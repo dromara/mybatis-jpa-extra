@@ -3,6 +3,13 @@
 ------
 MyBatis JPA Extra对MyBatis进行了扩展，目的在于简化开发的难度，采用了JPA 2.1的注释，无需配置映射的XML文件，使用插件的方式动态生成SQL语句，实现对单表的操作的简化；另外使用Interceptor拦截需要分页的SELECT查询语句，根据不同的数据库完成分页查询。
 
+相关资源
+[MyBatis网站][1]
+[MyBatis GitHub源码][2]
+[作者Blog][3]
+
+----------
+
 - 1、JavaBean注释简单
 - 
 只支持4个注释
@@ -10,6 +17,22 @@ MyBatis JPA Extra对MyBatis进行了扩展，目的在于简化开发的难度�
 > * @Id
 > * @Column
 > * @GeneratedValue
+
+@GeneratedValue有3中策略 
+
+ 1. **AUTO**
+uuid
+uuid.hex
+serial
+
+ 2. **SEQUENCE**
+    generator值为数据库序列名
+
+ 3. **IDENTITY**
+    generator无需指定，根据数据库自动生成方式
+
+
+，
 
 ```java
 package org.apache.mybatis.jpa.test.domain;
@@ -35,7 +58,7 @@ public class Students extends BaseDomain implements Serializable{
 	@Column
 	@GeneratedValue(strategy=GenerationType.AUTO,generator="serial")
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
 	@Column
 	private String stdNo;
@@ -119,7 +142,7 @@ public class Students extends BaseDomain implements Serializable{
 ----------
 
 
--  2、单表新增、修改、删除
+-  2、单表新增、修改、删除、查询
 -
 
 ```java
@@ -472,3 +495,7 @@ public class MyBatisTestRunner {
 	 -->
 ```
 
+
+  [1]: http://www.mybatis.org/mybatis-3/
+  [2]: https://github.com/mybatis/mybatis-3/
+  [3]: http://shimingxy.blog.163.com/
