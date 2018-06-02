@@ -14,7 +14,7 @@
 ----------
 
 - 1、JavaBean注释简单
-- 
+
 只支持4个注释
 > * @Table
 > * @Id
@@ -147,7 +147,6 @@ public class Students extends BaseDomain implements Serializable{
 
 
 -  2、单表新增、修改、删除、查询
--
 
 ```java
 package org.apache.mybatis.jpa.test;
@@ -273,7 +272,7 @@ public class MyBatisTestRunner {
 ----------
 
 - 3、支持分页查询
-- 
+
 ```java
 package org.apache.mybatis.jpa.test;
 
@@ -368,7 +367,7 @@ public class MyBatisTestRunner {
 ----------
 
 - 4、映射文件配置
-- 
+
 ```xml
 <mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper" >
 	<sql id="sql_condition">
@@ -435,7 +434,7 @@ public class MyBatisTestRunner {
 ----------
 
 - 5、Spring XML配置
-- 
+
 ```xml
   <tx:annotation-driven transaction-manager="txManager" />
 
