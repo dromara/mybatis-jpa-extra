@@ -1,0 +1,83 @@
+CREATE TABLE STUDENTS
+(
+  STDNO     VARCHAR(100),
+  STDNAME   VARCHAR(100),
+  STDGENDER VARCHAR(100),
+  STDAGE    int,
+  STDMAJOR  VARCHAR(100),
+  STDCLASS  VARCHAR(100),
+  ID        VARCHAR(100)
+)ENGINE = InnoDB 
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10001', '刘备', 'M', 40, '政治', '1', '8c34448b-c65b-4a4e-a0da-83284d05f909');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10002', '关羽', 'M', 37, '物理', '1', 'b9111f83-d338-461d-8d46-f331087d5a42');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10003', '张飞', 'M', 38, '政治', '1', '1297510b-5f47-4425-b1cf-778425254142');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10004', '赵云', 'M', 29, '历史', '1', '940908e2-7c58-429a-bcef-8b566befed00');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10005', '黄忠', 'M', 68, '化学', '1', '05084723-77a8-425a-870e-e33d00e53fd2');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10006', '魏延', 'M', 35, '化学', '1', '37e4b3b4-3c76-4bf3-8165-f514d14ff54f');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10007', '马超', 'M', 29, '历史', '1', 'f8d34aac-93d6-47ab-915e-fcd169007f62');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10008', '姜维', 'M', 20, '政治', '1', 'd252f326-c0ac-46cb-82fc-cb2597edaf41');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10009', '孙策', 'M', 43, '政治', '2', 'e4b748e6-ff3c-4727-9fc2-458b97cb318d');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10010', '周瑜', 'M', 39, '数学', '2', 'c38f8afd-a6bc-458d-9f9a-fb22f30c7e39');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10011', '鲁肃', 'M', 34, '物理', '2', '71aaa4dd-9720-4f76-a825-357842de3c88');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10012', '吕蒙', 'M', 20, '数学', '2', 'dba0b7b9-97bf-41ac-8ac1-652b1fa05c9a');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10013', '孙权', 'M', 20, '政治', '2', '3f1e0276-8104-44a0-9231-2759777b08ee');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10014', '陆逊', 'M', 18, '数学', '2', '2120f7a5-00d9-44ff-92ee-ae1e2bc212e2');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10015', '曹操', 'M', 46, '政治', '3', '715c53ac-c85d-4049-9ef9-abf4e3d91d15');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10016', '典韦', 'M', 28, '历史', '3', '293745a9-c33e-47d2-9844-8668574d3b60');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10017', '曹仁', 'M', 40, '数学', '3', 'f29ca87a-7b85-4ed6-b57b-8ab75128487b');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10018', '司马懿', 'M', 38, '政治', '3', '8793f911-fc0a-49fa-9ca7-2ab4e6a19454');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10019', '邓艾', 'M', 17, '军事', '3', '317d5eda-927c-4871-a916-472a8062df23');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10020', '大乔', 'F', 25, '艺术', '4', '3edd3ce2-1b13-46c9-8f39-37522052f2cc');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10021', '小乔', 'F', 23, '艺术', '4', 'd353a108-657d-47c3-8aef-e6936fd9a58e');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10022', '孙尚香', 'F', 26, '历史', '4', '22f2914c-37bc-4e05-b0da-3d02f682008a');
+
+insert into STUDENTS (STDNO, STDNAME, STDGENDER, STDAGE, STDMAJOR, STDCLASS, ID)
+values ('10023', '貂蝉', 'F', 20, '艺术', '4', 'af04d610-6092-481e-9558-30bd63ef783c');
+
