@@ -20,11 +20,23 @@
 > * @GeneratedValue
 
 @GeneratedValue有3中策略 
-|序号| strategy | generator |
-|--|--------|-------|
-|1| AUTO | uuid  uuid.hex   serial|
-|2| SEQUENCE |数据库序列名 |
-|3| IDENTITY|无,数据库自动生成 |
+
+ 1. **AUTO**
+ 
+    uuid
+
+    uuid.hex
+
+    serial
+
+ 2. **SEQUENCE**
+ 
+    generator值为数据库序列名
+
+ 3. **IDENTITY**
+ 
+    generator无，根据数据库自动生成方式
+
 
 ```java
 package org.apache.mybatis.jpa.test.domain;
