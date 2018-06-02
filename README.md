@@ -25,18 +25,21 @@ MyBatis JPA Extra对MyBatis进行了扩展，目的在于简化开发的难度�
 @GeneratedValue有3中策略 
 
  1. **AUTO**
+ 
 uuid
+
 uuid.hex
+
 serial
 
  2. **SEQUENCE**
+ 
     generator值为数据库序列名
 
  3. **IDENTITY**
+ 
     generator无需指定，根据数据库自动生成方式
 
-
-，
 
 ```java
 package org.apache.mybatis.jpa.test.domain;
