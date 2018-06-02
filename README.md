@@ -1,2 +1,2 @@
 # mybatis-jpa-extra
-mybatis jpa extra
+Mybatis JPA Extra
