@@ -1,5 +1,5 @@
-# MyBatis JPA Extra
 
+# MyBatis JPA Extra
    **MyBatis JPA Extra**对MyBatis进行了扩展，目的在于简化开发的难度，采用了JPA 2.1的注释，无需配置映射的XML文件，使用插件的方式动态生成SQL语句，实现对单表的操作的简化；另外使用Interceptor拦截需要分页的SELECT查询语句，根据不同的数据库完成分页查询。
 
 相关资源
@@ -13,7 +13,7 @@
 
 ----------
 
-- 1、JavaBean注释简单
+## 1、JavaBean注释简单
 
 只支持4个注释
 > * @Table
@@ -22,44 +22,27 @@
 > * @GeneratedValue
 
 @GeneratedValue有3中策略 
-
- 1. **AUTO**
- 
-    uuid
-
-    uuid.hex
-
-    serial
-
- 2. **SEQUENCE**
- 
-    generator值为数据库序列名
-
- 3. **IDENTITY**
- 
-    generator无需指定，根据数据库自动生成方式
-
+|序号| strategy | generator |
+|--|--------|-------|
+|1| AUTO | uuid  uuid.hex   serial|
+|2| SEQUENCE |数据库序列名 |
+|3| IDENTITY|无,数据库自动生成 |
 
 ```java
 package org.apache.mybatis.jpa.test.domain;
-
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.apache.mybatis.jpa.domain.BaseDomain;
-
 /**
  * @author Crystal.Sea
  */
 @Table(name = "STUDENTS")  
 public class Students extends BaseDomain implements Serializable{
 
-	private static final long serialVersionUID = -6928570405840778151L;
-	
 	@Id
 	@Column
 	@GeneratedValue(strategy=GenerationType.AUTO,generator="serial")
@@ -143,10 +126,8 @@ public class Students extends BaseDomain implements Serializable{
 }
 
 ```
-----------
 
-
--  2、单表新增、修改、删除、查询
+## 2、单表新增、修改、删除、查询
 
 ```java
 package org.apache.mybatis.jpa.test;
@@ -269,9 +250,8 @@ public class MyBatisTestRunner {
 	
 }
 ```
-----------
 
-- 3、支持分页查询
+## 3、支持分页查询
 
 ```java
 package org.apache.mybatis.jpa.test;
@@ -364,9 +344,9 @@ public class MyBatisTestRunner {
 	
 }
 ```
-----------
 
-- 4、映射文件配置
+
+## 4、映射文件配置
 
 ```xml
 <mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper" >
@@ -431,9 +411,8 @@ public class MyBatisTestRunner {
     
 ```
 
-----------
 
-- 5、Spring XML配置
+##  5、Spring XML配置
 
 ```xml
   <tx:annotation-driven transaction-manager="txManager" />
