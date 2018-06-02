@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>mybatis-jpa-extra-2.1-api</artifactId>
 	<name>mybatis-jpa-extra-2.1-api</name>
-	<description>jpa 2.1 annotation</description>
+	<description>JPA 2.1 API Annotation</description>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
