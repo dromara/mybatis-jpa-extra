@@ -206,10 +206,15 @@ public class MapperSqlProvider <T extends BaseDomain>{
 		
 		StringBuffer sql=new StringBuffer();
 		StringBuffer countSql=new StringBuffer();
-		for (ParameterMapping parameterMapping:boundSql.getParameterMappings()) {
-			countSql.append(selectSql.substring(0, selectSql.indexOf("?")));
-			countSql.append("#{"+parameterMapping.getProperty()+"}");
-			selectSql=selectSql.substring(selectSql.indexOf("?")+1);
+		
+		if(boundSql.getParameterMappings()==null ||boundSql.getParameterMappings().isEmpty()) {
+			countSql.append(selectSql);
+		}else {
+			for (ParameterMapping parameterMapping:boundSql.getParameterMappings()) {
+				countSql.append(selectSql.substring(0, selectSql.indexOf("?")));
+				countSql.append("#{"+parameterMapping.getProperty()+"}");
+				selectSql=selectSql.substring(selectSql.indexOf("?")+1);
+			}
 		}
 		
 		if(countSql.toString().toUpperCase().indexOf("DISTINCT")>0) {
