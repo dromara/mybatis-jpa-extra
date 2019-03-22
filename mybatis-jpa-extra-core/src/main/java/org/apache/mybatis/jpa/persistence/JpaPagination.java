@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.apache.mybatis.jpa.domain;
+package org.apache.mybatis.jpa.persistence;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * @author Crystal.Sea
  *
  */
-public class Pagination {
+public class JpaPagination {
 	
 	@JsonIgnore
 	protected int rows;

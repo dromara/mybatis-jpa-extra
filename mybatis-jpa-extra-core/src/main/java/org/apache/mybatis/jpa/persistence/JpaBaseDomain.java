@@ -1,4 +1,4 @@
-package org.apache.mybatis.jpa.domain;
+package org.apache.mybatis.jpa.persistence;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -9,7 +9,7 @@ import java.util.UUID;
  * @author Crystal.sea
  * 
  */
-public class BaseDomain extends Pagination implements Serializable{
+public class JpaBaseDomain extends JpaPagination implements Serializable{
 	/**
 	 * 
 	 */

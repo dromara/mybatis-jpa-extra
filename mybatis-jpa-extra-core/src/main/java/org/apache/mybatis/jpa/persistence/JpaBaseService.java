@@ -1,4 +1,4 @@
-package org.apache.mybatis.jpa.service;
+package org.apache.mybatis.jpa.persistence;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -6,9 +6,6 @@ import java.time.Duration;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
-import org.apache.mybatis.jpa.domain.BaseDomain;
-import org.apache.mybatis.jpa.domain.PageResults;
-import org.apache.mybatis.jpa.persistence.IJpaBaseMapper;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
 import org.apache.mybatis.jpa.util.WebContext;
@@ -23,7 +20,7 @@ import org.ehcache.config.builders.UserManagedCacheBuilder;
  *
  * @param <T>
  */
-public  class  JpaBaseService <T extends BaseDomain> {
+public  class  JpaBaseService <T extends JpaBaseDomain> {
 	
 	final static Logger log = Logger.getLogger(JpaBaseService.class);
 	
@@ -111,7 +108,7 @@ public  class  JpaBaseService <T extends BaseDomain> {
 	 * @param entity
 	 * @return
 	 */
-	public PageResults<T> queryPageResults(T entity) {
+	public JpaPageResults<T> queryPageResults(T entity) {
 		entity.setPageResultSelectUUID(entity.generateId());
 		entity.setStartRow(calculateStartRow(entity.getPage() ,entity.getPageResults()));
 		
@@ -127,7 +124,7 @@ public  class  JpaBaseService <T extends BaseDomain> {
 			totalCount=parseCount(getMapper().queryPageResultsCount(entity));
 		}
 		
-		return new PageResults<T>(entity.getPage(),entity.getPageResults(),totalPage,totalCount,resultslist);
+		return new JpaPageResults<T>(entity.getPage(),entity.getPageResults(),totalPage,totalCount,resultslist);
 	}
 	
 	
@@ -139,7 +136,7 @@ public  class  JpaBaseService <T extends BaseDomain> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public PageResults<T> queryPageResults(String mapperId,T entity) {
+	public JpaPageResults<T> queryPageResults(String mapperId,T entity) {
 		entity.setPageResultSelectUUID(entity.generateId());
 		entity.setStartRow(calculateStartRow(entity.getPage() ,entity.getPageResults()));
 		
@@ -161,7 +158,7 @@ public  class  JpaBaseService <T extends BaseDomain> {
 			totalCount=parseCount(getMapper().queryPageResultsCount(entity));
 		}
 		
-		return new PageResults<T>(entity.getPage(),entity.getPageResults(),totalPage,totalCount,resultslist);
+		return new JpaPageResults<T>(entity.getPage(),entity.getPageResults(),totalPage,totalCount,resultslist);
 	}
 	
 	/**
@@ -382,7 +379,7 @@ public  class  JpaBaseService <T extends BaseDomain> {
 	 * @param totalCount
 	 * @return
 	 */
-	public Integer calculateTotalPage(BaseDomain entity,Integer totalCount){
+	public Integer calculateTotalPage(JpaBaseDomain entity,Integer totalCount){
 		return (totalCount + entity.getPageResults() - 1) / entity.getPageResults();
 	}
 	

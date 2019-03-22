@@ -1,4 +1,4 @@
-package org.apache.mybatis.jpa.domain;
+package org.apache.mybatis.jpa.persistence;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T>
  */
-public  class PageResults <T>{
-	private final Logger _logger = LoggerFactory.getLogger(PageResults.class);
+public  class JpaPageResults <T>{
+	private final Logger _logger = LoggerFactory.getLogger(JpaPageResults.class);
 	
 	private int page=0;//当前页
 	
@@ -33,7 +33,7 @@ public  class PageResults <T>{
 	/**
 	 * 
 	 */
-	public PageResults() {
+	public JpaPageResults() {
 		_logger.debug("Grid.");
 		
 	}
@@ -42,7 +42,7 @@ public  class PageResults <T>{
 	 * @param pageResults
 	 * @param recordsCount
 	 */
-	public PageResults(int currentPage,int pageResults,Long recordsCount) {
+	public JpaPageResults(int currentPage,int pageResults,Long recordsCount) {
 		pageCount(currentPage,pageResults, recordsCount);
 		_logger.debug("Grid page : "+page+" , records : "+records+" , total : "+total);
 	}
@@ -53,7 +53,7 @@ public  class PageResults <T>{
 	 * @param recordsCount
 	 * @param rows
 	 */
-	public PageResults(int currentPage,int pageResults,Long recordsCount,List<T> rows) {
+	public JpaPageResults(int currentPage,int pageResults,Long recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
 		this.rows=rows;
 	}
@@ -65,7 +65,7 @@ public  class PageResults <T>{
 	 * @param recordsCount
 	 * @param rows
 	 */
-	public PageResults(int currentPage,int pageResults,Integer recordsCount,List<T> rows) {
+	public JpaPageResults(int currentPage,int pageResults,Integer recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
 		this.rows=rows;
 	}
@@ -78,7 +78,7 @@ public  class PageResults <T>{
 	 * @param recordsCount
 	 * @param rows
 	 */
-	public PageResults(int currentPage,int pageResults,int totalPage,Long recordsCount,List<T> rows) {
+	public JpaPageResults(int currentPage,int pageResults,int totalPage,Long recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
 		this.rows=rows;
 		this.totalPage=totalPage;
@@ -92,7 +92,7 @@ public  class PageResults <T>{
 	 * @param recordsCount
 	 * @param rows
 	 */
-	public PageResults(int currentPage,int pageResults,int totalPage,Integer recordsCount,List<T> rows) {
+	public JpaPageResults(int currentPage,int pageResults,int totalPage,Integer recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
 		this.rows=rows;
 		this.totalPage=totalPage;
