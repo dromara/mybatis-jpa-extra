@@ -1,6 +1,6 @@
 package org.apache.mybatis.jpa.test.dao.service;
 
-import org.apache.mybatis.jpa.service.JpaBaseService;
+import org.apache.mybatis.jpa.persistence.JpaBaseService;
 import org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.apache.mybatis.jpa.test.domain.Students;
 import org.springframework.stereotype.Service;

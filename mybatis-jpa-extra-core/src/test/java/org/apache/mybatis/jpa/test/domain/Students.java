@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.mybatis.jpa.domain.BaseDomain;
+import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
 
 
 
@@ -27,7 +27,7 @@ import org.apache.mybatis.jpa.domain.BaseDomain;
  *
  */
 @Table(name = "STUDENTS")  
-public class Students extends BaseDomain implements Serializable{
+public class Students extends JpaBaseDomain implements Serializable{
 	/**
 	 * 
 	 */

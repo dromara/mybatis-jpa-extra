@@ -15,8 +15,8 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-import org.apache.mybatis.jpa.domain.Pagination;
-import org.apache.mybatis.jpa.service.JpaBaseService;
+import org.apache.mybatis.jpa.persistence.JpaBaseService;
+import org.apache.mybatis.jpa.persistence.JpaPagination;
 
 
 @Intercepts( {
@@ -49,9 +49,9 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			String sql = boundSql.getSql();
 			//log.debug("prepare  boundSql  ==> "+removeBreakingWhitespace(sql));
 			//log.debug("prepare  boundSql  ==> "+parameterObject);
-			if ((parameterObject instanceof Pagination)
+			if ((parameterObject instanceof JpaPagination)
 					&& (sql.toUpperCase().trim().startsWith("SELECT")) ) {
-				Pagination pagination=(Pagination)parameterObject;
+				JpaPagination pagination=(JpaPagination)parameterObject;
 				if(pagination.isPageable()){
 					//log.debug("startsWith SELECT : "+sql.toUpperCase().trim().startsWith("SELECT"));
 					_logger.debug("prepare  boundSql  ==> "+removeBreakingWhitespace(sql));

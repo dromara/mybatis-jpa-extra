@@ -1,3 +1,4 @@
 *.class
 mybatis-jpa-extra-core/target/*
 mybatis-jpa-extra-2.1-api/target/*
+/.metadata/

@@ -3,7 +3,7 @@ package org.apache.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.apache.mybatis.jpa.domain.Pagination;
+import org.apache.mybatis.jpa.persistence.JpaPagination;
 
 
 public class PostgreSQLDialect extends Dialect {
@@ -19,7 +19,7 @@ public class PostgreSQLDialect extends Dialect {
 	}
 	
 	@Override
-	public String getLimitString(String sql,  Pagination pagination) {
+	public String getLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
 			return sql +  " LIMIT " + pagination.getPageResults()+" ,  "+pagination.getStartRow() ;
@@ -31,7 +31,7 @@ public class PostgreSQLDialect extends Dialect {
 	}
 	
 	@Override
-	public String getPreparedStatementLimitString(String sql,  Pagination pagination) {
+	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
 			return sql +  " LIMIT ? , ?";
@@ -43,7 +43,7 @@ public class PostgreSQLDialect extends Dialect {
 	}
 	
 	
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,Pagination pagination) {
+	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
 		
 		try {
 			if(pagination.getPageResults()>0&&pagination.getStartRow()>0){

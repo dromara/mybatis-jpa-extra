@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
-import org.apache.mybatis.jpa.domain.BaseDomain;
+import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
 import org.apache.mybatis.jpa.util.JsonDateTimeDeserializer;
 import org.apache.mybatis.jpa.util.JsonDateTimeSerializer;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DemoDomain extends BaseDomain{
+public class DemoDomain extends JpaBaseDomain{
 	
 	/**
 	 * 

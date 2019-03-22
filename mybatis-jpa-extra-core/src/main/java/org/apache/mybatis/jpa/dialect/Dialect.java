@@ -4,7 +4,7 @@ package org.apache.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 
-import org.apache.mybatis.jpa.domain.Pagination;
+import org.apache.mybatis.jpa.persistence.JpaPagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,19 +60,19 @@ public abstract class Dialect {
 	 * @return The modified query statement with the limit applied.
 	 */
 
-	public String getLimitString(String query, Pagination pagination) {
+	public String getLimitString(String query, JpaPagination pagination) {
 		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
 	}
 	
 	
 	
 	
-	public String getPreparedStatementLimitString(String query, Pagination pagination) {
+	public String getPreparedStatementLimitString(String query, JpaPagination pagination) {
 		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
 	}
 	
 	
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,Pagination pagination) {
+	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
 		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
 	}
 	

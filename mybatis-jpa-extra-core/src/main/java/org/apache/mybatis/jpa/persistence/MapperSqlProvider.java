@@ -20,10 +20,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
-import org.apache.mybatis.jpa.domain.BaseDomain;
-import org.apache.mybatis.jpa.domain.Pagination;
 import org.apache.mybatis.jpa.id.IdentifierGeneratorFactory;
-import org.apache.mybatis.jpa.service.JpaBaseService;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class MapperSqlProvider <T extends BaseDomain>{
+public class MapperSqlProvider <T extends JpaBaseDomain>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperSqlProvider.class);
 	
@@ -198,7 +195,7 @@ public class MapperSqlProvider <T extends BaseDomain>{
 	 * @return insert sql String
 	 */
 	public String queryPageResultsCount(T entity) {
-		Pagination pagination=(Pagination)entity;
+		JpaPagination pagination=(JpaPagination)entity;
 		//获取缓存数据
 		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.get(pagination.getPageResultSelectUUID());
 		String selectSql=pageResultsSqlCache.getSql();

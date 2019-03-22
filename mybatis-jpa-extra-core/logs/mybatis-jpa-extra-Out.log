@@ -2803,3 +2803,19 @@ WHERE (ID = #{id})
 2018-06-02 10:07:17.393 [org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper.get:DEBUG] <==      Total: 0
 2018-06-02 10:07:17.395 [org.mybatis.spring.SqlSessionUtils:DEBUG] Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@555cf22]
 2018-06-02 10:07:17.395 [org.apache.mybatis.jpa.test.MyBatisTestRunner:INFO] Students null
+2018-06-10 12:06:04.177 [org.apache.mybatis.jpa.test.UUIDHexGeneratorTest:INFO] 40281181-63e7df58-0163-e7df5891-0000
+2018-06-10 12:06:04.242 [org.apache.mybatis.jpa.test.UUIDHexGeneratorTest:INFO] 40281181-63e7df58-0163-e7df58d2-0001
+2018-06-10 12:06:04.303 [org.apache.mybatis.jpa.id.SerialGenerator:INFO] ipAddressNodeValue : 
+2018-06-10 12:06:04.304 [org.apache.mybatis.jpa.id.SerialGenerator:INFO] STATIC_NODE_SEQUENCE_NUMBER : 01
+2018-06-10 12:06:04.305 [org.apache.mybatis.jpa.test.SerialGeneratorTest:INFO] 20180610011206040001
+2018-06-10 12:06:04.311 [org.apache.mybatis.jpa.util.MacAddress:INFO] OS : Windows 7
+2018-06-10 12:06:05.455 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : F0-76-1C-B0-26-9C
+2018-06-10 12:06:06.133 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : AC-E0-10-21-C6-8A
+2018-06-10 12:06:06.833 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : AC-E0-10-21-C6-89
+2018-06-10 12:06:08.238 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : 00-00-00-00-00-00-00-E0
+2018-06-10 12:06:10.268 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : 1E-E0-10-21-C6-89
+2018-06-10 12:06:12.331 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : 00-50-56-C0-00-08
+2018-06-10 12:06:14.323 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : 00-00-00-00-00-00-00-E0
+2018-06-10 12:06:16.465 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : 00-00-00-00-00-00-00-E0
+2018-06-10 12:06:18.570 [org.apache.mybatis.jpa.util.MacAddress:INFO] host MAC : 00-00-00-00-00-00-00-E0
+2018-06-10 12:06:18.571 [org.apache.mybatis.jpa.test.SerialGeneratorTest:INFO] F0-76-1C-B0-26-9C,AC-E0-10-21-C6-8A,AC-E0-10-21-C6-89,00-00-00-00-00-00-00-E0,1E-E0-10-21-C6-89,00-50-56-C0-00-08,00-00-00-00-00-00-00-E0,00-00-00-00-00-00-00-E0,00-00-00-00-00-00-00-E0,

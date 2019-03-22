@@ -21,7 +21,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.mybatis.jpa.domain.BaseDomain;
+import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
 
 
 @Intercepts({
@@ -61,11 +61,11 @@ public class AllStatementHandlerInterceptor extends
 			String sql = boundSql.getSql();
 			_logger.debug("prepare  boundSql : "+sql);
 			_logger.debug("startsWith SELECT : "+sql.toUpperCase().trim().startsWith("SELECT"));
-			if (sql.toUpperCase().trim().startsWith("SELECT") && (parameterObject instanceof BaseDomain)) {
+			if (sql.toUpperCase().trim().startsWith("SELECT") && (parameterObject instanceof JpaBaseDomain)) {
 				if(statement instanceof SimpleStatementHandler){
-					sql = dialect.getLimitString(sql, (BaseDomain)parameterObject);
+					sql = dialect.getLimitString(sql, (JpaBaseDomain)parameterObject);
 				}else if(statement instanceof PreparedStatementHandler){
-					sql = dialect.getPreparedStatementLimitString(sql, (BaseDomain)parameterObject);
+					sql = dialect.getPreparedStatementLimitString(sql, (JpaBaseDomain)parameterObject);
 				}
 			}
 			metaObject.setValue("boundSql.sql", sql);
@@ -84,11 +84,11 @@ public class AllStatementHandlerInterceptor extends
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statementHandler.getBoundSql();
 			
-			if (boundSql.getSql().toUpperCase().trim().startsWith("SELECT") && (parameterObject instanceof BaseDomain)) {
+			if (boundSql.getSql().toUpperCase().trim().startsWith("SELECT") && (parameterObject instanceof JpaBaseDomain)) {
 				List<ParameterMapping>  pms= boundSql.getParameterMappings();
 				System.out.println(pms);
 				int parameterSize = pms.size();
-				dialect.setLimitParamters(ps, parameterSize,(BaseDomain)parameterObject);
+				dialect.setLimitParamters(ps, parameterSize,(JpaBaseDomain)parameterObject);
 			}
 		}
 		return invocation.proceed();
