@@ -40,24 +40,45 @@
 
 ```java
 package org.apache.mybatis.jpa.test.domain;
+
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.apache.mybatis.jpa.domain.BaseDomain;
+
+import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
+
+
+
+/*
+   ID                   varchar(40)                    not null,
+   NAME                 varchar(60)                    not null,
+   STATUS               char(1)                        null,
+   CREATEBY             varchar(40)                    null,
+   CREATEDATE           date                           null,
+   UPDATEBY             varchar(40)                    null,
+   UPDATEDATE           date                           null,
+   constraint PK_ROLES primary key clustered (ID)
+ */
 /**
  * @author Crystal.Sea
+ *
  */
 @Table(name = "STUDENTS")  
-public class Students extends BaseDomain implements Serializable{
-
+public class Students extends JpaBaseDomain implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6928570405840778151L;
+	
 	@Id
 	@Column
 	@GeneratedValue(strategy=GenerationType.AUTO,generator="serial")
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	//@GeneratedValue(strategy=GenerationType.IDENTITY)
+	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
 	@Column
 	private String stdNo;
@@ -71,69 +92,98 @@ public class Students extends BaseDomain implements Serializable{
 	private String stdMajor;
 	@Column
 	private String stdClass;
-
-	public Students() {}
 	
+	
+	public Students() {
+		super();
+	}
+
+
 	public String getStdNo() {
 		return stdNo;
 	}
+
 
 	public void setStdNo(String stdNo) {
 		this.stdNo = stdNo;
 	}
 
+
 	public String getStdName() {
 		return stdName;
 	}
+
 
 	public void setStdName(String stdName) {
 		this.stdName = stdName;
 	}
 
+
+
+
+
 	public String getStdGender() {
 		return stdGender;
 	}
+
 
 	public void setStdGender(String stdGender) {
 		this.stdGender = stdGender;
 	}
 
+
 	public int getStdAge() {
 		return stdAge;
 	}
+
 
 	public void setStdAge(int stdAge) {
 		this.stdAge = stdAge;
 	}
 
+
 	public String getStdMajor() {
 		return stdMajor;
 	}
+
 
 	public void setStdMajor(String stdMajor) {
 		this.stdMajor = stdMajor;
 	}
 
+
 	public String getStdClass() {
 		return stdClass;
 	}
+
 
 	public void setStdClass(String stdClass) {
 		this.stdClass = stdClass;
 	}
 
+
 	public String getId() {
 		return id;
 	}
+
 
 	public void setId(String id) {
 		this.id = id;
 	}
 
+
 	@Override
 	public String toString() {
+		return "Students [stdNo=" + stdNo + ", stdName=" + stdName + ", stdgender=" + stdGender + ", stdAge=" + stdAge
+				+ ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
 	}
+
+
+	
+	
+
 }
+
 
 ```
 
@@ -146,6 +196,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.domain.Students;
 import org.apache.mybatis.jpa.util.WebContext;
@@ -155,6 +206,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 
 public class MyBatisTestRunner {
 	private static final Logger _logger = LoggerFactory.getLogger(MyBatisTestRunner.class);
@@ -270,6 +322,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.domain.Students;
 import org.apache.mybatis.jpa.util.WebContext;
@@ -279,6 +332,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 
 public class MyBatisTestRunner {
 	
