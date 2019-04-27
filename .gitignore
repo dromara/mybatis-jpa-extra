@@ -1,9 +1,9 @@
 *.class
-mybatis-jpa-extra-core/target/*
-mybatis-jpa-extra-2.1-api/target/*
+*/target/*
 /.metadata/
 # Log file
 *.log
 *.log.*
+*/logs/*
 */jdk/*
 jdk/*
