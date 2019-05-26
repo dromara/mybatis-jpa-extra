@@ -4,38 +4,18 @@
         <Console name="consolePrint" target="SYSTEM_OUT">  
             <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n" />  
         </Console>
-        <!--
-        <File name="File" fileName="logs/app.log">
-            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n" />
-        </File>
-        -->
-   
-		<!-- 输出到文件，按天或者超过80MB分割 -->
-		<RollingFile name="RollingFile" fileName="logs/taskrunner.log"    filePattern="logs/$${date:yyyy-MM}/taskrunner-%d{yyyy-MM-dd}-%i.log.gz">
-		    <!-- 需要记录的级别 -->
-		 	<!-- <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" /> -->
-		     <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n" />
-		     <Policies>
-		          <OnStartupTriggeringPolicy />
-		          <TimeBasedTriggeringPolicy />
-		          <SizeBasedTriggeringPolicy size="512 MB" />
-		          <!-- <SizeBasedTriggeringPolicy size="80 MB" /> -->
-		     </Policies>
-		</RollingFile>
+        
 	 </appenders>  
 	 
     <loggers>  
         <root level="debug">  
             <appender-ref ref="consolePrint" /> 
-            <appender-ref ref="RollingFile" /> 
         </root>  
          <Logger name="org.springframework" level="info">
          	<appender-ref ref="consolePrint" /> 
-         	<appender-ref ref="RollingFile" /> 
          </Logger>
     	<Logger name="org.apache.mybatis" level="DEBUG">
     		<appender-ref ref="consolePrint" /> 
-    		<appender-ref ref="RollingFile" /> 
     	</Logger>
     
     </loggers>  
