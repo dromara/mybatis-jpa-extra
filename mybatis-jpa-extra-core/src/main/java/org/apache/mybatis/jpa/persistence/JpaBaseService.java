@@ -181,15 +181,6 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 		return null;
 	}
 	
-	public List<T> select(T entity) {
-		try {
-			return getMapper().select(entity);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	/**
 	 *  query list entity by entity 
 	 * @param entity
@@ -227,7 +218,8 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	 */
 	public T load(T entity) {
 		try {
-			return getMapper().load(entity);
+			List<T> entityList=getMapper().query(entity);
+			return entityList!=null&&entityList.size()>0?entityList.get(0):null;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -241,6 +233,7 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	 */
 	public T get(String id) {
 		try {
+			log.debug("entityClass  "+entityClass.toGenericString()+" , id "+id);
 			return  getMapper().get(this.entityClass,id);
 		} catch(Exception e) {
 			e.printStackTrace();

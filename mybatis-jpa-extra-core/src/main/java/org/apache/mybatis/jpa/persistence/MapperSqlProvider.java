@@ -226,6 +226,23 @@ public class MapperSqlProvider <T extends JpaBaseDomain>{
 		_logger.trace("Count SQL : \n" + sql);
 		return sql.toString();
 	}
+	
+	public String query(T entity) {
+		buildColumnList(entity.getClass());
+		SQL sql=new SQL();
+		sql.SELECT(" * ");  
+        sql.FROM(getTableName(entity.getClass()));  
+        
+        for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entity.getClass().getSimpleName())) {
+        	if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
+				//skip null field value
+			}else {
+				sql.WHERE(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");
+			}
+		}
+		
+		return sql.toString();
+	}
 
 	public String getTableName(Class<?> entityClass) {
 		Table table = (Table)entityClass.getAnnotation(Table.class);

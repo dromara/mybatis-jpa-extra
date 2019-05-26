@@ -14,8 +14,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
  */
 public interface IJpaBaseMapper<T> {
 	
-	public List<T> select(T entity);
-	
+	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);
 	
 	//TODO follow function for Query
@@ -35,12 +34,6 @@ public interface IJpaBaseMapper<T> {
 	@SelectProvider(type = MapperSqlProvider.class, method = "get")
 	public T get(@Param ("entityClass")Class<?> entityClass,@Param ("id") String id);
 	
-	/**
-	 * query by entity
-	 * @param entity
-	 * @return one
-	 */
-	public T load(T entity);
 	
 	//TODO follow function for insert update and delete
 	@InsertProvider(type = MapperSqlProvider.class, method = "insert")
