@@ -45,6 +45,7 @@ public class MyBatisTestRunner {
 		_logger.info("get...");
 		Students student=service.get("921d3377-937a-4578-b1e2-92fb23b5e512");
 		
+		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
 
 	}
