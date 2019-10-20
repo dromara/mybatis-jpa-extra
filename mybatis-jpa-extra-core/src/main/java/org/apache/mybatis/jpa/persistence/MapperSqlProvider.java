@@ -212,6 +212,7 @@ public class MapperSqlProvider <T extends JpaBaseDomain>{
 				countSql.append("#{"+parameterMapping.getProperty()+"}");
 				selectSql=selectSql.substring(selectSql.indexOf("?")+1);
 			}
+			countSql.append(selectSql);
 		}
 		
 		if(countSql.toString().toUpperCase().indexOf("DISTINCT")>0) {
