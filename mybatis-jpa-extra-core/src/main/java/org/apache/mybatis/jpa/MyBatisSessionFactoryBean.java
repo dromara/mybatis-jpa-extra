@@ -25,7 +25,7 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		this.timeout = timeout;
 	}
   
-	protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
+	protected SqlSessionFactory buildSqlSessionFactory() throws Exception {
 		SqlSessionFactory factory = super.buildSqlSessionFactory();
 		
 		
@@ -42,7 +42,7 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		return factory;
 	}
 	
-	public SqlSessionFactory build() throws IOException {
+	public SqlSessionFactory build() throws Exception {
 		return buildSqlSessionFactory();
 	}
 }
