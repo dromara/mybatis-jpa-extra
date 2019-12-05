@@ -110,7 +110,7 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	 */
 	public JpaPageResults<T> queryPageResults(T entity) {
 		entity.setPageResultSelectUUID(entity.generateId());
-		entity.setStartRow(calculateStartRow(entity.getPage() ,entity.getPageResults()));
+		entity.setStartRow(calculateStartRow(entity.getPageNumber() ,entity.getPageSize()));
 		
 		entity.setPageable(true);
 		List<T> resultslist=getMapper().queryPageResults(entity);
@@ -118,13 +118,13 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 		Integer totalPage=resultslist.size();
 		
 		Integer totalCount = 0;
-		if(entity.getPage()==1&&totalPage<entity.getPageResults()) {
+		if(entity.getPageNumber()==1&&totalPage<entity.getPageSize()) {
 			totalCount=totalPage;
 		}else {
 			totalCount=parseCount(getMapper().queryPageResultsCount(entity));
 		}
 		
-		return new JpaPageResults<T>(entity.getPage(),entity.getPageResults(),totalPage,totalCount,resultslist);
+		return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
 	}
 	
 	
@@ -138,7 +138,7 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	@SuppressWarnings("unchecked")
 	public JpaPageResults<T> queryPageResults(String mapperId,T entity) {
 		entity.setPageResultSelectUUID(entity.generateId());
-		entity.setStartRow(calculateStartRow(entity.getPage() ,entity.getPageResults()));
+		entity.setStartRow(calculateStartRow(entity.getPageNumber() ,entity.getPageSize()));
 		
 		entity.setPageable(true);
 		List<T> resultslist=null;
@@ -152,13 +152,13 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 		Integer totalPage=resultslist.size();
 		
 		Integer totalCount = 0;
-		if(entity.getPage()==1&&totalPage<entity.getPageResults()) {
+		if(entity.getPageNumber()==1&&totalPage<entity.getPageSize()) {
 			totalCount=totalPage;
 		}else {
 			totalCount=parseCount(getMapper().queryPageResultsCount(entity));
 		}
 		
-		return new JpaPageResults<T>(entity.getPage(),entity.getPageResults(),totalPage,totalCount,resultslist);
+		return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
 	}
 	
 	/**
@@ -373,7 +373,7 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	 * @return
 	 */
 	public Integer calculateTotalPage(JpaBaseDomain entity,Integer totalCount){
-		return (totalCount + entity.getPageResults() - 1) / entity.getPageResults();
+		return (totalCount + entity.getPageSize() - 1) / entity.getPageSize();
 	}
 	
 	/**
@@ -382,7 +382,7 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	 * @param pageResults
 	 * @return
 	 */
-	public Integer calculateStartRow(Integer page,Integer pageResults){
-		return (page - 1) * pageResults;
+	public Integer calculateStartRow(Integer page,Integer pageSize){
+		return (page - 1) * pageSize;
 	}
 }

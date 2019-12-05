@@ -21,10 +21,10 @@ public class PostgreSQLDialect extends Dialect {
 	@Override
 	public String getLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
-		if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
-			return sql +  " LIMIT " + pagination.getPageResults()+" ,  "+pagination.getStartRow() ;
-		}else if(pagination.getPageResults()>0){
-			return sql +  " LIMIT " + pagination.getPageResults();
+		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
+			return sql +  " LIMIT " + pagination.getPageSize()+" ,  "+pagination.getStartRow() ;
+		}else if(pagination.getPageSize()>0){
+			return sql +  " LIMIT " + pagination.getPageSize();
 		}else{
 			return sql +  " LIMIT 1000";
 		}
@@ -33,9 +33,9 @@ public class PostgreSQLDialect extends Dialect {
 	@Override
 	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
-		if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
+		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
 			return sql +  " LIMIT ? , ?";
-		}else if(pagination.getPageResults()>0){
+		}else if(pagination.getPageSize()>0){
 			return sql +  " LIMIT  ? ";
 		}else{
 			return sql +  " LIMIT ?";
@@ -46,11 +46,11 @@ public class PostgreSQLDialect extends Dialect {
 	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
 		
 		try {
-			if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageResults());
-				preparedStatement.setInt(++parameterSize, pagination.getPageResults());
-			}else if(pagination.getPageResults()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageResults());
+			if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
+				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
+				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
+			}else if(pagination.getPageSize()>0){
+				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
 			}else{
 				preparedStatement.setInt(++parameterSize, 1000);
 			}

@@ -21,7 +21,7 @@ public class DB2Dialect extends Dialect {
 	
 	@Override
 	public String getLimitString(String sql,  JpaPagination pagination) {
-		if ( pagination.getPageResults() == 0 ) {
+		if ( pagination.getPageSize() == 0 ) {
 			return sql + " fetch first " + pagination.getStartRow() + " rows only";
 		}
 		StringBuilder pagingSelectSql = new StringBuilder( sql.length() + 200 )
@@ -30,7 +30,7 @@ public class DB2Dialect extends Dialect {
 				)
 				.append( sql )  //nest the main query in an outer select
 				.append(" fetch first ")
-				.append(pagination.getPageResults())
+				.append(pagination.getPageSize())
 				.append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > " )
 				.append(pagination.getStartRow())
 				.append(" order by rownumber_");
@@ -40,9 +40,9 @@ public class DB2Dialect extends Dialect {
 	@Override
 	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
-		if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
+		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
 			return sql +  " LIMIT ? , ?";
-		}else if(pagination.getPageResults()>0){
+		}else if(pagination.getPageSize()>0){
 			return sql +  " LIMIT  ? ";
 		}else{
 			return sql +  " LIMIT ?";
@@ -53,11 +53,11 @@ public class DB2Dialect extends Dialect {
 	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
 		
 		try {
-			if(pagination.getPageResults()>0&&pagination.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageResults());
-				preparedStatement.setInt(++parameterSize, pagination.getPageResults());
-			}else if(pagination.getPageResults()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageResults());
+			if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
+				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
+				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
+			}else if(pagination.getPageSize()>0){
+				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
 			}else{
 				preparedStatement.setInt(++parameterSize, 1000);
 			}

@@ -80,8 +80,8 @@ public class MyBatisTestRunner {
 		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
 		 student.setStdGender("M");
 		 //student.setStdMajor(政治");
-		 student.setPageResults(10);
-		 student.setPage(2);
+		 student.setPageSize(10);
+		 student.setPageNumber(2);
 		 _logger.info("queryPageResults "+service.queryPageResults(student));
 	}
 	
@@ -92,8 +92,8 @@ public class MyBatisTestRunner {
 		 Students student=new Students();
 		 student.setStdGender("M");
 		 //student.setStdMajor(政治");
-		 student.setPageResults(10);
-		 student.setPage(2);
+		 student.setPageSize(10);
+		 student.setPageNumber(2);
 		 
 		 _logger.info("queryPageResults by mapperId "+service.queryPageResults("queryPageResults1",student));
 		 

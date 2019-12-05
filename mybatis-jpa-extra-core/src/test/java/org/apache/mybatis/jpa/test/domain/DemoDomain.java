@@ -39,8 +39,6 @@ public class DemoDomain extends JpaBaseDomain{
 	
 	protected int 		status;
 	
-	protected int 		sortOrder;
-	
 	protected String 	createdBy;
 	
 	@JsonSerialize(using=JsonDateTimeSerializer.class)
@@ -100,23 +98,6 @@ public class DemoDomain extends JpaBaseDomain{
 	}
 
 
-
-	/**
-	 * @return the sortOrder
-	 */
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-
-
-
-	/**
-	 * @param sortOrder the sortOrder to set
-	 */
-	public void setSortOrder(int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
 
 
 

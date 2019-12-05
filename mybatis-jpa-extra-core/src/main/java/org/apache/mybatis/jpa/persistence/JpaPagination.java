@@ -18,12 +18,12 @@ public class JpaPagination {
 	 * 
 	 */
 	@JsonIgnore
-	protected int pageResults = 20;
+	protected int pageSize = 20;
 	/**
 	 * 
 	 */
 	@JsonIgnore
-	protected int page=1;
+	protected int pageNumber=1;
 	/**
 	 * 
 	 */
@@ -41,7 +41,7 @@ public class JpaPagination {
 	 * 
 	 */
 	@JsonIgnore
-	protected String sord;
+	protected String sortOrder;
 	/**
 	 * 
 	 */
@@ -67,16 +67,16 @@ public class JpaPagination {
 
 	public void setRows(int rows) {
 		this.rows = rows;
-		this.pageResults = rows;
+		this.pageSize = rows;
 		calculate();
 	}
 	@JsonIgnore
-	public int getPage() {
-		return page;
+	public int getPageNumber() {
+		return pageNumber;
 	}
 
-	public void setPage(int page) {
-		this.page = page;
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
 		calculate();
 	}
 	@JsonIgnore
@@ -89,12 +89,12 @@ public class JpaPagination {
 		setSortKey();
 	}
 	@JsonIgnore
-	public String getSord() {
-		return sord;
+	public String getSortOrder() {
+		return sortOrder;
 	}
 
-	public void setSord(String sord) {
-		this.sord = sord;
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 		setSortKey();
 	}
 
@@ -116,18 +116,18 @@ public class JpaPagination {
 	}
 
 	public void calculate() {
-		if (this.page >= 1 && this.pageResults > 0){
-				startRow = (this.page - 1) * this.pageResults;
-				endRow = startRow + this.pageResults;
+		if (this.pageNumber >= 1 && this.pageSize > 0){
+				startRow = (this.pageNumber - 1) * this.pageSize;
+				endRow = startRow + this.pageSize;
 			}
 	}
 	@JsonIgnore
-	public int getPageResults() {
-		return pageResults;
+	public int getPageSize() {
+		return pageSize;
 	}
 
-	public void setPageResults(int pageResults) {
-		this.pageResults = pageResults;
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 	@JsonIgnore
 	public String getSortKey() {
@@ -138,8 +138,8 @@ public class JpaPagination {
 	 * create sortKey from sidx & sord,eg  order by  name asc 
 	 */
 	public void setSortKey() {
-		if(sidx!=null	&&	sord!=null	&&	!sidx.equals("")	&&	!sord.equals("")){
-			sortKey=" "+sidx+" "+sord+" ";
+		if(sidx!=null	&&	sortOrder!=null	&&	!sidx.equals("")	&&	!sortOrder.equals("")){
+			sortKey=" "+sidx+" "+sortOrder+" ";
 			setOrderBy();
 		}
 		
@@ -158,7 +158,7 @@ public class JpaPagination {
 	 */
 	public void setOrderBy() {
 		if(sortKey!=null	&&	!sortKey.equals("")){
-			orderBy=" ORDER BY  "+sidx+" "+sord+" ";
+			orderBy=" ORDER BY  "+sidx+" "+sortOrder+" ";
 		}
 		
 	}
@@ -192,9 +192,9 @@ public class JpaPagination {
 	 */
 	@Override
 	public String toString() {
-		return "Pagination [rows=" + rows + ", pageResults=" + pageResults
-				+ ", page=" + page + ", startRow=" + startRow + ", endRow="
-				+ endRow + ", sidx=" + sidx + ", sord=" + sord + ", sortKey="
+		return "Pagination [rows=" + rows + ", pageResults=" + pageSize
+				+ ", page=" + pageNumber + ", startRow=" + startRow + ", endRow="
+				+ endRow + ", sidx=" + sidx + ", sord=" + sortOrder + ", sortKey="
 				+ sortKey + ", orderBy=" + orderBy + ", pageable=" + pageable
 				+ "]";
 	}
