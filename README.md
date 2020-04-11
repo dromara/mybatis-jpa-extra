@@ -8,8 +8,6 @@
 
 [MyBatis GitHub源码][2]
 
-[作者Blog][3]
-
 
 ## 1、JavaBean注释简单
 
