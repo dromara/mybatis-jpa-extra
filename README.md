@@ -507,4 +507,3 @@ public class MyBatisTestRunner {
 
   [1]: http://www.mybatis.org/mybatis-3/
   [2]: https://github.com/mybatis/mybatis-3/
-  [3]: http://shimingxy.blog.163.com/
