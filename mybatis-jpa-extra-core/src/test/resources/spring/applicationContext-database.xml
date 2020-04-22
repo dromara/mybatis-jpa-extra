@@ -18,7 +18,7 @@
 	     http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<!-- dataSource define begin -->
-	<!-- c3p0 configuration -->
+	<!-- c3p0 configuration 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  destroy-method="close" >      
 	    <property name="driverClass" value="${config.datasource.driverclass}"/>      
 	    <property name="jdbcUrl" value="${config.datasource.url}"/>      
@@ -28,6 +28,13 @@
 	    <property name="minPoolSize" value="21"/> 
 	    <property name="initialPoolSize" value="15"/> 
 	    
+	</bean> 
+	-->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"  destroy-method="close" >      
+	   <!--  <property name="driverClass" value="#{dataSoruceConfig.driverClass}"/>     -->  
+	    <property name="url" value="${config.datasource.url}"/>      
+	    <property name="username" value="${config.datasource.username}"/>      
+	    <property name="password" value="${config.datasource.password}"/>      
 	</bean> 
 
 </beans>

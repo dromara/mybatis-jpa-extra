@@ -58,6 +58,7 @@ public class MybatisProperties {
    */
   private String typeAliasesPackage;
 
+  private String dialect;
   /**
    * The super class for filtering type alias. If this not specifies, the MyBatis deal as type alias all classes that
    * searched from typeAliasesPackage.
@@ -212,5 +213,13 @@ public class MybatisProperties {
       return new Resource[0];
     }
   }
+
+	public String getDialect() {
+		return dialect;
+	}
+	
+	public void setDialect(String dialect) {
+		this.dialect = dialect;
+	}
 
 }

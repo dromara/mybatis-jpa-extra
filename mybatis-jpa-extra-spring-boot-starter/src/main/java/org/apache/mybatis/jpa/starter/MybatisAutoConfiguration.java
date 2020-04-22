@@ -16,8 +16,6 @@
 package org.apache.mybatis.jpa.starter;
 
 import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +32,6 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.mybatis.jpa.MyBatisSessionFactoryBean;
-import org.apache.mybatis.jpa.StatementHandlerInterceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperFactoryBean;
@@ -134,11 +131,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 	//mybatis-jpa
 	MyBatisSessionFactoryBean factory = new MyBatisSessionFactoryBean();
-	StatementHandlerInterceptor  interceptor=new org.apache.mybatis.jpa.StatementHandlerInterceptor();
-	interceptor.setDialectString("org.apache.mybatis.jpa.dialect.MySQLDialect");
-	List<Interceptor> interceptors = new ArrayList<Interceptor>();
-	interceptors.add(interceptor);
-	factory.setInterceptors(interceptors);
+	
 	
     factory.setDataSource(dataSource);
     factory.setVfs(SpringBootVFS.class);
@@ -152,6 +145,12 @@ public class MybatisAutoConfiguration implements InitializingBean {
     if (!ObjectUtils.isEmpty(this.interceptors)) {
       factory.setPlugins(this.interceptors);
     }
+    
+    //mybatis-jpa
+    if (StringUtils.hasLength(this.properties.getDialect())) {
+    	factory.setDialect(this.properties.getDialect());
+    }
+    
     if (this.databaseIdProvider != null) {
       factory.setDatabaseIdProvider(this.databaseIdProvider);
     }
