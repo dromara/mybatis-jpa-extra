@@ -82,7 +82,11 @@ public class MyBatisTestRunner {
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
-		 _logger.info("queryPageResults "+service.queryPageResults(student));
+		 List<Students> allListStudents = 
+				 service.queryPageResults(student).getRows();
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
 	}
 	
 	@Test
@@ -95,7 +99,11 @@ public class MyBatisTestRunner {
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 
-		 _logger.info("queryPageResults by mapperId "+service.queryPageResults("queryPageResults1",student));
+		 List<Students> allListStudents = 
+				 service.queryPageResults("queryPageResults1",student).getRows();
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
 		 
 	}
 	
@@ -104,7 +112,10 @@ public class MyBatisTestRunner {
 	@Test
 	public void findAll() throws Exception{
 		_logger.info("findAll...");
-		_logger.info("findAll "+service.findAll());
+		List<Students> allListStudents =service.findAll();
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
 	}
 	
 	@Before

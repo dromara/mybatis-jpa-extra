@@ -1,6 +1,5 @@
 package org.apache.mybatis.jpa;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
