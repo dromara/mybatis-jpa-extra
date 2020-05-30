@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>mybatis-jpa-extra</groupId>
   <artifactId>mybatis-jpa-extra-parent</artifactId>
-  <version>2.0</version>
+  <version>${extra.version}</version>
   <packaging>pom</packaging>
     <modules>
-    <module>mybatis-jpa-extra-2.1-api</module>
     <module>mybatis-jpa-extra-core</module>
     <module>mybatis-jpa-extra-spring-boot-starter</module>
+    <module>mybatis-jpa-extra-test</module>
   </modules>
  
  	<properties>
@@ -28,6 +28,9 @@
 		<jackson.version1>1.9.13</jackson.version1>
 		<jackson.version2>2.10.0</jackson.version2>
 		<druid.version>1.1.22</druid.version>
+		<persistence.version>2.2.1</persistence.version>
+		<extra.version>2.1</extra.version>
+		
 	</properties>
 	
 	<repositories>
@@ -162,6 +165,12 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.5</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>javax.persistence</artifactId>
+		    <version>${persistence.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>

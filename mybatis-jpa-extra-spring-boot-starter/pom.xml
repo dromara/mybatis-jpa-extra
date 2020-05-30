@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>mybatis-jpa-extra</groupId>
 		<artifactId>mybatis-jpa-extra-parent</artifactId>
-		<version>2.0</version>
+		<version>${extra.version}</version>
 	</parent>
 	<artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
 	<name>mybatis-jpa-extra-spring-boot-starter</name>
@@ -19,18 +19,17 @@
 	</properties>
 	
 	<dependencies>
-		
-		<dependency>
-			<groupId>mybatis-jpa-extra</groupId>
-			<artifactId>mybatis-jpa-extra-2.1-api</artifactId>
-			<version>2.0</version>
-		</dependency>
 		<dependency>
 			<groupId>mybatis-jpa-extra</groupId>
 			<artifactId>mybatis-jpa-extra</artifactId>
-			<version>2.0</version>
+			<version>${extra.version}</version>
 		</dependency>
-				<dependency>
+		<dependency>
+			<groupId>mybatis-jpa-extra</groupId>
+			<artifactId>mybatis-jpa-extra-test</artifactId>
+			<version>${extra.version}</version>
+		</dependency>
+		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot</artifactId>
 		    <version>${springboot.version}</version>
