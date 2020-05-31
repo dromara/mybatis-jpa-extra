@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>mybatis-jpa-extra</groupId>
-  <artifactId>mybatis-jpa-extra-parent</artifactId>
-  <version>${extra.version}</version>
-  <packaging>pom</packaging>
-    <modules>
-    <module>mybatis-jpa-extra-core</module>
-    <module>mybatis-jpa-extra-spring-boot-starter</module>
-    <module>mybatis-jpa-extra-test</module>
-  </modules>
+	<modelVersion>4.0.0</modelVersion>
+	<!--parent -->
+	<groupId>mybatis-jpa-extra</groupId>
+	<artifactId>mybatis-jpa-extra-parent</artifactId>
+	<version>${mybatis.jpa.extra.version}</version>
+	<packaging>pom</packaging>
+	
+	<!--modules -->
+	<modules>
+		<module>mybatis-jpa-extra-core</module>
+		<module>mybatis-jpa-extra-spring-boot-starter</module>
+		<module>mybatis-jpa-extra-test</module>
+	</modules>
  
  	<properties>
+		<mybatis.jpa.extra.version>2.1</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>5.2.0.RELEASE</spring.version>
@@ -20,7 +24,6 @@
 		<commons-pool2.version>2.4.2</commons-pool2.version>
 		<mysql-connnector.version>5.1.30</mysql-connnector.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
-		<jackson.version>2.6.3</jackson.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-codec.version>1.9</commons-codec.version>
 		<log4j.version>2.12.1</log4j.version>
@@ -28,9 +31,7 @@
 		<jackson.version1>1.9.13</jackson.version1>
 		<jackson.version2>2.10.0</jackson.version2>
 		<druid.version>1.1.22</druid.version>
-		<persistence.version>2.2.1</persistence.version>
-		<extra.version>2.1</extra.version>
-		
+		<persistence.version>2.2.1</persistence.version>		
 	</properties>
 	
 	<repositories>
@@ -315,7 +316,5 @@
 			        <version>2.4.2</version>    
 			 </plugin>
 		</plugins>
-	</build>      
-			        
-			  	        
+	</build>    	        
 </project>

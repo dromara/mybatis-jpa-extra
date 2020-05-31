@@ -1,7 +1,7 @@
 
 # MyBatis JPA Extra
    **MyBatis JPA Extra**对MyBatis进行了扩展，目的在于简化开发的难度，采用了JPA 2.1的注释，无需配置映射的XML文件，使用插件的方式动态生成SQL语句，实现对单表的操作的简化；另外使用Interceptor拦截需要分页的SELECT查询语句，根据不同的数据库完成分页查询。
-
+ 
 相关资源
 
 [MyBatis网站][1]

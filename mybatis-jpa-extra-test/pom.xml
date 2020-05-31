@@ -1,22 +1,24 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+	<!--parent -->
 	<parent>
 		<groupId>mybatis-jpa-extra</groupId>
 		<artifactId>mybatis-jpa-extra-parent</artifactId>
-		<version>${extra.version}</version>
+		<version>${mybatis.jpa.extra.version}</version>
 	</parent>
 
+	<!--self -->
 	<artifactId>mybatis-jpa-extra-test</artifactId>
 	<name>mybatis-jpa-extra-test</name>
-	<url>http://maven.apache.org</url>
+	<description>mybatis-jpa-extra-test</description>
+	<url>https://github.com/shimingxy/mybatis-jpa-extra</url>
 
-	
 	<dependencies>
 		<dependency>
 			<groupId>mybatis-jpa-extra</groupId>
 			<artifactId>mybatis-jpa-extra</artifactId>
-			<version>${extra.version}</version>
+			<version>${mybatis.jpa.extra.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
