@@ -42,16 +42,45 @@ public class MyBatisTestRunner {
 		
 	}
 	
+	
+	@Test
+	public void merge() throws Exception{
+		_logger.info("merge...");
+		Students student=new Students();
+		//student.setId("10024");
+		student.setStdNo("10024");
+		student.setStdGender("M");
+		student.setStdName("司马昭");
+		student.setStdAge(20);
+		student.setStdMajor("政治");
+		student.setStdClass("4");
+		service.merge(student);
+		
+		Thread.sleep(1000);
+		_logger.info("insert id " + student.getId());
+		service.remove(student.getId());
+		
+	}
+	
 	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
-		Students student=service.get("921d3377-937a-4578-b1e2-92fb23b5e512");
+		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
 		
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
-
 	}
 	
+	
+	@Test
+	public void find() throws Exception{
+		_logger.info("find...");
+		Students student=service.find(Students.class,"317d5eda-927c-4871-a916-472a8062df23");
+		
+		System.out.println("Students "+student);
+		 _logger.info("Students "+student);	 
+
+	}
 	
 	@Test
 	public void remove() throws Exception{

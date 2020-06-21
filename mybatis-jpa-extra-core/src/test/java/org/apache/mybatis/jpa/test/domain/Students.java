@@ -133,12 +133,9 @@ public class Students extends JpaBaseDomain implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Students [stdNo=" + stdNo + ", stdName=" + stdName + ", stdgender=" + stdGender + ", stdAge=" + stdAge
-				+ ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
+		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
+				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
 	}
 
-
-	
-	
 
 }

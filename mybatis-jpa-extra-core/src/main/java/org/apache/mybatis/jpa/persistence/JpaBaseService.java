@@ -233,8 +233,18 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 	 */
 	public T get(String id) {
 		try {
-			log.debug("entityClass  "+entityClass.toGenericString()+" , id "+id);
+			log.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+id);
 			return  getMapper().get(this.entityClass,id);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public T find(Class<T> entityClass,Object primaryKey) {
+		try {
+			log.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+primaryKey);
+			return  getMapper().get(entityClass,primaryKey.toString());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -257,6 +267,30 @@ public  class  JpaBaseService <T extends JpaBaseDomain> {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/**
+	 * JPA persist
+	 * @param entity
+	 * @return boolean
+	 */
+	public boolean persist(T entity) {
+		return insert(entity);
+	}
+	
+	/**
+	 * JPA merge
+	 * @param entity
+	 * @return boolean
+	 */
+	public boolean merge(T entity) {
+		T loadedEntity = load(entity);
+		
+		if(loadedEntity == null) {
+			return insert(entity);
+		}else {
+			return update(entity);
+		}
 	}
 	
 	/**
