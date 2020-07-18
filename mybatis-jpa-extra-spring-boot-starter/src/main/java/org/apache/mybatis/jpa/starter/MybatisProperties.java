@@ -59,6 +59,13 @@ public class MybatisProperties {
   private String typeAliasesPackage;
 
   private String dialect;
+  
+  private boolean tableColumnEscape;
+  
+  private String tableColumnEscapeChar;
+  
+  private boolean tableColumnUpcase;
+  
   /**
    * The super class for filtering type alias. If this not specifies, the MyBatis deal as type alias all classes that
    * searched from typeAliasesPackage.
@@ -214,12 +221,36 @@ public class MybatisProperties {
     }
   }
 
-	public String getDialect() {
-		return dialect;
-	}
-	
-	public void setDialect(String dialect) {
-		this.dialect = dialect;
-	}
+  public boolean isTableColumnEscape() {
+      return tableColumnEscape;
+  }
+
+  public void setTableColumnEscape(boolean tableColumnEscape) {
+      this.tableColumnEscape = tableColumnEscape;
+  }
+
+  public String getTableColumnEscapeChar() {
+      return tableColumnEscapeChar;
+  }
+
+  public void setTableColumnEscapeChar(String tableColumnEscapeChar) {
+      this.tableColumnEscapeChar = tableColumnEscapeChar;
+  }
+
+  public boolean isTableColumnUpcase() {
+      return tableColumnUpcase;
+  }
+
+  public void setTableColumnUpcase(boolean tableColumnUpcase) {
+      this.tableColumnUpcase = tableColumnUpcase;
+  }
+
+  public String getDialect() {
+      return dialect;
+  }
+
+  public void setDialect(String dialect) {
+      this.dialect = dialect;
+  }
 
 }

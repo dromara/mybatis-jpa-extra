@@ -37,7 +37,11 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 	/**
 	 * 表名和字段名
 	 */
-	public static boolean 	TABLE_COLUMN_UPCASE 					= 	true;
+	public static boolean 	TABLE_COLUMN_UPCASE 				=   true;
+	public static boolean   TABLE_COLUMN_ESCAPE                 =  false;
+	public static String    TABLE_COLUMN_ESCAPE_CHAR            =  "`";
+	
+	
 	public transient static ConcurrentMap<String, List<FieldColumnMapper>> 	fieldsMap 	= 	new ConcurrentHashMap<String, List<FieldColumnMapper>>();
 	public transient static ConcurrentMap<String, String> 		sqlsMap 	= 	new ConcurrentHashMap<String, String>();
 	public static IdentifierGeneratorFactory identifierGeneratorFactory=new IdentifierGeneratorFactory();
@@ -50,7 +54,9 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 		} else {
 			tablename = entityClass.getClass().getSimpleName();
 		}
-		return TABLE_COLUMN_UPCASE ? tablename.toUpperCase() : tablename;
+		tablename = TABLE_COLUMN_UPCASE ? tablename.toUpperCase() : tablename;
+		tablename = TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + tablename + TABLE_COLUMN_ESCAPE_CHAR : tablename;
+		return tablename;
 	}
 	
 	public static  FieldColumnMapper getIdColumn(String  classSimpleName) {
@@ -81,17 +87,20 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 				FieldColumnMapper fieldColumnMapper=new FieldColumnMapper();
 				fieldColumnMapper.setFieldName( field.getName());
 				fieldColumnMapper.setFieldType(field.getType().getSimpleName());
-				
+				String columnName = "";
 				Column columnAnnotation = (Column) field.getAnnotation(Column.class);
 				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
-					fieldColumnMapper.setColumnName(columnAnnotation.name());
+				    columnName = columnAnnotation.name();
 				} else {
-					if (TABLE_COLUMN_UPCASE) {
-						fieldColumnMapper.setColumnName(field.getName().toUpperCase());
-					} else {
-						fieldColumnMapper.setColumnName(field.getName());
-					}
+				    columnName = TABLE_COLUMN_UPCASE ? 
+				            field.getName().toUpperCase() : field.getName();
 				}
+				
+				columnName = TABLE_COLUMN_ESCAPE ? 
+				        TABLE_COLUMN_ESCAPE_CHAR + columnName + TABLE_COLUMN_ESCAPE_CHAR 
+				        : columnName;
+				
+				fieldColumnMapper.setColumnName(columnName);
 				
 				if(field.isAnnotationPresent(Id.class)) {
 					fieldColumnMapper.setIdColumn(true);

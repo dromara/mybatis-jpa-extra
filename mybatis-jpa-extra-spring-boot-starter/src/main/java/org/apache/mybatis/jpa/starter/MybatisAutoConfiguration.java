@@ -32,6 +32,7 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.mybatis.jpa.MyBatisSessionFactoryBean;
+import org.apache.mybatis.jpa.persistence.MapperMetadata;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperFactoryBean;
@@ -149,6 +150,17 @@ public class MybatisAutoConfiguration implements InitializingBean {
     //mybatis-jpa
     if (StringUtils.hasLength(this.properties.getDialect())) {
     	factory.setDialect(this.properties.getDialect());
+    }
+    
+    if(this.properties.isTableColumnEscape()) {
+        MapperMetadata.TABLE_COLUMN_ESCAPE = true;
+        if(StringUtils.hasLength(this.properties.getTableColumnEscapeChar())) {
+            MapperMetadata.TABLE_COLUMN_ESCAPE_CHAR = this.properties.getTableColumnEscapeChar();
+        }
+    }
+    
+    if(this.properties.isTableColumnUpcase()) {
+        MapperMetadata.TABLE_COLUMN_UPCASE = true;
     }
     
     if (this.databaseIdProvider != null) {
