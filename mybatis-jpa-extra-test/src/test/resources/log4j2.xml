@@ -11,12 +11,9 @@
         <root level="debug">  
             <appender-ref ref="consolePrint" /> 
         </root>  
-         <Logger name="org.springframework" level="INFO">
-         	<appender-ref ref="consolePrint" /> 
-         </Logger>
-    	<Logger name="org.apache.mybatis" level="DEBUG">
-    		<appender-ref ref="consolePrint" /> 
-    	</Logger>
+        
+        <Logger name="org.springframework" level="INFO"></Logger>
+    	<Logger name="org.apache.mybatis" level="DEBUG"></Logger>
     
     </loggers>  
 </configuration>

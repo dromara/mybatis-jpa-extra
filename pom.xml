@@ -36,6 +36,11 @@
 	
 	<repositories>
 		<repository>
+			<id>mvnrepository</id>
+			<name>mvnrepository</name>
+			<url>http://mvnrepository.com/</url>
+		</repository>
+		<repository>
 			<id>sonatype-nexus-staging</id>
 			<name>Sonatype Nexus Staging</name>
 			<url>https://oss.sonatype.org/content/repositories/releases/</url>
@@ -45,14 +50,6 @@
 			<name>jcenter</name>
 			<url>http://jcenter.bintray.com</url>
 		</repository>
-		<!--
-		<repository>
-			<id>mvnrepository</id>
-			<name>mvnrepository</name>
-			<url>http://mvnrepository.com/</url>
-
-		</repository>
-		-->
 	</repositories>
 	
 	<dependencies>
@@ -140,12 +137,12 @@
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-			<version>3.5.3</version>
+			<version>3.5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 		  <groupId>com.alibaba</groupId>

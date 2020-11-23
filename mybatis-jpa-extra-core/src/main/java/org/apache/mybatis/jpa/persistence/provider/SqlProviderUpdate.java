@@ -34,12 +34,19 @@ public class SqlProviderUpdate <T extends JpaBaseDomain>{
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper=listFields.get(i);
 			
+			_logger.trace("Field " +fieldColumnMapper.getFieldName()+" , Type "+ fieldColumnMapper.getFieldType());
+			
 			if (fieldColumnMapper.isIdColumn()) {
 				continue;
 			}
 			
-			if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
+			if(
+				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
+						||fieldColumnMapper.getFieldType().startsWith("byte")
+				)
+				&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
 				//skip null field value
+				_logger.trace("skip  field value is null ");
 			}else {
 				sql.SET(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");
 			}

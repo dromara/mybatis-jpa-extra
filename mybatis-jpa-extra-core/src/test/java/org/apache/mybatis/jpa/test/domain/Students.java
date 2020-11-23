@@ -52,6 +52,9 @@ public class Students extends JpaBaseDomain implements Serializable{
 	@Column
 	private String stdClass;
 	
+	@Column
+	private byte[] images;
+	
 	
 	public Students() {
 		super();
@@ -128,6 +131,16 @@ public class Students extends JpaBaseDomain implements Serializable{
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+
+	public byte[] getImages() {
+		return images;
+	}
+
+
+	public void setImages(byte[] images) {
+		this.images = images;
 	}
 
 

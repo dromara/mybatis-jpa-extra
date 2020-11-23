@@ -33,10 +33,15 @@ public class SqlProviderInsert <T extends JpaBaseDomain>{
 		sql.INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper=listFields.get(i);
-			if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
-					&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
-					&&fieldColumnMapper.getGeneratedValue()==null) {
+			if(
+				(
+					fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
+					||fieldColumnMapper.getFieldType().startsWith("byte")
+				)
+				&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
+				&&fieldColumnMapper.getGeneratedValue()==null) {
 				//skip null field value
+				_logger.trace("skip  field value is null ");
 			}else {
 				//have GeneratedValue and (value is null or eq "")
 				if(fieldColumnMapper.getGeneratedValue()!=null 

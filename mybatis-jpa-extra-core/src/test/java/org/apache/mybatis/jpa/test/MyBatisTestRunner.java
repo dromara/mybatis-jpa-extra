@@ -58,7 +58,7 @@ public class MyBatisTestRunner {
 		
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
-		service.remove(student.getId());
+		//service.remove(student.getId());
 		
 	}
 	
@@ -69,6 +69,23 @@ public class MyBatisTestRunner {
 		
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
+	}
+	
+	@Test
+	public void update() throws Exception{
+		_logger.info("get...");
+		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		System.out.println("Students "+student);
+		 _logger.info("Students "+student);
+		 
+		 _logger.info("update...");
+		 student.setImages(null);
+		 service.update(student);
+		 _logger.info("updateed.");
+		 
+		 student.setImages("ssss".getBytes());
+		 service.update(student);
+		 _logger.info("updateed2.");
 	}
 	
 	
