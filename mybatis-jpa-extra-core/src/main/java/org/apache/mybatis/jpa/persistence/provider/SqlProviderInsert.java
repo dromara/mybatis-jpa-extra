@@ -26,7 +26,7 @@ public class SqlProviderInsert <T extends JpaBaseDomain>{
 	 * @param entity
 	 * @return insert sql String
 	 */
-	public String insert(T entity) {
+	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());
 		SQL sql = new SQL();

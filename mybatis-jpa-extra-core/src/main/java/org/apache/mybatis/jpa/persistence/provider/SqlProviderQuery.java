@@ -60,12 +60,33 @@ public class SqlProviderQuery <T extends JpaBaseDomain>{
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL,findAllSql);
         return findAllSql;  
     }
+
+	public String execute(T entity) {
+		MapperMetadata.buildColumnList(entity.getClass());
+		SQL sql=new SQL();
+		sql.SELECT(" * ");  
+        sql.FROM(MapperMetadata.getTableName(entity.getClass()));  
+        
+        for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
+        	if((
+					fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
+					||fieldColumnMapper.getFieldType().startsWith("byte")
+				)
+        		&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
+				//skip null field value
+			}else {
+				sql.WHERE(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");
+			}
+		}
+		
+		return sql.toString();
+	}
 	
 	/**
 	 * @param entity
 	 * @return insert sql String
 	 */
-	public String queryPageResultsCount(T entity) {
+	public String executePageResultsCount(T entity) {
 		JpaPagination pagination=(JpaPagination)entity;
 		//获取缓存数据
 		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.get(pagination.getPageResultSelectUUID());
@@ -99,21 +120,4 @@ public class SqlProviderQuery <T extends JpaBaseDomain>{
 		return sql.toString();
 	}
 	
-	public String query(T entity) {
-		MapperMetadata.buildColumnList(entity.getClass());
-		SQL sql=new SQL();
-		sql.SELECT(" * ");  
-        sql.FROM(MapperMetadata.getTableName(entity.getClass()));  
-        
-        for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
-        	if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
-				//skip null field value
-			}else {
-				sql.WHERE(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");
-			}
-		}
-		
-		return sql.toString();
-	}
-
 }

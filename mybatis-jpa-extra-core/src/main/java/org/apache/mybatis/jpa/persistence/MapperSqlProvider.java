@@ -20,6 +20,10 @@ public class MapperSqlProvider <T extends JpaBaseDomain>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperSqlProvider.class);
 	
+	public MapperSqlProvider() {
+		_logger.debug("constructor init .");
+	}
+
 	public String get(Map<String, Object>  parametersMap) {
 		return new SqlProviderQuery().get(parametersMap);  
     }
@@ -29,7 +33,7 @@ public class MapperSqlProvider <T extends JpaBaseDomain>{
     }
 	
 	public String remove(Map<String, Object>  parametersMap) { 
-        return new SqlProviderDelete().remove(parametersMap);  
+        return new SqlProviderDelete().execute(parametersMap);  
     }  
 	
 	public String batchDelete(Map<String, Object>  parametersMap) { 
@@ -41,17 +45,15 @@ public class MapperSqlProvider <T extends JpaBaseDomain>{
 	 * @return insert sql String
 	 */
 	public String insert(T entity) {
-		return new SqlProviderInsert().insert(entity);
+		return new SqlProviderInsert().execute(entity);
 	}
-	
-
 
 	/**
 	 * @param entity
 	 * @return update sql String
 	 */
 	public String update(T entity) {
-		return new SqlProviderUpdate().update(entity);
+		return new SqlProviderUpdate().execute(entity);
 	}
 
 	/**
@@ -59,11 +61,11 @@ public class MapperSqlProvider <T extends JpaBaseDomain>{
 	 * @return insert sql String
 	 */
 	public String queryPageResultsCount(T entity) {
-		return new SqlProviderQuery().queryPageResultsCount(entity);
+		return new SqlProviderQuery().executePageResultsCount(entity);
 	}
 	
 	public String query(T entity) {
-		return new SqlProviderQuery().query(entity);
+		return new SqlProviderQuery().execute(entity);
 	}
 
 }

@@ -3,6 +3,8 @@
  */
 package org.apache.mybatis.jpa.persistence;
 
+import javax.persistence.Transient;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
@@ -12,52 +14,65 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 public class JpaPagination {
 	
+	
 	@JsonIgnore
+	@Transient
 	protected int rows;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected int pageSize = 20;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected int pageNumber=1;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected int startRow;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected int endRow;
 	
 	@JsonIgnore
+	@Transient
 	protected String sidx;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected String sortOrder;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected String sortKey;
 	/**
 	 * 
 	 */
 	@JsonIgnore
+	@Transient
 	protected String orderBy;
 	/**
 	 * @serialField pageable
 	 */
 	@JsonIgnore
+	@Transient
 	protected boolean pageable=false;
 	
+	@JsonIgnore
+	@Transient
 	protected String    pageResultSelectUUID;
 	
 	@JsonIgnore

@@ -10,9 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
@@ -47,16 +49,50 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 	public static IdentifierGeneratorFactory identifierGeneratorFactory=new IdentifierGeneratorFactory();
 	
 	public static String getTableName(Class<?> entityClass) {
+		String tableName = null;
+		String schema = null;
+		String catalog = null;
+		//must use @Entity to ORM class
+		Entity entity =(Entity)entityClass.getAnnotation(Entity.class);
+		_logger.trace("entity " + entity);
 		Table table = (Table)entityClass.getAnnotation(Table.class);
-		String tablename = "";
-		if (table != null) {
-			tablename = table.name();
-		} else {
-			tablename = entityClass.getClass().getSimpleName();
+		_logger.trace("table " + table);
+		if(entity !=null ) {
+			if(entity.name()!=null&& !entity.name().equals("")) {
+				tableName = entity.name();
+			}
+			if (table != null) {
+				if(table.name()!=null&& !table.name().equals("")) {
+					tableName = table.name();
+				}
+				if(table.schema()!=null&& !table.schema().equals("")) {
+					schema = table.schema();
+					_logger.trace("schema " + schema);
+				}
+				
+				if(table.catalog()!=null&& !table.catalog().equals("")) {
+					catalog = table.catalog();
+					_logger.trace("catalog " + catalog);
+				}
+			}
+			
+			if(tableName == null) {
+				tableName = entityClass.getClass().getSimpleName();
+			}
+			
+			if(schema != null) {
+				tableName = schema+"."+tableName;
+			}
+			
+			if(catalog != null) {
+				tableName = catalog+"."+tableName;
+			}
+			
 		}
-		tablename = TABLE_COLUMN_UPCASE ? tablename.toUpperCase() : tablename;
-		tablename = TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + tablename + TABLE_COLUMN_ESCAPE_CHAR : tablename;
-		return tablename;
+		tableName = TABLE_COLUMN_UPCASE ? tableName.toUpperCase() : tableName;
+		tableName = TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + tableName + TABLE_COLUMN_ESCAPE_CHAR : tableName;
+		_logger.trace("Table Name " + tableName);
+		return tableName;
 	}
 	
 	public static  FieldColumnMapper getIdColumn(String  classSimpleName) {
@@ -83,6 +119,11 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<FieldColumnMapper>(fields.length);
 
 		for (Field field : fields) {
+			//skip Transient field
+			if(field.isAnnotationPresent(Transient.class)) {
+				continue;
+			}
+			
 			if (field.isAnnotationPresent(Column.class)) {
 				FieldColumnMapper fieldColumnMapper=new FieldColumnMapper();
 				fieldColumnMapper.setFieldName( field.getName());

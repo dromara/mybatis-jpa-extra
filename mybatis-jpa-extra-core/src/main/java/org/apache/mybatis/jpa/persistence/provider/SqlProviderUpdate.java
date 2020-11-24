@@ -24,7 +24,7 @@ public class SqlProviderUpdate <T extends JpaBaseDomain>{
 	 * @param entity
 	 * @return update sql String
 	 */
-	public String update(T entity) {
+	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 
 		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());

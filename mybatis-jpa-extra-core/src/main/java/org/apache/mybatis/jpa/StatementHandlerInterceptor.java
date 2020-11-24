@@ -47,21 +47,19 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			//log.debug("prepare  boundSql  ==> "+removeBreakingWhitespace(sql));
-			//log.debug("prepare  boundSql  ==> "+parameterObject);
+			_logger.trace("parameter object  ==> "+parameterObject);
 			if ((parameterObject instanceof JpaPagination)
 					&& (sql.toUpperCase().trim().startsWith("SELECT")) ) {
 				JpaPagination pagination=(JpaPagination)parameterObject;
 				if(pagination.isPageable()){
-					//log.debug("startsWith SELECT : "+sql.toUpperCase().trim().startsWith("SELECT"));
-					_logger.debug("prepare  boundSql  ==> "+removeBreakingWhitespace(sql));
+					_logger.trace("prepare  boundSql  ==> "+removeBreakingWhitespace(sql));
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, pagination);
 					}else if(statement instanceof PreparedStatementHandler){
 						JpaBaseService.pageResultsBoundSqlCache.put(pagination.getPageResultSelectUUID(), new PageResultsSqlCache(sql,boundSql));
 						sql = dialect.getLimitString(sql, pagination);
 					}
-					_logger.debug("prepare dialect boundSql : "+removeBreakingWhitespace(sql));
+					_logger.trace("prepare dialect boundSql : "+removeBreakingWhitespace(sql));
 					metaObject.setValue("boundSql.sql", sql);
 				}
 				

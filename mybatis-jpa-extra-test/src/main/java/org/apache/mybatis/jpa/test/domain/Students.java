@@ -3,6 +3,7 @@ package org.apache.mybatis.jpa.test.domain;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +27,7 @@ import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
  * @author Crystal.Sea
  *
  */
+@Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaBaseDomain implements Serializable{
 	/**
