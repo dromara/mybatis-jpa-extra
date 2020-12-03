@@ -1,6 +1,6 @@
 
 # MyBatis JPA Extra
-   **MyBatis JPA Extra**对MyBatis进行了扩展，目的在于简化开发的难度，采用了JPA 2.1的注释，无需配置映射的XML文件，使用插件的方式动态生成SQL语句，实现对单表的操作的简化；另外使用Interceptor拦截需要分页的SELECT查询语句，根据不同的数据库完成分页查询。
+   **MyBatis JPA Extra**对MyBatis进行了JPA扩展，目的在于基于JPA 2.1的注释简化对单表CUID操作，根据JPA注释动态生成SQL语句；使用Interceptor拦截需要分页的SELECT查询语句，根据不同的数据库完成分页查询，适配多种数据库；另外提供mybatis-jpa-extra-spring-boot-starter简化SpringBoot集成。
  
 相关资源
 
@@ -11,7 +11,7 @@
 
 ## 1、JavaBean注释简单
 
-只支持4个注释
+只支持6个注释
 > * @Entity
 > * @Table
 > * @Column
