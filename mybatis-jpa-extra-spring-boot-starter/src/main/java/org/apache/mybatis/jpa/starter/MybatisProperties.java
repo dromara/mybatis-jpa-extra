@@ -66,6 +66,10 @@ public class MybatisProperties {
   
   private boolean tableColumnUpcase;
   
+  private int tableColumnSnowflakeDatacenterId;
+  
+  private int tableColumnSnowflakeMachineId;
+  
   /**
    * The super class for filtering type alias. If this not specifies, the MyBatis deal as type alias all classes that
    * searched from typeAliasesPackage.
@@ -245,7 +249,23 @@ public class MybatisProperties {
       this.tableColumnUpcase = tableColumnUpcase;
   }
 
-  public String getDialect() {
+  public int getTableColumnSnowflakeDatacenterId() {
+	return tableColumnSnowflakeDatacenterId;
+}
+
+public void setTableColumnSnowflakeDatacenterId(int tableColumnSnowflakeDatacenterId) {
+	this.tableColumnSnowflakeDatacenterId = tableColumnSnowflakeDatacenterId;
+}
+
+public int getTableColumnSnowflakeMachineId() {
+	return tableColumnSnowflakeMachineId;
+}
+
+public void setTableColumnSnowflakeMachineId(int tableColumnSnowflakeMachineId) {
+	this.tableColumnSnowflakeMachineId = tableColumnSnowflakeMachineId;
+}
+
+public String getDialect() {
       return dialect;
   }
 

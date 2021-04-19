@@ -37,7 +37,7 @@ public class Students extends JpaBaseDomain implements Serializable{
 	
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.AUTO,generator="serial")
+	@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;

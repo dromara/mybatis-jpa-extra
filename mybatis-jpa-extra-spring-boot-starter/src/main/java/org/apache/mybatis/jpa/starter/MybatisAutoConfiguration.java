@@ -32,6 +32,7 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.mybatis.jpa.MyBatisSessionFactoryBean;
+import org.apache.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.apache.mybatis.jpa.persistence.MapperMetadata;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -162,6 +163,15 @@ public class MybatisAutoConfiguration implements InitializingBean {
     if(this.properties.isTableColumnUpcase()) {
         MapperMetadata.TABLE_COLUMN_UPCASE = true;
     }
+    
+    if(this.properties.getTableColumnSnowflakeDatacenterId()>0 && 
+    		this.properties.getTableColumnSnowflakeMachineId()>0) {
+    	logger.debug("TableColumn Snowflake init ");
+    	IdentifierGeneratorFactory  identifierGeneratorFactory = new IdentifierGeneratorFactory(
+    			this.properties.getTableColumnSnowflakeDatacenterId(),this.properties.getTableColumnSnowflakeMachineId());
+    	MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
+    }
+    
     
     if (this.databaseIdProvider != null) {
       factory.setDatabaseIdProvider(this.databaseIdProvider);

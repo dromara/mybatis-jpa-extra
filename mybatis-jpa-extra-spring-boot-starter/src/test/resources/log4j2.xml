@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<configuration status="DEBUG">  
+    <appenders>  
+        <Console name="consolePrint" target="SYSTEM_OUT">  
+            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n" />  
+        </Console>
+        
+	 </appenders>
+
+	<loggers>
+
+		<Logger name="org.springframework" level="INFO"></Logger>
+		<Logger name="org.apache.mybatis" level="DEBUG"></Logger>
+		<Logger name="org.apache.mybatis.jpa" level="TRACE"></Logger>
+
+		<root level="INFO">
+			<appender-ref ref="consolePrint" />
+		</root>
+	</loggers>  
+</configuration>

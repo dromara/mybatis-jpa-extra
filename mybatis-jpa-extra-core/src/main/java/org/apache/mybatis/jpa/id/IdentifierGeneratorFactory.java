@@ -13,7 +13,13 @@ public class IdentifierGeneratorFactory {
 	public IdentifierGeneratorFactory() {
 		register("uuid", new UUIDGenerator());
 		register("uuid.hex", new UUIDHexGenerator());
-		//register("serial", new SerialGenerator());
+		register("snowflakeid", new SnowFlakeIdGenerator());
+	}
+	
+	public IdentifierGeneratorFactory(long datacenterId, long machineId) {
+		register("uuid", new UUIDGenerator());
+		register("uuid.hex", new UUIDHexGenerator());
+		register("snowflakeid", new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 
 	public ConcurrentHashMap<String, IdentifierGenerator> getGeneratorStrategyMap() {
