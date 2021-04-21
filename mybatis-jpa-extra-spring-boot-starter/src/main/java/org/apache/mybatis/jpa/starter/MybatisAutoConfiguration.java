@@ -158,14 +158,18 @@ public class MybatisAutoConfiguration implements InitializingBean {
         }
     }
     
-    //default is lowercase
-    if(this.properties.getTableColumnCase().equalsIgnoreCase("uppercase")) {
-        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.UPPERCASE;
-    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("lowercase")) {
-        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
-    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("normal")) {
-    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.NORMAL;
-  	}else {
+    if (StringUtils.hasLength(this.properties.getTableColumnCase())) {
+	    //default is lowercase
+	    if(this.properties.getTableColumnCase().equalsIgnoreCase("uppercase")) {
+	        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.UPPERCASE;
+	    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("lowercase")) {
+	        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
+	    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("normal")) {
+	    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.NORMAL;
+	  	}else {
+	    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
+	    }
+    }else {
     	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
     }
     
