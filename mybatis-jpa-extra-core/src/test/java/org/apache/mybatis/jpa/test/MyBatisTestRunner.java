@@ -38,7 +38,7 @@ public class MyBatisTestRunner {
 		
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
-		service.remove(student.getId());
+		//service.remove(student.getId());
 		
 	}
 	
@@ -129,7 +129,7 @@ public class MyBatisTestRunner {
 		 student.setStdGender("M");
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
-		 student.setPageNumber(2);
+		 student.setPageNumber(1);
 		 List<Students> allListStudents = 
 				 service.queryPageResults(student).getRows();
 		 for (Students s : allListStudents) {

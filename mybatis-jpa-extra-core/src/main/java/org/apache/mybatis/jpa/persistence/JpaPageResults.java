@@ -183,14 +183,23 @@ public  class JpaPageResults <T>{
 	public void setRows(List<T> rows) {
 		this.rows = rows;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Grid [page=" + page + ", total=" + total
-				+ ", totalPage=" + totalPage + ", records=" + records
-				+ ", rows=" + rows + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("JpaPageResults [_logger=");
+		builder.append(_logger);
+		builder.append(", page=");
+		builder.append(page);
+		builder.append(", total=");
+		builder.append(total);
+		builder.append(", totalPage=");
+		builder.append(totalPage);
+		builder.append(", records=");
+		builder.append(records);
+		builder.append(", rows=");
+		builder.append(rows);
+		builder.append("]");
+		return builder.toString();
 	}
 	
 

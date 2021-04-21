@@ -64,7 +64,7 @@ public class MybatisProperties {
   
   private String tableColumnEscapeChar;
   
-  private boolean tableColumnUpcase;
+  private String tableColumnCase;
   
   private int tableColumnSnowflakeDatacenterId;
   
@@ -241,15 +241,18 @@ public class MybatisProperties {
       this.tableColumnEscapeChar = tableColumnEscapeChar;
   }
 
-  public boolean isTableColumnUpcase() {
-      return tableColumnUpcase;
-  }
 
-  public void setTableColumnUpcase(boolean tableColumnUpcase) {
-      this.tableColumnUpcase = tableColumnUpcase;
-  }
 
-  public int getTableColumnSnowflakeDatacenterId() {
+
+public String getTableColumnCase() {
+	return tableColumnCase;
+}
+
+public void setTableColumnCase(String tableColumnCase) {
+	this.tableColumnCase = tableColumnCase;
+}
+
+public int getTableColumnSnowflakeDatacenterId() {
 	return tableColumnSnowflakeDatacenterId;
 }
 

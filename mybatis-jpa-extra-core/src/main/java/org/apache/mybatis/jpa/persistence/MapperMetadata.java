@@ -39,15 +39,26 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 	/**
 	 * 表名和字段名
 	 */
-	public static boolean 	TABLE_COLUMN_UPCASE 				=   true;
+	public static int 		TABLE_COLUMN_CASE 					=   CASE_TYPE.LOWERCASE;
 	public static boolean   TABLE_COLUMN_ESCAPE                 =  false;
 	public static String    TABLE_COLUMN_ESCAPE_CHAR            =  "`";
+	
+	public static class CASE_TYPE{
+		public static int 		NORMAL 				=   0;
+		public static int 		LOWERCASE 			=   1;
+		public static int 		UPPERCASE 			=   2;
+	}
 	
 	
 	public transient static ConcurrentMap<String, List<FieldColumnMapper>> 	fieldsMap 	= 	new ConcurrentHashMap<String, List<FieldColumnMapper>>();
 	public transient static ConcurrentMap<String, String> 		sqlsMap 	= 	new ConcurrentHashMap<String, String>();
 	public static IdentifierGeneratorFactory identifierGeneratorFactory=new IdentifierGeneratorFactory();
 	
+	/**
+	 * getTableName
+	 * @param entityClass
+	 * @return
+	 */
 	public static String getTableName(Class<?> entityClass) {
 		String tableName = null;
 		String schema = null;
@@ -89,7 +100,9 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 			}
 			
 		}
-		tableName = TABLE_COLUMN_UPCASE ? tableName.toUpperCase() : tableName;
+		
+		tableName = tableColumnCaseConverter(tableName);
+		
 		tableName = TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + tableName + TABLE_COLUMN_ESCAPE_CHAR : tableName;
 		_logger.trace("Table Name " + tableName);
 		return tableName;
@@ -107,6 +120,10 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 		return idFieldColumnMapper;
 	}
 
+	/**
+	 * buildColumnList
+	 * @param entityClass
+	 */
 	public static void buildColumnList(Class<?> entityClass) {
 		if (fieldsMap.containsKey(entityClass.getSimpleName())) {
 			//run one time
@@ -133,9 +150,10 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
 				    columnName = columnAnnotation.name();
 				} else {
-				    columnName = TABLE_COLUMN_UPCASE ? 
-				            field.getName().toUpperCase() : field.getName();
+					columnName = field.getName();
 				}
+				
+				columnName = tableColumnCaseConverter(columnName);
 				
 				columnName = TABLE_COLUMN_ESCAPE ? 
 				        TABLE_COLUMN_ESCAPE_CHAR + columnName + TABLE_COLUMN_ESCAPE_CHAR 
@@ -160,5 +178,15 @@ public class MapperMetadata <T extends JpaBaseDomain>{
 		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);
 		_logger.debug("fieldsMap : " + fieldsMap);
 
+	}
+	
+	public static String tableColumnCaseConverter(String name) {
+		if(TABLE_COLUMN_CASE  == CASE_TYPE.NORMAL) {}
+		else if(TABLE_COLUMN_CASE  == CASE_TYPE.LOWERCASE) {
+			name = name.toLowerCase();
+		}else if(TABLE_COLUMN_CASE  == CASE_TYPE.UPPERCASE) {
+			name = name.toUpperCase();
+		}
+		return name;
 	}
 }

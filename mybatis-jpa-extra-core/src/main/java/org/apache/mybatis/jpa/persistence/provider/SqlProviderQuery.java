@@ -107,11 +107,11 @@ public class SqlProviderQuery <T extends JpaBaseDomain>{
 			countSql.append(selectSql);
 		}
 		
-		if(countSql.toString().toUpperCase().indexOf("DISTINCT")>0) {
-			sql.append("SELECT COUNT(1) COUNTROWS_ FROM (").append(countSql).append(" ) COUNT_TABLE_");
+		if(countSql.toString().toLowerCase().indexOf("distinct")>0) {
+			sql.append("select count(1) countrows_ from (").append(countSql).append(" ) count_table_");
 		}else {
-			sql.append("SELECT COUNT(1) COUNTROWS_ ").append(
-					countSql.substring(countSql.toString().toUpperCase().indexOf("FROM"))
+			sql.append("select count(1) countrows_ ").append(
+					countSql.substring(countSql.toString().toLowerCase().indexOf("from"))
 			);
 		}
 		//删除缓存

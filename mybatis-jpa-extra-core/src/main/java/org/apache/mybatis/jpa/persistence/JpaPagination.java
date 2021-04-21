@@ -202,16 +202,33 @@ public class JpaPagination {
 		return pageResultSelectUUID;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "Pagination [rows=" + rows + ", pageResults=" + pageSize
-				+ ", page=" + pageNumber + ", startRow=" + startRow + ", endRow="
-				+ endRow + ", sidx=" + sidx + ", sord=" + sortOrder + ", sortKey="
-				+ sortKey + ", orderBy=" + orderBy + ", pageable=" + pageable
-				+ "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("JpaPagination [rows=");
+		builder.append(rows);
+		builder.append(", pageSize=");
+		builder.append(pageSize);
+		builder.append(", pageNumber=");
+		builder.append(pageNumber);
+		builder.append(", startRow=");
+		builder.append(startRow);
+		builder.append(", endRow=");
+		builder.append(endRow);
+		builder.append(", sidx=");
+		builder.append(sidx);
+		builder.append(", sortOrder=");
+		builder.append(sortOrder);
+		builder.append(", sortKey=");
+		builder.append(sortKey);
+		builder.append(", orderBy=");
+		builder.append(orderBy);
+		builder.append(", pageable=");
+		builder.append(pageable);
+		builder.append(", pageResultSelectUUID=");
+		builder.append(pageResultSelectUUID);
+		builder.append("]");
+		return builder.toString();
 	}
 	
 	

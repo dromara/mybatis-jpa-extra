@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper" >
+
+	<sql id="sql_condition">
+		WHERE	1	=	1
+    	<if test="id != null">
+			AND	id	=	'${id}'
+		</if>
+		<if test="stdName != null  and stdName != '' ">
+			AND stdname like '%${stdName}%'
+		</if>
+		<if test="stdGender != null  and stdGender != '' ">
+			AND	stdgender	=	#{stdGender}
+		</if>
+		<if test="stdMajor != null">
+			<![CDATA[AND	stdmajor	= #{stdMajor}]]>
+		</if>
+	</sql>
+	
+    <select id="queryPageResults" parameterType="Students" resultType="Students">
+    	select 
+    		id		   ,
+			stdno      ,
+			stdname    ,
+			stdgender  ,
+			stdage     ,
+			stdmajor   ,
+			stdclass 
+			
+    	from students 
+    	<include refid="sql_condition"/>
+    </select>
+   
+ 
+     <select id="queryPageResults1" parameterType="Students" resultType="Students">
+    	select 
+    		id		   ,
+			stdno      ,
+			stdname    ,
+			stdgender  ,
+			stdage     ,
+			stdmajor   ,
+			stdclass 
+			
+    	from students 
+    	<include refid="sql_condition"/>
+    	and stdgender in (
+    		select stdgender from  students
+    	)
+    </select>
+       
+     <select id="queryBy" parameterType="Students" resultType="Students">
+    	select 
+    		id		   ,
+			stdno      ,
+			stdname    ,
+			stdgender  ,
+			stdage     ,
+			stdmajor   ,
+			stdclass 
+    	from roles 
+    	<include refid="sql_condition"/>
+    </select>
+  
+
+    
+    <delete id="delete" parameterType="Students" >
+    	delete from students where id=#{id}
+    </delete>
+    
+
+
+</mapper>

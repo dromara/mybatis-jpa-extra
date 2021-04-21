@@ -25,11 +25,11 @@ public class SQLServerDialect extends Dialect {
 		StringBuilder pagingSelectSql = new StringBuilder( "" );
 		if(pagination.getPageSize()>0){
 			
-			pagingSelectSql.append("SELECT TOP "+pagination.getPageSize()+" * FROM ( ");
-			pagingSelectSql.append("SELECT ROW_NUMBER() OVER() AS ROWNUMBER,MYBATIS_QUERY_TEMP_TABLE.* FROM ( ");
-			pagingSelectSql.append("MYBATIS_QUERY_TEMP_TABLE ) MYBATIS_QUERY_TEMP_PAGE ");
+			pagingSelectSql.append("select top "+pagination.getPageSize()+" * from ( ");
+			pagingSelectSql.append("select row_number() over() as rownumber,mybatis_query_temp_table.* from ( ");
+			pagingSelectSql.append("mybatis_query_temp_table ) mybatis_query_temp_page ");
 			if(pagination.getStartRow()>0){
-				pagingSelectSql.append("WHERE  ROWNUMBER > "+pagination.getStartRow());
+				pagingSelectSql.append("where  rownumber > "+pagination.getStartRow());
 			}
 		}else{
 			return sql;
@@ -41,11 +41,11 @@ public class SQLServerDialect extends Dialect {
 	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " LIMIT ? , ?";
+			return sql +  " limit ? , ?";
 		}else if(pagination.getPageSize()>0){
-			return sql +  " LIMIT  ? ";
+			return sql +  " limit  ? ";
 		}else{
-			return sql +  " LIMIT ?";
+			return sql +  " limit ?";
 		}
 	}
 	

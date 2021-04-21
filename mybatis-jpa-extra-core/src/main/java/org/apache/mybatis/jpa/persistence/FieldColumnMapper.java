@@ -69,8 +69,19 @@ public class FieldColumnMapper {
 
 	@Override
 	public String toString() {
-		return "FieldColumnMapper [fieldName=" + fieldName + ", fieldType=" + fieldType + ", columnName=" + columnName
-				+ ", idColumn=" + idColumn + ", generatedValue=" + generatedValue + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("FieldColumnMapper [fieldName=");
+		builder.append(fieldName);
+		builder.append(", fieldType=");
+		builder.append(fieldType);
+		builder.append(", columnName=");
+		builder.append(columnName);
+		builder.append(", idColumn=");
+		builder.append(idColumn);
+		builder.append(", generatedValue=");
+		builder.append(generatedValue);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

@@ -35,9 +35,9 @@
 	<!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
 	<bean id="sqlSessionFactory" class="org.apache.mybatis.jpa.MyBatisSessionFactoryBean">
 		<property name="timeout" value="30" />
-		<property name="dialect" value="mysql" />
+		<property name="dialect" value="postgresql" />
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/mysql/*.xml" />
+		<property name="mapperLocations" value="classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/postgresql/*.xml" />
 		<property name="typeAliasesPackage" 
         		  value="
 	        			org.apache.mybatis.jpa.test.domain,

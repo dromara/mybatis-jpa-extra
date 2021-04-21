@@ -34,6 +34,7 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.mybatis.jpa.MyBatisSessionFactoryBean;
 import org.apache.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.apache.mybatis.jpa.persistence.MapperMetadata;
+import org.apache.mybatis.jpa.persistence.MapperMetadata.CASE_TYPE;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperFactoryBean;
@@ -160,8 +161,15 @@ public class MybatisAutoConfiguration implements InitializingBean {
         }
     }
     
-    if(this.properties.isTableColumnUpcase()) {
-        MapperMetadata.TABLE_COLUMN_UPCASE = true;
+    //default is lowercase
+    if(this.properties.getTableColumnCase().equalsIgnoreCase("uppercase")) {
+        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.UPPERCASE;
+    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("lowercase")) {
+        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
+    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("normal")) {
+    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.NORMAL;
+  	}else {
+    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
     }
     
     if(this.properties.getTableColumnSnowflakeDatacenterId()>0 && 

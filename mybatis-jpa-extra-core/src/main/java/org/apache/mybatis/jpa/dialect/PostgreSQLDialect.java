@@ -22,11 +22,11 @@ public class PostgreSQLDialect extends Dialect {
 	public String getLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " LIMIT " + pagination.getPageSize()+" ,  "+pagination.getStartRow() ;
+			return sql +  " limit " + pagination.getPageSize()+" offset  "+pagination.getStartRow() ;
 		}else if(pagination.getPageSize()>0){
-			return sql +  " LIMIT " + pagination.getPageSize();
+			return sql +  " limit " + pagination.getPageSize();
 		}else{
-			return sql +  " LIMIT 1000";
+			return sql +  " limit 1000";
 		}
 	}
 	
@@ -34,11 +34,11 @@ public class PostgreSQLDialect extends Dialect {
 	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " LIMIT ? , ?";
+			return sql +  " limit ? offset ?";
 		}else if(pagination.getPageSize()>0){
-			return sql +  " LIMIT  ? ";
+			return sql +  " limit  ? ";
 		}else{
-			return sql +  " LIMIT ?";
+			return sql +  " limit ?";
 		}
 	}
 	

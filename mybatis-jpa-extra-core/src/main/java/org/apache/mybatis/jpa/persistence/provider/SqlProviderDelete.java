@@ -50,7 +50,7 @@ public class SqlProviderDelete <T extends JpaBaseDomain>{
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		SQL sql=new SQL();
         sql.DELETE_FROM(MapperMetadata.getTableName(entityClass));  
-        sql.WHERE(idFieldColumnMapper.getColumnName()+" IN ( "+keyValue+" )");  
+        sql.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
         String deleteSql=sql.toString(); 
         _logger.trace("Delete SQL \n"+deleteSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL,deleteSql);

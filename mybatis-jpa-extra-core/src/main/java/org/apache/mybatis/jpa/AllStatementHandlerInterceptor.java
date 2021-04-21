@@ -34,9 +34,9 @@ public class AllStatementHandlerInterceptor extends
 
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
-		if ("prepare".equals(m.getName())) { // һ���������Statement
+		if ("prepare".equals(m.getName())) { // prepare Statement
 			return prepare(invocation);
-		} else if ("parameterize".equals(m.getName())) { // һ���������ò���
+		} else if ("parameterize".equals(m.getName())) { // parameterize
 			return parameterize(invocation);
 		} else if ("handleResultSets".equals(m.getName())) {// handleResultSets
 			return handleResultSets(invocation);
@@ -54,14 +54,15 @@ public class AllStatementHandlerInterceptor extends
 
 	private Object prepare(Invocation invocation) throws Throwable {
 		StatementHandler statement = getStatementHandler(invocation);
-		if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
+		if (statement instanceof SimpleStatementHandler 
+				|| statement instanceof PreparedStatementHandler) {
 			MetaObject metaObject=SystemMetaObject.forObject(statement);
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
 			_logger.debug("prepare  boundSql : "+sql);
-			_logger.debug("startsWith SELECT : "+sql.toUpperCase().trim().startsWith("SELECT"));
-			if (sql.toUpperCase().trim().startsWith("SELECT") && (parameterObject instanceof JpaBaseDomain)) {
+			_logger.debug("startsWith select : "+sql.toLowerCase().trim().startsWith("select"));
+			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaBaseDomain)) {
 				if(statement instanceof SimpleStatementHandler){
 					sql = dialect.getLimitString(sql, (JpaBaseDomain)parameterObject);
 				}else if(statement instanceof PreparedStatementHandler){
@@ -84,9 +85,12 @@ public class AllStatementHandlerInterceptor extends
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statementHandler.getBoundSql();
 			
-			if (boundSql.getSql().toUpperCase().trim().startsWith("SELECT") && (parameterObject instanceof JpaBaseDomain)) {
+			if (
+					boundSql.getSql().toLowerCase().trim().startsWith("select") 
+					&& (parameterObject instanceof JpaBaseDomain)
+			) {
 				List<ParameterMapping>  pms= boundSql.getParameterMappings();
-				System.out.println(pms);
+				_logger.debug("ParameterMapping " + pms);
 				int parameterSize = pms.size();
 				dialect.setLimitParamters(ps, parameterSize,(JpaBaseDomain)parameterObject);
 			}

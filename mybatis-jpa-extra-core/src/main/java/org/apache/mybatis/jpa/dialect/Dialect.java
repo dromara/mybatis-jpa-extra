@@ -21,7 +21,7 @@ public abstract class Dialect {
 
 	private static final Logger _logger 			= 	LoggerFactory.getLogger(Dialect.class);
 
-	public static final String DEFAULT_BATCH_SIZE	= 	"15";
+	public static final String DEFAULT_BATCH_SIZE	= 	"20";
 	public static final String NO_BATCH 			= 	"0";
 	public static final String DEFAULT_DIALECT 		= 	"mysql";
 
@@ -35,7 +35,9 @@ public abstract class Dialect {
 		dialectMap.put("mysql", 		"org.apache.mybatis.jpa.dialect.MySQLDialect");
 		dialectMap.put("oracle", 		"org.apache.mybatis.jpa.dialect.OracleDialect");
 		dialectMap.put("postgresql", 	"org.apache.mybatis.jpa.dialect.PostgreSQLDialect");
+		dialectMap.put("highgo", 		"org.apache.mybatis.jpa.dialect.HighgoDialect");
 		dialectMap.put("sqlserver", 	"org.apache.mybatis.jpa.dialect.SQLServerDialect");
+		
 		
 		_logger.trace("Dialect Mapper : \n"+dialectMap);
 	}

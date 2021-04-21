@@ -41,11 +41,11 @@ public class DB2Dialect extends Dialect {
 	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " LIMIT ? , ?";
+			return sql +  " limit ? , ?";
 		}else if(pagination.getPageSize()>0){
-			return sql +  " LIMIT  ? ";
+			return sql +  " limit  ? ";
 		}else{
-			return sql +  " LIMIT ?";
+			return sql +  " limit ?";
 		}
 	}
 	

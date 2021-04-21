@@ -56,7 +56,7 @@ public class SqlProviderInsert <T extends JpaBaseDomain>{
 							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
 						}
 					}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
-						sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".NEXTVAL");
+						sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
 					}else if(generatedValue.strategy()==GenerationType.IDENTITY){
 						//skip
 					}else if(generatedValue.strategy()==GenerationType.TABLE){
