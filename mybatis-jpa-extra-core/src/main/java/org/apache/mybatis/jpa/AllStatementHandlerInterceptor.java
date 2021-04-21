@@ -1,3 +1,20 @@
+/*
+ * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+
 package org.apache.mybatis.jpa;
 
 import java.lang.reflect.Method;
@@ -6,7 +23,6 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
-
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.executor.statement.PreparedStatementHandler;
 import org.apache.ibatis.executor.statement.SimpleStatementHandler;
@@ -21,7 +37,9 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
+import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @Intercepts({
@@ -31,7 +49,8 @@ import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
 })
 public class AllStatementHandlerInterceptor extends
 		AbstractStatementHandlerInterceptor implements Interceptor {
-
+	protected Logger _logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
+	
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
 		if ("prepare".equals(m.getName())) { // prepare Statement
@@ -62,11 +81,11 @@ public class AllStatementHandlerInterceptor extends
 			String sql = boundSql.getSql();
 			_logger.debug("prepare  boundSql : "+sql);
 			_logger.debug("startsWith select : "+sql.toLowerCase().trim().startsWith("select"));
-			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaBaseDomain)) {
+			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaBaseEntity)) {
 				if(statement instanceof SimpleStatementHandler){
-					sql = dialect.getLimitString(sql, (JpaBaseDomain)parameterObject);
+					sql = dialect.getLimitString(sql, (JpaBaseEntity)parameterObject);
 				}else if(statement instanceof PreparedStatementHandler){
-					sql = dialect.getPreparedStatementLimitString(sql, (JpaBaseDomain)parameterObject);
+					sql = dialect.getPreparedStatementLimitString(sql, (JpaBaseEntity)parameterObject);
 				}
 			}
 			metaObject.setValue("boundSql.sql", sql);
@@ -87,12 +106,12 @@ public class AllStatementHandlerInterceptor extends
 			
 			if (
 					boundSql.getSql().toLowerCase().trim().startsWith("select") 
-					&& (parameterObject instanceof JpaBaseDomain)
+					&& (parameterObject instanceof JpaBaseEntity)
 			) {
 				List<ParameterMapping>  pms= boundSql.getParameterMappings();
 				_logger.debug("ParameterMapping " + pms);
 				int parameterSize = pms.size();
-				dialect.setLimitParamters(ps, parameterSize,(JpaBaseDomain)parameterObject);
+				dialect.setLimitParamters(ps, parameterSize,(JpaBaseEntity)parameterObject);
 			}
 		}
 		return invocation.proceed();

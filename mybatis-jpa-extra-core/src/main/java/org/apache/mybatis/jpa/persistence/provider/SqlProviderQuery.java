@@ -1,16 +1,32 @@
+/*
+ * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+
 /**
  * 
  */
 package org.apache.mybatis.jpa.persistence.provider;
 
 import java.util.Map;
-
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.persistence.FieldColumnMapper;
-import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
+import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 import org.apache.mybatis.jpa.persistence.JpaBaseService;
 import org.apache.mybatis.jpa.persistence.JpaPagination;
 import org.apache.mybatis.jpa.persistence.MapperMetadata;
@@ -23,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SqlProviderQuery <T extends JpaBaseDomain>{
+public class SqlProviderQuery <T extends JpaBaseEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderQuery.class);
 

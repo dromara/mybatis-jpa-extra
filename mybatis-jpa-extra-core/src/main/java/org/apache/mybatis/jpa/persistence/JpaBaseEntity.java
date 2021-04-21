@@ -15,32 +15,24 @@
  */
  
 
-package org.apache.mybatis.jpa;
+package org.apache.mybatis.jpa.persistence;
 
-import org.apache.ibatis.mapping.BoundSql;
+import java.io.Serializable;
+import java.util.UUID;
 
-public class PageResultsSqlCache {
-	String sql;
-	BoundSql boundSql;
+/**
+ * BaseDomain for Database Table domain
+ * 
+ * @author Crystal.sea
+ * 
+ */
+public class JpaBaseEntity extends JpaPagination implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6290127045507211154L;
 	
-	
-	public PageResultsSqlCache(String sql, BoundSql boundSql) {
-		super();
-		this.sql = sql;
-		this.boundSql = boundSql;
+	public String generateId() {
+		return UUID.randomUUID().toString().toLowerCase();
 	}
-	
-	public String getSql() {
-		return sql;
-	}
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-	public BoundSql getBoundSql() {
-		return boundSql;
-	}
-	public void setBoundSql(BoundSql boundSql) {
-		this.boundSql = boundSql;
-	}
-	
 }
