@@ -27,15 +27,18 @@ public class IdentifierGeneratorFactory {
 	public static ConcurrentHashMap<String, IdentifierGenerator> generatorStrategyMap = new ConcurrentHashMap<String, IdentifierGenerator>();
 	
 	public IdentifierGeneratorFactory() {
-		register("uuid", new UUIDGenerator());
-		register("uuid.hex", new UUIDHexGenerator());
-		register("snowflakeid", new SnowFlakeIdGenerator());
+		register(IdStrategy.UUID, new UUIDGenerator());
+		register(IdStrategy.UUIDHEX, new UUIDHexGenerator());
+		register(IdStrategy.SERIAL, new SerialGenerator());
+		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator());
 	}
 	
 	public IdentifierGeneratorFactory(long datacenterId, long machineId) {
-		register("uuid", new UUIDGenerator());
-		register("uuid.hex", new UUIDHexGenerator());
-		register("snowflakeid", new SnowFlakeIdGenerator(datacenterId,machineId));
+		register(IdStrategy.UUID, new UUIDGenerator());
+		register(IdStrategy.UUIDHEX, new UUIDHexGenerator());
+		register(IdStrategy.SERIAL, new SerialGenerator());
+		SerialGenerator.STATIC_NODE_NUMBER = "" + datacenterId + machineId;
+		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 
 	public ConcurrentHashMap<String, IdentifierGenerator> getGeneratorStrategyMap() {

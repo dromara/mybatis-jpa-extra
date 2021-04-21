@@ -20,6 +20,8 @@ package org.apache.mybatis.jpa.persistence;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.apache.mybatis.jpa.id.IdStrategy;
+
 /**
  * BaseDomain for Database Table domain
  * 
@@ -33,6 +35,10 @@ public class JpaBaseEntity extends JpaPagination implements Serializable{
 	private static final long serialVersionUID = -6290127045507211154L;
 	
 	public String generateId() {
-		return UUID.randomUUID().toString().toLowerCase();
+		if(MapperMetadata.identifierGeneratorFactory!=null) {
+			return MapperMetadata.identifierGeneratorFactory.generate(IdStrategy.SNOWFLAKEID);
+		}else {
+			return UUID.randomUUID().toString().toLowerCase();
+		}
 	}
 }
