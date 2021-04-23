@@ -7,13 +7,6 @@
 2.用Interceptor实现数据库**SELECT分页查询**;
 	
 3.提供mybatis-jpa-extra-spring-boot-starter,**简化SpringBoot集成**;
- 
-相关资源
-
-[MyBatis网站][1]
-
-[MyBatis GitHub源码][2]
-
 
 ## 1、JavaBean注释简单
 
@@ -531,6 +524,12 @@ mybatis.table-column-snowflake-machine-id=1
 #mybatis.table-column-escape-char=`
 ```
 
+
+##  5、相关资源
+
+[MyBatis网站][1]
+
+[MyBatis GitHub源码][2]
 
   [1]: http://www.mybatis.org/mybatis-3/
   [2]: https://github.com/mybatis/mybatis-3/
