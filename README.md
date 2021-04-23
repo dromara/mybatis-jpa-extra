@@ -17,7 +17,7 @@
 
 ## 1、JavaBean注释简单
 
-只支持6个注释
+仅有6个注释
 > * @Entity
 > * @Table
 > * @Column
@@ -26,7 +26,7 @@
 > * @Transient 
 
 
-@GeneratedValue有3中策略 
+@GeneratedValue有4中策略 
 
  1. **AUTO**
 	
