@@ -41,52 +41,17 @@
 
 
 ```java
-/*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package org.apache.mybatis.jpa.test.entity;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 
-
-
-/*
-   ID                   varchar(40)                    not null,
-   NAME                 varchar(60)                    not null,
-   STATUS               char(1)                        null,
-   CREATEBY             varchar(40)                    null,
-   CREATEDATE           date                           null,
-   UPDATEBY             varchar(40)                    null,
-   UPDATEDATE           date                           null,
-   constraint PK_ROLES primary key clustered (ID)
- */
-/**
- * @author Crystal.Sea
- *
- */
 @Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaBaseEntity implements Serializable{
@@ -205,14 +170,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 		this.images = images;
 	}
 
-
-	@Override
-	public String toString() {
-		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
-				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
-	}
-
-
 }
 
 
@@ -221,23 +178,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 ## 2、单表新增、修改、删除、查询、分页查询
 
 ```java
-/*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-
 package org.apache.mybatis.jpa.test;
 
 import java.text.SimpleDateFormat;
