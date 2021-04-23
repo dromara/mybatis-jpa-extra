@@ -2,7 +2,7 @@
 # MyBatis JPA Extra
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
-1.旨在基于JPA 2.1的注释**简化CUID操作**;
+1.基于JPA 2.1的注释**简化CUID操作**;
 	
 2.用Interceptor实现数据库**SELECT分页查询**;
 	
