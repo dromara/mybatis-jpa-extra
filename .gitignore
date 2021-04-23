@@ -1,5 +1,7 @@
 *.class
 */target/*
+.metadata
+.classpath
 /.metadata/
 # Log file
 *.log
@@ -7,3 +9,8 @@
 */logs/*
 */jdk/*
 jdk/*
+.settings
+*/.settings
+.project
+*/.project
+*/.classpath

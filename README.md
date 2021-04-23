@@ -1,6 +1,6 @@
 
 # MyBatis JPA Extra
-   **MyBatis JPA Extra**对MyBatis进行了JPA扩展，旨在基于JPA 2.1的注释简化对单表CUID操作，根据JPA注释动态生成SQL语句；使用Interceptor实现数据库SELECT分页查询，适配多种数据库；另外提供mybatis-jpa-extra-spring-boot-starter简化SpringBoot集成。
+   **MyBatis JPA Extra**对MyBatis扩展JPA功能，旨在基于JPA 2.1的注释简化对单表CUID操作；用Interceptor实现数据库SELECT分页查询；另外提供mybatis-jpa-extra-spring-boot-starter简化SpringBoot集成。
  
 相关资源
 
@@ -23,7 +23,9 @@
 @GeneratedValue有3中策略 
 
  1. **AUTO**
- 
+	
+	snowflakeid
+	
     uuid
 
     uuid.hex
@@ -40,16 +42,37 @@
 
 
 ```java
-package org.apache.mybatis.jpa.test.domain;
+/*
+ * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+
+package org.apache.mybatis.jpa.test.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
+
+import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
+
+
 
 /*
    ID                   varchar(40)                    not null,
@@ -67,7 +90,7 @@ import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
  */
 @Entity
 @Table(name = "STUDENTS")  
-public class Students extends JpaBaseDomain implements Serializable{
+public class Students extends JpaBaseEntity implements Serializable{
 	/**
 	 * 
 	 */
@@ -75,7 +98,7 @@ public class Students extends JpaBaseDomain implements Serializable{
 	
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.AUTO,generator="serial")
+	@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
@@ -92,78 +115,130 @@ public class Students extends JpaBaseDomain implements Serializable{
 	@Column
 	private String stdClass;
 	
+	@Column
+	private byte[] images;
+	
+	
 	public Students() {
 		super();
 	}
+
 
 	public String getStdNo() {
 		return stdNo;
 	}
 
+
 	public void setStdNo(String stdNo) {
 		this.stdNo = stdNo;
 	}
+
 
 	public String getStdName() {
 		return stdName;
 	}
 
+
 	public void setStdName(String stdName) {
 		this.stdName = stdName;
 	}
+
+
+
+
 
 	public String getStdGender() {
 		return stdGender;
 	}
 
+
 	public void setStdGender(String stdGender) {
 		this.stdGender = stdGender;
 	}
+
 
 	public int getStdAge() {
 		return stdAge;
 	}
 
+
 	public void setStdAge(int stdAge) {
 		this.stdAge = stdAge;
 	}
+
 
 	public String getStdMajor() {
 		return stdMajor;
 	}
 
+
 	public void setStdMajor(String stdMajor) {
 		this.stdMajor = stdMajor;
 	}
+
 
 	public String getStdClass() {
 		return stdClass;
 	}
 
+
 	public void setStdClass(String stdClass) {
 		this.stdClass = stdClass;
 	}
+
 
 	public String getId() {
 		return id;
 	}
 
+
 	public void setId(String id) {
 		this.id = id;
 	}
 
+
+	public byte[] getImages() {
+		return images;
+	}
+
+
+	public void setImages(byte[] images) {
+		this.images = images;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Students [stdNo=" + stdNo + ", stdName=" + stdName + ", stdgender=" + stdGender + ", stdAge=" + stdAge
-				+ ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
+		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
+				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
 	}
+
+
 }
+
 
 ```
 
-## 2、单表新增、修改、删除、查询
+## 2、单表新增、修改、删除、查询、分页查询
 
 ```java
+/*
+ * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+
 package org.apache.mybatis.jpa.test;
 
 import java.text.SimpleDateFormat;
@@ -171,7 +246,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
-import org.apache.mybatis.jpa.test.domain.Students;
+import org.apache.mybatis.jpa.test.entity.Students;
 import org.apache.mybatis.jpa.util.WebContext;
 import org.junit.Before;
 import org.junit.Test;
@@ -181,15 +256,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyBatisTestRunner {
+	
 	private static final Logger _logger = LoggerFactory.getLogger(MyBatisTestRunner.class);
 	
 	public static ApplicationContext context;
 	public static StudentsService service;
 	
+	
 	@Test
 	public void insert() throws Exception{
 		_logger.info("insert...");
 		Students student=new Students();
+		//student.setId("10024");
 		student.setStdNo("10024");
 		student.setStdGender("M");
 		student.setStdName("司马昭");
@@ -197,20 +275,73 @@ public class MyBatisTestRunner {
 		student.setStdMajor("政治");
 		student.setStdClass("4");
 		service.insert(student);
+		
 		Thread.sleep(1000);
-		service.remove(student.getId());
+		_logger.info("insert id " + student.getId());
+		//service.remove(student.getId());
+		
+	}
+	
+	
+	@Test
+	public void merge() throws Exception{
+		_logger.info("merge...");
+		Students student=new Students();
+		//student.setId("10024");
+		student.setStdNo("10024");
+		student.setStdGender("M");
+		student.setStdName("司马昭");
+		student.setStdAge(20);
+		student.setStdMajor("政治");
+		student.setStdClass("4");
+		service.merge(student);
+		
+		Thread.sleep(1000);
+		_logger.info("insert id " + student.getId());
+		//service.remove(student.getId());
+		
 	}
 	
 	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
-		Students student=service.get("921d3377-937a-4578-b1e2-92fb23b5e512");
+		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		
+		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
+	}
+	
+	@Test
+	public void update() throws Exception{
+		_logger.info("get...");
+		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		System.out.println("Students "+student);
+		 _logger.info("Students "+student);
+		 
+		 _logger.info("update...");
+		 student.setImages(null);
+		 service.update(student);
+		 _logger.info("updateed.");
+		 
+		 student.setImages("ssss".getBytes());
+		 service.update(student);
+		 _logger.info("updateed2.");
+	}
+	
+	
+	@Test
+	public void find() throws Exception{
+		_logger.info("find...");
+		Students student=service.find(Students.class,"317d5eda-927c-4871-a916-472a8062df23");
+		
+		System.out.println("Students "+student);
+		 _logger.info("Students "+student);	 
 
 	}
 	
 	@Test
 	public void remove() throws Exception{
+		
 		_logger.info("remove...");
 		Students student=new Students();
 		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
@@ -230,9 +361,49 @@ public class MyBatisTestRunner {
 	}
 
 	@Test
+	public void queryPageResults() throws Exception{
+		
+		_logger.info("queryPageResults...");
+		 Students student=new Students();
+		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
+		 student.setStdGender("M");
+		 //student.setStdMajor(政治");
+		 student.setPageSize(10);
+		 student.setPageNumber(1);
+		 List<Students> allListStudents = 
+				 service.queryPageResults(student).getRows();
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
+	
+	@Test
+	public void queryPageResultsByMapperId() throws Exception{
+
+		_logger.info("queryPageResults by mapperId...");
+		 Students student=new Students();
+		 student.setStdGender("M");
+		 //student.setStdMajor(政治");
+		 student.setPageSize(10);
+		 student.setPageNumber(2);
+		 
+		 List<Students> allListStudents = 
+				 service.queryPageResults("queryPageResults1",student).getRows();
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
+		 
+	}
+	
+	
+	
+	@Test
 	public void findAll() throws Exception{
 		_logger.info("findAll...");
-		_logger.info("findAll "+service.findAll());
+		List<Students> allListStudents =service.findAll();
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
 	}
 	
 	@Before
@@ -255,181 +426,17 @@ public class MyBatisTestRunner {
 	
 	//Initialization ApplicationContext for Project
 	public void init(){
-		_logger.info("init ...");
 		
+		_logger.info("Application dir "+System.getProperty("user.dir"));
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
 		
 		WebContext.applicationContext=context;
 		service =(StudentsService)WebContext.getBean("studentsService");
+		
 	}
 	
 }
-```
 
-## 3、支持分页查询
-
-```java
-package org.apache.mybatis.jpa.test;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.mybatis.jpa.test.dao.service.StudentsService;
-import org.apache.mybatis.jpa.test.domain.Students;
-import org.apache.mybatis.jpa.util.WebContext;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = MybatisJpaApplication.class)
-public class MybatisJpaApplicationTest{ 
-    private static final Logger _logger = LoggerFactory.getLogger(MybatisJpaApplicationTest.class);
-    
-    @Autowired
-    StudentsService studentsService;
-    
-    @Autowired
-    org.apache.ibatis.session.SqlSessionFactory SqlSessionFactory;
-
-    @Autowired
-    private ApplicationContext applicationContext;
- 
-    @Before
-    public  void before() {
-    	_logger.info("---------------- before");
-    	WebContext.applicationContext=applicationContext;
-
-    }
-    
-    @Test
-	public void insert() throws Exception{
-		_logger.info("insert...");
-		Students student=new Students();
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
-		student.setStdMajor("政治");
-		student.setStdClass("4");
-		studentsService.insert(student);
-		
-		Thread.sleep(1000);
-		studentsService.remove(student.getId());
-		
-	}
-	
-	@Test
-	public void get() throws Exception{
-		_logger.info("get...");
-		Students student=studentsService.get("921d3377-937a-4578-b1e2-92fb23b5e512");
-		
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);
-
-	}
-	
-	@Test
-	public void remove() throws Exception{
-		
-		_logger.info("remove...");
-		Students student=new Students();
-		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
-		studentsService.remove(student.getId());
-		
-	}
-	
-	@Test
-	public void batchDelete() throws Exception{
-		_logger.info("batchDelete...");
-		List<String> idList=new ArrayList<String>();
-		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		studentsService.batchDelete(idList);
-	}
-
-	@Test
-	public void queryPageResults() throws Exception{
-		
-		_logger.info("queryPageResults...");
-		 Students student=new Students();
-		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
-		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 List<Students> allListStudents = 
-				 studentsService.queryPageResults(student).getRows();
-		 for (Students s : allListStudents) {
-			 _logger.info("Students "+s);
-		 }
-	}
-	
-	@Test
-	public void queryPageResultsByMapperId() throws Exception{
-
-		_logger.info("queryPageResults by mapperId...");
-		 Students student=new Students();
-		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 
-		 List<Students> allListStudents = 
-				 studentsService.queryPageResults("queryPageResults1",student).getRows();
-		 for (Students s : allListStudents) {
-			 _logger.info("Students "+s);
-		 }
-	}
-	
-	
-	 @Test
-	 public void findAll() {
-			_logger.info("---------------- ALL");
-			
-			List<Students> allListStudents=studentsService.findAll();
-			 for (Students s : allListStudents) {
-				 _logger.info("Students "+s);
-			 }
-	 }
-}
-
-package org.apache.mybatis.jpa.test;
-
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-
-@Configuration
-public class MybatisJpaConfig {
-    private int port;
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    @Bean
-	@Primary
-	@ConfigurationProperties("spring.datasource")
-	public DataSource dataSource() {
-		return DruidDataSourceBuilder.create().build();
-	}
-}
 ```
 
 
@@ -502,7 +509,6 @@ public class MybatisJpaConfig {
 ##  5、SpringBoot配置
 
 ```ini
- spring.main.web-application-type=NONE
 #
 spring.datasource.username=root
 spring.datasource.password=maxkey
@@ -510,10 +516,12 @@ spring.datasource.url=jdbc:mysql://localhost/test?autoReconnect=true&characterEn
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 
-
-mybatis.type-aliases-package=org.apache.mybatis.jpa.test.domain
-mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/mysql/*.xml
+mybatis.dialect=mysql
+mybatis.type-aliases-package=org.apache.mybatis.jpa.test.entity
+mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/${mybatis.dialect}/*.xml
 mybatis.table-column-escape=true
+mybatis.table-column-snowflake-datacenter-id=1
+mybatis.table-column-snowflake-machine-id=1
 #mybatis.table-column-escape-char=`
 ```
 
