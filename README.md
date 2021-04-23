@@ -1,6 +1,12 @@
 
 # MyBatis JPA Extra
-   **MyBatis JPA Extra**对MyBatis扩展JPA功能，旨在基于JPA 2.1的注释简化对单表CUID操作；用Interceptor实现数据库SELECT分页查询；另外提供mybatis-jpa-extra-spring-boot-starter简化SpringBoot集成。
+**MyBatis JPA Extra**对MyBatis扩展JPA功能
+   
+1.旨在基于JPA 2.1的注释**简化CUID操作**;
+	
+2.用Interceptor实现数据库**SELECT分页查询**;
+	
+3.提供mybatis-jpa-extra-spring-boot-starter,**简化SpringBoot集成**;
  
 相关资源
 
@@ -440,7 +446,7 @@ public class MyBatisTestRunner {
 ```
 
 
-## 4、映射文件配置
+## 3、映射文件配置
 
 ```xml
 <mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper" >
@@ -506,7 +512,7 @@ public class MyBatisTestRunner {
 ```
 
 
-##  5、SpringBoot配置
+##  4、SpringBoot配置
 
 ```ini
 #
