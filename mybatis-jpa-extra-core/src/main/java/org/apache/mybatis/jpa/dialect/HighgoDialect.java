@@ -80,6 +80,6 @@ public class HighgoDialect extends Dialect {
 	 */
 	@Override
 	public String toString() {
-		return "PostgreSQLDialect [" + HighgoDialect.class + "]";
+		return "HighgoDialect [" + HighgoDialect.class + "]";
 	}
 }
