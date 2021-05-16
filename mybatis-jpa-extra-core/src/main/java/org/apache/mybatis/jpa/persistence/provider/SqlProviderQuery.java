@@ -106,10 +106,12 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		JpaPagination pagination=(JpaPagination)entity;
 		//获取缓存数据
 		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.get(pagination.getPageResultSelectUUID());
-		String selectSql=pageResultsSqlCache.getSql();
+		//多个空格 tab 替换成1个空格
+		String selectSql=pageResultsSqlCache.getSql().replaceAll("\t", " ").replaceAll(" +"," ");
 		BoundSql boundSql=(BoundSql)pageResultsSqlCache.getBoundSql();
+		_logger.trace("Count original SQL  :\n" + selectSql);
 		
-		StringBuffer sql=new StringBuffer();
+		StringBuffer sql=new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
 		StringBuffer countSql=new StringBuffer();
 		
 		if(boundSql.getParameterMappings()==null ||boundSql.getParameterMappings().isEmpty()) {
@@ -122,13 +124,27 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 			}
 			countSql.append(selectSql);
 		}
+		String countSqlLowerCase = countSql.toString().toLowerCase();
+		_logger.trace("Count SQL LowerCase  :\n" + countSqlLowerCase);
 		
-		if(countSql.toString().toLowerCase().indexOf("distinct")>0) {
-			sql.append("select count(1) countrows_ from (").append(countSql).append(" ) count_table_");
+		if(countSqlLowerCase.indexOf(SqlSyntax.DISTINCT + " ")>0 //去重
+				||countSqlLowerCase.indexOf(" " + SqlSyntax.GROUPBY + " ")>0 //分组
+				||countSqlLowerCase.indexOf(" " + SqlSyntax.HAVING + " ")>0 //聚合函数
+				||(countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ") 
+						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntax.FROM + " ")
+				) //嵌套
+				) {
+			_logger.trace("Count SQL Complex ");
+			sql.append(SqlSyntax.FROM).append(" (").append(countSql).append(" ) count_table_");
 		}else {
-			sql.append("select count(1) countrows_ ").append(
-					countSql.substring(countSql.toString().toLowerCase().indexOf("from"))
-			);
+			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ");
+			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.ORDERBY + " ");
+			_logger.trace("Count SQL from Index "+ fromIndex +" , order by " +orderByIndex);
+			if(orderByIndex > -1) {
+				sql.append(countSql.substring(fromIndex,orderByIndex));
+			}else {
+				sql.append(countSql.substring(fromIndex));
+			}
 		}
 		//删除缓存
 		JpaBaseService.pageResultsBoundSqlCache.remove(pagination.getPageResultSelectUUID());

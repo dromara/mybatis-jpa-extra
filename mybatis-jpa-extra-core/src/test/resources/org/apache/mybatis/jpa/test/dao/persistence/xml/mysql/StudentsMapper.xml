@@ -30,6 +30,8 @@
 			
     	FROM STUDENTS 
     	<include refid="sql_condition"/>
+    	<!-- group by STDMAJOR  -->
+    	order	by STDAGE 
     </select>
    
  
