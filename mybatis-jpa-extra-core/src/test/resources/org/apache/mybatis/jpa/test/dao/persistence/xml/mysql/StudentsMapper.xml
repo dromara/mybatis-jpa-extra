@@ -28,7 +28,8 @@
 			STDMAJOR   ,
 			STDCLASS 
 			
-    	FROM STUDENTS 
+    	FROM
+    	STUDENTS 
     	<include refid="sql_condition"/>
     	<!-- group by STDMAJOR  -->
     	order	by STDAGE 

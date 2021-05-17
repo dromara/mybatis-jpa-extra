@@ -107,7 +107,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		//获取缓存数据
 		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.get(pagination.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
-		String selectSql=pageResultsSqlCache.getSql().replaceAll("\t", " ").replaceAll(" +"," ");
+		String selectSql=pageResultsSqlCache.getSql().replaceAll("\r\n+", " \n").replaceAll("\n+", " \n").replaceAll("\t", " ").replaceAll(" +"," ");
 		BoundSql boundSql=(BoundSql)pageResultsSqlCache.getBoundSql();
 		_logger.trace("Count original SQL  :\n" + selectSql);
 		
