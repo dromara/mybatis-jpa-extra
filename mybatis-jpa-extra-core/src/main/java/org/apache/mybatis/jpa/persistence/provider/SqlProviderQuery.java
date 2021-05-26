@@ -84,11 +84,22 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
         sql.FROM(MapperMetadata.getTableName(entity.getClass()));  
         
         for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
-        	if((
-					fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
-					||fieldColumnMapper.getFieldType().startsWith("byte")
-				)
-        		&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
+        	 String fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
+        	 String fieldType=fieldColumnMapper.getFieldType().toLowerCase();
+        	 
+        	 _logger.trace("ColumnName "+fieldColumnMapper.getColumnName()
+        	 				+" , FieldType "+fieldType
+        	 				+" , value " + fieldValue);
+        	
+        	if(fieldValue==null
+        		||(fieldType.equals("string")&&fieldValue.equals(""))
+        		||(fieldType.startsWith("byte")&&fieldValue==null)
+        		||(fieldType.equals("int")&&fieldValue.equals("0"))
+        		||(fieldType.equals("long")&&fieldValue.equals("0"))
+        		||(fieldType.equals("integer")&&fieldValue.equals("0"))
+        		||(fieldType.equals("float")&&fieldValue.equals("0.0"))
+        		||(fieldType.equals("double")&&fieldValue.equals("0.0"))
+        		) {
 				//skip null field value
 			}else {
 				sql.WHERE(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");

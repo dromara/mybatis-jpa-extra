@@ -175,6 +175,15 @@ public class MyBatisTestRunner {
 	
 	
 	@Test
+	public void query() throws Exception{
+		_logger.info("findAll...");
+		List<Students> allListStudents =service.query(null);
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
+	
+	@Test
 	public void findAll() throws Exception{
 		_logger.info("findAll...");
 		List<Students> allListStudents =service.findAll();
