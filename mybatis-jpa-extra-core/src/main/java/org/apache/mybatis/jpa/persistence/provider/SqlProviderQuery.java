@@ -53,7 +53,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		SQL sql=new SQL();
-		sql.SELECT(" * ");  
+		sql.SELECT(selectColumnMapper(entityClass));  
         sql.FROM(MapperMetadata.getTableName(entityClass));  
         sql.WHERE(idFieldColumnMapper.getColumnName()+" = #{"+idFieldColumnMapper.getFieldName()+"}");  
         String getSql=sql.toString(); 
@@ -69,7 +69,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL);
 		}
 		SQL sql=new SQL();
-		sql.SELECT(" * ");  
+		sql.SELECT(selectColumnMapper(entityClass));  
         sql.FROM(MapperMetadata.getTableName(entityClass));  
         String findAllSql=sql.toString(); 
         _logger.trace("Find All SQL \n"+findAllSql);
@@ -80,7 +80,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 		SQL sql=new SQL();
-		sql.SELECT(" * ");  
+		sql.SELECT(selectColumnMapper(entity.getClass()));  
         sql.FROM(MapperMetadata.getTableName(entity.getClass()));  
         
         for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
@@ -107,6 +107,31 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		}
 		
 		return sql.toString();
+	}
+	
+	public String selectColumnMapper(Class<?> entityClass) {
+		StringBuffer selectColumn =new StringBuffer("");
+		int columnCount = 0;
+		for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entityClass.getSimpleName())) {
+			
+			if(columnCount == 0) {
+				if(fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
+					selectColumn.append(fieldColumnMapper.getColumnName());
+				}else {
+					selectColumn.append(fieldColumnMapper.getColumnName()).append(" ").append(fieldColumnMapper.getFieldName());
+				}
+				
+			}else {
+				if(fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
+					selectColumn.append(",").append(fieldColumnMapper.getColumnName());
+				}else {
+					selectColumn.append(",").append(fieldColumnMapper.getColumnName()).append(" ").append(fieldColumnMapper.getFieldName());
+				}
+			}
+			columnCount ++;
+			 ;
+		}
+		return selectColumn.toString();
 	}
 	
 	/**

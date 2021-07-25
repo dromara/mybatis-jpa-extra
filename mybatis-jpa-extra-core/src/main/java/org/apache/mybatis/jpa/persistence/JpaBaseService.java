@@ -39,7 +39,7 @@ import org.ehcache.config.builders.UserManagedCacheBuilder;
  */
 public  class  JpaBaseService <T extends JpaBaseEntity> {
 	
-	final static Logger log = Logger.getLogger(JpaBaseService.class);
+	final static Logger _logger = Logger.getLogger(JpaBaseService.class);
 	
 	//定义全局缓存
 	public static UserManagedCache<String, PageResultsSqlCache> pageResultsBoundSqlCache = UserManagedCacheBuilder
@@ -73,15 +73,16 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public JpaBaseService(@SuppressWarnings("rawtypes") Class cls) {
-		log.trace("class : " + cls.getSimpleName());
+		_logger.trace("class : " + cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 		if (pType != null && pType.length >= 1) {
 			this.entityClass = (Class<T>) pType[0];
 		} else {
+			_logger.error("invalide initail, need generic type parameter! ");
 			throw new RuntimeException("invalide initail, need generic type parameter!");
 		}
-		log.trace("class : " + entityClass.getSimpleName());
+		_logger.trace("class : " + entityClass.getSimpleName());
 	}
 
 	/**
@@ -89,7 +90,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * @param mapperClass
 	 */
 	public JpaBaseService(String mapperClass) {
-		log.trace("class : " + mapperClass);
+		_logger.trace("class : " + mapperClass);
 		this.mapperClass = mapperClass;
 	}
 
@@ -103,11 +104,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		try {
 			if(mapper == null) {
 				String mapperClassBean=mapperClass.toLowerCase().charAt(0)+mapperClass.substring(1);
-				log.info("mapperClass Bean is " +mapperClassBean);
+				_logger.info("mapperClass Bean is " +mapperClassBean);
 				mapper = (IJpaBaseMapper<T>) WebContext.getBean(mapperClassBean);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("getMapper Exception ",e);
 		} finally {
 			
 		}
@@ -162,8 +163,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		try {
 			resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_logger.error("queryPageResults Exception ",e);
 		}
 		entity.setPageable(false);
 		Integer totalPage=resultslist.size();
@@ -190,10 +190,10 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 				entity = (T) entityClass.newInstance();
 			}
 			Integer count=getMapper().queryPageResultsCount(entity);
-			log.debug("queryCount count : "+count);
+			_logger.debug("queryCount count : "+count);
 			return count;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("queryPageResultsCount Exception ",e);
 		}
 		return null;
 	}
@@ -212,7 +212,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			}
 			return getMapper().query(entity);
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("query Exception ",e);
 		}
 		return null;
 	}
@@ -223,7 +223,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 
 			return getMapper().findAll(this.entityClass);
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("findAll Exception ",e);
 		}
 		return null;
 	}
@@ -238,7 +238,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			List<T> entityList=getMapper().query(entity);
 			return entityList!=null&&entityList.size()>0?entityList.get(0):null;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("load Exception ",e);
 		}
 		return null;
 	}
@@ -250,20 +250,20 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public T get(String id) {
 		try {
-			log.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+id);
+			_logger.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+id);
 			return  getMapper().get(this.entityClass,id);
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("get Exception ",e);
 		}
 		return null;
 	}
 	
 	public T find(Class<T> entityClass,Object primaryKey) {
 		try {
-			log.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+primaryKey);
+			_logger.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+primaryKey);
 			return  getMapper().get(entityClass,primaryKey.toString());
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("find Exception ",e);
 		}
 		return null;
 	}
@@ -277,11 +277,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public boolean insert(T entity) {
 		try {
 			Integer count=getMapper().insert(entity);
-			log.debug("insert count : "+count);
+			_logger.debug("insert count : "+count);
 			
 			return  count > 0;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("insert Exception ",e);
 		}
 		return false;
 	}
@@ -319,11 +319,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		try {
 			
 			Integer count=getMapper().update(entity);
-			log.debug("update count : "+count);
+			_logger.debug("update count : "+count);
 			
 			return count > 0;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("update Exception ",e);
 		}
 		return false;
 	}
@@ -336,11 +336,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public boolean delete(T entity) {
 		try {
 			Integer count=getMapper().delete(entity);
-			log.debug("delete count : "+count);
+			_logger.debug("delete count : "+count);
 			
 			return count > 0;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("delete Exception ",e);
 		}
 		return false;
 	}
@@ -350,11 +350,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		try {
 			
 			Integer count=getMapper().remove(this.entityClass,id);
-			log.debug("remove count : "+count);
+			_logger.debug("remove count : "+count);
 			
 			return count > 0;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("remove Exception ",e);
 		}
 		return false;
 	}
@@ -374,11 +374,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 						count++;
 					}
 				}
-				log.debug("batchInsert count : "+count);
+				_logger.debug("batchInsert count : "+count);
 				return count > 0;
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("batchInsert Exception ",e);
 		}
 		return false;
 	}
@@ -391,11 +391,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public boolean batchDelete(List<String> idList) {
 		try {
 			Integer count=getMapper().batchDelete(this.entityClass,idList);
-			log.debug("batchDelete count : "+count);
+			_logger.debug("batchDelete count : "+count);
 			
 			return count > 0;
 		} catch(Exception e) {
-			e.printStackTrace();
+			_logger.error("batchDelete Exception ",e);
 		}
 		return false;
 	}
