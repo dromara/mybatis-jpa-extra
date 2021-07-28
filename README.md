@@ -10,7 +10,7 @@
 
 ## 1、JavaBean注释简单
 
-仅有6个注释
+仅有7个注释
 > * @Entity
 > * @Table
 > * @Column
