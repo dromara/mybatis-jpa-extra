@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.UserMapper">
+    <sql id="sql_condition">
+        WHERE 1 = 1
+        <if test="id != null">
+            AND ID = '${id}'
+        </if>
+        <if test="firstName != null  and firstName != '' ">
+            AND firstName like '%${firstName}%'
+        </if>
+        <if test="lastName != null  and lastName != '' ">
+            AND lastName = #{lastName}
+        </if>
+    </sql>
+
+    <select id="queryPageResults" parameterType="User" resultType="User">
+        SELECT
+        ID,
+        FIRSTNAME,
+        LASTNAME,
+        DELETED,
+        CREATEDBY,
+        CREATEDAT,
+        MODIFIEDBY,
+        MODIFIEDAT
+        FROM USER
+        <include refid="sql_condition"/>
+    </select>
+</mapper>
