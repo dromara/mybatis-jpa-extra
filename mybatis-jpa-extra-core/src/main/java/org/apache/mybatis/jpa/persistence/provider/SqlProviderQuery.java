@@ -54,7 +54,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		SQL sql=new SQL();
 		sql.SELECT(selectColumnMapper(entityClass));  
-        sql.FROM(MapperMetadata.getTableName(entityClass));  
+        sql.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
         sql.WHERE(idFieldColumnMapper.getColumnName()+" = #{"+idFieldColumnMapper.getFieldName()+"}");  
         String getSql=sql.toString(); 
         _logger.trace("Get SQL \n"+getSql);
@@ -70,7 +70,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		}
 		SQL sql=new SQL();
 		sql.SELECT(selectColumnMapper(entityClass));  
-        sql.FROM(MapperMetadata.getTableName(entityClass));  
+        sql.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
         String findAllSql=sql.toString(); 
         _logger.trace("Find All SQL \n"+findAllSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL,findAllSql);
@@ -81,7 +81,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		MapperMetadata.buildColumnList(entity.getClass());
 		SQL sql=new SQL();
 		sql.SELECT(selectColumnMapper(entity.getClass()));  
-        sql.FROM(MapperMetadata.getTableName(entity.getClass()));  
+        sql.FROM(MapperMetadata.getTableName(entity.getClass())+" sel_tmp_table ");  
         
         for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
         	 String fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
@@ -110,26 +110,18 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 	}
 	
 	public String selectColumnMapper(Class<?> entityClass) {
-		StringBuffer selectColumn =new StringBuffer("");
+		StringBuffer selectColumn =new StringBuffer("sel_tmp_table.* ");
 		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entityClass.getSimpleName())) {
-			
-			if(columnCount == 0) {
-				if(fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
-					selectColumn.append(fieldColumnMapper.getColumnName());
-				}else {
-					selectColumn.append(fieldColumnMapper.getColumnName()).append(" ").append(fieldColumnMapper.getFieldName());
-				}
-				
-			}else {
-				if(fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
-					selectColumn.append(",").append(fieldColumnMapper.getColumnName());
-				}else {
-					selectColumn.append(",").append(fieldColumnMapper.getColumnName()).append(" ").append(fieldColumnMapper.getFieldName());
-				}
-			}
 			columnCount ++;
-			 ;
+			//不同的属性和数据库字段不一致的需要进行映射
+			if(!fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
+				selectColumn.append(",")
+							.append(fieldColumnMapper.getColumnName())
+							.append(" ")
+							.append(fieldColumnMapper.getFieldName());
+			}
+			_logger.debug("Column "+ columnCount + " , ColumnName : "+fieldColumnMapper.getColumnName()+" , FieldName : " + fieldColumnMapper.getFieldName());
 		}
 		return selectColumn.toString();
 	}

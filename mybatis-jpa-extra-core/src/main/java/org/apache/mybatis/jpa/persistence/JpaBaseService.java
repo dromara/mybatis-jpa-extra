@@ -31,6 +31,8 @@ import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.builders.UserManagedCacheBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * @author Crystal.Sea
@@ -41,6 +43,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	
 	final static Logger _logger = Logger.getLogger(JpaBaseService.class);
 	
+	@JsonIgnore
 	//定义全局缓存
 	public static UserManagedCache<String, PageResultsSqlCache> pageResultsBoundSqlCache = UserManagedCacheBuilder
 											.newUserManagedCacheBuilder(String.class, PageResultsSqlCache.class)
@@ -51,17 +54,20 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	/**
 	 * mapper class
 	 */
+	@JsonIgnore
 	private String mapperClass = "";
 	
 	/**
 	 * entity Class
 	 */
+	@JsonIgnore
 	@SuppressWarnings("rawtypes")
 	private Class entityClass;
 	
 	/**
 	 * mapper 
 	 */
+	@JsonIgnore
 	private IJpaBaseMapper<T> mapper = null;
 	
 	//TODO 
