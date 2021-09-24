@@ -121,7 +121,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 							.append(" ")
 							.append(fieldColumnMapper.getFieldName());
 			}
-			_logger.debug("Column "+ columnCount + " , ColumnName : "+fieldColumnMapper.getColumnName()+" , FieldName : " + fieldColumnMapper.getFieldName());
+			_logger.trace("Column "+ columnCount + " , ColumnName : "+fieldColumnMapper.getColumnName()+" , FieldName : " + fieldColumnMapper.getFieldName());
 		}
 		return selectColumn.toString();
 	}

@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
+import org.apache.mybatis.jpa.util.StringUtils;
 import org.apache.mybatis.jpa.util.WebContext;
 import org.ehcache.UserManagedCache;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
@@ -390,7 +391,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	}
 	
 	/**
-	 * batch delete entity by ids
+	 * batch delete entity by id List
 	 * @param ids
 	 * @return
 	 */
@@ -404,6 +405,16 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			_logger.error("batchDelete Exception ",e);
 		}
 		return false;
+	}
+	
+	/**
+	 * batch delete entity by ids,split with ,
+	 * @param ids
+	 * @return
+	 */
+	public boolean batchDelete(String ids) {
+		List<String> idList = StringUtils.string2List(ids, ",");
+		return batchDelete(idList);
 	}
 
 	

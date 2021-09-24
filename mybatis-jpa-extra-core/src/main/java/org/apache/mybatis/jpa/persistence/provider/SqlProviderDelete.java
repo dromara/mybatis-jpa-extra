@@ -52,18 +52,20 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL,deleteSql);
         return deleteSql;  
     }  
-	
+	@SuppressWarnings("unchecked")
 	public String batchDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
-		
-		@SuppressWarnings("unchecked")
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
 		String keyValue="";
 		for(String value : idValues) {
-			keyValue+=",'"+value+"'";
+			if(value.trim().length() > 1) {
+				keyValue += ",'" + value + "'";
+				_logger.trace("batch delete by id " + value);
+			}
 		}
-		keyValue=keyValue.substring(1);
+		//remove ;
+		keyValue = keyValue.substring(1).replaceAll(";", "");
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		SQL sql=new SQL();
         sql.DELETE_FROM(MapperMetadata.getTableName(entityClass));  

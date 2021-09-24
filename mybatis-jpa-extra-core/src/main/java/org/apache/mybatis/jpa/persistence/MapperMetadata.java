@@ -191,7 +191,7 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 		}
 		
 		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);
-		_logger.debug("fieldsMap : " + fieldsMap);
+		_logger.trace("fieldsMap : " + fieldsMap);
 
 	}
 	
