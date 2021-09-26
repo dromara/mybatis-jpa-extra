@@ -136,6 +136,13 @@ public class MyBatisTestRunner {
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
 		service.batchDelete(idList);
 	}
+	
+	@Test
+	public void batchDeleteByIds() throws Exception{
+		_logger.info("batchDeleteByIds...");
+		service.batchDelete("2");
+		service.batchDelete("2,639178432667713536");
+	}
 
 	@Test
 	public void queryPageResults() throws Exception{

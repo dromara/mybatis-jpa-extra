@@ -59,7 +59,7 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
 		String keyValue="";
 		for(String value : idValues) {
-			if(value.trim().length() > 1) {
+			if(value.trim().length() > 0) {
 				keyValue += ",'" + value + "'";
 				_logger.trace("batch delete by id " + value);
 			}
