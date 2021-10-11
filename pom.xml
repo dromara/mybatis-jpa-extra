@@ -15,7 +15,7 @@
 	</modules>
  
  	<properties>
-		<mybatis.jpa.extra.version>2.5</mybatis.jpa.extra.version><!--project version-->
+		<mybatis.jpa.extra.version>2.6</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>5.2.0.RELEASE</spring.version>
@@ -243,9 +243,9 @@
 			<version>11.2.0.3</version> <scope>system</scope> <systemPath>${project.basedir}/lib/ojdbc6.jar</systemPath> 
 			</dependency> -->
 		<dependency>
-			<groupId>org.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-			<version>3.5.2</version>
+		    <groupId>com.github.ben-manes.caffeine</groupId>
+		    <artifactId>caffeine</artifactId>
+		    <version>2.9.2</version>
 		</dependency>
 		
 		<dependency>

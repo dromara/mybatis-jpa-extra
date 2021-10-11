@@ -133,7 +133,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 	public String executePageResultsCount(T entity) {
 		JpaPagination pagination=(JpaPagination)entity;
 		//获取缓存数据
-		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.get(pagination.getPageResultSelectUUID());
+		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
 		String selectSql=pageResultsSqlCache.getSql().replaceAll("\r\n+", " \n").replaceAll("\n+", " \n").replaceAll("\t", " ").replaceAll(" +"," ");
 		BoundSql boundSql=(BoundSql)pageResultsSqlCache.getBoundSql();
@@ -175,7 +175,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 			}
 		}
 		//删除缓存
-		JpaBaseService.pageResultsBoundSqlCache.remove(pagination.getPageResultSelectUUID());
+		JpaBaseService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
 		_logger.trace("Count SQL : \n" + sql);
 		return sql.toString();
 	}

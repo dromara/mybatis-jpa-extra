@@ -19,20 +19,19 @@ package org.apache.mybatis.jpa.persistence;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Logger;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
 import org.apache.mybatis.jpa.util.StringUtils;
 import org.apache.mybatis.jpa.util.WebContext;
-import org.ehcache.UserManagedCache;
-import org.ehcache.config.builders.ExpiryPolicyBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.config.builders.UserManagedCacheBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 
 /**
@@ -46,12 +45,10 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	
 	@JsonIgnore
 	//定义全局缓存
-	public static UserManagedCache<String, PageResultsSqlCache> pageResultsBoundSqlCache = UserManagedCacheBuilder
-											.newUserManagedCacheBuilder(String.class, PageResultsSqlCache.class)
-											.withResourcePools(ResourcePoolsBuilder.heap(1000))
-											//.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofSeconds(300)))
-											.withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(300)))
-											.build(true);
+	public static final Cache<String, PageResultsSqlCache> pageResultsBoundSqlCache = 
+							Caffeine.newBuilder()
+								.expireAfterWrite(300, TimeUnit.SECONDS)
+								.build();
 	/**
 	 * mapper class
 	 */
