@@ -150,10 +150,11 @@ public class MyBatisTestRunner {
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
 		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
-		 student.setStdGender("M");
+		 //student.setStdGender("M");
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
-		 student.setPageNumber(1);
+		 //student.setPageNumber(2);
+		 student.calculate(21);
 		 List<Students> allListStudents = 
 				 service.queryPageResults(student).getRows();
 		 for (Students s : allListStudents) {

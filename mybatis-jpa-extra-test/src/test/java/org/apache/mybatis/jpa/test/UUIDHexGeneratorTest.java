@@ -26,7 +26,6 @@ public class UUIDHexGeneratorTest {
 	private static final Logger _logger = LoggerFactory.getLogger(UUIDHexGeneratorTest.class);
 	@Test
 	public  void generator() {
-		// TODO Auto-generated method stub
 		UUIDHexGenerator uhg=new UUIDHexGenerator();
 		_logger.info(uhg.generate(""));
 		_logger.info(uhg.generate(""));

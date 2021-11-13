@@ -36,7 +36,6 @@ public class StudentsService extends JpaBaseService<Students> {
 	 */
 	@Override
 	public StudentsMapper getMapper() {
-		// TODO Auto-generated method stub
 		return (StudentsMapper)super.getMapper();
 	}
 	

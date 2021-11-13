@@ -68,7 +68,6 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	@JsonIgnore
 	private IJpaBaseMapper<T> mapper = null;
 	
-	//TODO 
 	public JpaBaseService() {}
 	
 	/**
@@ -98,7 +97,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		this.mapperClass = mapperClass;
 	}
 
-	//TODO get or set mapper
+	//get or set mapper
 	/**
 	 * Load Mapper from spring container by mapperClass as bean id
 	 * @return IBaseMapper
@@ -123,7 +122,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		this.mapper = mapper;
 	}
 
-	//TODO follow function for Query
+	//follow function for Query
 	
 	/**
 	 * query page list entity by entity 
@@ -150,7 +149,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	}
 	
 	
-	//TODO follow function for Query
+	//follow function for Query
 	
 	/**
 	 * query page list entity by entity 
@@ -272,7 +271,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		return null;
 	}
 	
-	//TODO follow function for insert update and delete
+	//follow function for insert update and delete
 	/**
 	 * insert new entity
 	 * @param entity
@@ -363,7 +362,6 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		return false;
 	}
 	
-	//TODO follow function for complex insert and delete
 	/**
 	 * batch insert entity
 	 * @param listEntity
@@ -415,7 +413,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	}
 
 	
-	//TODO follow is  for query grid paging
+	//follow is  for query grid paging
 	/**
 	 * parse Object Count to Integer
 	 * @param totalCount

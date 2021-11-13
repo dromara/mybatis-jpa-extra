@@ -27,7 +27,6 @@ public class SerialGeneratorTest {
 	private static final Logger _logger = LoggerFactory.getLogger(SerialGeneratorTest.class);
 	@Test
 	public  void generator() {
-		// TODO Auto-generated method stub
 		SerialGenerator serialGenerator=new SerialGenerator();
 		_logger.info(serialGenerator.generate(""));
 		_logger.info(MacAddress.getAllHostMacAddress());

@@ -101,6 +101,7 @@ public class JpaPagination {
 		this.pageSize = rows;
 		calculate();
 	}
+	
 	@JsonIgnore
 	public int getPageNumber() {
 		return pageNumber;
@@ -110,6 +111,7 @@ public class JpaPagination {
 		this.pageNumber = pageNumber;
 		calculate();
 	}
+	
 	@JsonIgnore
 	public String getSidx() {
 		return sidx;
@@ -135,8 +137,10 @@ public class JpaPagination {
 	}
 
 	public void setStartRow(int startRow) {
-		this.startRow = startRow;
+		this.startRow 	= startRow;
+		
 	}
+	
 	@JsonIgnore
 	public int getEndRow() {
 		return endRow;
@@ -146,12 +150,25 @@ public class JpaPagination {
 		this.endRow = endRow;
 	}
 
+	public void calculate(int startRow) {
+		if(startRow <= pageSize) {
+			startRow = 0;
+			setPageNumber(1);
+		}else {
+			setPageNumber(startRow/pageSize + (startRow%pageSize == 0 ? 0 : 1));
+		}
+	}
+	
 	public void calculate() {
 		if (this.pageNumber >= 1 && this.pageSize > 0){
-				startRow = (this.pageNumber - 1) * this.pageSize;
-				endRow = startRow + this.pageSize;
-			}
+			startRow = (this.pageNumber - 1) * this.pageSize;
+			endRow = startRow + this.pageSize;
+		}else {
+			startRow = 0;
+			endRow	 = this.pageSize;
+		}
 	}
+	
 	@JsonIgnore
 	public int getPageSize() {
 		return pageSize;

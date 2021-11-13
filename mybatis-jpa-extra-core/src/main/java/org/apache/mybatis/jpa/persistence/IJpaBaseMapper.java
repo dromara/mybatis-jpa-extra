@@ -33,7 +33,7 @@ public interface IJpaBaseMapper<T> {
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);
 	
-	//TODO follow function for Query
+	//follow function for Query
 	public List<T> queryPageResults(T entity);
 
 	@SelectProvider(type = MapperSqlProvider.class, method = "queryPageResultsCount")
@@ -51,7 +51,7 @@ public interface IJpaBaseMapper<T> {
 	public T get(@Param ("entityClass")Class<?> entityClass,@Param ("id") String id);
 	
 	
-	//TODO follow function for insert update and delete
+	//follow function for insert update and delete
 	@InsertProvider(type = MapperSqlProvider.class, method = "insert")
 	public Integer insert(T entity);
 	

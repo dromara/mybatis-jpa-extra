@@ -77,7 +77,7 @@ public class SqlProviderInsert <T extends JpaBaseEntity>{
 					}else if(generatedValue.strategy()==GenerationType.IDENTITY){
 						//skip
 					}else if(generatedValue.strategy()==GenerationType.TABLE){
-						//TODO
+						//skip
 					}
 				}else {
 					sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
