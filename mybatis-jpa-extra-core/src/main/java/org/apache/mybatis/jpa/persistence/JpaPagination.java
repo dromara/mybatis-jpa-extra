@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class JpaPagination {
 	
+	public static final int MAX_RESULTS = 10000;
 	
 	@JsonIgnore
 	@Transient
@@ -175,8 +176,12 @@ public class JpaPagination {
 	}
 
 	public void setPageSize(int pageSize) {
+		if(pageSize == -1 || pageSize > MAX_RESULTS) {
+			pageSize = MAX_RESULTS;
+		}
 		this.pageSize = pageSize;
 	}
+	
 	@JsonIgnore
 	public String getSortKey() {
 		return sortKey;
