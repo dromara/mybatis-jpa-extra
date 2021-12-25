@@ -52,7 +52,7 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		
 		
 		Configuration config = factory.getConfiguration();
-		_logger.debug("buildSqlSessionFactory : "+config.toString());
+		_logger.debug("buildSqlSessionFactory : {}" , config.toString());
 		for (Interceptor interceptor : interceptors) {
 			config.addInterceptor(interceptor);
 		}
@@ -61,10 +61,10 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		statementHandlerInterceptor.setDialectString(Dialect.getDialect(dialect));
 		config.addInterceptor(statementHandlerInterceptor);
 		
-		_logger.debug("DefaultStatementTimeout : "+ config.getDefaultStatementTimeout());
+		_logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
 		config.setDefaultStatementTimeout(timeout);
-		_logger.debug("after change ,DefaultStatementTimeout : "+ config.getDefaultStatementTimeout());
-		_logger.debug(""+config.getMappedStatementNames());
+		_logger.debug("after change ,DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
+		_logger.debug("MappedStatementNames {}" , config.getMappedStatementNames());
 		return factory;
 	}
 	

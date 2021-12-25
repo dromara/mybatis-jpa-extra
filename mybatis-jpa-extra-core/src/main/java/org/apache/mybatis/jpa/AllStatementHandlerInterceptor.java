@@ -79,8 +79,8 @@ public class AllStatementHandlerInterceptor extends
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			_logger.debug("prepare  boundSql : "+sql);
-			_logger.trace("startsWith select : "+sql.toLowerCase().trim().startsWith("select"));
+			_logger.debug("prepare  boundSql : {}" , sql);
+			_logger.trace("startsWith select : {}" , sql.toLowerCase().trim().startsWith("select"));
 			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaBaseEntity)) {
 				if(statement instanceof SimpleStatementHandler){
 					sql = dialect.getLimitString(sql, (JpaBaseEntity)parameterObject);
