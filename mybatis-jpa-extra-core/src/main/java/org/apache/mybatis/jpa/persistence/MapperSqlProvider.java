@@ -53,9 +53,13 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
         return new SqlProviderDelete().execute(parametersMap);  
     }  
 	
-	public String batchDelete(Map<String, Object>  parametersMap) { 
+	public String deleteBatch(Map<String, Object>  parametersMap) { 
 		return new SqlProviderDelete().batchDelete(parametersMap);
     } 
+	
+	public String logicDelete(Map<String, Object>  parametersMap) { 
+		return new SqlProviderDelete().logicDelete(parametersMap);
+    }
 	
 	/**
 	 * @param entity

@@ -73,7 +73,11 @@ public interface IJpaBaseMapper<T> {
 	@DeleteProvider(type = MapperSqlProvider.class, method = "remove")
 	public Integer remove(@Param ("entityClass")Class<?> entityClass,@Param ("id") String id);
 	
-	@DeleteProvider(type = MapperSqlProvider.class, method = "batchDelete")
-	public Integer batchDelete(@Param ("entityClass")Class<?> entityClass,@Param ("idList") List<String> idList);	
+	@DeleteProvider(type = MapperSqlProvider.class, method = "deleteBatch")
+	public Integer deleteBatch(@Param ("entityClass")Class<?> entityClass,@Param ("idList") List<String> idList);	
+	
+	@DeleteProvider(type = MapperSqlProvider.class, method = "logicDelete")
+	public Integer logicDelete(@Param ("entityClass")Class<?> entityClass,@Param ("idList") List<String> idList);
+	
 	
 }

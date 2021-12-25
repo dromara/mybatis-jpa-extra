@@ -60,7 +60,7 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,Long recordsCount) {
 		pageCount(currentPage,pageResults, recordsCount);
-		_logger.debug("Grid page : "+page+" , records : "+records+" , total : "+total);
+		_logger.debug("JpaPageResults : {} , records : {} , total : {}",page,records,total);
 	}
 	/**
 	 * 构造函数

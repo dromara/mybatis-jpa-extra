@@ -51,7 +51,7 @@ public class SqlProviderUpdate <T extends JpaBaseEntity>{
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper=listFields.get(i);
 			
-			_logger.trace("Field " +fieldColumnMapper.getFieldName()+" , Type "+ fieldColumnMapper.getFieldType());
+			_logger.trace("Field {} , Type {}",fieldColumnMapper.getFieldName(), fieldColumnMapper.getFieldType());
 			
 			if (fieldColumnMapper.isIdColumn()) {
 				continue;
@@ -71,7 +71,7 @@ public class SqlProviderUpdate <T extends JpaBaseEntity>{
 		
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entity.getClass().getSimpleName());
 		sql.WHERE(idFieldColumnMapper.getColumnName() + "=#{"+idFieldColumnMapper.getFieldName()+"}");
-		_logger.trace("Update SQL : \n" + sql);
+		_logger.trace("Update SQL : \n{}" , sql);
 		return sql.toString();
 	}
 

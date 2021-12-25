@@ -45,13 +45,15 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		}
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn((entityClass).getSimpleName());
 		SQL sql=new SQL();
-        sql.DELETE_FROM(MapperMetadata.getTableName(entityClass));  
-        sql.WHERE(idFieldColumnMapper.getColumnName()+" = #{"+idFieldColumnMapper.getFieldName()+",javaType=string,jdbcType=VARCHAR}");  
+        sql.DELETE_FROM(MapperMetadata.getTableName(entityClass))
+        	.WHERE(idFieldColumnMapper.getColumnName() 
+        			+ " = #{" +idFieldColumnMapper.getFieldName() + ",javaType=string,jdbcType=VARCHAR}");  
         String deleteSql=sql.toString(); 
         _logger.trace("Delete SQL \n"+deleteSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL,deleteSql);
         return deleteSql;  
     }  
+	
 	@SuppressWarnings("unchecked")
 	public String batchDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
@@ -68,11 +70,36 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		keyValue = keyValue.substring(1).replaceAll(";", "");
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		SQL sql=new SQL();
-        sql.DELETE_FROM(MapperMetadata.getTableName(entityClass));  
-        sql.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
+        sql.DELETE_FROM(MapperMetadata.getTableName(entityClass))
+        	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
         String deleteSql=sql.toString(); 
         _logger.trace("Delete SQL \n"+deleteSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL,deleteSql);
+        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.BATCHDELETE_SQL,deleteSql);
+        return deleteSql;  
+    } 
+	
+	@SuppressWarnings("unchecked")
+	public String logicDelete(Map<String, Object>  parametersMap) { 
+		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
+		MapperMetadata.buildColumnList(entityClass);
+		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
+		String keyValue="";
+		for(String value : idValues) {
+			if(value.trim().length() > 0) {
+				keyValue += ",'" + value + "'";
+				_logger.trace("logic delete by id " + value);
+			}
+		}
+		//remove ;
+		keyValue = keyValue.substring(1).replaceAll(";", "");
+		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
+		SQL sql=new SQL();
+        sql.UPDATE(MapperMetadata.getTableName(entityClass))
+        	.SET("status = 9")
+        	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
+        String deleteSql=sql.toString(); 
+        _logger.trace("logic Delete SQL \n"+deleteSql);
+        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.LOGICDELETE_SQL,deleteSql);
         return deleteSql;  
     } 
 	

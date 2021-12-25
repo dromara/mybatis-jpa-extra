@@ -68,8 +68,11 @@ public class SqlProviderInsert <T extends JpaBaseEntity>{
 						)) {
 					GeneratedValue generatedValue=listFields.get(i).getGeneratedValue();
 					if(generatedValue.strategy()==GenerationType.AUTO) {
-						if(MapperMetadata.identifierGeneratorFactory.getGeneratorStrategyMap().containsKey(generatedValue.generator().toLowerCase())) {
-							BeanUtil.set(entity, fieldColumnMapper.getFieldName(), MapperMetadata.identifierGeneratorFactory.generate(generatedValue.generator().toLowerCase()));
+						if(MapperMetadata.identifierGeneratorFactory.getGeneratorStrategyMap()
+								.containsKey(generatedValue.generator().toLowerCase())) {
+							BeanUtil.set(entity, 
+									fieldColumnMapper.getFieldName(), 
+									MapperMetadata.identifierGeneratorFactory.generate(generatedValue.generator().toLowerCase()));
 							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
 						}
 					}else if(generatedValue.strategy()==GenerationType.SEQUENCE){

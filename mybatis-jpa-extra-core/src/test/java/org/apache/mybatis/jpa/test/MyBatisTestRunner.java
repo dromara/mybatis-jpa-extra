@@ -134,14 +134,25 @@ public class MyBatisTestRunner {
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		service.batchDelete(idList);
+		service.deleteBatch(idList);
+	}
+	
+	@Test
+	public void logicDelete() throws Exception{
+		_logger.info("logicDelete...");
+		List<String> idList=new ArrayList<String>();
+		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
+		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+		service.logicDelete(idList);
 	}
 	
 	@Test
 	public void batchDeleteByIds() throws Exception{
 		_logger.info("batchDeleteByIds...");
-		service.batchDelete("2");
-		service.batchDelete("2,639178432667713536");
+		service.deleteBatch("2");
+		service.deleteBatch("2,639178432667713536");
 	}
 
 	@Test

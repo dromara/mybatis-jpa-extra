@@ -48,6 +48,10 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 		public static String 	GET_SQL							=	"_GET_SQL";
 		public static String 	FINDALL_SQL						=	"_FINDALL_SQL";
 		public static String 	REMOVE_SQL						=	"_REMOVE_SQL";
+		public static String 	BATCHDELETE_SQL					=	"_BATCHDELETE_SQL";
+		public static String 	LOGICDELETE_SQL					=	"_LOGICDELETE_SQL";
+		
+		
 	}
 	
 	public static 			String ENTITY_CLASS					=	"entityClass";

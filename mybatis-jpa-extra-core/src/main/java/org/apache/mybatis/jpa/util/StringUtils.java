@@ -20,7 +20,7 @@ package org.apache.mybatis.jpa.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
 	public static boolean isNumeric(String val) {
 		char[] chars = val.toCharArray();
@@ -53,14 +53,6 @@ public class StringUtils {
 			}
 		}
 		return num;
-	}
-
-	public static boolean isBlank(String str) {
-		return str==null || str.matches("\\s*");
-	}
-
-	public static boolean isNotBlank(String val) {
-		return !isBlank(val);
 	}
 
 	public static List<String> string2List(String string, String split) {

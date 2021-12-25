@@ -53,9 +53,10 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		SQL sql=new SQL();
-		sql.SELECT(selectColumnMapper(entityClass));  
-        sql.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
-        sql.WHERE(idFieldColumnMapper.getColumnName()+" = #{"+idFieldColumnMapper.getFieldName()+"}");  
+		sql.SELECT(selectColumnMapper(entityClass)) 
+        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ")
+        	.WHERE(idFieldColumnMapper.getColumnName() 
+        			+ " = #{"+idFieldColumnMapper.getFieldName() + "}");  
         String getSql=sql.toString(); 
         _logger.trace("Get SQL \n"+getSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL,getSql);
@@ -69,8 +70,8 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL);
 		}
 		SQL sql=new SQL();
-		sql.SELECT(selectColumnMapper(entityClass));  
-        sql.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
+		sql.SELECT(selectColumnMapper(entityClass))  
+        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
         String findAllSql=sql.toString(); 
         _logger.trace("Find All SQL \n"+findAllSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL,findAllSql);
@@ -80,8 +81,8 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 		SQL sql=new SQL();
-		sql.SELECT(selectColumnMapper(entity.getClass()));  
-        sql.FROM(MapperMetadata.getTableName(entity.getClass())+" sel_tmp_table ");  
+		sql.SELECT(selectColumnMapper(entity.getClass())) 
+        	.FROM(MapperMetadata.getTableName(entity.getClass())+" sel_tmp_table ");  
         
         for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
         	 String fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
@@ -121,7 +122,8 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 							.append(" ")
 							.append(fieldColumnMapper.getFieldName());
 			}
-			_logger.trace("Column "+ columnCount + " , ColumnName : "+fieldColumnMapper.getColumnName()+" , FieldName : " + fieldColumnMapper.getFieldName());
+			_logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
+					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
 		}
 		return selectColumn.toString();
 	}
@@ -133,11 +135,16 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 	public String executePageResultsCount(T entity) {
 		JpaPagination pagination=(JpaPagination)entity;
 		//获取缓存数据
-		PageResultsSqlCache pageResultsSqlCache=JpaBaseService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
+		PageResultsSqlCache pageResultsSqlCache = 
+				JpaBaseService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
-		String selectSql=pageResultsSqlCache.getSql().replaceAll("\r\n+", " \n").replaceAll("\n+", " \n").replaceAll("\t", " ").replaceAll(" +"," ");
+		String selectSql = pageResultsSqlCache.getSql()
+								.replaceAll("\r\n+", " \n")
+								.replaceAll("\n+", " \n")
+								.replaceAll("\t", " ")
+								.replaceAll(" +"," ");
 		BoundSql boundSql=(BoundSql)pageResultsSqlCache.getBoundSql();
-		_logger.trace("Count original SQL  :\n" + selectSql);
+		_logger.trace("Count original SQL  :\n{}" , selectSql);
 		
 		StringBuffer sql=new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
 		StringBuffer countSql=new StringBuffer();
@@ -153,7 +160,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 			countSql.append(selectSql);
 		}
 		String countSqlLowerCase = countSql.toString().toLowerCase();
-		_logger.trace("Count SQL LowerCase  :\n" + countSqlLowerCase);
+		_logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
 		
 		if(countSqlLowerCase.indexOf(SqlSyntax.DISTINCT + " ")>0 //去重
 				||countSqlLowerCase.indexOf(" " + SqlSyntax.GROUPBY + " ")>0 //分组
@@ -167,7 +174,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		}else {
 			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ");
 			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.ORDERBY + " ");
-			_logger.trace("Count SQL from Index "+ fromIndex +" , order by " +orderByIndex);
+			_logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
 			if(orderByIndex > -1) {
 				sql.append(countSql.substring(fromIndex,orderByIndex));
 			}else {
@@ -176,7 +183,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		}
 		//删除缓存
 		JpaBaseService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
-		_logger.trace("Count SQL : \n" + sql);
+		_logger.trace("Count SQL : \n{}" , sql);
 		return sql.toString();
 	}
 	

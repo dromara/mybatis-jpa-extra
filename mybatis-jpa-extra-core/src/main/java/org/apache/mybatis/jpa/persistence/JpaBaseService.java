@@ -22,7 +22,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
@@ -41,7 +42,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 public  class  JpaBaseService <T extends JpaBaseEntity> {
 	
-	final static Logger _logger = Logger.getLogger(JpaBaseService.class);
+	final static Logger _logger = LoggerFactory.getLogger(JpaBaseService.class);
 	
 	@JsonIgnore
 	//定义全局缓存
@@ -76,7 +77,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public JpaBaseService(@SuppressWarnings("rawtypes") Class cls) {
-		_logger.trace("class : " + cls.getSimpleName());
+		_logger.trace("class : {}" , cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 		if (pType != null && pType.length >= 1) {
@@ -85,7 +86,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			_logger.error("invalide initail, need generic type parameter! ");
 			throw new RuntimeException("invalide initail, need generic type parameter!");
 		}
-		_logger.trace("class : " + entityClass.getSimpleName());
+		_logger.trace("class : {}" , entityClass.getSimpleName());
 	}
 
 	/**
@@ -93,10 +94,14 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * @param mapperClass
 	 */
 	public JpaBaseService(String mapperClass) {
-		_logger.trace("class : " + mapperClass);
+		_logger.trace("class : {}" , mapperClass);
 		this.mapperClass = mapperClass;
 	}
 
+	public void setMapper(IJpaBaseMapper<T> mapper) {
+		this.mapper = mapper;
+	}
+	
 	//get or set mapper
 	/**
 	 * Load Mapper from spring container by mapperClass as bean id
@@ -106,20 +111,16 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public IJpaBaseMapper<T> getMapper() {
 		try {
 			if(mapper == null) {
-				String mapperClassBean=mapperClass.toLowerCase().charAt(0)+mapperClass.substring(1);
-				_logger.info("mapperClass Bean is " +mapperClassBean);
+				String mapperClassBean = mapperClass.toLowerCase().charAt(0) + mapperClass.substring(1);
+				_logger.info("mapperClass Bean is {}" , mapperClassBean);
 				mapper = (IJpaBaseMapper<T>) WebContext.getBean(mapperClassBean);
 			}
 		} catch(Exception e) {
-			_logger.error("getMapper Exception ",e);
+			_logger.error("getMapper Exception " , e);
 		} finally {
 			
 		}
 		return mapper;
-	}
-
-	public void setMapper(IJpaBaseMapper<T> mapper) {
-		this.mapper = mapper;
 	}
 
 	//follow function for Query
@@ -134,15 +135,15 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		entity.setStartRow(calculateStartRow(entity.getPageNumber() ,entity.getPageSize()));
 		
 		entity.setPageable(true);
-		List<T> resultslist=getMapper().queryPageResults(entity);
+		List<T> resultslist = getMapper().queryPageResults(entity);
 		entity.setPageable(false);
-		Integer totalPage=resultslist.size();
+		Integer totalPage = resultslist.size();
 		
 		Integer totalCount = 0;
-		if(entity.getPageNumber()==1&&totalPage<entity.getPageSize()) {
+		if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
 			totalCount=totalPage;
 		}else {
-			totalCount=parseCount(getMapper().queryPageResultsCount(entity));
+			totalCount = parseCount(getMapper().queryPageResultsCount(entity));
 		}
 		
 		return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
@@ -150,7 +151,6 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	
 	
 	//follow function for Query
-	
 	/**
 	 * query page list entity by entity 
 	 * @param entity
@@ -162,20 +162,20 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		entity.setStartRow(calculateStartRow(entity.getPageNumber() ,entity.getPageSize()));
 		
 		entity.setPageable(true);
-		List<T> resultslist=null;
+		List<T> resultslist = null;
 		try {
 			resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
 		} catch (Exception e) {
-			_logger.error("queryPageResults Exception ",e);
+			_logger.error("queryPageResults Exception " , e);
 		}
 		entity.setPageable(false);
-		Integer totalPage=resultslist.size();
+		Integer totalPage = resultslist.size();
 		
 		Integer totalCount = 0;
-		if(entity.getPageNumber()==1&&totalPage<entity.getPageSize()) {
-			totalCount=totalPage;
+		if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
+			totalCount = totalPage;
 		}else {
-			totalCount=parseCount(getMapper().queryPageResultsCount(entity));
+			totalCount = parseCount(getMapper().queryPageResultsCount(entity));
 		}
 		
 		return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
@@ -188,17 +188,17 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Integer queryPageResultsCount(T entity) {
+		Integer count = 0;
 		try {
 			if(entity == null) {
 				entity = (T) entityClass.newInstance();
 			}
-			Integer count=getMapper().queryPageResultsCount(entity);
-			_logger.debug("queryCount count : "+count);
-			return count;
+			count = getMapper().queryPageResultsCount(entity);
+			_logger.debug("queryCount count : {}" , count);
 		} catch(Exception e) {
-			_logger.error("queryPageResultsCount Exception ",e);
+			_logger.error("queryPageResultsCount Exception " , e);
 		}
-		return null;
+		return count;
 	}
 	
 	/**
@@ -211,11 +211,10 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		try {
 			if(entity == null) {
 				entity = (T) entityClass.newInstance();
-				return getMapper().query(entity);
 			}
 			return getMapper().query(entity);
 		} catch(Exception e) {
-			_logger.error("query Exception ",e);
+			_logger.error("query Exception " , e);
 		}
 		return null;
 	}
@@ -223,10 +222,9 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	
 	public List<T> findAll() {
 		try {
-
 			return getMapper().findAll(this.entityClass);
 		} catch(Exception e) {
-			_logger.error("findAll Exception ",e);
+			_logger.error("findAll Exception " , e);
 		}
 		return null;
 	}
@@ -238,10 +236,10 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public T load(T entity) {
 		try {
-			List<T> entityList=getMapper().query(entity);
-			return entityList!=null&&entityList.size()>0?entityList.get(0):null;
+			List<T> entityList = getMapper().query(entity);
+			return ((entityList != null) && ( entityList.size() > 0 ))?entityList.get(0) : null;
 		} catch(Exception e) {
-			_logger.error("load Exception ",e);
+			_logger.error("load Exception " , e);
 		}
 		return null;
 	}
@@ -253,20 +251,20 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public T get(String id) {
 		try {
-			_logger.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+id);
+			_logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , id);
 			return  getMapper().get(this.entityClass,id);
 		} catch(Exception e) {
-			_logger.error("get Exception ",e);
+			_logger.error("get Exception " , e);
 		}
 		return null;
 	}
 	
 	public T find(Class<T> entityClass,Object primaryKey) {
 		try {
-			_logger.debug("entityClass  "+entityClass.toGenericString()+" , primaryKey "+primaryKey);
+			_logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , primaryKey);
 			return  getMapper().get(entityClass,primaryKey.toString());
 		} catch(Exception e) {
-			_logger.error("find Exception ",e);
+			_logger.error("find Exception " , e);
 		}
 		return null;
 	}
@@ -279,18 +277,40 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public boolean insert(T entity) {
 		try {
-			Integer count=getMapper().insert(entity);
-			_logger.debug("insert count : "+count);
-			
+			Integer count = getMapper().insert(entity);
+			_logger.debug("insert count : {}" , count);
 			return  count > 0;
 		} catch(Exception e) {
-			_logger.error("insert Exception ",e);
+			_logger.error("insert Exception " , e);
 		}
 		return false;
 	}
 	
 	/**
-	 * JPA persist
+	 * insert entity with batch
+	 * @param listEntity
+	 * @return
+	 */
+	public boolean insertBatch(List<T> listEntity){
+		try {
+			if(BeanUtil.isNotNull(listEntity)) {
+				Integer count = 0;
+				for(T entity  : listEntity) {
+					if(getMapper().insert(entity)>0) {
+						count ++;
+					}
+				}
+				_logger.debug("Insert Batch count : {}" , count);
+				return count > 0;
+			}
+		} catch(Exception e) {
+			_logger.error("Insert Batch Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 * JPA persist ,  save
 	 * @param entity
 	 * @return boolean
 	 */
@@ -299,13 +319,12 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	}
 	
 	/**
-	 * JPA merge
+	 * JPA merge , save or update
 	 * @param entity
 	 * @return boolean
 	 */
 	public boolean merge(T entity) {
 		T loadedEntity = load(entity);
-		
 		if(loadedEntity == null) {
 			return insert(entity);
 		}else {
@@ -320,13 +339,11 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public boolean update(T entity) {
 		try {
-			
 			Integer count=getMapper().update(entity);
-			_logger.debug("update count : "+count);
-			
+			_logger.debug("update count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("update Exception ",e);
+			_logger.error("update Exception " , e);
 		}
 		return false;
 	}
@@ -339,48 +356,10 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public boolean delete(T entity) {
 		try {
 			Integer count=getMapper().delete(entity);
-			_logger.debug("delete count : "+count);
-			
+			_logger.debug("delete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("delete Exception ",e);
-		}
-		return false;
-	}
-	
-	
-	public boolean remove(String id){
-		try {
-			
-			Integer count=getMapper().remove(this.entityClass,id);
-			_logger.debug("remove count : "+count);
-			
-			return count > 0;
-		} catch(Exception e) {
-			_logger.error("remove Exception ",e);
-		}
-		return false;
-	}
-	
-	/**
-	 * batch insert entity
-	 * @param listEntity
-	 * @return
-	 */
-	public boolean batchInsert(List<T> listEntity){
-		try {
-			if(BeanUtil.isNotNull(listEntity)) {
-				Integer count=0;
-				for(T entity  : listEntity) {
-					if(getMapper().insert(entity)>0) {
-						count++;
-					}
-				}
-				_logger.debug("batchInsert count : "+count);
-				return count > 0;
-			}
-		} catch(Exception e) {
-			_logger.error("batchInsert Exception ",e);
+			_logger.error("delete Exception " , e);
 		}
 		return false;
 	}
@@ -390,14 +369,14 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * @param ids
 	 * @return
 	 */
-	public boolean batchDelete(List<String> idList) {
+	public boolean deleteBatch(List<String> idList) {
 		try {
-			Integer count=getMapper().batchDelete(this.entityClass,idList);
-			_logger.debug("batchDelete count : "+count);
-			
+			_logger.trace("deleteBatch {}" , idList);
+			Integer count = getMapper().deleteBatch(this.entityClass,idList);
+			_logger.debug("deleteBatch count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("batchDelete Exception ",e);
+			_logger.error("deleteBatch Exception " , e);
 		}
 		return false;
 	}
@@ -407,11 +386,50 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * @param ids
 	 * @return
 	 */
-	public boolean batchDelete(String ids) {
+	public boolean deleteBatch(String ids) {
 		List<String> idList = StringUtils.string2List(ids, ",");
-		return batchDelete(idList);
+		return deleteBatch(idList);
 	}
 
+	public boolean deleteBatch(String ids , String split) {
+		List<String> idList = StringUtils.string2List(ids, split);
+		return deleteBatch(idList);
+	}
+	
+	
+	public boolean remove(String id){
+		try {
+			Integer count=getMapper().remove(this.entityClass,id);
+			_logger.debug("remove count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			_logger.error("remove Exception " , e);
+		}
+		return false;
+	}
+	
+	public boolean logicDelete(List<String> idList) {
+		try {
+			_logger.trace("logicDelete {}" , idList);
+			Integer count = getMapper().logicDelete(this.entityClass,idList);
+			_logger.debug("logicDelete count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			_logger.error("logicDelete Exception " , e);
+		}
+		return true;
+	}
+	
+	public boolean logicDelete(String ids) {
+		List<String> idList = StringUtils.string2List(ids, ",");
+		return logicDelete(idList);
+	}
+	
+	public boolean logicDelete(String ids , String split) {
+		List<String> idList = StringUtils.string2List(ids, split);
+		return logicDelete(idList);
+	}
+	
 	
 	//follow is  for query grid paging
 	/**
@@ -424,7 +442,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		if(totalCount == null) {
 			return retTotalCount;
 		}else{
-			retTotalCount=Integer.parseInt(totalCount.toString());
+			retTotalCount = Integer.parseInt(totalCount.toString());
 		}
 		return retTotalCount;
 	}
