@@ -34,12 +34,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyBatisTestRunner {
-	
 	private static final Logger _logger = LoggerFactory.getLogger(MyBatisTestRunner.class);
-	
 	public static ApplicationContext context;
 	public static StudentsService service;
-	
 	
 	@Test
 	public void insert() throws Exception{
@@ -57,9 +54,7 @@ public class MyBatisTestRunner {
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
 		//service.remove(student.getId());
-		
 	}
-	
 	
 	@Test
 	public void merge() throws Exception{
@@ -94,14 +89,12 @@ public class MyBatisTestRunner {
 							new int[]{Types.VARCHAR,Types.INTEGER}
 						)
 		);	
-		
 	}
 	
 	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
-		
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
 	}
@@ -125,12 +118,10 @@ public class MyBatisTestRunner {
 	
 	@Test
 	public void remove() throws Exception{
-		
 		_logger.info("remove...");
 		Students student=new Students();
 		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
 		service.remove(student.getId());
-		
 	}
 	
 	@Test
@@ -195,10 +186,7 @@ public class MyBatisTestRunner {
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }
-		 
 	}
-	
-	
 	
 	@Test
 	public void query() throws Exception{
@@ -224,15 +212,12 @@ public class MyBatisTestRunner {
 		_logger.info("init Spring Context...");
 		SimpleDateFormat sdf_ymdhms =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startTime=sdf_ymdhms.format(new Date());
-
 		try{
 			MyBatisTestRunner runner=new MyBatisTestRunner();
 			runner.init();
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
 		_logger.info("-- --Init Start at " + startTime+" , End at  "+sdf_ymdhms.format(new Date()));
 	}
 	
@@ -244,7 +229,5 @@ public class MyBatisTestRunner {
 		
 		WebContext.applicationContext=context;
 		service =(StudentsService)WebContext.getBean("studentsService");
-		
 	}
-	
 }

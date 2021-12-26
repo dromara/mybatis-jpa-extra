@@ -1,4 +1,3 @@
-
 # MyBatis JPA Extra
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
@@ -42,7 +41,6 @@
 
 ```java
 package org.apache.mybatis.jpa.test.entity;
-
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,9 +53,6 @@ import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 @Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaBaseEntity implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6928570405840778151L;
 	
 	@Id
@@ -66,120 +61,43 @@ public class Students extends JpaBaseEntity implements Serializable{
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
 	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
+	
 	@Column
 	private String stdNo;
+	
 	@Column
 	private String stdName;
+	
 	@Column
 	private String stdGender;
+	
 	@Column
 	private int stdAge;
+	
 	@Column
 	private String stdMajor;
+	
 	@Column
 	private String stdClass;
 	
 	@Column
 	private byte[] images;
 	
-	
 	public Students() {
 		super();
 	}
 
-
-	public String getStdNo() {
-		return stdNo;
-	}
-
-
-	public void setStdNo(String stdNo) {
-		this.stdNo = stdNo;
-	}
-
-
-	public String getStdName() {
-		return stdName;
-	}
-
-
-	public void setStdName(String stdName) {
-		this.stdName = stdName;
-	}
-
-
-
-
-
-	public String getStdGender() {
-		return stdGender;
-	}
-
-
-	public void setStdGender(String stdGender) {
-		this.stdGender = stdGender;
-	}
-
-
-	public int getStdAge() {
-		return stdAge;
-	}
-
-
-	public void setStdAge(int stdAge) {
-		this.stdAge = stdAge;
-	}
-
-
-	public String getStdMajor() {
-		return stdMajor;
-	}
-
-
-	public void setStdMajor(String stdMajor) {
-		this.stdMajor = stdMajor;
-	}
-
-
-	public String getStdClass() {
-		return stdClass;
-	}
-
-
-	public void setStdClass(String stdClass) {
-		this.stdClass = stdClass;
-	}
-
-
-	public String getId() {
-		return id;
-	}
-
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
-	public byte[] getImages() {
-		return images;
-	}
-
-
-	public void setImages(byte[] images) {
-		this.images = images;
-	}
-
+	public get(){};
+	public void set(){};
+	//...
 }
-
-
 ```
 
 ## 2、单表新增、修改、删除、查询、分页查询
 
 ```java
 package org.apache.mybatis.jpa.test;
-
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -195,12 +113,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyBatisTestRunner {
-	
 	private static final Logger _logger = LoggerFactory.getLogger(MyBatisTestRunner.class);
-	
 	public static ApplicationContext context;
 	public static StudentsService service;
-	
 	
 	@Test
 	public void insert() throws Exception{
@@ -218,9 +133,7 @@ public class MyBatisTestRunner {
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
 		//service.remove(student.getId());
-		
 	}
-	
 	
 	@Test
 	public void merge() throws Exception{
@@ -237,15 +150,28 @@ public class MyBatisTestRunner {
 		
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
-		//service.remove(student.getId());
-		
+	}
+	
+	@Test
+	public void find() throws Exception{
+		_logger.info("find...");
+		_logger.info("find by filter  " 
+					+ service.find(" StdNo = '10024' or StdNo = '10004'")
+		);
+
+		_logger.info("find by filter with args " 
+				+ service.find(
+							" StdNo = ? or StdNo = ?  ",
+							new Object[]{"10024","10004"},
+							new int[]{Types.VARCHAR,Types.INTEGER}
+						)
+		);	
 	}
 	
 	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
-		
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
 	}
@@ -256,7 +182,6 @@ public class MyBatisTestRunner {
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
-		 
 		 _logger.info("update...");
 		 student.setImages(null);
 		 service.update(student);
@@ -267,25 +192,12 @@ public class MyBatisTestRunner {
 		 _logger.info("updateed2.");
 	}
 	
-	
-	@Test
-	public void find() throws Exception{
-		_logger.info("find...");
-		Students student=service.find(Students.class,"317d5eda-927c-4871-a916-472a8062df23");
-		
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);	 
-
-	}
-	
 	@Test
 	public void remove() throws Exception{
-		
 		_logger.info("remove...");
 		Students student=new Students();
 		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
 		service.remove(student.getId());
-		
 	}
 	
 	@Test
@@ -296,19 +208,37 @@ public class MyBatisTestRunner {
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		service.batchDelete(idList);
+		service.deleteBatch(idList);
+	}
+	
+	@Test
+	public void logicDelete() throws Exception{
+		_logger.info("logicDelete...");
+		List<String> idList=new ArrayList<String>();
+		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
+		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+		service.logicDelete(idList);
+	}
+	
+	@Test
+	public void batchDeleteByIds() throws Exception{
+		_logger.info("batchDeleteByIds...");
+		service.deleteBatch("2");
+		service.deleteBatch("2,639178432667713536");
 	}
 
 	@Test
 	public void queryPageResults() throws Exception{
-		
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
 		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
-		 student.setStdGender("M");
+		 //student.setStdGender("M");
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
-		 student.setPageNumber(1);
+		 //student.setPageNumber(2);
+		 student.calculate(21);
 		 List<Students> allListStudents = 
 				 service.queryPageResults(student).getRows();
 		 for (Students s : allListStudents) {
@@ -318,23 +248,27 @@ public class MyBatisTestRunner {
 	
 	@Test
 	public void queryPageResultsByMapperId() throws Exception{
-
 		_logger.info("queryPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
-		 
 		 List<Students> allListStudents = 
 				 service.queryPageResults("queryPageResults1",student).getRows();
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }
-		 
 	}
 	
-	
+	@Test
+	public void query() throws Exception{
+		_logger.info("findAll...");
+		List<Students> allListStudents =service.query(null);
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
 	
 	@Test
 	public void findAll() throws Exception{
@@ -351,33 +285,24 @@ public class MyBatisTestRunner {
 		_logger.info("init Spring Context...");
 		SimpleDateFormat sdf_ymdhms =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startTime=sdf_ymdhms.format(new Date());
-
 		try{
 			MyBatisTestRunner runner=new MyBatisTestRunner();
 			runner.init();
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
 		_logger.info("-- --Init Start at " + startTime+" , End at  "+sdf_ymdhms.format(new Date()));
 	}
 	
 	//Initialization ApplicationContext for Project
 	public void init(){
-		
 		_logger.info("Application dir "+System.getProperty("user.dir"));
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
-		
 		WebContext.applicationContext=context;
 		service =(StudentsService)WebContext.getBean("studentsService");
-		
 	}
-	
 }
-
 ```
-
 
 ## 3、映射文件配置
 
