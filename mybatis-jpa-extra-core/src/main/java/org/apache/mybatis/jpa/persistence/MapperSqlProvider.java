@@ -45,12 +45,16 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 		return new SqlProviderQuery().get(parametersMap);  
     }
 	
+	public String find(Map<String, Object>  parametersMap) throws Exception {
+		return new SqlProviderQuery().find(parametersMap);  
+    }
+	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		return new SqlProviderQuery().findAll(parametersMap);  
     }
 	
 	public String remove(Map<String, Object>  parametersMap) { 
-        return new SqlProviderDelete().execute(parametersMap);  
+        return new SqlProviderDelete().remove(parametersMap);  
     }  
 	
 	public String deleteBatch(Map<String, Object>  parametersMap) { 
@@ -66,7 +70,7 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	 * @return insert sql String
 	 */
 	public String insert(T entity) {
-		return new SqlProviderInsert().execute(entity);
+		return new SqlProviderInsert().insert(entity);
 	}
 
 	/**
@@ -74,7 +78,7 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	 * @return update sql String
 	 */
 	public String update(T entity) {
-		return new SqlProviderUpdate().execute(entity);
+		return new SqlProviderUpdate().update(entity);
 	}
 
 	/**
@@ -86,7 +90,7 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	}
 	
 	public String query(T entity) {
-		return new SqlProviderQuery().execute(entity);
+		return new SqlProviderQuery().query(entity);
 	}
 
 }

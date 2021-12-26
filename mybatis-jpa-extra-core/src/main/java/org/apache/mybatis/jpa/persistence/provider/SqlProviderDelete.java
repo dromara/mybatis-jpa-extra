@@ -38,7 +38,7 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderDelete.class);
 	
-	public String execute(Map<String, Object>  parametersMap) { 
+	public String remove(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
 		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL)) {

@@ -17,6 +17,7 @@
 
 package org.apache.mybatis.jpa.test;
 
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,6 +81,23 @@ public class MyBatisTestRunner {
 	}
 	
 	@Test
+	public void find() throws Exception{
+		_logger.info("find...");
+		_logger.info("find by filter  " 
+					+ service.find(" StdNo = '10024' or StdNo = '10004'")
+		);
+
+		_logger.info("find by filter with args " 
+				+ service.find(
+							" StdNo = ? or StdNo = ?  ",
+							new Object[]{"10024","10004"},
+							new int[]{Types.VARCHAR,Types.INTEGER}
+						)
+		);	
+		
+	}
+	
+	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
@@ -103,17 +121,6 @@ public class MyBatisTestRunner {
 		 student.setImages("ssss".getBytes());
 		 service.update(student);
 		 _logger.info("updateed2.");
-	}
-	
-	
-	@Test
-	public void find() throws Exception{
-		_logger.info("find...");
-		Students student=service.find(Students.class,"317d5eda-927c-4871-a916-472a8062df23");
-		
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);	 
-
 	}
 	
 	@Test

@@ -20,7 +20,10 @@
  */
 package org.apache.mybatis.jpa.persistence.provider;
 
+import java.sql.Types;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -81,8 +84,61 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL,findAllSql);
         return findAllSql;  
     }
+	
+	public String find(Map<String, Object>  parametersMap) throws Exception {  
+		Class<?> entityClass=(Class<?>)	parametersMap.get(MapperMetadata.ENTITY_CLASS);
+		Object[] args 	= (Object[])	parametersMap.get(MapperMetadata.QUERY_ARGS);
+		int[] argTypes 	= (int[])		parametersMap.get(MapperMetadata.QUERY_ARGTYPES);
+		String filterSql = parametersMap.get(MapperMetadata.QUERY_FILTER).toString().trim();
+		
+		MapperMetadata.buildColumnList(entityClass);
+		
+		if(filterSql.toLowerCase().startsWith("where")) {
+			filterSql = filterSql.substring(5);
+		}
+		
+		if(args == null || args.length == 0) {
+			filterSql = replace(filterSql);
+		}else {
+			int countMatches = StringUtils.countMatches(filterSql, "?");
+			if(args.length < countMatches) {
+				_logger.error("args length {} < parameter placeholder {}" ,  countMatches,args.length);
+				throw new Exception("args length < parameter placeholder");
+			}
+			
+			String filterSqls [] = filterSql.split("\\?");
+			StringBuffer sqlBuffer = new StringBuffer("");
+			for(int i = 0 ;i < args.length ; i++){
+				_logger.trace("Find args[{}] {}" , i, args[i]);
+				if(argTypes[i] == Types.VARCHAR ||argTypes[i] == Types.NVARCHAR 
+						||argTypes[i] == Types.CHAR||argTypes[i] == Types.NCHAR
+						||argTypes[i] == Types.LONGVARCHAR ||argTypes[i] == Types.LONGNVARCHAR) {
+					sqlBuffer
+						.append(filterSqls[i])
+						.append("'")
+						.append(args[i].toString().replaceAll("'", ""))
+						.append("'");
+				}else {
+					sqlBuffer
+					.append(filterSqls[i])
+					.append(args[i]);
+				}
+			}
+			filterSql = replace(sqlBuffer.toString());
+		}
+		
+		SQL sql=new SQL()
+			.SELECT(selectColumnMapper(entityClass))  
+        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ")
+			.WHERE(filterSql);
+		
+        String findSql = sql.toString(); 
+        _logger.trace("Find SQL \n" + findSql);
 
-	public String execute(T entity) {
+        return findSql;  
+    }
+	
+	public String query(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 		SQL sql=new SQL()
 			.SELECT(selectColumnMapper(entity.getClass())) 
@@ -92,9 +148,8 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
         	 String fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
         	 String fieldType=fieldColumnMapper.getFieldType().toLowerCase();
         	 
-        	 _logger.trace("ColumnName "+fieldColumnMapper.getColumnName()
-        	 				+" , FieldType "+fieldType
-        	 				+" , value " + fieldValue);
+        	 _logger.trace("ColumnName {} , FieldType {} , value {}" ,
+        			 		fieldColumnMapper.getColumnName(),fieldType, fieldValue);
         	
         	if(fieldValue==null
         		||(fieldType.equals("string")&&fieldValue.equals(""))
@@ -107,7 +162,7 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
         		) {
 				//skip null field value
 			}else {
-				sql.WHERE(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");
+				sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
 			}
 		}
 		
@@ -142,11 +197,8 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		PageResultsSqlCache pageResultsSqlCache = 
 				JpaBaseService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
-		String selectSql = pageResultsSqlCache.getSql()
-								.replaceAll("\r\n+", " \n")
-								.replaceAll("\n+", " \n")
-								.replaceAll("\t", " ")
-								.replaceAll(" +"," ");
+		String selectSql = replace(pageResultsSqlCache.getSql());
+		
 		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
 		_logger.trace("Count original SQL  :\n{}" , selectSql);
 		
@@ -189,6 +241,13 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		JpaBaseService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
 		_logger.trace("Count SQL : \n{}" , sql);
 		return sql.toString();
+	}
+	
+	public static String replace(String sql) {
+		return 	sql.replaceAll("\r\n+", " \n")
+				   .replaceAll("\n+", " \n")
+				   .replaceAll("\t", " ")
+				   .replaceAll(" +"," ");
 	}
 	
 }

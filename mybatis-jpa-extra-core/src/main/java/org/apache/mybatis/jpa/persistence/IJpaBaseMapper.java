@@ -48,7 +48,9 @@ public interface IJpaBaseMapper<T> {
 	 * @return one 
 	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "get")
-	public T get(@Param ("entityClass")Class<?> entityClass,@Param ("id") String id);
+	public T get(
+					@Param ("entityClass")Class<?> entityClass,
+					@Param ("id") String id);
 	
 	
 	//follow function for insert update and delete
@@ -71,13 +73,25 @@ public interface IJpaBaseMapper<T> {
 	 * @return
 	 */
 	@DeleteProvider(type = MapperSqlProvider.class, method = "remove")
-	public Integer remove(@Param ("entityClass")Class<?> entityClass,@Param ("id") String id);
+	public Integer remove(	@Param ("entityClass")Class<?> entityClass,
+							@Param ("id") String id);
 	
 	@DeleteProvider(type = MapperSqlProvider.class, method = "deleteBatch")
-	public Integer deleteBatch(@Param ("entityClass")Class<?> entityClass,@Param ("idList") List<String> idList);	
+	public Integer deleteBatch(	
+							@Param ("entityClass")Class<?> entityClass,
+							@Param ("idList") List<String> idList);	
 	
 	@DeleteProvider(type = MapperSqlProvider.class, method = "logicDelete")
-	public Integer logicDelete(@Param ("entityClass")Class<?> entityClass,@Param ("idList") List<String> idList);
+	public Integer logicDelete(	
+							@Param ("entityClass")	Class<?> 	entityClass,
+							@Param ("idList") 		List<String> idList);
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "find")
+	public List<T> find(	@Param ("entityClass")	Class<?> 	entityClass,
+							@Param ("filter")		String 		filter,
+							@Param ("args") 		Object[] 	args, 
+							@Param ("argTypes") 	int[] 		argTypes);
+	
 	
 	
 }

@@ -55,6 +55,10 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 	}
 	
 	public static 			String ENTITY_CLASS					=	"entityClass";
+	
+	public static 			String QUERY_FILTER					=	"filter";
+	public static 			String QUERY_ARGS					=	"args";
+	public static 			String QUERY_ARGTYPES				=	"argTypes";
 	/**
 	 * 表名和字段名
 	 */

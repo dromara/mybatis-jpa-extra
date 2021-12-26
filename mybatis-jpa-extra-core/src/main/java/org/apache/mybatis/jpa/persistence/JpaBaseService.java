@@ -219,7 +219,10 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		return null;
 	}
 	
-	
+	/**
+	 * findAll from table
+	 * @return
+	 */
 	public List<T> findAll() {
 		try {
 			return getMapper().findAll(this.entityClass);
@@ -227,6 +230,69 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			_logger.error("findAll Exception " , e);
 		}
 		return null;
+	}
+	
+	
+	/**
+	 * select with filter and args
+	 * 
+	 * <pre>
+	 * find(" StdNo = ? or StdNo = ?",new Object[]{"10024","10004"},new int[]{Types.VARCHAR,Types.INTEGER})
+	 * </pre>
+	 * @param filter
+	 * @param args
+	 * @param argTypes
+	 * @return List<T>
+	 * 
+	 */
+	public List<T> find(String filter , Object[] args , int[] argTypes) {
+		try {
+			return getMapper().find(this.entityClass,filter ,args , argTypes);
+		} catch(Exception e) {
+			_logger.error("findAll Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 * select with filter 
+	 * <pre>
+	 * find(" StdNo = '10024')
+	 * </pre>
+	 * @param filter
+	 * @return List<T>
+	 */
+	public List<T> find(String filter) {
+		return find(filter ,null , null);
+	}
+	
+	/**
+	 * select with filter and args
+	 * @param filter
+	 * @param args
+	 * @param argTypes
+	 * @return T
+	 */
+	public T findOne(String filter , Object[] args , int[] argTypes) {
+		try {
+			List<T> findList = find(filter ,args , argTypes);
+			return  (findList == null ||findList.size() == 0) ? null : findList.get(0);
+		} catch(Exception e) {
+			_logger.error("findAll Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 * select with filter
+	 * <pre>
+	 * find(" StdNo = '10024')
+	 * </pre>
+	 * @param filter
+	 * @return T
+	 */
+	public T findOne(String filter) {
+		return findOne( filter ,null , null);
 	}
 	
 	/**
@@ -255,16 +321,6 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			return  getMapper().get(this.entityClass,id);
 		} catch(Exception e) {
 			_logger.error("get Exception " , e);
-		}
-		return null;
-	}
-	
-	public T find(Class<T> entityClass,Object primaryKey) {
-		try {
-			_logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , primaryKey);
-			return  getMapper().get(entityClass,primaryKey.toString());
-		} catch(Exception e) {
-			_logger.error("find Exception " , e);
 		}
 		return null;
 	}
