@@ -44,6 +44,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 	
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
+
 		if ("prepare".equals(m.getName())) {
 			return prepare(invocation);
 		}

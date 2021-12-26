@@ -43,16 +43,15 @@ public class SqlProviderUpdate <T extends JpaBaseEntity>{
 	 */
 	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
-
 		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());
-		SQL sql = new SQL();
-
-		sql.UPDATE(MapperMetadata.getTableName(entity.getClass()));
+		
+		SQL sql = new SQL()
+			.UPDATE(MapperMetadata.getTableName(entity.getClass()));
+		
 		for (int i = 0; i < listFields.size(); i++) {
-			FieldColumnMapper fieldColumnMapper=listFields.get(i);
-			
-			_logger.trace("Field {} , Type {}",fieldColumnMapper.getFieldName(), fieldColumnMapper.getFieldType());
-			
+			FieldColumnMapper fieldColumnMapper = listFields.get(i);
+			_logger.trace("Field {} , Type {}",
+							fieldColumnMapper.getFieldName(), fieldColumnMapper.getFieldType());
 			if (fieldColumnMapper.isIdColumn()) {
 				continue;
 			}
@@ -65,12 +64,12 @@ public class SqlProviderUpdate <T extends JpaBaseEntity>{
 				//skip null field value
 				_logger.trace("skip  field value is null ");
 			}else {
-				sql.SET(fieldColumnMapper.getColumnName() + "=#{" + fieldColumnMapper.getFieldName() + "}");
+				sql.SET(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
 			}
 		}
 		
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entity.getClass().getSimpleName());
-		sql.WHERE(idFieldColumnMapper.getColumnName() + "=#{"+idFieldColumnMapper.getFieldName()+"}");
+		sql.WHERE(idFieldColumnMapper.getColumnName() + " = #{" + idFieldColumnMapper.getFieldName() + "}");
 		_logger.trace("Update SQL : \n{}" , sql);
 		return sql.toString();
 	}

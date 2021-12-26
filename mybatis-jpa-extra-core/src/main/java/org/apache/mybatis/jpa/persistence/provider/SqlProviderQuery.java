@@ -52,13 +52,15 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		}
 		
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
-		SQL sql=new SQL();
-		sql.SELECT(selectColumnMapper(entityClass)) 
+		
+		SQL sql=new SQL()
+			.SELECT(selectColumnMapper(entityClass)) 
         	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ")
         	.WHERE(idFieldColumnMapper.getColumnName() 
         			+ " = #{"+idFieldColumnMapper.getFieldName() + "}");  
-        String getSql=sql.toString(); 
-        _logger.trace("Get SQL \n"+getSql);
+		
+        String getSql = sql.toString(); 
+        _logger.trace("Get SQL \n" + getSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL,getSql);
         return getSql;  
     }
@@ -69,19 +71,21 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL)) {
 			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL);
 		}
-		SQL sql=new SQL();
-		sql.SELECT(selectColumnMapper(entityClass))  
+		
+		SQL sql=new SQL()
+			.SELECT(selectColumnMapper(entityClass))  
         	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
-        String findAllSql=sql.toString(); 
-        _logger.trace("Find All SQL \n"+findAllSql);
+		
+        String findAllSql = sql.toString(); 
+        _logger.trace("Find All SQL \n" + findAllSql);
         MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL,findAllSql);
         return findAllSql;  
     }
 
 	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
-		SQL sql=new SQL();
-		sql.SELECT(selectColumnMapper(entity.getClass())) 
+		SQL sql=new SQL()
+			.SELECT(selectColumnMapper(entity.getClass())) 
         	.FROM(MapperMetadata.getTableName(entity.getClass())+" sel_tmp_table ");  
         
         for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
@@ -143,19 +147,19 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 								.replaceAll("\n+", " \n")
 								.replaceAll("\t", " ")
 								.replaceAll(" +"," ");
-		BoundSql boundSql=(BoundSql)pageResultsSqlCache.getBoundSql();
+		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
 		_logger.trace("Count original SQL  :\n{}" , selectSql);
 		
-		StringBuffer sql=new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
-		StringBuffer countSql=new StringBuffer();
+		StringBuffer sql = new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
+		StringBuffer countSql = new StringBuffer();
 		
-		if(boundSql.getParameterMappings()==null ||boundSql.getParameterMappings().isEmpty()) {
+		if(boundSql.getParameterMappings() == null ||boundSql.getParameterMappings().isEmpty()) {
 			countSql.append(selectSql);
 		}else {
 			for (ParameterMapping parameterMapping:boundSql.getParameterMappings()) {
 				countSql.append(selectSql.substring(0, selectSql.indexOf("?")));
 				countSql.append("#{"+parameterMapping.getProperty()+"}");
-				selectSql=selectSql.substring(selectSql.indexOf("?")+1);
+				selectSql = selectSql.substring(selectSql.indexOf("?")+1);
 			}
 			countSql.append(selectSql);
 		}

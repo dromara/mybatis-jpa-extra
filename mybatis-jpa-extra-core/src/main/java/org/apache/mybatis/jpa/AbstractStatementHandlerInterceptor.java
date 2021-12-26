@@ -42,7 +42,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	 * @param dialect the dialect to set
 	 */
 	public void setDialect(Dialect dialect) {
-		_logger.debug("dialect from bean : "+dialect);
+		_logger.debug("dialect from bean : {}" , dialect);
 		this.dialect = dialect;
 	}
 
@@ -53,10 +53,9 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	public void setDialectString(String dialectString) {
 		this.dialectString = dialectString;
 		try {
-			_logger.debug("dialect from String : " + dialectString);
+			_logger.debug("dialect from String : {}" , dialectString);
 			this.dialect =(Dialect)Class.forName(dialectString).getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			e.printStackTrace();
 			_logger.error("Dialect new error : " , e);
 		} 
 	}

@@ -46,8 +46,10 @@ public class SqlProviderInsert <T extends JpaBaseEntity>{
 	public String execute(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());
-		SQL sql = new SQL();
-		sql.INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
+		
+		SQL sql = new SQL()
+			.INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
+		
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper=listFields.get(i);
 			if(

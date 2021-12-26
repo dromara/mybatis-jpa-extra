@@ -26,6 +26,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.apache.mybatis.jpa.persistence.FieldColumnMapper;
 import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 import org.apache.mybatis.jpa.persistence.MapperMetadata;
+import org.apache.mybatis.jpa.persistence.MapperMetadata.SQL_TYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,17 +41,19 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 	public String execute(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL)) {
-			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL);
+		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL)) {
+			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL);
 		}
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn((entityClass).getSimpleName());
-		SQL sql=new SQL();
-        sql.DELETE_FROM(MapperMetadata.getTableName(entityClass))
+		
+		SQL sql=new SQL()
+        	.DELETE_FROM(MapperMetadata.getTableName(entityClass))
         	.WHERE(idFieldColumnMapper.getColumnName() 
         			+ " = #{" +idFieldColumnMapper.getFieldName() + ",javaType=string,jdbcType=VARCHAR}");  
-        String deleteSql=sql.toString(); 
+		
+        String deleteSql = sql.toString(); 
         _logger.trace("Delete SQL \n"+deleteSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.REMOVE_SQL,deleteSql);
+        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL,deleteSql);
         return deleteSql;  
     }  
 	
@@ -68,13 +71,16 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		}
 		//remove ;
 		keyValue = keyValue.substring(1).replaceAll(";", "");
-		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
-		SQL sql=new SQL();
-        sql.DELETE_FROM(MapperMetadata.getTableName(entityClass))
+		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
+		
+		SQL sql=new SQL()
+        	.DELETE_FROM(MapperMetadata.getTableName(entityClass))
         	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
+		
         String deleteSql=sql.toString(); 
-        _logger.trace("Delete SQL \n"+deleteSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.BATCHDELETE_SQL,deleteSql);
+        _logger.trace("Delete SQL \n" + deleteSql);
+        MapperMetadata.sqlsMap.put(
+        		MapperMetadata.getTableName(entityClass) + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
         return deleteSql;  
     } 
 	
@@ -93,13 +99,16 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		//remove ;
 		keyValue = keyValue.substring(1).replaceAll(";", "");
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
-		SQL sql=new SQL();
-        sql.UPDATE(MapperMetadata.getTableName(entityClass))
+		
+		SQL sql=new SQL()
+        	.UPDATE(MapperMetadata.getTableName(entityClass))
         	.SET("status = 9")
         	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
-        String deleteSql=sql.toString(); 
-        _logger.trace("logic Delete SQL \n"+deleteSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + MapperMetadata.SQL_TYPE.LOGICDELETE_SQL,deleteSql);
+		
+        String deleteSql = sql.toString(); 
+        _logger.trace("logic Delete SQL \n" + deleteSql);
+        MapperMetadata.sqlsMap.put(
+        		MapperMetadata.getTableName(entityClass) + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
         return deleteSql;  
     } 
 	
