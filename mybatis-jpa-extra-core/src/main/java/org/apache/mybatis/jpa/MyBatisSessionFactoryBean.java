@@ -61,9 +61,13 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		statementHandlerInterceptor.setDialectString(Dialect.getDialect(dialect));
 		config.addInterceptor(statementHandlerInterceptor);
 		
+		
+		if(config.getDefaultStatementTimeout() == null 
+				|| config.getDefaultStatementTimeout() == 0) {
+			_logger.debug("set StatementTimeout as default");
+			config.setDefaultStatementTimeout(timeout);
+		}
 		_logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
-		config.setDefaultStatementTimeout(timeout);
-		_logger.debug("after change ,DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
 		_logger.debug("MappedStatementNames {}" , config.getMappedStatementNames());
 		return factory;
 	}
