@@ -18,7 +18,7 @@
 		<mybatis.jpa.extra.version>2.7</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
-		<spring.version>5.3.14</spring.version>
+		<spring.version>5.3.18</spring.version>
 		<springboot.version>2.6.2</springboot.version>
 		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
 		<commons-pool2.version>2.4.2</commons-pool2.version>
