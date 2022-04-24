@@ -1,5 +1,5 @@
 /*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2022] [MaxKey of copyright http://www.maxkey.top]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,11 @@ package org.apache.mybatis.jpa.util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.SystemUtils;
+import org.joda.time.DateTime;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -32,7 +36,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Crystal.Sea
  * @since 1.6
  */
-public final class WebContext {
+public final class JpaWebContext {
+	
+	private static String VERSION = null;
+	
+	public static StandardEnvironment properties;
 	
 	public static ApplicationContext applicationContext=null;
 	
@@ -119,5 +127,37 @@ public final class WebContext {
 	public static String getParameter(String name){
 		return getRequest().getParameter(name);
 	}
-
+	
+	public static String version() {
+		if(VERSION == null) {
+			StringBuffer version =
+					new StringBuffer("---------------------------------------------------------------------------------\n");
+					  version.append("+                                MaxKey \n");
+					  version.append("+                      Single   Sign   On ( SSO ) \n");
+					  version.append("+                           Version "); 
+					  version.append(properties.getProperty("application.formatted-version")+"\n");
+					  version.append("+\n");
+					  version.append(String.format("+                 %sCopyright 2018 - %s https://www.maxkey.top/\n",
+		        			    (char)0xA9 , new DateTime().getYear()
+		        			));
+					  version.append("+                 Licensed under the Apache License, Version 2.0 \n");
+	
+				        
+					  version.append("---------------------------------------------------------------------------------\n");
+					  version.append("+                                JAVA    \n");
+					  version.append(String.format("+                 %s java version %s, class %s\n",
+				                        SystemUtils.JAVA_VENDOR,
+				                        SystemUtils.JAVA_VERSION,
+				                        SystemUtils.JAVA_CLASS_VERSION
+				                    ));
+					  version.append(String.format("+                 %s (build %s, %s)\n",
+				                        SystemUtils.JAVA_VM_NAME,
+				                        SystemUtils.JAVA_VM_VERSION,
+				                        SystemUtils.JAVA_VM_INFO
+				                    ));
+					  version.append("---------------------------------------------------------------------------------\n");
+			 VERSION = version.toString();
+		}
+		return VERSION;
+	}
 }

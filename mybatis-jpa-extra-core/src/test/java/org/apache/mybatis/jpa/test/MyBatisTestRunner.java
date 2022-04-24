@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
-import org.apache.mybatis.jpa.util.WebContext;
+import org.apache.mybatis.jpa.util.JpaWebContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -227,7 +227,7 @@ public class MyBatisTestRunner {
 		_logger.info("Application dir "+System.getProperty("user.dir"));
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
 		
-		WebContext.applicationContext=context;
-		service =(StudentsService)WebContext.getBean("studentsService");
+		JpaWebContext.applicationContext=context;
+		service =(StudentsService)JpaWebContext.getBean("studentsService");
 	}
 }

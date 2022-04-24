@@ -28,7 +28,7 @@ import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
 import org.apache.mybatis.jpa.util.StringUtils;
-import org.apache.mybatis.jpa.util.WebContext;
+import org.apache.mybatis.jpa.util.JpaWebContext;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -113,7 +113,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			if(mapper == null) {
 				String mapperClassBean = mapperClass.toLowerCase().charAt(0) + mapperClass.substring(1);
 				_logger.info("mapperClass Bean is {}" , mapperClassBean);
-				mapper = (IJpaBaseMapper<T>) WebContext.getBean(mapperClassBean);
+				mapper = (IJpaBaseMapper<T>) JpaWebContext.getBean(mapperClassBean);
 			}
 		} catch(Exception e) {
 			_logger.error("getMapper Exception " , e);

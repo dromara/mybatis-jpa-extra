@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
-import org.apache.mybatis.jpa.util.WebContext;
+import org.apache.mybatis.jpa.util.JpaWebContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +50,7 @@ public class MybatisJpaApplicationTest{
     @Before
     public  void before() {
     	_logger.info("---------------- before");
-    	WebContext.applicationContext=applicationContext;
+    	JpaWebContext.applicationContext=applicationContext;
 
     }
     
