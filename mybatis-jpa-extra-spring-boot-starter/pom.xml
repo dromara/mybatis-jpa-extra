@@ -19,7 +19,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
-		<springboot.version>2.2.6.RELEASE</springboot.version>
+		<springboot.version>2.2.11.RELEASE</springboot.version>
 	</properties>
 	
 	<dependencies>
