@@ -18,21 +18,40 @@
 		<mybatis.jpa.extra.version>2.7</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
-		<spring.version>5.3.14</spring.version>
-		<springboot.version>2.6.2</springboot.version>
+		<servlet-api.version>3.1.0</servlet-api.version>
+		<junit.version>4.13.1</junit.version>
+		
+		<spring.version>5.3.22</spring.version>
+		<springboot.version>2.6.10</springboot.version>
+		
+		<commons-collections.version>3.2.2</commons-collections.version>
+		<beanutils.version>1.9.4</beanutils.version>
+		<commons-lang.version>2.5</commons-lang.version>
 		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
 		<commons-pool2.version>2.4.2</commons-pool2.version>
-		<mysql-connnector.version>8.0.26</mysql-connnector.version>
-		<servlet-api.version>3.1.0</servlet-api.version>
 		<commons-io.version>2.4</commons-io.version>
-		<commons-codec.version>1.9</commons-codec.version>
-		<log4j.version>2.17.1</log4j.version>
-		<slf4j.version>1.7.32</slf4j.version>
-		<jackson.version2>2.10.0</jackson.version2>
-		<druid.version>1.2.8</druid.version>
-		<persistence.version>2.2.1</persistence.version>	
-		<mybatis.version>3.5.8</mybatis.version>	
-		<mybatis-spring.version>2.0.6</mybatis-spring.version>
+        <commons-codec.version>1.9</commons-codec.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <xmlbeans.version>5.0.2</xmlbeans.version>
+        
+        <log4j.version>2.18.0</log4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
+		<jackson.version2>2.13.3</jackson.version2>
+		
+		<mysql-connnector.version>8.0.29</mysql-connnector.version>
+		<ojdbc8.version>21.6.0.0.1</ojdbc8.version>
+		<highgo.version>6.0.3.jre8</highgo.version>
+		<postgresql.version>42.3.3</postgresql.version>
+		<persistence.version>2.2.1</persistence.version>
+		<mybatis.version>3.5.10</mybatis.version>	
+		<mybatis-spring.version>2.0.7</mybatis-spring.version>
+		<druid.version>1.2.11</druid.version>
+		
+		<caffeine.version>2.9.3</caffeine.version>
+		<joda-time.version>2.10.14</joda-time.version>
+		<activation.version>1.1.1</activation.version>
+        <aopalliance.version>1.0</aopalliance.version>
 			
 	</properties>
 	
@@ -142,6 +161,28 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connnector.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.highgo</groupId>
+            <artifactId>HgdbJdbc</artifactId>
+            <version>${highgo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <!-- 
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>${ojdbc8.version}</version>
+        </dependency>
+        -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
@@ -165,12 +206,12 @@
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.4</version>
+			<version>${beanutils.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.5</version>
+			<version>${commons-lang.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
 		<dependency>
@@ -219,34 +260,13 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.2</version>
+			<version>${joda-time.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connnector.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.highgo</groupId>
-			<artifactId>HgdbJdbc</artifactId>
-			<version>6.0.3.jre8</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-		    <version>42.3.3</version>
-		</dependency>
-		
-		<!-- <dependency> <groupId>oracle</groupId> <artifactId>ojdbc6</artifactId> 
-			<version>11.2.0.3</version> <scope>system</scope> <systemPath>${project.basedir}/lib/ojdbc6.jar</systemPath> 
-			</dependency> -->
 		<dependency>
 		    <groupId>com.github.ben-manes.caffeine</groupId>
 		    <artifactId>caffeine</artifactId>
-		    <version>2.9.2</version>
+		    <version>${caffeine.version}</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -266,38 +286,38 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.10</version>
+			<version>${commons-codec.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.2.2</version>
+			<version>${commons-collections.version}</version>
 		</dependency>
 
         <dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
-		    <version>3.12.0</version>
+		    <version>${commons-lang3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
+			<version>${commons-logging.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
-			<version>5.0.2</version>
+			<version>${xmlbeans.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
+			<version>${activation.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
-			<version>1.0</version>
+			<version>${aopalliance.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -308,7 +328,7 @@
 		<dependency>
 		    <groupId>junit</groupId>
 		    <artifactId>junit</artifactId>
-		    <version>4.13.1</version>
+		    <version>${junit.version}</version>
 		    <scope>test</scope>
 		</dependency>
 	</dependencies>	
