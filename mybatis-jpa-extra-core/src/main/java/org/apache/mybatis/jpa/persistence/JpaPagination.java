@@ -46,7 +46,7 @@ public class JpaPagination {
 	 */
 	@JsonIgnore
 	@Transient
-	protected int pageNumber=1;
+	protected int pageNumber = 1;
 	/**
 	 * 
 	 */
@@ -86,7 +86,7 @@ public class JpaPagination {
 	 */
 	@JsonIgnore
 	@Transient
-	protected boolean pageable=false;
+	protected boolean pageable = false;
 	
 	@JsonIgnore
 	@Transient

@@ -68,7 +68,6 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 			config.setDefaultStatementTimeout(timeout);
 		}
 		_logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
-		_logger.debug("MappedStatementNames {}" , config.getMappedStatementNames());
 		if(_logger.isTraceEnabled()) {
 			for(String mappedStatementName : config.getMappedStatementNames()) {
 				_logger.trace("MappedStatementName {} " ,mappedStatementName);
