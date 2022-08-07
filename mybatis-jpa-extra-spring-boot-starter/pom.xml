@@ -14,7 +14,7 @@
 	<artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
 	<name>mybatis-jpa-extra-spring-boot-starter</name>
 	<description>mybatis-jpa-extra-spring-boot-starter</description>
-	<url>https://github.com/shimingxy/mybatis-jpa-extra</url>
+	<url>https://github.com/MaxKeyTop/mybatis-jpa-extra</url>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
