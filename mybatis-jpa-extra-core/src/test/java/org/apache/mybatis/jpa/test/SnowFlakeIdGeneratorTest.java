@@ -29,6 +29,8 @@ public class SnowFlakeIdGeneratorTest {
 		SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator();
 		_logger.info(uhg.generate(""));
 		_logger.info(uhg.generate(""));
+		StringBuffer conditionString =new StringBuffer("");
+		_logger.info("length {}",conditionString.length());
 	}
 
 }

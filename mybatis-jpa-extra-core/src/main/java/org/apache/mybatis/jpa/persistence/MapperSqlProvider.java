@@ -22,9 +22,13 @@ package org.apache.mybatis.jpa.persistence;
 
 import java.util.Map;
 import org.apache.mybatis.jpa.persistence.provider.SqlProviderDelete;
+import org.apache.mybatis.jpa.persistence.provider.SqlProviderFind;
+import org.apache.mybatis.jpa.persistence.provider.SqlProviderGet;
 import org.apache.mybatis.jpa.persistence.provider.SqlProviderInsert;
 import org.apache.mybatis.jpa.persistence.provider.SqlProviderQuery;
+import org.apache.mybatis.jpa.persistence.provider.SqlProviderPageResultsCount;
 import org.apache.mybatis.jpa.persistence.provider.SqlProviderUpdate;
+import org.apache.mybatis.jpa.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,15 +46,15 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	}
 
 	public String get(Map<String, Object>  parametersMap) {
-		return new SqlProviderQuery().get(parametersMap);  
+		return new SqlProviderGet().get(parametersMap);  
     }
 	
 	public String find(Map<String, Object>  parametersMap) throws Exception {
-		return new SqlProviderQuery().find(parametersMap);  
+		return new SqlProviderFind().find(parametersMap);  
     }
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
-		return new SqlProviderQuery().findAll(parametersMap);  
+		return new SqlProviderFind().findAll(parametersMap);  
     }
 	
 	public String remove(Map<String, Object>  parametersMap) { 
@@ -86,11 +90,11 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	 * @return insert sql String
 	 */
 	public String queryPageResultsCount(T entity) {
-		return new SqlProviderQuery().executePageResultsCount(entity);
+		return new SqlProviderPageResultsCount().executePageResultsCount(entity);
 	}
 	
-	public String query(T entity) {
-		return new SqlProviderQuery().query(entity);
+	public String query(T entity,Query query) {
+		return new SqlProviderQuery().query(entity,query);
 	}
 
 }

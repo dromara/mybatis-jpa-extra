@@ -23,6 +23,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.mybatis.jpa.query.Query;
 
 /**
  * @author Crystal.sea
@@ -31,7 +32,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 public interface IJpaBaseMapper<T> {
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
-	public List<T> query(T entity);
+	public List<T> query(T entity,Query query);
 	
 	//follow function for Query
 	public List<T> queryPageResults(T entity);

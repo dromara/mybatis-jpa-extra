@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.mybatis.jpa.PageResultsSqlCache;
+import org.apache.mybatis.jpa.query.Query;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
 import org.apache.mybatis.jpa.util.StringUtils;
@@ -212,7 +213,22 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			if(entity == null) {
 				entity = (T) entityClass.newInstance();
 			}
-			return getMapper().query(entity);
+			return getMapper().query(entity,null);
+		} catch(Exception e) {
+			_logger.error("query Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 *  query list entity by Query 
+	 * @param entity
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<T> query(Query query) {
+		try {
+			return getMapper().query((T)entityClass.newInstance(),query);
 		} catch(Exception e) {
 			_logger.error("query Exception " , e);
 		}
@@ -302,7 +318,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public T load(T entity) {
 		try {
-			List<T> entityList = getMapper().query(entity);
+			List<T> entityList = getMapper().query(entity,null);
 			return ((entityList != null) && ( entityList.size() > 0 ))?entityList.get(0) : null;
 		} catch(Exception e) {
 			_logger.error("load Exception " , e);

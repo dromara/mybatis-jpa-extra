@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.mybatis.jpa.query.Query;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
 import org.apache.mybatis.jpa.util.JpaWebContext;
@@ -189,9 +190,20 @@ public class MyBatisTestRunner {
 	}
 	
 	@Test
-	public void query() throws Exception{
-		_logger.info("findAll...");
-		List<Students> allListStudents =service.query(null);
+	public void queryByEntity() throws Exception{
+		_logger.info("find...");
+		List<Students> allListStudents =service.query(new Students());
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
+	
+	@Test
+	public void queryByQuery() throws Exception{
+		_logger.info("find...");
+		List<Students> allListStudents =service.query(
+				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
+				.or(new Query().eq("stdname", "周瑜")));
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }

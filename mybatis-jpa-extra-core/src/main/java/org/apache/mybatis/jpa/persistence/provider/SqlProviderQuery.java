@@ -1,5 +1,5 @@
 /*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2022] [MaxKey of copyright http://www.maxkey.top]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,13 @@
  */
 package org.apache.mybatis.jpa.persistence.provider;
 
-import java.sql.Types;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.persistence.FieldColumnMapper;
 import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
-import org.apache.mybatis.jpa.persistence.JpaBaseService;
-import org.apache.mybatis.jpa.persistence.JpaPagination;
 import org.apache.mybatis.jpa.persistence.MapperMetadata;
-import org.apache.mybatis.jpa.persistence.MapperMetadata.SQL_TYPE;
+import org.apache.mybatis.jpa.query.Condition;
+import org.apache.mybatis.jpa.query.Operator;
+import org.apache.mybatis.jpa.query.Query;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,100 +38,140 @@ import org.slf4j.LoggerFactory;
 public class SqlProviderQuery <T extends JpaBaseEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderQuery.class);
-
-
-	public String get(Map<String, Object>  parametersMap) {
-		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL)) {
-			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL);
-		}
-		
-		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
-		
-		SQL sql=new SQL()
-			.SELECT(selectColumnMapper(entityClass)) 
-        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ")
-        	.WHERE(idFieldColumnMapper.getColumnName() 
-        			+ " = #{"+idFieldColumnMapper.getFieldName() + "}");  
-		
-        String getSql = sql.toString(); 
-        _logger.trace("Get SQL \n" + getSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL,getSql);
-        return getSql;  
-    }
 	
-	public String findAll(Map<String, Object>  parametersMap) {  
-		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL)) {
-			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL);
-		}
-		
-		SQL sql=new SQL()
-			.SELECT(selectColumnMapper(entityClass))  
-        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ");  
-		
-        String findAllSql = sql.toString(); 
-        _logger.trace("Find All SQL \n" + findAllSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.FINDALL_SQL,findAllSql);
-        return findAllSql;  
-    }
+	public String query(T entity,Query query) {		
+		return (query == null) ? filterByEntity(entity) : filterByQuery(entity,query);
+	}
 	
-	public String find(Map<String, Object>  parametersMap) throws Exception {  
-		Class<?> entityClass=(Class<?>)	parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		Object[] args 	= (Object[])	parametersMap.get(MapperMetadata.QUERY_ARGS);
-		int[] argTypes 	= (int[])		parametersMap.get(MapperMetadata.QUERY_ARGTYPES);
-		String filterSql = parametersMap.get(MapperMetadata.QUERY_FILTER).toString().trim();
-		
-		MapperMetadata.buildColumnList(entityClass);
-		
-		if(filterSql.toLowerCase().startsWith("where")) {
-			filterSql = filterSql.substring(5);
-		}
-		
-		if(args == null || args.length == 0) {
-			filterSql = replace(filterSql);
-		}else {
-			int countMatches = StringUtils.countMatches(filterSql, "?");
-			if(args.length < countMatches) {
-				_logger.error("args length {} < parameter placeholder {}" ,  countMatches,args.length);
-				throw new Exception("args length < parameter placeholder");
-			}
-			
-			String filterSqls [] = filterSql.split("\\?");
-			StringBuffer sqlBuffer = new StringBuffer("");
-			for(int i = 0 ;i < args.length ; i++){
-				_logger.trace("Find args[{}] {}" , i, args[i]);
-				if(argTypes[i] == Types.VARCHAR ||argTypes[i] == Types.NVARCHAR 
-						||argTypes[i] == Types.CHAR||argTypes[i] == Types.NCHAR
-						||argTypes[i] == Types.LONGVARCHAR ||argTypes[i] == Types.LONGNVARCHAR) {
-					sqlBuffer
-						.append(filterSqls[i])
-						.append("'")
-						.append(args[i].toString().replaceAll("'", ""))
-						.append("'");
-				}else {
-					sqlBuffer
-					.append(filterSqls[i])
-					.append(args[i]);
+	public String filterByQuery(T entity,Query query) {
+		_logger.trace("Query \n" + query);
+		MapperMetadata.buildColumnList(entity.getClass());
+		SQL sql=new SQL()
+			.SELECT(selectColumnMapper(entity.getClass())) 
+        	.FROM(MapperMetadata.getTableName(entity.getClass())+" sel_tmp_table ");  
+		sql.WHERE(buildQuery(query));
+		if(query.getGroupBy() != null) {
+			StringBuffer groupBy = new StringBuffer();
+			for(Condition condition : query.getGroupBy()) {
+				if(groupBy.length() >0 ) {
+					groupBy.append(" , ");
 				}
+				groupBy.append( condition.getColumn());
 			}
-			filterSql = replace(sqlBuffer.toString());
+			sql.GROUP_BY(groupBy.toString());
 		}
-		
-		SQL sql=new SQL()
-			.SELECT(selectColumnMapper(entityClass))  
-        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ")
-			.WHERE(filterSql);
-		
-        String findSql = sql.toString(); 
-        _logger.trace("Find SQL \n" + findSql);
-
-        return findSql;  
-    }
+		if(query.getOrderBy() != null) {
+			StringBuffer orderBy = new StringBuffer();
+			for(Condition condition : query.getGroupBy()) {
+				if(orderBy.length() > 0) {
+					orderBy.append(" , ");
+				}
+				orderBy.append(condition.getColumn()).append(" ").append(condition.getValue());
+			}
+			sql.ORDER_BY(orderBy.toString());
+		}
+		return sql.toString();
+	}
 	
-	public String query(T entity) {
+	public String buildQuery(Query query) {
+		StringBuffer conditionString =new StringBuffer("");
+		for(Condition condition : query.getConditions()) {
+			condition.setColumn(condition.getColumn().replaceAll("'", "").replaceAll(" ", "").replace(";", ""));
+			if(condition.getExpression().equals(Operator.and)
+					||condition.getExpression().equals(Operator.or)
+					) {
+				
+				conditionString.append(" ").append(condition.getExpression().getOperator()).append(" ");
+				
+				if(condition.getValue() !=null && condition.getValue() instanceof Query) {
+					conditionString.append(" ( ").append(buildQuery((Query)condition.getValue())).append(" ) ");
+				}
+				
+			}else if(condition.getExpression().equals(Operator.like)
+					||condition.getExpression().equals(Operator.notLike)
+					) {
+				
+				conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator()).append(" ");
+				conditionString.append("'%").append(condition.getValue().toString()).append("%'");
+				
+			}else if(condition.getExpression().equals(Operator.likeLeft)) {
+				
+				conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator()).append(" ");
+				conditionString.append("'%").append(condition.getValue().toString()).append("'");
+				
+			}else if(condition.getExpression().equals(Operator.likeRight)) {
+				
+				conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator()).append(" ");
+				conditionString.append("'").append(condition.getValue().toString()).append("%'");
+				
+			}else if(condition.getExpression().equals(Operator.eq)
+					||condition.getExpression().equals(Operator.notEq)
+					
+					||condition.getExpression().equals(Operator.gt)
+					||condition.getExpression().equals(Operator.ge)
+					
+					||condition.getExpression().equals(Operator.lt)
+					||condition.getExpression().equals(Operator.le)
+					) {
+				
+				conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator()).append(" ");
+				conditionString.append(getConditionValue(condition.getValue()));
+				
+			}else if(condition.getExpression().equals(Operator.between)
+					||condition.getExpression().equals(Operator.notBetween)) {
+				
+				conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator()).append(" ");
+				conditionString.append(getConditionValue(condition.getValue()));
+				conditionString.append(" and ");
+				conditionString.append(getConditionValue(condition.getValue2()));
+				
+			}else if(condition.getExpression().equals(Operator.isNull)
+					||condition.getExpression().equals(Operator.isNotNull)) {
+				
+				conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
+				
+			}else if(condition.getExpression().equals(Operator.in)
+					||condition.getExpression().equals(Operator.notIn)) {
+				if(condition.getValue().getClass().isArray()) {
+					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
+					conditionString.append(" ( ");
+					StringBuffer conditionArray =new StringBuffer();
+					Object[] objects = (Object[]) condition.getValue();
+					for(Object object : objects) {
+						if(conditionArray.length() > 0) {
+							conditionArray.append(" , ");
+						}
+						conditionArray.append(getConditionValue(object));
+					}
+					conditionString.append(conditionArray);
+					conditionString.append(" ) ");
+				}
+			}else if(condition.getExpression().equals(Operator.condition)) {
+				conditionString.append(condition.getColumn().replace(";", ""));
+			}
+		}
+		return conditionString.toString();
+	}
+	
+	public String getConditionValue(Object value) {
+		StringBuffer conditionString =new StringBuffer("");
+		String valueType = value.getClass().getSimpleName().toLowerCase();
+		if(valueType.equals("string")
+				||valueType.equals("char")){
+			conditionString.append("'").append(String.valueOf(value).replaceAll("'", "")).append("'");
+		}else if(valueType.equals("int")
+				||valueType.equals("long")
+				||valueType.equals("integer")
+				||valueType.equals("float")
+				||valueType.equals("double")){
+			conditionString.append("").append(value).append("");
+		}else {
+			conditionString.append("'").append(String.valueOf(value).replaceAll("'", "")).append("'");
+		}
+		return conditionString.toString();
+	}
+	
+	public String filterByEntity(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
 		SQL sql=new SQL()
 			.SELECT(selectColumnMapper(entity.getClass())) 
@@ -185,62 +218,6 @@ public class SqlProviderQuery <T extends JpaBaseEntity>{
 					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
 		}
 		return selectColumn.toString();
-	}
-	
-	/**
-	 * @param entity
-	 * @return insert sql String
-	 */
-	public String executePageResultsCount(T entity) {
-		JpaPagination pagination=(JpaPagination)entity;
-		//获取缓存数据
-		PageResultsSqlCache pageResultsSqlCache = 
-				JpaBaseService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
-		//多个空格 tab 替换成1个空格
-		String selectSql = replace(pageResultsSqlCache.getSql());
-		
-		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
-		_logger.trace("Count original SQL  :\n{}" , selectSql);
-		
-		StringBuffer sql = new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
-		StringBuffer countSql = new StringBuffer();
-		
-		if(boundSql.getParameterMappings() == null ||boundSql.getParameterMappings().isEmpty()) {
-			countSql.append(selectSql);
-		}else {
-			for (ParameterMapping parameterMapping:boundSql.getParameterMappings()) {
-				countSql.append(selectSql.substring(0, selectSql.indexOf("?")));
-				countSql.append("#{"+parameterMapping.getProperty()+"}");
-				selectSql = selectSql.substring(selectSql.indexOf("?")+1);
-			}
-			countSql.append(selectSql);
-		}
-		String countSqlLowerCase = countSql.toString().toLowerCase();
-		_logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
-		
-		if(countSqlLowerCase.indexOf(SqlSyntax.DISTINCT + " ")>0 //去重
-				||countSqlLowerCase.indexOf(" " + SqlSyntax.GROUPBY + " ")>0 //分组
-				||countSqlLowerCase.indexOf(" " + SqlSyntax.HAVING + " ")>0 //聚合函数
-				||(countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ") 
-						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntax.FROM + " ")
-				) //嵌套
-				) {
-			_logger.trace("Count SQL Complex ");
-			sql.append(SqlSyntax.FROM).append(" (").append(countSql).append(" ) count_table_");
-		}else {
-			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ");
-			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.ORDERBY + " ");
-			_logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
-			if(orderByIndex > -1) {
-				sql.append(countSql.substring(fromIndex,orderByIndex));
-			}else {
-				sql.append(countSql.substring(fromIndex));
-			}
-		}
-		//删除缓存
-		JpaBaseService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
-		_logger.trace("Count SQL : \n{}" , sql);
-		return sql.toString();
 	}
 	
 	public static String replace(String sql) {
