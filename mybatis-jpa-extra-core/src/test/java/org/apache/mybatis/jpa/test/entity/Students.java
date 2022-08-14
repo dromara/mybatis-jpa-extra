@@ -79,6 +79,9 @@ public class Students extends JpaBaseEntity implements Serializable{
 		super();
 	}
 
+	public Students(String stdNo) {
+		this.stdNo = stdNo;
+	}
 
 	public String getStdNo() {
 		return stdNo;

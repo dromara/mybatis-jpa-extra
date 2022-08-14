@@ -31,6 +31,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,73 +47,82 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
 	public  static class SQL_TYPE{
-		public static String 	GET_SQL							=	"_GET_SQL";
-		public static String 	FINDALL_SQL						=	"_FINDALL_SQL";
-		public static String 	REMOVE_SQL						=	"_REMOVE_SQL";
-		public static String 	BATCHDELETE_SQL					=	"_BATCHDELETE_SQL";
-		public static String 	LOGICDELETE_SQL					=	"_LOGICDELETE_SQL";
+		public static String 	GET_SQL							= "_GET_SQL";
+		public static String 	FINDALL_SQL						= "_FINDALL_SQL";
+		public static String 	REMOVE_SQL						= "_REMOVE_SQL";
+		public static String 	BATCHDELETE_SQL					= "_BATCHDELETE_SQL";
+		public static String 	LOGICDELETE_SQL					= "_LOGICDELETE_SQL";
 		
 		
 	}
 	
-	public static 			String ENTITY_CLASS					=	"entityClass";
+	public static 			String ENTITY_CLASS					= "entityClass";
 	
-	public static 			String QUERY_FILTER					=	"filter";
-	public static 			String QUERY_ARGS					=	"args";
-	public static 			String QUERY_ARGTYPES				=	"argTypes";
+	public static 			String QUERY_FILTER					= "filter";
+	public static 			String QUERY_ARGS					= "args";
+	public static 			String QUERY_ARGTYPES				= "argTypes";
 	/**
 	 * 表名和字段名
 	 */
-	public static int 		TABLE_COLUMN_CASE 					=   CASE_TYPE.LOWERCASE;
-	public static boolean   TABLE_COLUMN_ESCAPE                 =  false;
+	public static int 		TABLE_COLUMN_CASE 					= CASE_TYPE.LOWERCASE;
+	public static boolean   TABLE_COLUMN_ESCAPE                 = false;
 	public static String    TABLE_COLUMN_ESCAPE_CHAR            =  "`";
 	
 	public static class CASE_TYPE{
-		public static int 		NORMAL 				=   0;
-		public static int 		LOWERCASE 			=   1;
-		public static int 		UPPERCASE 			=   2;
+		public static int 		NORMAL 							= 0;
+		public static int 		LOWERCASE 						= 1;
+		public static int 		UPPERCASE 						= 2;
 	}
 	
 	
-	public transient static ConcurrentMap<String, List<FieldColumnMapper>> 	fieldsMap 	= 	new ConcurrentHashMap<String, List<FieldColumnMapper>>();
-	public transient static ConcurrentMap<String, String> 		sqlsMap 	= 	new ConcurrentHashMap<String, String>();
+	public transient static ConcurrentMap<String, List<FieldColumnMapper>> 	
+											fieldsMap 	= 	new ConcurrentHashMap<String, List<FieldColumnMapper>>();
+	
+	public transient static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<String, String>();
+	
+	public transient static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<String, String>();
+	
 	public static IdentifierGeneratorFactory identifierGeneratorFactory=new IdentifierGeneratorFactory();
 	
 	/**
-	 * getTableName
+	 * getTableName and cache table name
 	 * @param entityClass
-	 * @return
+	 * @return table name
 	 */
 	public static String getTableName(Class<?> entityClass) {
+		String entityClassName = entityClass.getClass().getSimpleName();
+		if(tableNameMap.containsKey(entityClassName)) {
+			return tableNameMap.get(entityClassName);
+		}
 		String tableName = null;
 		String schema = null;
 		String catalog = null;
 		//must use @Entity to ORM class
 		Entity entity =(Entity)entityClass.getAnnotation(Entity.class);
-		_logger.trace("entity " + entity);
+		_logger.trace("entity {}" , entity);
 		Table table = (Table)entityClass.getAnnotation(Table.class);
-		_logger.trace("table " + table);
-		if(entity !=null ) {
-			if(entity.name()!=null&& !entity.name().equals("")) {
+		_logger.trace("table {}" , table);
+		if(entity != null ) {
+			if(entity.name() != null && !entity.name().equals("")) {
 				tableName = entity.name();
 			}
 			if (table != null) {
-				if(table.name()!=null&& !table.name().equals("")) {
+				if(table.name() != null && !table.name().equals("")) {
 					tableName = table.name();
 				}
-				if(table.schema()!=null&& !table.schema().equals("")) {
+				if(table.schema() != null && !table.schema().equals("")) {
 					schema = table.schema();
-					_logger.trace("schema " + schema);
+					_logger.trace("schema {}" , schema);
 				}
 				
-				if(table.catalog()!=null&& !table.catalog().equals("")) {
+				if(table.catalog() != null && !table.catalog().equals("")) {
 					catalog = table.catalog();
-					_logger.trace("catalog " + catalog);
+					_logger.trace("catalog {}" , catalog);
 				}
 			}
 			
 			if(tableName == null) {
-				tableName = entityClass.getClass().getSimpleName();
+				tableName = entityClassName;
 			}
 			
 			if(schema != null) {
@@ -121,13 +132,13 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 			if(catalog != null) {
 				tableName = catalog+"."+tableName;
 			}
-			
 		}
 		
 		tableName = tableColumnCaseConverter(tableName);
 		
 		tableName = TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + tableName + TABLE_COLUMN_ESCAPE_CHAR : tableName;
-		_logger.trace("Table Name " + tableName);
+		tableNameMap.put(entityClassName,tableName);
+		_logger.trace("Table Name {}" , tableName);
 		return tableName;
 	}
 	
@@ -143,6 +154,40 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 		return idFieldColumnMapper;
 	}
 
+	/**
+	 * get select table Column from entityClass, data cache in fieldsMap
+	 * @param entityClass
+	 * @return selectColumn
+	 */
+	public static String selectColumnMapper(Class<?> entityClass) {
+		StringBuffer selectColumn =new StringBuffer("sel_tmp_table.* ");
+		int columnCount = 0;
+		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getSimpleName())) {
+			columnCount ++;
+			//不同的属性和数据库字段不一致的需要进行映射
+			if(!fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
+				selectColumn.append(",")
+							.append(fieldColumnMapper.getColumnName())
+							.append(" ")
+							.append(fieldColumnMapper.getFieldName());
+			}
+			_logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
+					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
+		}
+		return selectColumn.toString();
+	}
+	
+	/**
+	 * build select from entity Class
+	 * @param entityClass
+	 * @return select columns  from table name sel_tmp_table
+	 */
+	public static SQL buildSelect(Class<?> entityClass) {
+		buildColumnList(entityClass);
+		return new SQL().SELECT(selectColumnMapper(entityClass))
+				.FROM(getTableName(entityClass) + " sel_tmp_table ");
+	}
+	
 	/**
 	 * buildColumnList
 	 * @param entityClass
@@ -203,6 +248,11 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 
 	}
 	
+	/**
+	 * Case Converter
+	 * @param name
+	 * @return case
+	 */
 	public static String tableColumnCaseConverter(String name) {
 		if(TABLE_COLUMN_CASE  == CASE_TYPE.NORMAL) {}
 		else if(TABLE_COLUMN_CASE  == CASE_TYPE.LOWERCASE) {

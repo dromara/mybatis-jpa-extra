@@ -213,7 +213,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 			if(entity == null) {
 				entity = (T) entityClass.newInstance();
 			}
-			return getMapper().query(entity,null);
+			return getMapper().query(entity);
 		} catch(Exception e) {
 			_logger.error("query Exception " , e);
 		}
@@ -228,7 +228,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	@SuppressWarnings("unchecked")
 	public List<T> query(Query query) {
 		try {
-			return getMapper().query((T)entityClass.newInstance(),query);
+			return getMapper().filterByQuery((T)entityClass.newInstance(),query);
 		} catch(Exception e) {
 			_logger.error("query Exception " , e);
 		}
@@ -318,7 +318,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 */
 	public T load(T entity) {
 		try {
-			List<T> entityList = getMapper().query(entity,null);
+			List<T> entityList = getMapper().query(entity);
 			return ((entityList != null) && ( entityList.size() > 0 ))?entityList.get(0) : null;
 		} catch(Exception e) {
 			_logger.error("load Exception " , e);

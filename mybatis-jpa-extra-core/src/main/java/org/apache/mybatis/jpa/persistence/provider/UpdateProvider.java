@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SqlProviderUpdate <T extends JpaBaseEntity>{
+public class UpdateProvider <T extends JpaBaseEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderUpdate.class);
+	private static final Logger _logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
 
 	/**
 	 * @param entity

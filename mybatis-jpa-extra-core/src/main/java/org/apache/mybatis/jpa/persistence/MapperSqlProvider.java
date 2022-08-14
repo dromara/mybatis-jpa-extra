@@ -21,13 +21,13 @@
 package org.apache.mybatis.jpa.persistence;
 
 import java.util.Map;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderDelete;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderFind;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderGet;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderInsert;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderQuery;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderPageResultsCount;
-import org.apache.mybatis.jpa.persistence.provider.SqlProviderUpdate;
+import org.apache.mybatis.jpa.persistence.provider.DeleteProvider;
+import org.apache.mybatis.jpa.persistence.provider.FindProvider;
+import org.apache.mybatis.jpa.persistence.provider.GetProvider;
+import org.apache.mybatis.jpa.persistence.provider.InsertProvider;
+import org.apache.mybatis.jpa.persistence.provider.QueryProvider;
+import org.apache.mybatis.jpa.persistence.provider.PageResultsCountProvider;
+import org.apache.mybatis.jpa.persistence.provider.UpdateProvider;
 import org.apache.mybatis.jpa.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,27 +46,27 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	}
 
 	public String get(Map<String, Object>  parametersMap) {
-		return new SqlProviderGet().get(parametersMap);  
+		return new GetProvider().get(parametersMap);  
     }
 	
 	public String find(Map<String, Object>  parametersMap) throws Exception {
-		return new SqlProviderFind().find(parametersMap);  
+		return new FindProvider().find(parametersMap);  
     }
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
-		return new SqlProviderFind().findAll(parametersMap);  
+		return new FindProvider().findAll(parametersMap);  
     }
 	
 	public String remove(Map<String, Object>  parametersMap) { 
-        return new SqlProviderDelete().remove(parametersMap);  
+        return new DeleteProvider().remove(parametersMap);  
     }  
 	
 	public String deleteBatch(Map<String, Object>  parametersMap) { 
-		return new SqlProviderDelete().batchDelete(parametersMap);
+		return new DeleteProvider().batchDelete(parametersMap);
     } 
 	
 	public String logicDelete(Map<String, Object>  parametersMap) { 
-		return new SqlProviderDelete().logicDelete(parametersMap);
+		return new DeleteProvider().logicDelete(parametersMap);
     }
 	
 	/**
@@ -74,7 +74,7 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	 * @return insert sql String
 	 */
 	public String insert(T entity) {
-		return new SqlProviderInsert().insert(entity);
+		return new InsertProvider().insert(entity);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	 * @return update sql String
 	 */
 	public String update(T entity) {
-		return new SqlProviderUpdate().update(entity);
+		return new UpdateProvider().update(entity);
 	}
 
 	/**
@@ -90,11 +90,15 @@ public class MapperSqlProvider <T extends JpaBaseEntity>{
 	 * @return insert sql String
 	 */
 	public String queryPageResultsCount(T entity) {
-		return new SqlProviderPageResultsCount().executePageResultsCount(entity);
+		return new PageResultsCountProvider().executePageResultsCount(entity);
 	}
 	
-	public String query(T entity,Query query) {
-		return new SqlProviderQuery().query(entity,query);
+	public String query(T entity) {
+		return new QueryProvider().query(entity);
+	}
+	
+	public String filterByQuery(T entity,Query query) {
+		return new QueryProvider().filterByQuery(entity,query);
 	}
 
 }

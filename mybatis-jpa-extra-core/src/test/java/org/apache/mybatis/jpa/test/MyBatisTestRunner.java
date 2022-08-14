@@ -192,7 +192,7 @@ public class MyBatisTestRunner {
 	@Test
 	public void queryByEntity() throws Exception{
 		_logger.info("find...");
-		List<Students> allListStudents =service.query(new Students());
+		List<Students> allListStudents =service.query(new Students("10024"));
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }

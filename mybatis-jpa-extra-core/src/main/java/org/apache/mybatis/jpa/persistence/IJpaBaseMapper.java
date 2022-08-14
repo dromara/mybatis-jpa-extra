@@ -32,7 +32,10 @@ import org.apache.mybatis.jpa.query.Query;
 public interface IJpaBaseMapper<T> {
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
-	public List<T> query(T entity,Query query);
+	public List<T> query(T entity);
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "filterByQuery")
+	public List<T> filterByQuery(T entity,Query query);
 	
 	//follow function for Query
 	public List<T> queryPageResults(T entity);

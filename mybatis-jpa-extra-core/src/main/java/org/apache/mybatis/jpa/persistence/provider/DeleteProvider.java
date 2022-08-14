@@ -34,26 +34,27 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SqlProviderDelete <T extends JpaBaseEntity>{
+public class DeleteProvider <T extends JpaBaseEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderDelete.class);
+	private static final Logger _logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
 	
 	public String remove(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL)) {
-			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL);
+		String tableName = MapperMetadata.getTableName(entityClass);
+		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
+			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.REMOVE_SQL);
 		}
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn((entityClass).getSimpleName());
 		
 		SQL sql=new SQL()
-        	.DELETE_FROM(MapperMetadata.getTableName(entityClass))
+        	.DELETE_FROM(tableName)
         	.WHERE(idFieldColumnMapper.getColumnName() 
         			+ " = #{" +idFieldColumnMapper.getFieldName() + ",javaType=string,jdbcType=VARCHAR}");  
 		
         String deleteSql = sql.toString(); 
+        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.REMOVE_SQL,deleteSql);
         _logger.trace("Delete SQL \n"+deleteSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.REMOVE_SQL,deleteSql);
         return deleteSql;  
     }  
 	
@@ -61,6 +62,7 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 	public String batchDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
+		String tableName = MapperMetadata.getTableName(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
 		String keyValue="";
 		for(String value : idValues) {
@@ -74,13 +76,12 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql=new SQL()
-        	.DELETE_FROM(MapperMetadata.getTableName(entityClass))
+        	.DELETE_FROM(tableName)
         	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
 		
         String deleteSql=sql.toString(); 
+        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
         _logger.trace("Delete SQL \n" + deleteSql);
-        MapperMetadata.sqlsMap.put(
-        		MapperMetadata.getTableName(entityClass) + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
         return deleteSql;  
     } 
 	
@@ -88,6 +89,7 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 	public String logicDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
+		String tableName = MapperMetadata.getTableName(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
 		String keyValue="";
 		for(String value : idValues) {
@@ -101,14 +103,13 @@ public class SqlProviderDelete <T extends JpaBaseEntity>{
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql=new SQL()
-        	.UPDATE(MapperMetadata.getTableName(entityClass))
+        	.UPDATE(tableName)
         	.SET("status = 9")
         	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
 		
         String deleteSql = sql.toString(); 
+        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
         _logger.trace("logic Delete SQL \n" + deleteSql);
-        MapperMetadata.sqlsMap.put(
-        		MapperMetadata.getTableName(entityClass) + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
         return deleteSql;  
     } 
 	

@@ -85,4 +85,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		return string;
 	}
 
+	public static String lineBreak2Blank(String sql) {
+		return 	sql.replaceAll("\r\n+", " \n")
+				   .replaceAll("\n+", " \n")
+				   .replaceAll("\t", " ")
+				   .replaceAll(" +"," ");
+	}
 }

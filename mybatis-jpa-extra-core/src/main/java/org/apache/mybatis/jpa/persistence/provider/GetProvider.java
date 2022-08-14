@@ -34,54 +34,27 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SqlProviderGet <T extends JpaBaseEntity>{
+public class GetProvider <T extends JpaBaseEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderGet.class);
+	private static final Logger _logger 	= 	LoggerFactory.getLogger(GetProvider.class);
 	
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL)) {
-			return MapperMetadata.sqlsMap.get(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL);
+		String tableName = MapperMetadata.getTableName(entityClass);
+		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.GET_SQL)) {
+			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.GET_SQL);
 		}
 		
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
-		SQL sql=new SQL()
-			.SELECT(selectColumnMapper(entityClass)) 
-        	.FROM(MapperMetadata.getTableName(entityClass)+" sel_tmp_table ")
+		SQL sql = MapperMetadata.buildSelect(entityClass)
         	.WHERE(idFieldColumnMapper.getColumnName() 
         			+ " = #{"+idFieldColumnMapper.getFieldName() + "}");  
 		
         String getSql = sql.toString(); 
+        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.GET_SQL,getSql);
         _logger.trace("Get SQL \n" + getSql);
-        MapperMetadata.sqlsMap.put(MapperMetadata.getTableName(entityClass) + SQL_TYPE.GET_SQL,getSql);
         return getSql;  
     }
-	
-	public String selectColumnMapper(Class<?> entityClass) {
-		StringBuffer selectColumn =new StringBuffer("sel_tmp_table.* ");
-		int columnCount = 0;
-		for(FieldColumnMapper fieldColumnMapper  : MapperMetadata.fieldsMap.get(entityClass.getSimpleName())) {
-			columnCount ++;
-			//不同的属性和数据库字段不一致的需要进行映射
-			if(!fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
-				selectColumn.append(",")
-							.append(fieldColumnMapper.getColumnName())
-							.append(" ")
-							.append(fieldColumnMapper.getFieldName());
-			}
-			_logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
-		}
-		return selectColumn.toString();
-	}
-	
-	public static String replace(String sql) {
-		return 	sql.replaceAll("\r\n+", " \n")
-				   .replaceAll("\n+", " \n")
-				   .replaceAll("\t", " ")
-				   .replaceAll(" +"," ");
-	}
-	
 }

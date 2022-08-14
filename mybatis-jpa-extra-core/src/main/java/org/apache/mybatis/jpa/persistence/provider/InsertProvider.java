@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SqlProviderInsert <T extends JpaBaseEntity>{
+public class InsertProvider <T extends JpaBaseEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderInsert.class);
+	private static final Logger _logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
 	
 	/**
 	 * @param entity
@@ -47,8 +47,7 @@ public class SqlProviderInsert <T extends JpaBaseEntity>{
 		MapperMetadata.buildColumnList(entity.getClass());
 		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());
 		
-		SQL sql = new SQL()
-			.INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
+		SQL sql = new SQL().INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
 		
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper=listFields.get(i);
@@ -57,8 +56,8 @@ public class SqlProviderInsert <T extends JpaBaseEntity>{
 					fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
 					||fieldColumnMapper.getFieldType().startsWith("byte")
 				)
-				&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
-				&&fieldColumnMapper.getGeneratedValue()==null) {
+				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
+				&& fieldColumnMapper.getGeneratedValue()==null) {
 				//skip null field value
 				_logger.trace("skip  field value is null ");
 			}else {

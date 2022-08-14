@@ -26,6 +26,7 @@ import org.apache.mybatis.jpa.PageResultsSqlCache;
 import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 import org.apache.mybatis.jpa.persistence.JpaBaseService;
 import org.apache.mybatis.jpa.persistence.JpaPagination;
+import org.apache.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +34,9 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SqlProviderPageResultsCount <T extends JpaBaseEntity>{
+public class PageResultsCountProvider <T extends JpaBaseEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(SqlProviderPageResultsCount.class);
+	private static final Logger _logger 	= 	LoggerFactory.getLogger(PageResultsCountProvider.class);
 	
 	/**
 	 * @param entity
@@ -47,14 +48,14 @@ public class SqlProviderPageResultsCount <T extends JpaBaseEntity>{
 		PageResultsSqlCache pageResultsSqlCache = 
 				JpaBaseService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
-		String selectSql = replace(pageResultsSqlCache.getSql());
+		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
 		
 		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
 		_logger.trace("Count original SQL  :\n{}" , selectSql);
 		
 		StringBuffer sql = new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
 		StringBuffer countSql = new StringBuffer();
-		
+
 		if(boundSql.getParameterMappings() == null ||boundSql.getParameterMappings().isEmpty()) {
 			countSql.append(selectSql);
 		}else {
@@ -91,13 +92,6 @@ public class SqlProviderPageResultsCount <T extends JpaBaseEntity>{
 		JpaBaseService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
 		_logger.trace("Count SQL : \n{}" , sql);
 		return sql.toString();
-	}
-	
-	public static String replace(String sql) {
-		return 	sql.replaceAll("\r\n+", " \n")
-				   .replaceAll("\n+", " \n")
-				   .replaceAll("\t", " ")
-				   .replaceAll(" +"," ");
 	}
 	
 }
