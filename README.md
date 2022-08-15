@@ -77,9 +77,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Column
 	private byte[] images;
 	
-	public Students() {
-		super();
-	}
+	public Students() {}
 
 	public get(){};
 	public void set(){};
@@ -95,7 +93,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 	public void insert() throws Exception{
 		_logger.info("insert...");
 		Students student=new Students();
-		//student.setId("10024");
 		student.setStdNo("10024");
 		student.setStdGender("M");
 		student.setStdName("司马昭");
@@ -106,7 +103,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 		
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
-		//service.remove(student.getId());
 	}
 	
 	//根据实体查询并更新
@@ -124,7 +120,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 		service.merge(student);
 		
 		Thread.sleep(1000);
-		_logger.info("insert id " + student.getId());
+		_logger.info("merge id " + student.getId());
 	}
 	
 	//springJDBC 的查询方式
@@ -220,9 +216,9 @@ public class Students extends JpaBaseEntity implements Serializable{
 		 student.setPageSize(10);
 		 //student.setPageNumber(2);
 		 student.calculate(21);
-		 List<Students> allListStudents = 
+		 List<Students> listStudents = 
 				 service.queryPageResults(student).getRows();
-		 for (Students s : allListStudents) {
+		 for (Students s : listStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
@@ -236,18 +232,20 @@ public class Students extends JpaBaseEntity implements Serializable{
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
-		 List<Students> allListStudents = 
+		 List<Students> listStudents = 
 				 service.queryPageResults("queryPageResults1",student).getRows();
-		 for (Students s : allListStudents) {
+		 for (Students s : listStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
 	//根据实体查询
 	@Test
 	public void query() throws Exception{
-		_logger.info("findAll...");
-		List<Students> allListStudents =service.query(null);
-		 for (Students s : allListStudents) {
+		_logger.info("query...");
+		Students student=new Students();
+		student.setStdGender("M");
+		List<Students> listStudents =service.query(student);
+		 for (Students s : listStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
@@ -256,11 +254,11 @@ public class Students extends JpaBaseEntity implements Serializable{
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
 	public void filterByQuery() throws Exception{
-		_logger.info("find...");
-		List<Students> allListStudents =service.query(
+		_logger.info("filterByQuery...");
+		List<Students> listStudents =service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
 				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
-		 for (Students s : allListStudents) {
+		 for (Students s : listStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
@@ -269,8 +267,8 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void findAll() throws Exception{
 		_logger.info("findAll...");
-		List<Students> allListStudents =service.findAll();
-		 for (Students s : allListStudents) {
+		List<Students> listStudents =service.findAll();
+		 for (Students s : listStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
