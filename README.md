@@ -5,11 +5,13 @@
 	
 2.用Interceptor实现数据库**SELECT分页查询**;
 	
-3.提供mybatis-jpa-extra-spring-boot-starter,**简化SpringBoot集成**;
+3.**链式**Query查询条件构造器;
 
-## 1、JavaBean注释简单
+4.提供starter,**简化SpringBoot集成**;
 
-仅有6个注释
+## 1、JPA 2.1注释
+
+仅支持6个注释
 > * @Entity
 > * @Table
 > * @Column
@@ -17,8 +19,9 @@
 > * @GeneratedValue
 > * @Transient 
 
+主键策略
 
-@GeneratedValue有4中策略 
+支持3种主键策略，4种AUTO自动主键策略 
 
  1. **AUTO**
 	
@@ -38,22 +41,13 @@
  
     generator无，根据数据库自动生成方式
 
+## 1、JavaBean JPA注释
 
 ```java
-package org.apache.mybatis.jpa.test.entity;
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 
 @Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaBaseEntity implements Serializable{
-	private static final long serialVersionUID = -6928570405840778151L;
 	
 	@Id
 	@Column
@@ -93,30 +87,10 @@ public class Students extends JpaBaseEntity implements Serializable{
 }
 ```
 
-## 2、单表新增、修改、删除、查询、分页查询
+## 2、CURD、Qruey构造器查询和分页查询
 
 ```java
-package org.apache.mybatis.jpa.test;
-import java.sql.Types;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import org.apache.mybatis.jpa.test.dao.service.StudentsService;
-import org.apache.mybatis.jpa.test.entity.Students;
-import org.apache.mybatis.jpa.util.WebContext;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class MyBatisTestRunner {
-	private static final Logger _logger = LoggerFactory.getLogger(MyBatisTestRunner.class);
-	public static ApplicationContext context;
-	public static StudentsService service;
-	
+	//新增数据
 	@Test
 	public void insert() throws Exception{
 		_logger.info("insert...");
@@ -135,6 +109,7 @@ public class MyBatisTestRunner {
 		//service.remove(student.getId());
 	}
 	
+	//根据实体查询并更新
 	@Test
 	public void merge() throws Exception{
 		_logger.info("merge...");
@@ -152,6 +127,7 @@ public class MyBatisTestRunner {
 		_logger.info("insert id " + student.getId());
 	}
 	
+	//springJDBC 的查询方式
 	@Test
 	public void find() throws Exception{
 		_logger.info("find...");
@@ -168,6 +144,7 @@ public class MyBatisTestRunner {
 		);	
 	}
 	
+	//根据ID查询
 	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
@@ -176,6 +153,7 @@ public class MyBatisTestRunner {
 		 _logger.info("Students "+student);
 	}
 	
+	//查询数据实体并更新
 	@Test
 	public void update() throws Exception{
 		_logger.info("get...");
@@ -192,6 +170,7 @@ public class MyBatisTestRunner {
 		 _logger.info("updateed2.");
 	}
 	
+	//根据ID删除
 	@Test
 	public void remove() throws Exception{
 		_logger.info("remove...");
@@ -200,6 +179,7 @@ public class MyBatisTestRunner {
 		service.remove(student.getId());
 	}
 	
+	//根据ID集合批量删除
 	@Test
 	public void batchDelete() throws Exception{
 		_logger.info("batchDelete...");
@@ -211,6 +191,7 @@ public class MyBatisTestRunner {
 		service.deleteBatch(idList);
 	}
 	
+	//根据ID批量逻辑删除
 	@Test
 	public void logicDelete() throws Exception{
 		_logger.info("logicDelete...");
@@ -221,7 +202,8 @@ public class MyBatisTestRunner {
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
 		service.logicDelete(idList);
 	}
-	
+
+	//根据ID批量删除
 	@Test
 	public void batchDeleteByIds() throws Exception{
 		_logger.info("batchDeleteByIds...");
@@ -229,6 +211,7 @@ public class MyBatisTestRunner {
 		service.deleteBatch("2,639178432667713536");
 	}
 
+	//分页查询
 	@Test
 	public void queryPageResults() throws Exception{
 		_logger.info("queryPageResults...");
@@ -245,7 +228,8 @@ public class MyBatisTestRunner {
 			 _logger.info("Students "+s);
 		 }
 	}
-	
+
+	//mapper id分页查询
 	@Test
 	public void queryPageResultsByMapperId() throws Exception{
 		_logger.info("queryPageResults by mapperId...");
@@ -260,7 +244,7 @@ public class MyBatisTestRunner {
 			 _logger.info("Students "+s);
 		 }
 	}
-	
+	//根据实体查询
 	@Test
 	public void query() throws Exception{
 		_logger.info("findAll...");
@@ -269,7 +253,21 @@ public class MyBatisTestRunner {
 			 _logger.info("Students "+s);
 		 }
 	}
+
+	//根据链式条件构造器查询
+	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
+	@Test
+	public void queryByQuery() throws Exception{
+		_logger.info("find...");
+		List<Students> allListStudents =service.query(
+				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
+				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
+		 for (Students s : allListStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
 	
+	//查询所有记录
 	@Test
 	public void findAll() throws Exception{
 		_logger.info("findAll...");
@@ -279,29 +277,7 @@ public class MyBatisTestRunner {
 		 }
 	}
 	
-	@Before
-	public void initSpringContext(){
-		if(context!=null) return;
-		_logger.info("init Spring Context...");
-		SimpleDateFormat sdf_ymdhms =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String startTime=sdf_ymdhms.format(new Date());
-		try{
-			MyBatisTestRunner runner=new MyBatisTestRunner();
-			runner.init();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		_logger.info("-- --Init Start at " + startTime+" , End at  "+sdf_ymdhms.format(new Date()));
-	}
-	
-	//Initialization ApplicationContext for Project
-	public void init(){
-		_logger.info("Application dir "+System.getProperty("user.dir"));
-		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
-		WebContext.applicationContext=context;
-		service =(StudentsService)WebContext.getBean("studentsService");
-	}
-}
+	//...
 ```
 
 ## 3、映射文件配置

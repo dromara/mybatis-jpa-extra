@@ -120,9 +120,7 @@ public class MyBatisTestRunner {
 	@Test
 	public void remove() throws Exception{
 		_logger.info("remove...");
-		Students student=new Students();
-		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
-		service.remove(student.getId());
+		service.remove("921d3377-937a-4578-b1e2-92fb23b5e512");
 	}
 	
 	@Test
@@ -190,7 +188,7 @@ public class MyBatisTestRunner {
 	}
 	
 	@Test
-	public void queryByEntity() throws Exception{
+	public void query() throws Exception{
 		_logger.info("find...");
 		List<Students> allListStudents =service.query(new Students("10024"));
 		 for (Students s : allListStudents) {
@@ -198,12 +196,13 @@ public class MyBatisTestRunner {
 		 }
 	}
 	
+	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
 	public void queryByQuery() throws Exception{
 		_logger.info("find...");
 		List<Students> allListStudents =service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
-				.or(new Query().eq("stdname", "周瑜")));
+				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }
