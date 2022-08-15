@@ -255,7 +255,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	//根据链式条件构造器查询
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
-	public void queryByQuery() throws Exception{
+	public void filterByQuery() throws Exception{
 		_logger.info("find...");
 		List<Students> allListStudents =service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
