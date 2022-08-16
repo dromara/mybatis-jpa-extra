@@ -1,9 +1,9 @@
 # MyBatis JPA Extra
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
-1.基于JPA 2.1的注释**简化CUID操作**;
+1.JPA 2.1注释**简化CUID操作**;
 	
-2.用Interceptor实现数据库**SELECT分页查询**;
+2.Interceptor实现数据库**SELECT分页查询**;
 	
 3.**链式**Query查询条件构造器;
 
@@ -41,7 +41,7 @@
  
     generator无，根据数据库自动生成方式
 
-## 1、JavaBean JPA注释
+## 1、JPA注释
 
 ```java
 
@@ -85,7 +85,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 }
 ```
 
-## 2、CURD、Qruey构造器查询和分页查询
+## 2、CURD、Qruey构造器和分页查询
 
 ```java
 	//新增数据
