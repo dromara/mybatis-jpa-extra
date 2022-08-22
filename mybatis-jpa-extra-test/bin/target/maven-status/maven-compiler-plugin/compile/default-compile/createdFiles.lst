@@ -1,0 +1,3 @@
+org\apache\mybatis\jpa\test\dao\service\StudentsService.class
+org\apache\mybatis\jpa\test\entity\Students.class
+org\apache\mybatis\jpa\test\dao\persistence\StudentsMapper.class

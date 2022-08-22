@@ -12,6 +12,7 @@
 		<module>mybatis-jpa-extra-core</module>
 		<module>mybatis-jpa-extra-spring-boot-starter</module>
 		<module>mybatis-jpa-extra-test</module>
+		<module>mybatis-jpa-extra-spring-boot-starter-test</module>
 	</modules>
  
  	<properties>

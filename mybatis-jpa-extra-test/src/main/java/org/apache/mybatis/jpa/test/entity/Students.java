@@ -71,11 +71,17 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Column
 	private String stdClass;
 	
+	@Column
+	private byte[] images;
+	
 	
 	public Students() {
 		super();
 	}
 
+	public Students(String stdNo) {
+		this.stdNo = stdNo;
+	}
 
 	public String getStdNo() {
 		return stdNo;
@@ -150,14 +156,21 @@ public class Students extends JpaBaseEntity implements Serializable{
 	}
 
 
-	@Override
-	public String toString() {
-		return "Students [stdNo=" + stdNo + ", stdName=" + stdName + ", stdgender=" + stdGender + ", stdAge=" + stdAge
-				+ ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
+	public byte[] getImages() {
+		return images;
 	}
 
 
-	
-	
+	public void setImages(byte[] images) {
+		this.images = images;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
+				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
+	}
+
 
 }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="1" failures="0" name="org.apache.mybatis.jpa.test.UUIDHexGeneratorTest" time="0.708" errors="0" skipped="0">
+  <properties>
+    <property name="java.vendor" value="Eclipse Adoptium"/>
+    <property name="env.SYSTEMROOT" value="C:\WINDOWS"/>
+    <property name="localRepository" value="C:\Users\shimi\.m2\repository"/>
+    <property name="env.USERDOMAIN_ROAMINGPROFILE" value="DESKTOP-DC7LPQG"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="env.ONEDRIVE" value="C:\Users\shimi\OneDrive"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="env.COMPUTERNAME" value="DESKTOP-DC7LPQG"/>
+    <property name="env.ALLUSERSPROFILE" value="C:\ProgramData"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.runtime.version" value="17.0.3+7"/>
+    <property name="env.HOMEPATH" value="\Users\shimi"/>
+    <property name="user.name" value="shimi"/>
+    <property name="maven.build.version" value="Apache Maven 3.8.4 (9b656c72d54e5bacbed989b64718c159fe39b537)"/>
+    <property name="env.DRIVERDATA" value="C:\Windows\System32\Drivers\DriverData"/>
+    <property name="env.ONEDRIVECONSUMER" value="C:\Users\shimi\OneDrive"/>
+    <property name="env.PATH" value="C:/IDE/eclipse-jee-2022-06//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416/jre/bin/server;C:/IDE/eclipse-jee-2022-06//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416/jre/bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.2.8-hotspot\bin;C:\Program Files\Eclipse Adoptium\jdk-8.0.312.7-hotspot\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\xampp\php;C:\xampp\composer;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\nodejs\node_modules;C:\Program Files\Git\cmd;C:\Users\shimi\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\shimi\AppData\Local\Programs\Python\Python310\;C:\Ruby27-x64\bin;C:\Users\shimi\AppData\Local\Microsoft\WindowsApps;C:\Users\shimi\AppData\Local\GitHubDesktop\bin;C:\Users\shimi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\shimi\.dotnet\tools;C:\Users\shimi\AppData\Roaming\npm;C:\Users\shimi\AppData\Roaming\Composer\vendor\bin;C:\Program Files\nodejs\node_modules;;C:\IDE\eclipse-jee-2022-06;"/>
+    <property name="user.language" value="zh"/>
+    <property name="env.WINDIR" value="C:\WINDOWS"/>
+    <property name="sun.boot.library.path" value="C:\IDE\eclipse-jee-2022-06\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416\jre\bin"/>
+    <property name="classworlds.conf" value="D:\MaxKey\workspace\workspace-maxkey\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf6879786509287559558.tmp"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.version" value="17.0.3"/>
+    <property name="env.PROCESSOR_IDENTIFIER" value="Intel64 Family 6 Model 140 Stepping 1, GenuineIntel"/>
+    <property name="user.timezone" value="Asia/Shanghai"/>
+    <property name="env.TEMP" value="C:\Users\shimi\AppData\Local\Temp"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="env.HOMEDRIVE" value="C:"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="env.SYSTEMDRIVE" value="C:"/>
+    <property name="file.separator" value="\"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="61.0"/>
+    <property name="user.country" value="CN"/>
+    <property name="java.home" value="C:\IDE\eclipse-jee-2022-06\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416\jre"/>
+    <property name="env.APPDATA" value="C:\Users\shimi\AppData\Roaming"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="env.PUBLIC" value="C:\Users\Public"/>
+    <property name="env.OS" value="Windows_NT"/>
+    <property name="os.version" value="10.0"/>
+    <property name="env.=::" value="::\"/>
+    <property name="env.RUBYOPT" value="-Eutf-8"/>
+    <property name="path.separator" value=";"/>
+    <property name="java.vm.version" value="17.0.3+7"/>
+    <property name="env.ZES_ENABLE_SYSMAN" value="1"/>
+    <property name="env.USERPROFILE" value="C:\Users\shimi"/>
+    <property name="user.variant" value=""/>
+    <property name="env.FPS_BROWSER_USER_PROFILE_STRING" value="Default"/>
+    <property name="env.TMP" value="C:\Users\shimi\AppData\Local\Temp"/>
+    <property name="env.PROGRAMFILES" value="C:\Program Files"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="user.script" value=""/>
+    <property name="user.home" value="C:\Users\shimi"/>
+    <property name="env.COMMONPROGRAMFILES" value="C:\Program Files\Common Files"/>
+    <property name="env.SESSIONNAME" value="Console"/>
+    <property name="java.version.date" value="2022-04-19"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="env.NUMBER_OF_PROCESSORS" value="8"/>
+    <property name="java.library.path" value="C:\IDE\eclipse-jee-2022-06\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/IDE/eclipse-jee-2022-06//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416/jre/bin/server;C:/IDE/eclipse-jee-2022-06//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.3.v20220515-1416/jre/bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.2.8-hotspot\bin;C:\Program Files\Eclipse Adoptium\jdk-8.0.312.7-hotspot\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\xampp\php;C:\xampp\composer;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\nodejs\node_modules;C:\Program Files\Git\cmd;C:\Users\shimi\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\shimi\AppData\Local\Programs\Python\Python310\;C:\Ruby27-x64\bin;C:\Users\shimi\AppData\Local\Microsoft\WindowsApps;C:\Users\shimi\AppData\Local\GitHubDesktop\bin;C:\Users\shimi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\shimi\.dotnet\tools;C:\Users\shimi\AppData\Roaming\npm;C:\Users\shimi\AppData\Roaming\Composer\vendor\bin;C:\Program Files\nodejs\node_modules;;C:\IDE\eclipse-jee-2022-06;;."/>
+    <property name="java.vendor.url" value="https://adoptium.net/"/>
+    <property name="env.COMMONPROGRAMFILES(X86)" value="C:\Program Files (x86)\Common Files"/>
+    <property name="env.PSMODULEPATH" value="C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"/>
+    <property name="java.vm.vendor" value="Eclipse Adoptium"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="maven.home" value="D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj\EMBEDDED"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -B install"/>
+    <property name="java.class.path" value="C:\IDE\eclipse-jee-2022-06\plugins\org.eclipse.m2e.maven.runtime_1.18.3.20220227-1319\jars\plexus-classworlds-2.6.0.jar"/>
+    <property name="env.PROGRAMW6432" value="C:\Program Files"/>
+    <property name="native.encoding" value="GBK"/>
+    <property name="maven.version" value="3.8.4"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="env.PROGRAMFILES(X86)" value="C:\Program Files (x86)"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="env.LOGONSERVER" value="\\DESKTOP-DC7LPQG"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="env.PROCESSOR_ARCHITECTURE" value="AMD64"/>
+    <property name="env.COMMONPROGRAMW6432" value="C:\Program Files\Common Files"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="surefire.test.class.path" value="D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj\mybatis-jpa-extra-test\target\test-classes;D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj\mybatis-jpa-extra-test\target\classes;D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj\mybatis-jpa-extra-core\target\mybatis-jpa-extra-2.8.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-aspects\5.3.22\spring-aspects-5.3.22.jar;C:\Users\shimi\.m2\repository\org\aspectj\aspectjweaver\1.9.7\aspectjweaver-1.9.7.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-aop\5.3.22\spring-aop-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-beans\5.3.22\spring-beans-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-context\5.3.22\spring-context-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-context-support\5.3.22\spring-context-support-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-core\5.3.22\spring-core-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-jcl\5.3.22\spring-jcl-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-expression\5.3.22\spring-expression-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-instrument\5.3.22\spring-instrument-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-jdbc\5.3.22\spring-jdbc-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-jms\5.3.22\spring-jms-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-messaging\5.3.22\spring-messaging-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-oxm\5.3.22\spring-oxm-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-orm\5.3.22\spring-orm-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-test\5.3.22\spring-test-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-web\5.3.22\spring-web-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-tx\5.3.22\spring-tx-5.3.22.jar;C:\Users\shimi\.m2\repository\org\springframework\spring-webmvc\5.3.22\spring-webmvc-5.3.22.jar;C:\Users\shimi\.m2\repository\mysql\mysql-connector-java\8.0.29\mysql-connector-java-8.0.29.jar;C:\Users\shimi\.m2\repository\com\google\protobuf\protobuf-java\3.19.4\protobuf-java-3.19.4.jar;C:\Users\shimi\.m2\repository\com\highgo\HgdbJdbc\6.0.3.jre8\HgdbJdbc-6.0.3.jre8.jar;C:\Users\shimi\.m2\repository\org\postgresql\postgresql\42.4.1\postgresql-42.4.1.jar;C:\Users\shimi\.m2\repository\org\checkerframework\checker-qual\3.5.0\checker-qual-3.5.0.jar;C:\Users\shimi\.m2\repository\org\mybatis\mybatis\3.5.10\mybatis-3.5.10.jar;C:\Users\shimi\.m2\repository\org\mybatis\mybatis-spring\2.0.7\mybatis-spring-2.0.7.jar;C:\Users\shimi\.m2\repository\com\alibaba\druid\1.2.11\druid-1.2.11.jar;C:\Users\shimi\.m2\repository\com\alibaba\druid-spring-boot-starter\1.2.11\druid-spring-boot-starter-1.2.11.jar;C:\Users\shimi\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\1.5.12.RELEASE\spring-boot-autoconfigure-1.5.12.RELEASE.jar;C:\Users\shimi\.m2\repository\org\springframework\boot\spring-boot\1.5.12.RELEASE\spring-boot-1.5.12.RELEASE.jar;C:\Users\shimi\.m2\repository\commons-beanutils\commons-beanutils\1.9.4\commons-beanutils-1.9.4.jar;C:\Users\shimi\.m2\repository\commons-lang\commons-lang\2.5\commons-lang-2.5.jar;C:\Users\shimi\.m2\repository\org\eclipse\persistence\javax.persistence\2.2.1\javax.persistence-2.2.1.jar;C:\Users\shimi\.m2\repository\org\apache\logging\log4j\log4j-1.2-api\2.18.0\log4j-1.2-api-2.18.0.jar;C:\Users\shimi\.m2\repository\org\apache\logging\log4j\log4j-api\2.18.0\log4j-api-2.18.0.jar;C:\Users\shimi\.m2\repository\org\apache\logging\log4j\log4j-core\2.18.0\log4j-core-2.18.0.jar;C:\Users\shimi\.m2\repository\org\apache\logging\log4j\log4j-jcl\2.18.0\log4j-jcl-2.18.0.jar;C:\Users\shimi\.m2\repository\org\apache\logging\log4j\log4j-jul\2.18.0\log4j-jul-2.18.0.jar;C:\Users\shimi\.m2\repository\org\apache\logging\log4j\log4j-slf4j-impl\2.18.0\log4j-slf4j-impl-2.18.0.jar;C:\Users\shimi\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\shimi\.m2\repository\joda-time\joda-time\2.10.14\joda-time-2.10.14.jar;C:\Users\shimi\.m2\repository\com\github\ben-manes\caffeine\caffeine\2.9.3\caffeine-2.9.3.jar;C:\Users\shimi\.m2\repository\com\google\errorprone\error_prone_annotations\2.10.0\error_prone_annotations-2.10.0.jar;C:\Users\shimi\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.13.3\jackson-core-2.13.3.jar;C:\Users\shimi\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.13.3\jackson-databind-2.13.3.jar;C:\Users\shimi\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.13.3\jackson-annotations-2.13.3.jar;C:\Users\shimi\.m2\repository\commons-codec\commons-codec\1.9\commons-codec-1.9.jar;C:\Users\shimi\.m2\repository\commons-collections\commons-collections\3.2.2\commons-collections-3.2.2.jar;C:\Users\shimi\.m2\repository\org\apache\commons\commons-lang3\3.12.0\commons-lang3-3.12.0.jar;C:\Users\shimi\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\shimi\.m2\repository\org\apache\xmlbeans\xmlbeans\5.0.2\xmlbeans-5.0.2.jar;C:\Users\shimi\.m2\repository\javax\activation\activation\1.1.1\activation-1.1.1.jar;C:\Users\shimi\.m2\repository\aopalliance\aopalliance\1.0\aopalliance-1.0.jar;C:\Users\shimi\.m2\repository\javax\servlet\javax.servlet-api\3.1.0\javax.servlet-api-3.1.0.jar;C:\Users\shimi\.m2\repository\junit\junit\4.13.1\junit-4.13.1.jar;C:\Users\shimi\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="env.PROCESSOR_REVISION" value="8c01"/>
+    <property name="java.io.tmpdir" value="C:\Users\shimi\AppData\Local\Temp\"/>
+    <property name="maven.multiModuleProjectDirectory" value="D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj"/>
+    <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
+    <property name="env.COMSPEC" value="C:\WINDOWS\system32\cmd.exe"/>
+    <property name="env.PROGRAMDATA" value="C:\ProgramData"/>
+    <property name="env.FPS_BROWSER_APP_PROFILE_STRING" value="Internet Explorer"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="env.=D:" value="D:\"/>
+    <property name="user.dir" value="D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj\mybatis-jpa-extra-test"/>
+    <property name="env.LOCALAPPDATA" value="C:\Users\shimi\AppData\Local"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="env.PATHEXT" value=".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"/>
+    <property name="basedir" value="D:\MaxKey\workspace\workspace-maxkey\mybatis-jpa-extra-proj\mybatis-jpa-extra-test"/>
+    <property name="env.USERNAME" value="shimi"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="env.USERDOMAIN" value="DESKTOP-DC7LPQG"/>
+    <property name="java.specification.version" value="17"/>
+    <property name="java.vendor.version" value="Temurin-17.0.3+7"/>
+    <property name="env.PROCESSOR_LEVEL" value="6"/>
+    <property name="env.VBOX_MSI_INSTALL_PATH" value="C:\Program Files\Oracle\VirtualBox\"/>
+  </properties>
+  <testcase classname="org.apache.mybatis.jpa.test.UUIDHexGeneratorTest" name="generator" time="0.691"/>
+</testsuite>

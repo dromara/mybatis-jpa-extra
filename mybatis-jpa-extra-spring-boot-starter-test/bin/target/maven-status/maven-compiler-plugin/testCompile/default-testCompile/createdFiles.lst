@@ -1,0 +1,4 @@
+org\apache\mybatis\jpa\test\MybatisJpaApplication.class
+org\apache\mybatis\jpa\test\MybatisJpaApplicationTest.class
+META-INF\spring-configuration-metadata.json
+org\apache\mybatis\jpa\test\MybatisJpaConfig.class
