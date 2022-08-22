@@ -90,7 +90,8 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 	 * @return table name
 	 */
 	public static String getTableName(Class<?> entityClass) {
-		String entityClassName = entityClass.getClass().getSimpleName();
+		String entityClassName = entityClass.getSimpleName();
+		_logger.debug("entity Class Name {}" , entityClassName);
 		if(tableNameMap.containsKey(entityClassName)) {
 			return tableNameMap.get(entityClassName);
 		}
