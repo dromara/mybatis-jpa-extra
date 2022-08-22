@@ -95,8 +95,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 		_logger.info("insert id " + student.getId());
 	}
 	
-
-	
 	//查询数据实体并更新
 	@Test
 	public void update() throws Exception{
@@ -197,7 +195,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 		service.deleteBatch("2");
 		service.deleteBatch("2,639178432667713536");
 	}
-
 ```
 
 ## 2.2、Find查询和Qruey构造器
@@ -261,7 +258,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 				 service.queryPageResults("queryPageResults1",student);
 		//...
 	}
-
 ```
 
 ## 3、mapper配置
@@ -326,7 +322,6 @@ public class Students extends JpaBaseEntity implements Serializable{
     <delete id="delete" parameterType="Students" >
     	DELETE FROM STUDENTS WHERE ID=#{id}
     </delete>
-    
 ```
 
 
