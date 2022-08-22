@@ -11,6 +11,7 @@
 
 ## 1、JPA 2.1注释
 
+## 1.1、注释
 仅支持6个注释
 > * @Entity
 > * @Table
@@ -19,29 +20,17 @@
 > * @GeneratedValue
 > * @Transient 
 
-主键策略
+## 1.2、主键策略
 
-支持3种主键策略，4种AUTO自动主键策略 
+支持3种主键策略
 
- 1. **AUTO**
-	
-	snowflakeid
-	
-    uuid
+| 序号    | 策略      |   支持  |
+| --------| :-----        | :----   |
+| 1     | **AUTO**          | 4种主键自动填充策略<br>snowflakeid(雪花ID-推荐)<br>uuid(UUID)<br>uuid.hex(UUID十六进制)<br>serial(JPA Extra序列)   | 
+| 2     | **SEQUENCE**      | 数据库序列生成，generator值为数据库序列名 | 
+| 3     | **IDENTITY**      | 数据库表自增主键  |
 
-    uuid.hex
-
-    serial
-
- 2. **SEQUENCE**
- 
-    generator值为数据库序列名
-
- 3. **IDENTITY**
- 
-    generator无，根据数据库自动生成方式
-
-## 1、JPA注释
+## 1.3、Java Bean 注释
 
 ```java
 
@@ -53,7 +42,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Column
 	@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
 	
 	@Column
@@ -84,8 +73,9 @@ public class Students extends JpaBaseEntity implements Serializable{
 	//...
 }
 ```
+## 2、基本操作
 
-## 2、CURD、Qruey构造器和分页查询
+## 2.1、CURD
 
 ```java
 	//新增数据
@@ -105,49 +95,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 		_logger.info("insert id " + student.getId());
 	}
 	
-	//根据实体查询并更新
-	@Test
-	public void merge() throws Exception{
-		_logger.info("merge...");
-		Students student=new Students();
-		//student.setId("10024");
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
-		student.setStdMajor("政治");
-		student.setStdClass("4");
-		service.merge(student);
-		
-		Thread.sleep(1000);
-		_logger.info("merge id " + student.getId());
-	}
-	
-	//springJDBC 的查询方式
-	@Test
-	public void find() throws Exception{
-		_logger.info("find...");
-		_logger.info("find by filter  " 
-					+ service.find(" StdNo = '10024' or StdNo = '10004'")
-		);
 
-		_logger.info("find by filter with args " 
-				+ service.find(
-							" StdNo = ? or StdNo = ?  ",
-							new Object[]{"10024","10004"},
-							new int[]{Types.VARCHAR,Types.INTEGER}
-						)
-		);	
-	}
-	
-	//根据ID查询
-	@Test
-	public void get() throws Exception{
-		_logger.info("get...");
-		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);
-	}
 	
 	//查询数据实体并更新
 	@Test
@@ -166,6 +114,51 @@ public class Students extends JpaBaseEntity implements Serializable{
 		 _logger.info("updateed2.");
 	}
 	
+	//根据实体查询并更新
+	@Test
+	public void merge() throws Exception{
+		_logger.info("merge...");
+		Students student=new Students();
+		//student.setId("10024");
+		student.setStdNo("10024");
+		student.setStdGender("M");
+		student.setStdName("司马昭");
+		student.setStdAge(20);
+		student.setStdMajor("政治");
+		student.setStdClass("4");
+		service.merge(student);
+		
+		Thread.sleep(1000);
+		_logger.info("merge id " + student.getId());
+	}
+
+	//根据ID查询
+	@Test
+	public void get() throws Exception{
+		_logger.info("get...");
+		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		System.out.println("Students "+student);
+		 _logger.info("Students "+student);
+	}
+	
+	//根据实体查询
+	@Test
+	public void query() throws Exception{
+		_logger.info("query...");
+		Students student=new Students();
+		student.setStdGender("M");
+		List<Students> listStudents =service.query(student);
+		//...
+	}
+
+	//查询所有记录
+	@Test
+	public void findAll() throws Exception{
+		_logger.info("findAll...");
+		List<Students> listStudents =service.findAll();
+		//...
+	}
+
 	//根据ID删除
 	@Test
 	public void remove() throws Exception{
@@ -205,22 +198,54 @@ public class Students extends JpaBaseEntity implements Serializable{
 		service.deleteBatch("2,639178432667713536");
 	}
 
-	//分页查询
+```
+
+## 2.2、Find查询和Qruey构造器
+
+```java
+	//springJDBC 的查询方式
+	@Test
+	public void find() throws Exception{
+		_logger.info("find by filter StdNo = '10024' or StdNo = '10004'");
+		List<Students> listStudents = service.find(" StdNo = ? or StdNo = ?  ",
+							new Object[]{"10024","10004"},
+							new int[]{Types.VARCHAR,Types.INTEGER}
+						);
+		//...
+	}
+
+	//根据链式条件构造器查询
+	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
+	@Test
+	public void filterByQuery() throws Exception{
+		_logger.info("filterByQuery...");
+		List<Students> listStudents = service.query(
+				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
+				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
+		//...
+	}
+```
+
+## 2.3、分页查询并count数据量
+
+```java
+	//根据实体分页查询
 	@Test
 	public void queryPageResults() throws Exception{
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
-		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
 		 //student.setStdGender("M");
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 //student.setPageNumber(2);
 		 student.calculate(21);
-		 List<Students> listStudents = 
-				 service.queryPageResults(student).getRows();
-		 for (Students s : listStudents) {
-			 _logger.info("Students "+s);
-		 }
+		 JpaPageResults<Students>  results = service.queryPageResults(student);
+		 List<Students> rowsStudents = results.getRows();
+		 long records =results.getRecords();//当前页记录数量
+		 long totalPage =results.getTotalPage();//总页数
+		 long total =results.getTotal();//总数据量
+		 long page =results.getPage();//当前页
+		//...
 	}
 
 	//mapper id分页查询
@@ -232,51 +257,14 @@ public class Students extends JpaBaseEntity implements Serializable{
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
-		 List<Students> listStudents = 
-				 service.queryPageResults("queryPageResults1",student).getRows();
-		 for (Students s : listStudents) {
-			 _logger.info("Students "+s);
-		 }
-	}
-	//根据实体查询
-	@Test
-	public void query() throws Exception{
-		_logger.info("query...");
-		Students student=new Students();
-		student.setStdGender("M");
-		List<Students> listStudents =service.query(student);
-		 for (Students s : listStudents) {
-			 _logger.info("Students "+s);
-		 }
+		 JpaPageResults<Students>  results =
+				 service.queryPageResults("queryPageResults1",student);
+		//...
 	}
 
-	//根据链式条件构造器查询
-	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
-	@Test
-	public void filterByQuery() throws Exception{
-		_logger.info("filterByQuery...");
-		List<Students> listStudents =service.query(
-				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
-				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
-		 for (Students s : listStudents) {
-			 _logger.info("Students "+s);
-		 }
-	}
-	
-	//查询所有记录
-	@Test
-	public void findAll() throws Exception{
-		_logger.info("findAll...");
-		List<Students> listStudents =service.findAll();
-		 for (Students s : listStudents) {
-			 _logger.info("Students "+s);
-		 }
-	}
-	
-	//...
 ```
 
-## 3、映射文件配置
+## 3、mapper配置
 
 ```xml
 <mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper" >

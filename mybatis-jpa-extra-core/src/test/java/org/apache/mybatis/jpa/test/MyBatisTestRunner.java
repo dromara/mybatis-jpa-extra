@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.mybatis.jpa.persistence.JpaPageResults;
 import org.apache.mybatis.jpa.query.Query;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
@@ -157,15 +158,20 @@ public class MyBatisTestRunner {
 		
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
-		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
 		 //student.setStdGender("M");
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 //student.setPageNumber(2);
 		 student.calculate(21);
-		 List<Students> allListStudents = 
-				 service.queryPageResults(student).getRows();
-		 for (Students s : allListStudents) {
+		 JpaPageResults<Students>  results = service.queryPageResults(student);
+		 List<Students> rowsStudents = results.getRows();
+		 long records =results.getRecords();//当前页记录数量
+		 long totalPage =results.getTotalPage();//总页数
+		 long total =results.getTotal();//总数据量
+		 long page =results.getPage();//当前页
+		 _logger.info("records {} , totalPage {} , total {} , page {} ",
+				 records,totalPage,total,page);
+		 for (Students s : rowsStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
@@ -180,9 +186,16 @@ public class MyBatisTestRunner {
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 
-		 List<Students> allListStudents = 
-				 service.queryPageResults("queryPageResults1",student).getRows();
-		 for (Students s : allListStudents) {
+		 JpaPageResults<Students>  results =
+				 service.queryPageResults("queryPageResults1",student);
+		 List<Students> rowsStudents = results.getRows();
+		 long records =results.getRecords();//当前页记录数量
+		 long totalPage =results.getTotalPage();//总页数
+		 long total =results.getTotal();//总数据量
+		 long page =results.getPage();//当前页
+		 _logger.info("records {} , totalPage {} , total {} , page {} ",
+				 records,totalPage,total,page);
+		 for (Students s : rowsStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
