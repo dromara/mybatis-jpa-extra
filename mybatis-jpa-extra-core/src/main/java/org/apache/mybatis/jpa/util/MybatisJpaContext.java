@@ -19,6 +19,7 @@ package org.apache.mybatis.jpa.util;
 
 import org.apache.commons.lang.SystemUtils;
 import org.joda.time.DateTime;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -36,13 +37,13 @@ import jakarta.servlet.http.HttpSession;
  * @author Crystal.Sea
  * @since 1.6
  */
-public final class JpaWebContext {
+public final class MybatisJpaContext {
 	
 	private static String VERSION = null;
 	
 	public static StandardEnvironment properties;
 	
-	public static ApplicationContext applicationContext=null;
+	public static ApplicationContext applicationContext = null;
 	
 	/**
 	 * get ApplicationContext from web  ServletContext configuration
@@ -58,13 +59,20 @@ public final class JpaWebContext {
 	 * @return Object
 	 */
 	public static Object getBean(String id){
-		if(applicationContext==null) {
+		if(applicationContext == null) {
 			return getApplicationContext().getBean(id);
 		}else {
 			return applicationContext.getBean(id);
 		}
 	}
 	
+    public static <T> T getBean(String name, Class<T> requiredType) throws BeansException{
+    	if(applicationContext == null) {
+            return getApplicationContext().getBean(name,requiredType);
+        }else {
+            return applicationContext.getBean(name,requiredType);
+        }
+    };
 	
 	//below method is common HttpServlet method
 	/**
@@ -75,7 +83,6 @@ public final class JpaWebContext {
 		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 	}
 
-	
 	/**
 	 * get current Session
 	 * @return HttpSession
@@ -83,51 +90,7 @@ public final class JpaWebContext {
 	public static HttpSession getSession(){
 		return getRequest().getSession();
 	}
-	
-	/**
-	 * get current Session,if no session ,new Session created
-	 * @return HttpSession
-	 */
-	public static HttpSession getSession(boolean create) {
-		return getRequest().getSession(create);
-	}
-	
-	/**
-	 * set Attribute to session ,Attribute name is name,value is value
-	 * @param name
-	 * @param value
-	 */
-	public static void setAttribute(String name,Object value){
-		 getSession().setAttribute(name, value);
-	}
-	
-	/**
-	 * get Attribute from session by name
-	 * @param name
-	 * @return
-	 */
-	public static Object getAttribute(String name){
-		return getSession().getAttribute(name);
-	}
-	
-	/**
-	 * remove Attribute from session by name
-	 * @param name
-	 */
-	public static void removeAttribute(String name){
-		 getSession().removeAttribute(name);
-	}
-	
 
-	/**
-	 * get Request Parameter by name
-	 * @param name
-	 * @return String
-	 */
-	public static String getParameter(String name){
-		return getRequest().getParameter(name);
-	}
-	
 	public static String version() {
 		if(VERSION == null) {
 			StringBuffer version =

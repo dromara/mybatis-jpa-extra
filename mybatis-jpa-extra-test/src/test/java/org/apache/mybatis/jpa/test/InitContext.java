@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
-import org.apache.mybatis.jpa.util.JpaWebContext;
+import org.apache.mybatis.jpa.util.MybatisJpaContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -23,8 +23,8 @@ public class InitContext {
 		_logger.info("Application dir "+System.getProperty("user.dir"));
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
 		
-		JpaWebContext.applicationContext=context;
-		StudentsService service =(StudentsService)JpaWebContext.getBean("studentsService");
+		MybatisJpaContext.applicationContext=context;
+		StudentsService service =(StudentsService)MybatisJpaContext.getBean("studentsService");
 		return service;
 	}
 }

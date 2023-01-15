@@ -21,7 +21,7 @@ import org.apache.mybatis.jpa.id.SerialGenerator;
 import org.apache.mybatis.jpa.persistence.JpaPageResults;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
-import org.apache.mybatis.jpa.util.JpaWebContext;
+import org.apache.mybatis.jpa.util.MybatisJpaContext;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class MybatisJpaApplication implements ApplicationRunner{
     
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		JpaWebContext.applicationContext=applicationContext;
+		MybatisJpaContext.applicationContext=applicationContext;
 		 
 		_logger.info("queryPageResults by mapperId...");
 		 Students student=new Students();

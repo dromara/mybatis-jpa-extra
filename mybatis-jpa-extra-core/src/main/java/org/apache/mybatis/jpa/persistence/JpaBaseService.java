@@ -29,7 +29,7 @@ import org.apache.mybatis.jpa.query.Query;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.apache.mybatis.jpa.util.InstanceUtil;
 import org.apache.mybatis.jpa.util.StringUtils;
-import org.apache.mybatis.jpa.util.JpaWebContext;
+import org.apache.mybatis.jpa.util.MybatisJpaContext;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -112,9 +112,9 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public IJpaBaseMapper<T> getMapper() {
 		try {
 			if(mapper == null) {
-				String mapperClassBean = mapperClass.toLowerCase().charAt(0) + mapperClass.substring(1);
+				String mapperClassBean = StringUtils.firstToLowerCase(mapperClass);
 				_logger.info("mapperClass Bean is {}" , mapperClassBean);
-				mapper = (IJpaBaseMapper<T>) JpaWebContext.getBean(mapperClassBean);
+				mapper = (IJpaBaseMapper<T>) MybatisJpaContext.getBean(mapperClassBean);
 			}
 		} catch(Exception e) {
 			_logger.error("getMapper Exception " , e);
@@ -192,7 +192,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 		Integer count = 0;
 		try {
 			if(entity == null) {
-				entity = (T) entityClass.newInstance();
+				entity = (T) entityClass.getDeclaredConstructor().newInstance();
 			}
 			count = getMapper().queryPageResultsCount(entity);
 			_logger.debug("queryCount count : {}" , count);
@@ -211,7 +211,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	public List<T> query(T entity) {
 		try {
 			if(entity == null) {
-				entity = (T) entityClass.newInstance();
+				entity = (T) entityClass.getDeclaredConstructor().newInstance();
 			}
 			return getMapper().query(entity);
 		} catch(Exception e) {
@@ -228,7 +228,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	@SuppressWarnings("unchecked")
 	public List<T> query(Query query) {
 		try {
-			return getMapper().filterByQuery((T)entityClass.newInstance(),query);
+			return getMapper().filterByQuery((T)entityClass.getDeclaredConstructor().newInstance(),query);
 		} catch(Exception e) {
 			_logger.error("query Exception " , e);
 		}

@@ -54,6 +54,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 		return num;
 	}
+	
+	public static String firstToLowerCase(String str) {
+		return str.toLowerCase().charAt(0) + str.substring(1);
+	}
 
 	public static List<String> string2List(String string, String split) {
 		String[] strs = {};

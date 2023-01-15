@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
-import org.apache.mybatis.jpa.util.JpaWebContext;
+import org.apache.mybatis.jpa.util.MybatisJpaContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class MybatisJpaApplicationTest{
     @BeforeEach
     public  void before() {
     	_logger.info("---------------- before");
-    	JpaWebContext.applicationContext = applicationContext;
+    	MybatisJpaContext.applicationContext = applicationContext;
 
     }
     
