@@ -40,6 +40,7 @@ public class DB2Dialect extends Dialect {
 		if ( pagination.getPageSize() == 0 ) {
 			return sql + " fetch first " + pagination.getStartRow() + " rows only";
 		}
+		
 		StringBuilder pagingSelectSql = new StringBuilder( sql.length() + 200 )
 				.append(
 						"select * from ( select inner2_.*, rownumber() over(order by order of inner2_) as rownumber_ from ( "
@@ -50,6 +51,7 @@ public class DB2Dialect extends Dialect {
 				.append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > " )
 				.append(pagination.getStartRow())
 				.append(" order by rownumber_");
+		
 		return pagingSelectSql.toString();
 	}
 	

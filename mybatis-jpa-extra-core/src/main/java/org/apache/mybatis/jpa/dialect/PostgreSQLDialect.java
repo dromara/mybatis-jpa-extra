@@ -38,8 +38,8 @@ public class PostgreSQLDialect extends Dialect {
 	public String getLimitString(String sql,  JpaPagination pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " limit " + pagination.getPageSize()+" offset  "+pagination.getStartRow() ;
-		}else if(pagination.getPageSize()>0){
+			return sql +  " limit " + pagination.getPageSize() +" offset  " + pagination.getStartRow() ;
+		}else if(pagination.getPageSize() > 0){
 			return sql +  " limit " + pagination.getPageSize();
 		}else{
 			return sql +  " limit 1000";
