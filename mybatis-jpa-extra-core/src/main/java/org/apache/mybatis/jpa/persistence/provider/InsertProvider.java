@@ -21,8 +21,7 @@
 package org.apache.mybatis.jpa.persistence.provider;
 
 import java.util.List;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.mybatis.jpa.persistence.FieldColumnMapper;
 import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
@@ -30,6 +29,9 @@ import org.apache.mybatis.jpa.persistence.MapperMetadata;
 import org.apache.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 /**
  * @author Crystal.Sea

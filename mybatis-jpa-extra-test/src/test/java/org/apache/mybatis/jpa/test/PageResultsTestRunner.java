@@ -22,10 +22,11 @@ import java.util.List;
 import org.apache.mybatis.jpa.persistence.JpaPageResults;
 import org.apache.mybatis.jpa.test.dao.service.StudentsService;
 import org.apache.mybatis.jpa.test.entity.Students;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class PageResultsTestRunner {
 	private static final Logger _logger = LoggerFactory.getLogger(PageResultsTestRunner.class);
@@ -78,8 +79,8 @@ public class PageResultsTestRunner {
 		 }
 	}
 	
-	@Before
-	public void initSpringContext(){
+	@BeforeAll
+	public static void initSpringContext(){
 		if(InitContext.context!=null) return;
 		service = new InitContext().init();
 	}

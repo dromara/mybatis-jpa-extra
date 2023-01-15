@@ -16,14 +16,14 @@
 	</modules>
  
  	<properties>
-		<mybatis.jpa.extra.version>2.8</mybatis.jpa.extra.version><!--project version-->
+		<mybatis.jpa.extra.version>3.0</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.8</jdk.version>
-		<servlet-api.version>3.1.0</servlet-api.version>
-		<junit.version>4.13.1</junit.version>
+		<jdk.version>17</jdk.version>
+		<servlet-api.version>6.0.0</servlet-api.version>
+		<junit.version>5.9.2</junit.version>
 		
-		<spring.version>5.3.22</spring.version>
-		<springboot.version>2.6.10</springboot.version>
+		<spring.version>6.0.4</spring.version>
+		<springboot.version>3.0.1</springboot.version>
 		
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<beanutils.version>1.9.4</beanutils.version>
@@ -36,7 +36,7 @@
         <commons-logging.version>1.2</commons-logging.version>
         <xmlbeans.version>5.0.2</xmlbeans.version>
         
-        <log4j.version>2.18.0</log4j.version>
+        <log4j.version>2.19.0</log4j.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<jackson.version2>2.14.0</jackson.version2>
 		
@@ -44,13 +44,13 @@
 		<ojdbc8.version>21.6.0.0.1</ojdbc8.version>
 		<highgo.version>6.0.3.jre8</highgo.version>
 		<postgresql.version>42.4.1</postgresql.version>
-		<persistence.version>2.2.1</persistence.version>
-		<mybatis.version>3.5.10</mybatis.version>	
-		<mybatis-spring.version>2.0.7</mybatis-spring.version>
-		<druid.version>1.2.11</druid.version>
+		<persistence.version>3.1.0</persistence.version>
+		<mybatis.version>3.5.11</mybatis.version>	
+		<mybatis-spring.version>3.0.1</mybatis-spring.version>
+		<druid.version>1.2.15</druid.version>
 		
-		<caffeine.version>2.9.3</caffeine.version>
-		<joda-time.version>2.10.14</joda-time.version>
+		<caffeine.version>3.1.2</caffeine.version>
+		<joda-time.version>2.12.2</joda-time.version>
 		<activation.version>1.1.1</activation.version>
         <aopalliance.version>1.0</aopalliance.version>
 			
@@ -214,12 +214,12 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${commons-lang.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
-		<dependency>
-		    <groupId>org.eclipse.persistence</groupId>
-		    <artifactId>javax.persistence</artifactId>
-		    <version>${persistence.version}</version>
-		</dependency>
+		<!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+    	<dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${persistence.version}</version>
+        </dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
@@ -246,11 +246,13 @@
 		    <artifactId>log4j-jul</artifactId>
 		    <version>${log4j.version}</version>
 		</dependency>
+		<!--
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-slf4j-impl</artifactId>
 		    <version>${log4j.version}</version>
 		</dependency>
+		-->
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
 		    <groupId>org.slf4j</groupId>
@@ -320,15 +322,23 @@
 			<artifactId>aopalliance</artifactId>
 			<version>${aopalliance.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet-api.version}</version>
-			<scope>provided</scope>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-api</artifactId>
+		    <version>${junit.version}</version>
+		    <scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter</artifactId>
 		    <version>${junit.version}</version>
 		    <scope>test</scope>
 		</dependency>

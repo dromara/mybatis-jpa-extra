@@ -17,7 +17,7 @@
 
 package org.apache.mybatis.jpa.persistence;
 
-import javax.persistence.GeneratedValue;
+import jakarta.persistence.GeneratedValue;
 
 public class FieldColumnMapper {
 	//class

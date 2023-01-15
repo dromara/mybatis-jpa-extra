@@ -17,9 +17,6 @@
 
 package org.apache.mybatis.jpa.util;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.SystemUtils;
 import org.joda.time.DateTime;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +24,9 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 
 

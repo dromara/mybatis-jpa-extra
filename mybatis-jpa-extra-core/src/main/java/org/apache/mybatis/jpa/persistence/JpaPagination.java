@@ -20,8 +20,9 @@
  */
 package org.apache.mybatis.jpa.persistence;
 
-import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Transient;
 
 /**
  * Pagination for database pagination

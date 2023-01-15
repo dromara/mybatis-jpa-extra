@@ -1,4 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.apache.mybatis.jpa.starter.MybatisLanguageDriverAutoConfiguration,\
-org.apache.mybatis.jpa.starter.MybatisAutoConfiguration
