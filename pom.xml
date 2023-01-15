@@ -43,7 +43,7 @@
 		<mysql.version>8.0.29</mysql.version>
 		<ojdbc8.version>21.6.0.0.1</ojdbc8.version>
 		<highgo.version>6.0.3.jre8</highgo.version>
-		<postgresql.version>42.4.1</postgresql.version>
+		<postgresql.version>42.4.3</postgresql.version>
 		<persistence.version>3.1.0</persistence.version>
 		<mybatis.version>3.5.11</mybatis.version>	
 		<mybatis-spring.version>3.0.1</mybatis-spring.version>
