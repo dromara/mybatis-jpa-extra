@@ -351,5 +351,11 @@ mybatis.table-column-snowflake-machine-id=1
 
 [MyBatis GitHub源码][2]
 
+[MaxKey单点登录认证系统 GitHub源码][3]
+
+[MaxKey单点登录认证系统 Gitee源码][4]
+
   [1]: http://www.mybatis.org/mybatis-3/
   [2]: https://github.com/mybatis/mybatis-3/
+  [3]: https://github.com/dromara/MaxKey
+  [4]: https://gitee.com/dromara/MaxKey
