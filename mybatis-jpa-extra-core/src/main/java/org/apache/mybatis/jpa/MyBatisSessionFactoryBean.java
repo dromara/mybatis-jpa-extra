@@ -50,13 +50,13 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 	protected SqlSessionFactory buildSqlSessionFactory() throws Exception {
 		SqlSessionFactory factory = super.buildSqlSessionFactory();
 		
-		
 		Configuration config = factory.getConfiguration();
 		_logger.debug("buildSqlSessionFactory : {}" , config.toString());
 		for (Interceptor interceptor : interceptors) {
 			config.addInterceptor(interceptor);
 		}
 		
+		//设置
 		StatementHandlerInterceptor statementHandlerInterceptor =new StatementHandlerInterceptor();
 		statementHandlerInterceptor.setDialectString(Dialect.getDialect(dialect));
 		config.addInterceptor(statementHandlerInterceptor);

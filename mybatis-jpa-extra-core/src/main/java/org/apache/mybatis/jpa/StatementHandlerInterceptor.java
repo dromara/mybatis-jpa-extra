@@ -69,9 +69,11 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
 			_logger.trace("parameter object  ==> {}" , parameterObject);
+			//判断是否select语句及需要分页支持
 			if ((parameterObject instanceof JpaPagination)
 					&& (sql.toLowerCase().trim().startsWith("select")) ) {
 				JpaPagination pagination=(JpaPagination)parameterObject;
+				//分页标识
 				if(pagination.isPageable()){
 					_logger.trace("prepare  boundSql  ==> {}" , removeBreakingWhitespace(sql));
 					if(statement instanceof SimpleStatementHandler){
