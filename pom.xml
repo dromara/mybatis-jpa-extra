@@ -22,8 +22,8 @@
 		<servlet-api.version>6.0.0</servlet-api.version>
 		<junit.version>5.9.2</junit.version>
 		
-		<spring.version>6.0.4</spring.version>
-		<springboot.version>3.0.1</springboot.version>
+		<spring.version>6.0.6</spring.version>
+		<springboot.version>3.0.4</springboot.version>
 		
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<beanutils.version>1.9.4</beanutils.version>
@@ -45,7 +45,7 @@
 		<highgo.version>6.0.3.jre8</highgo.version>
 		<postgresql.version>42.4.1</postgresql.version>
 		<persistence.version>3.1.0</persistence.version>
-		<mybatis.version>3.5.11</mybatis.version>	
+		<mybatis.version>3.5.12</mybatis.version>	
 		<mybatis-spring.version>3.0.1</mybatis-spring.version>
 		<druid.version>1.2.15</druid.version>
 		
