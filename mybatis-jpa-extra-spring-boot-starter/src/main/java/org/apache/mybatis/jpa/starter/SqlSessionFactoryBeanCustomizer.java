@@ -13,7 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-/**
- * @author Eddú Meléndez
- */
 package org.apache.mybatis.jpa.starter;
+
+import org.mybatis.spring.SqlSessionFactoryBean;
+
+/**
+ * Callback interface that can be customized a {@link SqlSessionFactoryBean} object generated on auto-configuration.
+ *
+ * @author Kazuki Shimizu
+ *
+ * @since 2.2.2
+ */
+@FunctionalInterface
+public interface SqlSessionFactoryBeanCustomizer {
+
+  /**
+   * Customize the given a {@link SqlSessionFactoryBean} object.
+   *
+   * @param factoryBean
+   *          the factory bean object to customize
+   */
+  void customize(SqlSessionFactoryBean factoryBean);
+
+}

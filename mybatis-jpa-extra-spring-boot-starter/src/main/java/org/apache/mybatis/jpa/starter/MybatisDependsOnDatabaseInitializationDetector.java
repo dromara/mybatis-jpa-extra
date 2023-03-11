@@ -15,24 +15,26 @@
  */
 package org.apache.mybatis.jpa.starter;
 
-import org.apache.ibatis.session.Configuration;
+import java.util.Collections;
+import java.util.Set;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.boot.sql.init.dependency.AbstractBeansOfTypeDependsOnDatabaseInitializationDetector;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitializationDetector;
 
 /**
- * Callback interface that can be customized a {@link Configuration} object generated on auto-configuration.
+ * {@link DependsOnDatabaseInitializationDetector} for Mybatis.
  *
- * @author Kazuki Shimizu
+ * @author Eddú Meléndez
  *
- * @since 1.2.1
+ * @since 2.3.0
  */
-@FunctionalInterface
-public interface ConfigurationCustomizer {
+class MybatisDependsOnDatabaseInitializationDetector
+    extends AbstractBeansOfTypeDependsOnDatabaseInitializationDetector {
 
-  /**
-   * Customize the given a {@link Configuration} object.
-   *
-   * @param configuration
-   *          the configuration object to customize
-   */
-  void customize(Configuration configuration);
+  @Override
+  protected Set<Class<?>> getDependsOnDatabaseInitializationBeanTypes() {
+    return Collections.singleton(SqlSessionTemplate.class);
+  }
 
 }

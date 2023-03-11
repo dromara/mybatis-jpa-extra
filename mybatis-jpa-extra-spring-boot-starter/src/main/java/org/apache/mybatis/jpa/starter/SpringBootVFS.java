@@ -1,11 +1,11 @@
-/**
- *    Copyright 2015-2019 the original author or authors.
+/*
+ *    Copyright 2015-2022 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
  *    You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *       https://www.apache.org/licenses/LICENSE-2.0
  *
  *    Unless required by applicable law or agreed to in writing, software
  *    distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,9 +18,13 @@ package org.apache.mybatis.jpa.starter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.apache.ibatis.io.VFS;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -33,7 +37,12 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  */
 public class SpringBootVFS extends VFS {
 
+  private static Charset urlDecodingCharset;
   private final ResourcePatternResolver resourceResolver;
+
+  static {
+    setUrlDecodingCharset(Charset.defaultCharset());
+  }
 
   public SpringBootVFS() {
     this.resourceResolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
@@ -46,18 +55,34 @@ public class SpringBootVFS extends VFS {
 
   @Override
   protected List<String> list(URL url, String path) throws IOException {
-    String urlString = url.toString();
+    String urlString = URLDecoder.decode(url.toString(), urlDecodingCharset.name());
     String baseUrlString = urlString.endsWith("/") ? urlString : urlString.concat("/");
     Resource[] resources = resourceResolver.getResources(baseUrlString + "**/*.class");
     return Stream.of(resources).map(resource -> preserveSubpackageName(baseUrlString, resource, path))
         .collect(Collectors.toList());
   }
 
+  /**
+   * Set the charset for decoding an encoded URL string.
+   * <p>
+   * Default is system default charset.
+   * </p>
+   *
+   * @param charset
+   *          the charset for decoding an encoded URL string
+   *
+   * @since 2.3.0
+   */
+  public static void setUrlDecodingCharset(Charset charset) {
+    urlDecodingCharset = charset;
+  }
+
   private static String preserveSubpackageName(final String baseUrlString, final Resource resource,
       final String rootPath) {
     try {
-      return rootPath + (rootPath.endsWith("/") ? "" : "/")
-          + resource.getURL().toString().substring(baseUrlString.length());
+      return rootPath + (rootPath.endsWith("/") ? "" : "/") + Normalizer
+          .normalize(URLDecoder.decode(resource.getURL().toString(), urlDecodingCharset.name()), Normalizer.Form.NFC)
+          .substring(baseUrlString.length());
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
