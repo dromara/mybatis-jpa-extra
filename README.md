@@ -1,7 +1,7 @@
 # MyBatis JPA Extra
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
-1.JPA 2.1注释**简化CUID操作**;
+1.Jakarta JPA 3注释**简化CUID操作**;
 	
 2.Interceptor实现数据库**SELECT分页查询**;
 	
@@ -37,40 +37,27 @@
 @Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaBaseEntity implements Serializable{
-	
+
 	@Id
 	@Column
 	@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
-	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
-	
 	@Column
 	private String stdNo;
-	
 	@Column
 	private String stdName;
-	
 	@Column
 	private String stdGender;
-	
 	@Column
 	private int stdAge;
-	
 	@Column
 	private String stdMajor;
-	
 	@Column
 	private String stdClass;
-	
 	@Column
 	private byte[] images;
-	
-	public Students() {}
 
-	public get(){};
-	public void set(){};
-	//...
+	//getter setter
 }
 ```
 ## 2、基本操作
@@ -82,7 +69,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void insert() throws Exception{
 		_logger.info("insert...");
-		Students student=new Students();
+		Students student = new Students();
 		student.setStdNo("10024");
 		student.setStdGender("M");
 		student.setStdName("司马昭");
@@ -90,7 +77,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 		student.setStdMajor("政治");
 		student.setStdClass("4");
 		service.insert(student);
-		
+
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
 	}
@@ -99,7 +86,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void update() throws Exception{
 		_logger.info("get...");
-		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
 		 _logger.info("update...");
@@ -116,8 +103,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void merge() throws Exception{
 		_logger.info("merge...");
-		Students student=new Students();
-		//student.setId("10024");
+		Students student = new Students();
 		student.setStdNo("10024");
 		student.setStdGender("M");
 		student.setStdName("司马昭");
@@ -134,7 +120,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void get() throws Exception{
 		_logger.info("get...");
-		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
 		System.out.println("Students "+student);
 		 _logger.info("Students "+student);
 	}
@@ -143,18 +129,16 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void query() throws Exception{
 		_logger.info("query...");
-		Students student=new Students();
+		Students student = new Students();
 		student.setStdGender("M");
 		List<Students> listStudents =service.query(student);
-		//...
 	}
 
 	//查询所有记录
 	@Test
 	public void findAll() throws Exception{
 		_logger.info("findAll...");
-		List<Students> listStudents =service.findAll();
-		//...
+		List<Students> listStudents = service.findAll();
 	}
 
 	//根据ID删除
@@ -168,7 +152,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void batchDelete() throws Exception{
 		_logger.info("batchDelete...");
-		List<String> idList=new ArrayList<String>();
+		List<String> idList = new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
@@ -180,7 +164,7 @@ public class Students extends JpaBaseEntity implements Serializable{
 	@Test
 	public void logicDelete() throws Exception{
 		_logger.info("logicDelete...");
-		List<String> idList=new ArrayList<String>();
+		List<String> idList = new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
@@ -208,7 +192,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 							new Object[]{"10024","10004"},
 							new int[]{Types.VARCHAR,Types.INTEGER}
 						);
-		//...
 	}
 
 	//根据链式条件构造器查询
@@ -219,7 +202,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 		List<Students> listStudents = service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
 				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
-		//...
 	}
 ```
 
@@ -231,8 +213,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 	public void queryPageResults() throws Exception{
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
-		 //student.setStdGender("M");
-		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 //student.setPageNumber(2);
 		 student.calculate(21);
@@ -242,7 +222,6 @@ public class Students extends JpaBaseEntity implements Serializable{
 		 long totalPage =results.getTotalPage();//总页数
 		 long total =results.getTotal();//总数据量
 		 long page =results.getPage();//当前页
-		//...
 	}
 
 	//mapper id分页查询
@@ -251,12 +230,10 @@ public class Students extends JpaBaseEntity implements Serializable{
 		_logger.info("queryPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 JpaPageResults<Students>  results =
 				 service.queryPageResults("queryPageResults1",student);
-		//...
 	}
 ```
 
