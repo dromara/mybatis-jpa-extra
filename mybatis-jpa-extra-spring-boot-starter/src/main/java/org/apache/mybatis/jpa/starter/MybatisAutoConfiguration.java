@@ -83,6 +83,7 @@ import org.springframework.util.StringUtils;
  * @author Josh Long
  * @author Kazuki Shimizu
  * @author Eduardo Macarrón
+ * @author Crystal.Sea
  */
 @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })

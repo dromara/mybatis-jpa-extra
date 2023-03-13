@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 
 package org.apache.mybatis.jpa.test.entity;
 
 import java.io.Serializable;
-
-
 import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 
 import jakarta.persistence.Column;
@@ -28,8 +25,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-
 
 /*
    ID                   varchar(40)                    not null,
@@ -46,18 +41,18 @@ import jakarta.persistence.Table;
  *
  */
 @Entity
-@Table(name = "STUDENTS")  
-public class Students extends JpaBaseEntity implements Serializable{
+@Table(name = "STUDENTS")
+public class Students extends JpaBaseEntity implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6928570405840778151L;
-	
+
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
-	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "snowflakeid")
+	// @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
+	// @GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
 	@Column
 	private String stdNo;
@@ -71,11 +66,9 @@ public class Students extends JpaBaseEntity implements Serializable{
 	private String stdMajor;
 	@Column
 	private String stdClass;
-	
 	@Column
 	private byte[] images;
-	
-	
+
 	public Students() {
 		super();
 	}
@@ -88,90 +81,70 @@ public class Students extends JpaBaseEntity implements Serializable{
 		return stdNo;
 	}
 
-
 	public void setStdNo(String stdNo) {
 		this.stdNo = stdNo;
 	}
-
 
 	public String getStdName() {
 		return stdName;
 	}
 
-
 	public void setStdName(String stdName) {
 		this.stdName = stdName;
 	}
-
-
-
-
 
 	public String getStdGender() {
 		return stdGender;
 	}
 
-
 	public void setStdGender(String stdGender) {
 		this.stdGender = stdGender;
 	}
-
 
 	public int getStdAge() {
 		return stdAge;
 	}
 
-
 	public void setStdAge(int stdAge) {
 		this.stdAge = stdAge;
 	}
-
 
 	public String getStdMajor() {
 		return stdMajor;
 	}
 
-
 	public void setStdMajor(String stdMajor) {
 		this.stdMajor = stdMajor;
 	}
-
 
 	public String getStdClass() {
 		return stdClass;
 	}
 
-
 	public void setStdClass(String stdClass) {
 		this.stdClass = stdClass;
 	}
-
 
 	public String getId() {
 		return id;
 	}
 
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 
 	public byte[] getImages() {
 		return images;
 	}
 
-
 	public void setImages(byte[] images) {
 		this.images = images;
 	}
-
 
 	@Override
 	public String toString() {
 		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
 				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
 	}
-
 
 }

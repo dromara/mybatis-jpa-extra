@@ -21,8 +21,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.apache.mybatis.jpa.persistence.JpaPagination;
 
-
-
 public class DB2Dialect extends Dialect {
 
 	public DB2Dialect() {

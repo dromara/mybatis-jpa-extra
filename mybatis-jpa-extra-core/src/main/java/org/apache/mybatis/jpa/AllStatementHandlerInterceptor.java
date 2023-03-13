@@ -41,7 +41,6 @@ import org.apache.mybatis.jpa.persistence.JpaBaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @Intercepts({
 		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class }),
 		@Signature(type = StatementHandler.class, method = "parameterize", args = { Statement.class }),

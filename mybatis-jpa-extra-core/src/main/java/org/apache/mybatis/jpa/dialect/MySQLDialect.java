@@ -22,7 +22,6 @@ import java.sql.SQLException;
 
 import org.apache.mybatis.jpa.persistence.JpaPagination;
 
-
 public class MySQLDialect extends Dialect {
 
 	public MySQLDialect() {

@@ -19,8 +19,11 @@ package org.apache.mybatis.jpa.util;
 
 import org.apache.commons.lang.SystemUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,21 +32,44 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-
-
 /**
- * Application Context
+ * Mybatis Jpa Context
  * 
  * @author Crystal.Sea
- * @since 1.6
+ * @since 3.0
  */
 public final class MybatisJpaContext {
+
+	private static final Logger _logger = LoggerFactory.getLogger(MybatisJpaContext.class);
 	
 	private static String VERSION = null;
 	
-	public static StandardEnvironment properties;
+	private static StandardEnvironment properties;
 	
-	public static ApplicationContext applicationContext = null;
+	private static ApplicationContext mybatisJpaContext = null;
+	
+	/**
+	 * init mybatisJpaContext and properties
+	 * 
+	 * @param applicationContext
+	 */
+	public static void init(ApplicationContext applicationContext) {
+		
+		mybatisJpaContext = applicationContext;
+		
+		if (mybatisJpaContext.containsBean("propertySourcesPlaceholderConfigurer")) {
+			_logger.trace("init MybatisJpaContext properties");
+            PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = 
+                    ((PropertySourcesPlaceholderConfigurer) applicationContext
+                    .getBean("propertySourcesPlaceholderConfigurer"));
+            
+            properties =  (StandardEnvironment) propertySourcesPlaceholderConfigurer
+                    .getAppliedPropertySources()
+                    .get(PropertySourcesPlaceholderConfigurer.ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME)
+                    .getSource();
+		}
+		
+	}
 	
 	/**
 	 * get ApplicationContext from web  ServletContext configuration
@@ -59,18 +85,18 @@ public final class MybatisJpaContext {
 	 * @return Object
 	 */
 	public static Object getBean(String id){
-		if(applicationContext == null) {
+		if(mybatisJpaContext == null) {
 			return getApplicationContext().getBean(id);
 		}else {
-			return applicationContext.getBean(id);
+			return mybatisJpaContext.getBean(id);
 		}
 	}
 	
     public static <T> T getBean(String name, Class<T> requiredType) throws BeansException{
-    	if(applicationContext == null) {
+    	if(mybatisJpaContext == null) {
             return getApplicationContext().getBean(name,requiredType);
         }else {
-            return applicationContext.getBean(name,requiredType);
+            return mybatisJpaContext.getBean(name,requiredType);
         }
     };
 	
@@ -89,6 +115,14 @@ public final class MybatisJpaContext {
 	 */
 	public static HttpSession getSession(){
 		return getRequest().getSession();
+	}
+
+	public static StandardEnvironment getProperties() {
+		return properties;
+	}
+
+	public static ApplicationContext getMybatisJpaContext() {
+		return mybatisJpaContext;
 	}
 
 	public static String version() {

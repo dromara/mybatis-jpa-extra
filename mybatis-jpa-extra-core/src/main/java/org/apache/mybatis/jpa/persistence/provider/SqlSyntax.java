@@ -21,7 +21,4 @@ public class SqlSyntax {
 		public static final String COUNT_ONE 	= "count(1)";
 	}
 	
-	
-	
-	
 }

@@ -22,8 +22,8 @@ public class InitContext {
 		_logger.info("-- --Init Start at {}" , startTime);
 		_logger.info("Application dir "+System.getProperty("user.dir"));
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
-		
-		MybatisJpaContext.applicationContext=context;
+
+		MybatisJpaContext.init(context);
 		StudentsService service =(StudentsService)MybatisJpaContext.getBean("studentsService");
 		return service;
 	}

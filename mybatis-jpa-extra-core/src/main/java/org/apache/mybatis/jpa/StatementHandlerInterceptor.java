@@ -36,7 +36,6 @@ import org.apache.mybatis.jpa.persistence.JpaPagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @Intercepts( {
 		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class })})
 public class StatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {

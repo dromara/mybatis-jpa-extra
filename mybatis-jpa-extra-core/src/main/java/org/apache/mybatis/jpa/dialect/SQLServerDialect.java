@@ -22,12 +22,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.apache.mybatis.jpa.persistence.JpaPagination;
 
-
 public class SQLServerDialect extends Dialect {
 
 	public SQLServerDialect() {
 		super();
-
 	}
 
 	@Override

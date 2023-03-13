@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 
 package org.apache.mybatis.jpa.test.dao.service;
 
@@ -21,7 +20,6 @@ import org.apache.mybatis.jpa.persistence.JpaBaseService;
 import org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.apache.mybatis.jpa.test.entity.Students;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class StudentsService extends JpaBaseService<Students> {
@@ -31,14 +29,14 @@ public class StudentsService extends JpaBaseService<Students> {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.connsec.db.service.BaseService#getMapper()
 	 */
 	@Override
 	public StudentsMapper getMapper() {
-		return (StudentsMapper)super.getMapper();
+		return (StudentsMapper) super.getMapper();
 	}
-	
-
 
 }

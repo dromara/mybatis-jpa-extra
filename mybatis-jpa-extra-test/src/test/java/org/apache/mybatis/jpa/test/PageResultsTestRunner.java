@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class PageResultsTestRunner {
 	private static final Logger _logger = LoggerFactory.getLogger(PageResultsTestRunner.class);
 	public static StudentsService service;
@@ -37,10 +36,7 @@ public class PageResultsTestRunner {
 		
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
-		 //student.setStdGender("M");
-		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
-		 //student.setPageNumber(2);
 		 student.calculate(21);
 		 JpaPageResults<Students>  results = service.queryPageResults(student);
 		 List<Students> rowsStudents = results.getRows();
@@ -84,6 +80,5 @@ public class PageResultsTestRunner {
 		if(InitContext.context!=null) return;
 		service = new InitContext().init();
 	}
-	
 
 }

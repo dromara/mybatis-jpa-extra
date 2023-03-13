@@ -27,7 +27,6 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 	protected Logger _logger = LoggerFactory.getLogger(MyBatisSessionFactoryBean.class);
 	private List<Interceptor> interceptors = Collections.emptyList();

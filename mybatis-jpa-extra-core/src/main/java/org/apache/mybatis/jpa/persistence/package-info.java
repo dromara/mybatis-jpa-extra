@@ -13,13 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 
-/**
- * 
- */
-/**
- * @author user
- *
- */
 package org.apache.mybatis.jpa.persistence;

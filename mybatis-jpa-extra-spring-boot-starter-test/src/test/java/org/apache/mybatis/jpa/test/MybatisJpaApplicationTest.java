@@ -43,11 +43,10 @@ public class MybatisJpaApplicationTest{
     @Autowired
     private ApplicationContext applicationContext;
  
-    
     @BeforeEach
     public  void before() {
     	_logger.info("---------------- before");
-    	MybatisJpaContext.applicationContext = applicationContext;
+    	MybatisJpaContext.init(applicationContext);
 
     }
     
@@ -78,7 +77,6 @@ public class MybatisJpaApplicationTest{
 
 	}
 	
-	
 	@Test
 	public void remove() throws Exception{
 		
@@ -105,9 +103,7 @@ public class MybatisJpaApplicationTest{
 		
 		_logger.info("queryPageResults...");
 		 Students student=new Students();
-		 //student.setId("af04d610-6092-481e-9558-30bd63ef783c");
 		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 List<Students> allListStudents = 
@@ -123,7 +119,6 @@ public class MybatisJpaApplicationTest{
 		_logger.info("queryPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 
@@ -145,6 +140,5 @@ public class MybatisJpaApplicationTest{
 				 _logger.info("Students "+s);
 			 }
 	 }
-
 	
 }

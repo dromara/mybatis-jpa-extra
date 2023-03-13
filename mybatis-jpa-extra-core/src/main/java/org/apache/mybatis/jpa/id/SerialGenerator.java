@@ -124,5 +124,4 @@ public class SerialGenerator  implements IdentifierGenerator{
 		getNodeNumber();
 	}
 	
-
 }

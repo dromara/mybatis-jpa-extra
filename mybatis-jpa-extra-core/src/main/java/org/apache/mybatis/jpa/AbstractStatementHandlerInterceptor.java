@@ -29,8 +29,6 @@ import org.apache.mybatis.jpa.dialect.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 public abstract class AbstractStatementHandlerInterceptor  implements Interceptor {
 	protected Logger _logger = LoggerFactory.getLogger(getClass());
 	

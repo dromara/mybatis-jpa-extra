@@ -21,7 +21,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.apache.mybatis.jpa.persistence.JpaPagination;
 
-
 public class PostgreSQLDialect extends Dialect {
 
 	public PostgreSQLDialect() {

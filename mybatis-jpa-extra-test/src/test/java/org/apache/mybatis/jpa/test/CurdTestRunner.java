@@ -35,7 +35,6 @@ public class CurdTestRunner {
 	public void insert() throws Exception{
 		_logger.info("insert...");
 		Students student=new Students();
-		//student.setId("10024");
 		student.setStdNo("10024");
 		student.setStdGender("M");
 		student.setStdName("司马昭");
@@ -46,14 +45,12 @@ public class CurdTestRunner {
 		
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
-		//service.remove(student.getId());
 	}
 	
 	@Test
 	public void merge() throws Exception{
 		_logger.info("merge...");
 		Students student=new Students();
-		//student.setId("10024");
 		student.setStdNo("10024");
 		student.setStdGender("M");
 		student.setStdName("司马昭");
@@ -64,7 +61,6 @@ public class CurdTestRunner {
 		
 		Thread.sleep(1000);
 		_logger.info("insert id " + student.getId());
-		//service.remove(student.getId());
 		
 	}
 

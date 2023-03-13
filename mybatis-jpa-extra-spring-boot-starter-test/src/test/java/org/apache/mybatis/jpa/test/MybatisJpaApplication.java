@@ -60,7 +60,7 @@ public class MybatisJpaApplication implements ApplicationRunner{
     
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		MybatisJpaContext.applicationContext=applicationContext;
+		MybatisJpaContext.init(applicationContext);
 		 
 		_logger.info("queryPageResults by mapperId...");
 		 Students student=new Students();

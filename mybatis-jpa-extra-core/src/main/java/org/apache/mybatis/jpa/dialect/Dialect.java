@@ -24,8 +24,6 @@ import org.apache.mybatis.jpa.persistence.JpaPagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * DB Access Dialect,inspiration from hibernate
  * 

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 
 /**
  * 
@@ -25,12 +24,11 @@ import java.util.List;
 import org.apache.mybatis.jpa.persistence.IJpaBaseMapper;
 import org.apache.mybatis.jpa.test.entity.Students;
 
-
 /**
  * @author Crystal.Sea
  *
  */
 
-public  interface StudentsMapper extends IJpaBaseMapper<Students> {
+public interface StudentsMapper extends IJpaBaseMapper<Students> {
 	public List<Students> queryPageResults1(Students entity);
 }
