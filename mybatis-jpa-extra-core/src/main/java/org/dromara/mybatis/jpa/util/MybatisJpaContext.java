@@ -129,12 +129,9 @@ public final class MybatisJpaContext {
 		if(VERSION == null) {
 			StringBuffer version =
 					new StringBuffer("---------------------------------------------------------------------------------\n");
-					  version.append("+                                MaxKey \n");
-					  version.append("+                      Single   Sign   On ( SSO ) \n");
-					  version.append("+                           Version "); 
-					  version.append(properties.getProperty("application.formatted-version")+"\n");
+					  version.append("+                                MyBatis JPA Extra \n");
 					  version.append("+\n");
-					  version.append(String.format("+                 %sCopyright 2018 - %s https://www.maxkey.top/\n",
+					  version.append(String.format("+                 %sCopyright 2018 - %s https://gitee.com/dromara/mybatis-jpa-extra/\n",
 		        			    (char)0xA9 , new DateTime().getYear()
 		        			));
 					  version.append("+                 Licensed under the Apache License, Version 2.0 \n");
