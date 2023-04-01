@@ -36,7 +36,7 @@ import org.springframework.context.ApplicationContext;
 
 //@SpringBootApplication(scanBasePackages = {"org.apache.mybatis.jpa"})
 @SpringBootApplication
-@MapperScan("org.apache.mybatis.jpa.test.dao.persistence")
+@MapperScan("org.dromara.mybatis.jpa.test.dao.persistence")
 public class MybatisJpaApplication implements ApplicationRunner{ 
     private static final Logger _logger = LoggerFactory.getLogger(MybatisJpaApplication.class);
     

@@ -45,13 +45,13 @@ public abstract class Dialect {
 	static {
 		
 		dialectMap=new HashMap<String,String>();
-		dialectMap.put("db2", 			"org.apache.mybatis.jpa.dialect.DB2Dialect");
-		dialectMap.put("derby", 		"org.apache.mybatis.jpa.dialect.DerbyDialect");
-		dialectMap.put("mysql", 		"org.apache.mybatis.jpa.dialect.MySQLDialect");
-		dialectMap.put("oracle", 		"org.apache.mybatis.jpa.dialect.OracleDialect");
-		dialectMap.put("postgresql", 	"org.apache.mybatis.jpa.dialect.PostgreSQLDialect");
-		dialectMap.put("highgo", 		"org.apache.mybatis.jpa.dialect.HighgoDialect");
-		dialectMap.put("sqlserver", 	"org.apache.mybatis.jpa.dialect.SQLServerDialect");
+		dialectMap.put("db2", 			"org.dromara.mybatis.jpa.dialect.DB2Dialect");
+		dialectMap.put("derby", 		"org.dromara.mybatis.jpa.dialect.DerbyDialect");
+		dialectMap.put("mysql", 		"org.dromara.mybatis.jpa.dialect.MySQLDialect");
+		dialectMap.put("oracle", 		"org.dromara.mybatis.jpa.dialect.OracleDialect");
+		dialectMap.put("postgresql", 	"org.dromara.mybatis.jpa.dialect.PostgreSQLDialect");
+		dialectMap.put("highgo", 		"org.dromara.mybatis.jpa.dialect.HighgoDialect");
+		dialectMap.put("sqlserver", 	"org.dromara.mybatis.jpa.dialect.SQLServerDialect");
 		
 		
 		_logger.trace("Dialect Mapper : \n"+dialectMap);

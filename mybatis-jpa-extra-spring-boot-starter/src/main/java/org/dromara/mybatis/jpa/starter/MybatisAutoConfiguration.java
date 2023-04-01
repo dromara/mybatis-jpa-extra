@@ -159,7 +159,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
       factory.setPlugins(this.interceptors);
     }
     
-  //mybatis-jpa
+    //mybatis-jpa
     if (StringUtils.hasLength(this.properties.getDialect())) {
     	factory.setDialect(this.properties.getDialect());
     }

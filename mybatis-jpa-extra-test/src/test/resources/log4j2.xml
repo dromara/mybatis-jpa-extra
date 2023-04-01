@@ -11,7 +11,7 @@
 
 		<Logger name="org.springframework" level="INFO"></Logger>
 		<Logger name="org.apache.mybatis" level="DEBUG"></Logger>
-		<Logger name="org.apache.mybatis.jpa" level="TRACE"></Logger>
+		<Logger name="org.dromara.mybatis.jpa" level="TRACE"></Logger>
 
 		<root level="INFO">
 			<appender-ref ref="consolePrint" />
