@@ -4,7 +4,7 @@
 	<!--parent -->
 	<groupId>org.dromara</groupId>
 	<artifactId>mybatis-jpa-extra-parent</artifactId>
-	<version>${mybatis.jpa.extra.version}</version>
+	<version>3.0.1</version>
 	<packaging>pom</packaging>
 	
 	<!--modules -->
@@ -16,14 +16,14 @@
 	</modules>
  
  	<properties>
-		<mybatis.jpa.extra.version>3.0</mybatis.jpa.extra.version><!--project version-->
+		<mybatis.jpa.extra.version>3.0.1</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>17</jdk.version>
 		<servlet-api.version>6.0.0</servlet-api.version>
 		<junit.version>5.9.2</junit.version>
 		
 		<spring.version>6.0.7</spring.version>
-		<springboot.version>3.0.4</springboot.version>
+		<springboot.version>3.0.5</springboot.version>
 		
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<beanutils.version>1.9.4</beanutils.version>

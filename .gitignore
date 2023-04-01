@@ -15,3 +15,5 @@ jdk/*
 .project
 */.project
 */.classpath
+*.xml.versionsBackup
+*/*.xml.versionsBackup
