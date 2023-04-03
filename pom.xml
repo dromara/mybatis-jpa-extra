@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<!--parent -->
-	<groupId>org.dromara</groupId>
+	<groupId>org.dromara.mybatis-jpa-extra</groupId>
 	<artifactId>mybatis-jpa-extra-parent</artifactId>
 	<version>3.0.1</version>
 	<packaging>pom</packaging>
@@ -45,19 +45,68 @@
 		<highgo.version>6.0.3.jre8</highgo.version>
 		<postgresql.version>42.4.1</postgresql.version>
 		<persistence.version>3.1.0</persistence.version>
-		<mybatis.version>3.5.12</mybatis.version>	
+		<mybatis.version>3.5.12</mybatis.version>
 		<mybatis-spring.version>3.0.1</mybatis-spring.version>
 		<druid.version>1.2.15</druid.version>
-		
+
 		<caffeine.version>3.1.2</caffeine.version>
 		<joda-time.version>2.12.2</joda-time.version>
 		<activation.version>1.1.1</activation.version>
-        <aopalliance.version>1.0</aopalliance.version>
-			
+		<aopalliance.version>1.0</aopalliance.version>
+
 	</properties>
-	
+
+	<name>mybatis-jpa-extra</name>
+	<description>简化MyBatis CUID操作,增强SELECT分页查询</description>
+	<url>https://github.com/dromara/mybatis-jpa-extra</url>
+
+	<issueManagement>
+		<system>Github Issue</system>
+		<url>https://github.com/dromara/mybatis-jpa-extra/issues</url>
+	</issueManagement>
+
+	<organization>
+		<name>dromara</name>
+		<url>https://dromara.org</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache Software License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git@github.com:dromara/mybatis-jpa-extra.git</connection>
+		<developerConnection>scm:git@github.com:dromara/mybatis-jpa-extra.git</developerConnection>
+		<url>git@github.com:dromara/mybatis-jpa-extra.git</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>MaxKeyTop</name>
+			<email>shimingxy@163.com</email>
+			<organization>dromara.org</organization>
+			<roles>
+				<role>author</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
 	<repositories>
-	
+
 		<repository>
 			<id>aliyunrepository</id>
 			<name>aliyunrepository</name>
@@ -347,10 +396,101 @@
 	<build>
 		<plugins>
 			<plugin>
-				 <groupId>org.apache.maven.plugins</groupId>    
-			        <artifactId>maven-surefire-plugin</artifactId>    
-			        <version>2.4.2</version>    
-			 </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+			</plugin>
+
+			<!-- Source -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<id>ossrh</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<additionalOptions>-Xdoclint:none</additionalOptions>
+					<tags>
+						<tag>
+							<name>apiNote</name>
+							<placement>a</placement>
+							<head>API Note:</head>
+						</tag>
+						<tag>
+							<name>implSpec</name>
+							<placement>a</placement>
+							<head>Implementation Requirements:</head>
+						</tag>
+						<tag>
+							<name>implNote</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+						<tag>
+							<name>inheritDoc</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+						<tag>
+							<name>param</name>
+						</tag>
+						<tag>
+							<name>return</name>
+						</tag>
+						<tag>
+							<name>throws</name>
+						</tag>
+						<tag>
+							<name>since</name>
+						</tag>
+						<tag>
+							<name>version</name>
+						</tag>
+						<tag>
+							<name>serialData</name>
+						</tag>
+						<tag>
+							<name>see</name>
+						</tag>
+					</tags>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Gpg Signature -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>ossrh</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>    	        
 </project>
