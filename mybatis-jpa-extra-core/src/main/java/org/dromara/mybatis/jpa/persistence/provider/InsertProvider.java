@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.persistence.provider;
 import java.util.List;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
 import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata;
@@ -76,6 +77,11 @@ public class InsertProvider <T extends JpaBaseEntity>{
 							BeanUtil.set(entity, 
 									fieldColumnMapper.getFieldName(), 
 									MapperMetadata.identifierGeneratorFactory.generate(generatedValue.generator().toLowerCase()));
+							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+						}else {
+							BeanUtil.set(entity, 
+									fieldColumnMapper.getFieldName(), 
+									MapperMetadata.identifierGeneratorFactory.generate(IdStrategy.SNOWFLAKEID));
 							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
 						}
 					}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
