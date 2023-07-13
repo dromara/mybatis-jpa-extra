@@ -10,4 +10,6 @@ public class IdStrategy {
 	
 	public final static String SNOWFLAKEID	= "snowflakeid";
 	
+	public final static String DEFAULT		= "default";
+	
 }

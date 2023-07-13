@@ -27,10 +27,11 @@ public class IdentifierGeneratorFactory {
 	public static ConcurrentHashMap<String, IdentifierGenerator> generatorStrategyMap = new ConcurrentHashMap<String, IdentifierGenerator>();
 	
 	public IdentifierGeneratorFactory() {
-		register(IdStrategy.UUID, new UUIDGenerator());
-		register(IdStrategy.UUIDHEX, new UUIDHexGenerator());
-		register(IdStrategy.SERIAL, new SerialGenerator());
-		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator());
+		register(IdStrategy.UUID		, new UUIDGenerator());
+		register(IdStrategy.UUIDHEX		, new UUIDHexGenerator());
+		register(IdStrategy.SERIAL		, new SerialGenerator());
+		register(IdStrategy.SNOWFLAKEID	, new SnowFlakeIdGenerator());
+		register(IdStrategy.DEFAULT		, new SnowFlakeIdGenerator());
 	}
 	
 	public IdentifierGeneratorFactory(long datacenterId, long machineId) {

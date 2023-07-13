@@ -81,7 +81,7 @@ public class InsertProvider <T extends JpaBaseEntity>{
 						}else {
 							BeanUtil.set(entity, 
 									fieldColumnMapper.getFieldName(), 
-									MapperMetadata.identifierGeneratorFactory.generate(IdStrategy.SNOWFLAKEID));
+									MapperMetadata.identifierGeneratorFactory.generate(IdStrategy.DEFAULT));
 							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
 						}
 					}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
