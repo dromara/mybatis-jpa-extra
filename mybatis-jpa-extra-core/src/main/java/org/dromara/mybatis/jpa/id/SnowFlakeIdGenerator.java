@@ -17,6 +17,8 @@
 
 package org.dromara.mybatis.jpa.id;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.Calendar;
 import java.util.Date;
 import org.joda.time.DateTime;
@@ -64,6 +66,27 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
 
     public SnowFlakeIdGenerator() {}
 
+    public  SnowFlakeIdGenerator(InetAddress inetAddress) {
+        long id = 0L;
+        try {
+            if (null == inetAddress) {
+            	inetAddress = InetAddress.getLocalHost();
+            }
+            NetworkInterface network = NetworkInterface.getByInetAddress(inetAddress);
+            if (null == network) {
+                id = 1L;
+            } else {
+                byte[] mac = network.getHardwareAddress();
+                if (null != mac) {
+                    id = ((0x000000FF & (long) mac[mac.length - 2]) | (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
+                    id = id % (datacenterId + 1);
+                }
+            }
+        } catch (Exception e) {
+           System.err.println(" getDatacenterId: " + e.getMessage());
+        }
+    }
+    
 	public SnowFlakeIdGenerator(long datacenterId, long machineId) {
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
             throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");

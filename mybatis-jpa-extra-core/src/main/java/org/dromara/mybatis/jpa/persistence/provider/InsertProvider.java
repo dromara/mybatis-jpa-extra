@@ -60,18 +60,18 @@ public class InsertProvider <T extends JpaBaseEntity>{
 					||fieldColumnMapper.getFieldType().startsWith("byte")
 				)
 				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
-				&& fieldColumnMapper.getGeneratedValue()==null) {
+				&& fieldColumnMapper.getGeneratedValue() == null) {
 				//skip null field value
 				_logger.trace("skip  field value is null ");
 			}else {
 				//have GeneratedValue and (value is null or eq "")
-				if(fieldColumnMapper.getGeneratedValue()!=null 
+				if(fieldColumnMapper.getGeneratedValue() != null 
 						&& (
 								BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
 								|| BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == ""
 						)) {
-					GeneratedValue generatedValue=listFields.get(i).getGeneratedValue();
-					if(generatedValue.strategy()==GenerationType.AUTO) {
+					GeneratedValue generatedValue = listFields.get(i).getGeneratedValue();
+					if(generatedValue.strategy() == GenerationType.AUTO) {
 						if(MapperMetadata.identifierGeneratorFactory.getGeneratorStrategyMap()
 								.containsKey(generatedValue.generator().toLowerCase())) {
 							BeanUtil.set(entity, 

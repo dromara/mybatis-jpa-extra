@@ -31,7 +31,7 @@ public class IdentifierGeneratorFactory {
 		register(IdStrategy.UUIDHEX		, new UUIDHexGenerator());
 		register(IdStrategy.SERIAL		, new SerialGenerator());
 		register(IdStrategy.SNOWFLAKEID	, new SnowFlakeIdGenerator());
-		register(IdStrategy.DEFAULT		, new SnowFlakeIdGenerator());
+		register(IdStrategy.DEFAULT		, new SnowFlakeIdGenerator(null));
 	}
 	
 	public IdentifierGeneratorFactory(long datacenterId, long machineId) {
