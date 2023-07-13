@@ -54,36 +54,37 @@ public class InsertProvider <T extends JpaBaseEntity>{
 		
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper=listFields.get(i);
+			_logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
 			if(
 				(
 					fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
 					||fieldColumnMapper.getFieldType().startsWith("byte")
 				)
 				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
-				&& fieldColumnMapper.getGeneratedValue() == null) {
+				&& fieldColumnMapper.getGeneratedValue() == null
+				&& !fieldColumnMapper.isIdColumn()) {
 				//skip null field value
 				_logger.trace("skip  field value is null ");
 			}else {
-				//have GeneratedValue and (value is null or eq "")
-				if(fieldColumnMapper.getGeneratedValue() != null 
+				//have @id or @GeneratedValue and (value is null or eq "")
+				if((fieldColumnMapper.isIdColumn() || fieldColumnMapper.getGeneratedValue() != null)
 						&& (
 								BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
 								|| BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == ""
 						)) {
 					GeneratedValue generatedValue = listFields.get(i).getGeneratedValue();
-					if(generatedValue.strategy() == GenerationType.AUTO) {
-						if(MapperMetadata.identifierGeneratorFactory.getGeneratorStrategyMap()
-								.containsKey(generatedValue.generator().toLowerCase())) {
-							BeanUtil.set(entity, 
-									fieldColumnMapper.getFieldName(), 
-									MapperMetadata.identifierGeneratorFactory.generate(generatedValue.generator().toLowerCase()));
-							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+					if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
+						String generatorId = "";
+						if(generatedValue == null ) {
+							generatorId = generatedValue(IdStrategy.DEFAULT);
+						}else if(MapperMetadata.identifierGeneratorFactory.getGeneratorStrategyMap()
+									.containsKey(generatedValue.generator().toLowerCase())) {
+							generatorId = generatedValue(generatedValue.generator().toLowerCase());
 						}else {
-							BeanUtil.set(entity, 
-									fieldColumnMapper.getFieldName(), 
-									MapperMetadata.identifierGeneratorFactory.generate(IdStrategy.DEFAULT));
-							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+							generatorId = generatedValue(IdStrategy.DEFAULT);
 						}
+						BeanUtil.set(entity, fieldColumnMapper.getFieldName(),generatorId);
+						sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
 					}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
 						sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
 					}else if(generatedValue.strategy()==GenerationType.IDENTITY){
@@ -98,6 +99,10 @@ public class InsertProvider <T extends JpaBaseEntity>{
 		}
 		_logger.trace("Insert SQL : \n" + sql);
 		return sql.toString();
+	}
+	
+	private String generatedValue(String strategy) {
+		return MapperMetadata.identifierGeneratorFactory.generate(strategy);
 	}
 	
 }

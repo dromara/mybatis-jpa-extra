@@ -50,7 +50,7 @@ public class Students extends JpaBaseEntity implements Serializable {
 
 	@Id
 	@Column
-	@GeneratedValue
+	//@GeneratedValue
 	// @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
 	// @GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
