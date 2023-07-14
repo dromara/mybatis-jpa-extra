@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.id.IdStrategy;
+import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
 import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata;
@@ -53,56 +54,55 @@ public class InsertProvider <T extends JpaBaseEntity>{
 		SQL sql = new SQL().INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
 		
 		for (int i = 0; i < listFields.size(); i++) {
-			FieldColumnMapper fieldColumnMapper=listFields.get(i);
+			FieldColumnMapper fieldColumnMapper = listFields.get(i);
 			_logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
-			if(
-				(
-					fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
-					||fieldColumnMapper.getFieldType().startsWith("byte")
-				)
-				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
-				&& fieldColumnMapper.getGeneratedValue() == null
-				&& !fieldColumnMapper.isIdColumn()) {
-				//skip null field value
-				_logger.trace("skip  field value is null ");
-			}else {
-				//have @id or @GeneratedValue and (value is null or eq "")
-				if((fieldColumnMapper.isIdColumn() || fieldColumnMapper.getGeneratedValue() != null)
-						&& (
-								BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
-								|| BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == ""
-						)) {
-					GeneratedValue generatedValue = listFields.get(i).getGeneratedValue();
-					if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
-						String generatorId = "";
-						if(generatedValue == null ) {
-							generatorId = generatedValue(IdStrategy.DEFAULT);
-						}else if(MapperMetadata.identifierGeneratorFactory.getGeneratorStrategyMap()
-									.containsKey(generatedValue.generator().toLowerCase())) {
-							generatorId = generatedValue(generatedValue.generator().toLowerCase());
-						}else {
-							generatorId = generatedValue(IdStrategy.DEFAULT);
-						}
-						BeanUtil.set(entity, fieldColumnMapper.getFieldName(),generatorId);
-						sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
-					}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
-						sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
-					}else if(generatedValue.strategy()==GenerationType.IDENTITY){
-						//skip
-					}else if(generatedValue.strategy()==GenerationType.TABLE){
-						//skip
-					}
+			if(fieldColumnMapper.getColumnAnnotation().insertable()) {
+				if(
+					(
+						fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
+						||fieldColumnMapper.getFieldType().startsWith("byte")
+					)
+					&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null
+					&& fieldColumnMapper.getGeneratedValue() == null
+					&& !fieldColumnMapper.isIdColumn()) {
+					//skip null field value
+					_logger.trace("skip  field value is null ");
 				}else {
-					sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+					if(fieldColumnMapper.getGeneratedValue() != null && fieldColumnMapper.getTemporalAnnotation() != null) {
+						sql.VALUES(fieldColumnMapper.getColumnName(),"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
+					}else if((fieldColumnMapper.isIdColumn() || fieldColumnMapper.getGeneratedValue() != null)
+							&& (
+									BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
+									|| BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == ""
+							)) {
+						//have @id or @GeneratedValue and (value is null or eq "")
+						GeneratedValue generatedValue = listFields.get(i).getGeneratedValue();
+						if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
+							String genValue = "";
+							if(generatedValue == null ) {
+								genValue = IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+							}else if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
+								genValue = IdentifierGeneratorFactory.generate(generatedValue.generator());
+							}else {
+								genValue = IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+							}
+							BeanUtil.set(entity, fieldColumnMapper.getFieldName(),genValue);
+							sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+						}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
+							sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
+						}else if(generatedValue.strategy()==GenerationType.IDENTITY){
+							//skip
+						}else if(generatedValue.strategy()==GenerationType.TABLE){
+							//skip
+						}
+					}else {
+						sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+					}
 				}
 			}
 		}
 		_logger.trace("Insert SQL : \n" + sql);
 		return sql.toString();
-	}
-	
-	private String generatedValue(String strategy) {
-		return MapperMetadata.identifierGeneratorFactory.generate(strategy);
 	}
 	
 }

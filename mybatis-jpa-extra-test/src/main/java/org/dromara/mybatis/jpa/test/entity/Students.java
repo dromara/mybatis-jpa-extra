@@ -17,6 +17,7 @@
 package org.dromara.mybatis.jpa.test.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
 
@@ -25,6 +26,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /*
    ID                   varchar(40)                    not null,
@@ -68,6 +71,11 @@ public class Students extends JpaBaseEntity implements Serializable {
 	private String stdClass;
 	@Column
 	private byte[] images;
+	
+	@Column(insertable = false)
+	@GeneratedValue
+	@Temporal(TemporalType.TIMESTAMP)
+    private Date modifyDate;
 
 	public Students() {
 		super();
@@ -139,6 +147,14 @@ public class Students extends JpaBaseEntity implements Serializable {
 
 	public void setImages(byte[] images) {
 		this.images = images;
+	}
+
+	public Date getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
 	}
 
 	@Override

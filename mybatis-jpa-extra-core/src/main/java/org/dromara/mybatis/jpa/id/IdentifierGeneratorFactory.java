@@ -17,14 +17,15 @@
 
 package org.dromara.mybatis.jpa.id;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class IdentifierGeneratorFactory {
+	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(IdentifierGeneratorFactory.class);
-	public static ConcurrentHashMap<String, IdentifierGenerator> generatorStrategyMap = new ConcurrentHashMap<String, IdentifierGenerator>();
+	
+	public static ConcurrentHashMap<String, IdentifierGenerator>identifierGeneratorMap = new ConcurrentHashMap<String, IdentifierGenerator>();
 	
 	public IdentifierGeneratorFactory() {
 		register(IdStrategy.UUID		, new UUIDGenerator());
@@ -42,26 +43,30 @@ public class IdentifierGeneratorFactory {
 		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 
-	public ConcurrentHashMap<String, IdentifierGenerator> getGeneratorStrategyMap() {
-		return generatorStrategyMap;
+	public static ConcurrentHashMap<String, IdentifierGenerator> getIdentifierGeneratorMap() {
+		return identifierGeneratorMap;
 	}
 
-	public void setGeneratorStrategyMap(ConcurrentHashMap<String, IdentifierGenerator> generatorStrategyMap) {
-		for (Map.Entry<String, IdentifierGenerator> entry : generatorStrategyMap.entrySet()) {  
-			register(entry.getKey(),entry.getValue());
-		}  
+	public static void setIdentifierGeneratorMap(ConcurrentHashMap<String, IdentifierGenerator> identifierGeneratorMap) {
+		IdentifierGeneratorFactory.identifierGeneratorMap = identifierGeneratorMap;
 	}
-	
+
 	public void register(String strategy, IdentifierGenerator generator) {
-		if(IdentifierGeneratorFactory.generatorStrategyMap.containsKey(strategy)) {
+		strategy = strategy.toLowerCase();
+		if(IdentifierGeneratorFactory.identifierGeneratorMap.containsKey(strategy)) {
 			return;
 		}
-		IdentifierGeneratorFactory.generatorStrategyMap.put(strategy, generator);
+		IdentifierGeneratorFactory.identifierGeneratorMap.put(strategy, generator);
 		_logger.debug( "Registering IdentifierGenerator strategy [{}] -> [{}]", strategy, generator.getClass().getName() );
 	}
 	
-	public String generate(String strategy) {
-		return generatorStrategyMap.get(strategy).generate(null);
+	public static boolean exists(String strategy) {
+		return identifierGeneratorMap.containsKey(strategy.toLowerCase());
+	}
+	
+	public static String generate(String strategy) {
+		strategy = strategy.toLowerCase();
+		return identifierGeneratorMap.get(strategy).generate(strategy);
 	}
 
 }

@@ -17,21 +17,27 @@
 
 package org.dromara.mybatis.jpa.persistence;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Temporal;
 
 public class FieldColumnMapper {
-	//class
-	private String fieldName;
+	//class field name
+	private String 			fieldName;
 	
-	//class
-	private String fieldType;
+	//class field type
+	private String 			fieldType;
 	
-	//table
-	private String columnName;
+	//table column name
+	private String 			columnName;
 	
-	private boolean idColumn	=	false;
+	private boolean 		idColumn	=	false;
 	
-	private GeneratedValue generatedValue;
+	private GeneratedValue 	generatedValue;
+	
+	private	Column 			columnAnnotation;
+	
+	private Temporal 		temporalAnnotation;
 	
 	public FieldColumnMapper() {
 		
@@ -84,6 +90,22 @@ public class FieldColumnMapper {
 		this.generatedValue = generatedValue;
 	}
 
+	public Column getColumnAnnotation() {
+		return columnAnnotation;
+	}
+
+	public void setColumnAnnotation(Column columnAnnotation) {
+		this.columnAnnotation = columnAnnotation;
+	}
+	
+	public Temporal getTemporalAnnotation() {
+		return temporalAnnotation;
+	}
+
+	public void setTemporalAnnotation(Temporal temporalAnnotation) {
+		this.temporalAnnotation = temporalAnnotation;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -97,6 +119,10 @@ public class FieldColumnMapper {
 		builder.append(idColumn);
 		builder.append(", generatedValue=");
 		builder.append(generatedValue);
+		builder.append(", columnAnnotation=");
+		builder.append(columnAnnotation);
+		builder.append(", temporalAnnotation=");
+		builder.append(temporalAnnotation);
 		builder.append("]");
 		return builder.toString();
 	}

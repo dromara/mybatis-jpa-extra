@@ -37,6 +37,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
 import jakarta.persistence.Transient;
 
 /**
@@ -83,7 +84,7 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 	
 	public transient static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<String, String>();
 	
-	public static IdentifierGeneratorFactory identifierGeneratorFactory=new IdentifierGeneratorFactory();
+	public static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
 	
 	/**
 	 * getTableName and cache table name
@@ -146,10 +147,10 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 	
 	public static  FieldColumnMapper getIdColumn(String  classSimpleName) {
 		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
-		FieldColumnMapper idFieldColumnMapper=null;
+		FieldColumnMapper idFieldColumnMapper = null;
 		for (int i = 0; i < listFields.size(); i++) {
 			if (listFields.get(i).isIdColumn()) {
-				idFieldColumnMapper=listFields.get(i);
+				idFieldColumnMapper = listFields.get(i);
 				break;
 			}
 		}
@@ -162,7 +163,7 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 	 * @return selectColumn
 	 */
 	public static String selectColumnMapper(Class<?> entityClass) {
-		StringBuffer selectColumn =new StringBuffer("sel_tmp_table.* ");
+		StringBuffer selectColumn = new StringBuffer("sel_tmp_table.* ");
 		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getSimpleName())) {
 			columnCount ++;
@@ -217,6 +218,7 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 				fieldColumnMapper.setFieldType(field.getType().getSimpleName());
 				String columnName = "";
 				Column columnAnnotation = (Column) field.getAnnotation(Column.class);
+				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
 				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
 				    columnName = columnAnnotation.name();
 				} else {
@@ -239,10 +241,15 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 					GeneratedValue generatedValue=(GeneratedValue) field.getAnnotation(GeneratedValue.class);
 					fieldColumnMapper.setGeneratedValue(generatedValue);
 				}
-				
+				if (field.isAnnotationPresent(Temporal.class)) {
+					Temporal temporalAnnotation = (Temporal) field.getAnnotation(Temporal.class);
+					fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
+				}
 				_logger.trace("FieldColumnMapper : " + fieldColumnMapper);
 				fieldColumnMapperList.add(fieldColumnMapper);
 			}
+			
+			
 		}
 		
 		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);

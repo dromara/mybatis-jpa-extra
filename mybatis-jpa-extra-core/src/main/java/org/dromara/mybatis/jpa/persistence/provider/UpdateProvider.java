@@ -60,15 +60,22 @@ public class UpdateProvider <T extends JpaBaseEntity>{
 				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
 						||fieldColumnMapper.getFieldType().startsWith("byte")
 				)
-				&&BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())==null) {
+				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())== null
+				&& fieldColumnMapper.getGeneratedValue() == null) {
 				//skip null field value
 				_logger.trace("skip  field value is null ");
 			}else {
-				sql.SET(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
+				if(fieldColumnMapper.getColumnAnnotation().updatable()) {
+					if(fieldColumnMapper.getGeneratedValue() != null && fieldColumnMapper.getTemporalAnnotation() != null) {
+						sql.SET(fieldColumnMapper.getColumnName() + " = '" + DateConverter.convert(entity, fieldColumnMapper,true) + "'");
+					}else {
+						sql.SET(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
+					}
+				}
 			}
 		}
 		
-		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entity.getClass().getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entity.getClass().getSimpleName());
 		sql.WHERE(idFieldColumnMapper.getColumnName() + " = #{" + idFieldColumnMapper.getFieldName() + "}");
 		_logger.trace("Update SQL : \n{}" , sql);
 		return sql.toString();

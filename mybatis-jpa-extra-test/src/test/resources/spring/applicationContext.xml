@@ -97,7 +97,7 @@
     <context:component-scan base-package="org.dromara.mybatis.jpa.test.dao.service" />
     
     <bean class ="org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory">
-	    <property name="generatorStrategyMap" >
+	    <property name="identifierGeneratorMap" >
 	    	<map>
 		        <entry key="serial" >
 		        	<bean class="org.dromara.mybatis.jpa.id.SerialGenerator">
