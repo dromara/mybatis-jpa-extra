@@ -17,6 +17,8 @@
 
 package org.dromara.mybatis.jpa.persistence;
 
+import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Temporal;
@@ -33,11 +35,15 @@ public class FieldColumnMapper {
 	
 	private boolean 		idColumn	=	false;
 	
+	private boolean 		generated	=	false;
+	
 	private GeneratedValue 	generatedValue;
 	
 	private	Column 			columnAnnotation;
 	
 	private Temporal 		temporalAnnotation;
+	
+	private ColumnDefault   columnDefault;
 	
 	public FieldColumnMapper() {
 		
@@ -104,6 +110,22 @@ public class FieldColumnMapper {
 
 	public void setTemporalAnnotation(Temporal temporalAnnotation) {
 		this.temporalAnnotation = temporalAnnotation;
+	}
+	
+	public boolean isGenerated() {
+		return generated;
+	}
+
+	public void setGenerated(boolean generated) {
+		this.generated = generated;
+	}
+	
+	public ColumnDefault getColumnDefault() {
+		return columnDefault;
+	}
+
+	public void setColumnDefault(ColumnDefault columnDefault) {
+		this.columnDefault = columnDefault;
 	}
 
 	@Override

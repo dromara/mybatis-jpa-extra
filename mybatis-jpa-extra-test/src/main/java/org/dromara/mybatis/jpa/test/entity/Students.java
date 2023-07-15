@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa.test.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
 
 import jakarta.persistence.Column;

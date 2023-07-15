@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 
 
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,10 +241,15 @@ public class MapperMetadata <T extends JpaBaseEntity>{
 				if(field.isAnnotationPresent(GeneratedValue.class)) {
 					GeneratedValue generatedValue=(GeneratedValue) field.getAnnotation(GeneratedValue.class);
 					fieldColumnMapper.setGeneratedValue(generatedValue);
+					fieldColumnMapper.setGenerated(true);
 				}
 				if (field.isAnnotationPresent(Temporal.class)) {
 					Temporal temporalAnnotation = (Temporal) field.getAnnotation(Temporal.class);
 					fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
+				}
+				if (field.isAnnotationPresent(ColumnDefault.class)) {
+					ColumnDefault columnDefault = (ColumnDefault) field.getAnnotation(ColumnDefault.class);
+					fieldColumnMapper.setColumnDefault(columnDefault);
 				}
 				_logger.trace("FieldColumnMapper : " + fieldColumnMapper);
 				fieldColumnMapperList.add(fieldColumnMapper);

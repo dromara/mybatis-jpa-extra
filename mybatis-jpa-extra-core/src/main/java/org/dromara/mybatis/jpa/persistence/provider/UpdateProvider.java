@@ -59,14 +59,15 @@ public class UpdateProvider <T extends JpaBaseEntity>{
 			if(
 				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
 						||fieldColumnMapper.getFieldType().startsWith("byte")
+						||BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
 				)
 				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())== null
-				&& fieldColumnMapper.getGeneratedValue() == null) {
+				&& !fieldColumnMapper.isGenerated()) {
 				//skip null field value
 				_logger.trace("skip  field value is null ");
 			}else {
 				if(fieldColumnMapper.getColumnAnnotation().updatable()) {
-					if(fieldColumnMapper.getGeneratedValue() != null && fieldColumnMapper.getTemporalAnnotation() != null) {
+					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
 						sql.SET(fieldColumnMapper.getColumnName() + " = '" + DateConverter.convert(entity, fieldColumnMapper,true) + "'");
 					}else {
 						sql.SET(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
