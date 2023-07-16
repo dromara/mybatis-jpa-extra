@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa.entity;
 
 import java.util.List;
 import org.slf4j.Logger;

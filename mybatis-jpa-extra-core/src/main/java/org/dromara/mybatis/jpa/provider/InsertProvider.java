@@ -18,17 +18,17 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.persistence.provider;
+package org.dromara.mybatis.jpa.provider;
 
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
-import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
-import org.dromara.mybatis.jpa.persistence.JpaEntity;
-import org.dromara.mybatis.jpa.persistence.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

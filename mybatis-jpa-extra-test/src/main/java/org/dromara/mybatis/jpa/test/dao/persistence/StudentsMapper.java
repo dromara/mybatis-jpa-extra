@@ -21,7 +21,7 @@ package org.dromara.mybatis.jpa.test.dao.persistence;
 
 import java.util.List;
 
-import org.dromara.mybatis.jpa.persistence.IJpaMapper;
+import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
 
 /**

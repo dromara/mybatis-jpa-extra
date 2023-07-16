@@ -13,5 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
 
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa.entity;
+
+import org.apache.ibatis.mapping.BoundSql;
+
+public class PageResultsSqlCache {
+	
+	String sql;
+	
+	BoundSql boundSql;
+	
+	
+	public PageResultsSqlCache(String sql, BoundSql boundSql) {
+		super();
+		this.sql = sql;
+		this.boundSql = boundSql;
+	}
+
+	public String getSql() {
+		return sql;
+	}
+
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
+
+	public BoundSql getBoundSql() {
+		return boundSql;
+	}
+
+	public void setBoundSql(BoundSql boundSql) {
+		this.boundSql = boundSql;
+	}
+
+}

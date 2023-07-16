@@ -23,6 +23,7 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.dromara.mybatis.jpa.dialect.Dialect;
+import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

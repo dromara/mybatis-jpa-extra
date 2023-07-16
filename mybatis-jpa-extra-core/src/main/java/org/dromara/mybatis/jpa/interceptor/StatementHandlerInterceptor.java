@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa;
+package org.dromara.mybatis.jpa.interceptor;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -31,8 +31,9 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-import org.dromara.mybatis.jpa.persistence.JpaService;
-import org.dromara.mybatis.jpa.persistence.JpaPagination;
+import org.dromara.mybatis.jpa.JpaService;
+import org.dromara.mybatis.jpa.entity.JpaPagination;
+import org.dromara.mybatis.jpa.entity.PageResultsSqlCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

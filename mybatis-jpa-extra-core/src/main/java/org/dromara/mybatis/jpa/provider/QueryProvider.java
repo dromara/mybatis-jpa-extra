@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.dromara.mybatis.jpa.persistence.provider;
+package org.dromara.mybatis.jpa.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
-import org.dromara.mybatis.jpa.persistence.JpaEntity;
-import org.dromara.mybatis.jpa.persistence.MapperMetadata;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.query.Condition;
 import org.dromara.mybatis.jpa.query.Operator;
 import org.dromara.mybatis.jpa.query.Query;

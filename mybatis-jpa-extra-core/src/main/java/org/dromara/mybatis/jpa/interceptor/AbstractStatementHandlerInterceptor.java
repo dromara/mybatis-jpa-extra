@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa;
+package org.dromara.mybatis.jpa.interceptor;
 
 import java.util.StringTokenizer;
 import org.apache.ibatis.executor.statement.RoutingStatementHandler;

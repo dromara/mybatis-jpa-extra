@@ -16,7 +16,7 @@
 
 package org.dromara.mybatis.jpa.test.dao.service;
 
-import org.dromara.mybatis.jpa.persistence.JpaService;
+import org.dromara.mybatis.jpa.JpaService;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.springframework.stereotype.Service;

@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa;
+package org.dromara.mybatis.jpa.spring;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa.metadata;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

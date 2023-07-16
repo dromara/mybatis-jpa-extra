@@ -1,6 +1,6 @@
-package org.dromara.mybatis.jpa.persistence.provider;
+package org.dromara.mybatis.jpa.metadata;
 
-public class SqlSyntax {
+public class SqlSyntaxConstants {
 	
 	public  final  static String SELECT 	= "select";
 	

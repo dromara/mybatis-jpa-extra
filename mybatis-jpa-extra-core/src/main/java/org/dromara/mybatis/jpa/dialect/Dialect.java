@@ -21,7 +21,7 @@ package org.dromara.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 
-import org.dromara.mybatis.jpa.persistence.JpaPagination;
+import org.dromara.mybatis.jpa.entity.JpaPagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
-import org.dromara.mybatis.jpa.persistence.JpaEntity;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

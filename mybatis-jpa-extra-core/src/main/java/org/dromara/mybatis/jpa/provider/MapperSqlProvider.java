@@ -18,17 +18,11 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa.provider;
 
 import java.util.Map;
 
-import org.dromara.mybatis.jpa.persistence.provider.DeleteProvider;
-import org.dromara.mybatis.jpa.persistence.provider.FindProvider;
-import org.dromara.mybatis.jpa.persistence.provider.GetProvider;
-import org.dromara.mybatis.jpa.persistence.provider.InsertProvider;
-import org.dromara.mybatis.jpa.persistence.provider.PageResultsCountProvider;
-import org.dromara.mybatis.jpa.persistence.provider.QueryProvider;
-import org.dromara.mybatis.jpa.persistence.provider.UpdateProvider;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

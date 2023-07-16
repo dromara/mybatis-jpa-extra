@@ -1,4 +1,4 @@
-package org.dromara.mybatis.jpa.persistence.provider;
+package org.dromara.mybatis.jpa.provider;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
+import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

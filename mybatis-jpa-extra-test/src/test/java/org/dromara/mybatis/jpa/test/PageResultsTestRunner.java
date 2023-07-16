@@ -19,7 +19,7 @@ package org.dromara.mybatis.jpa.test;
 
 import java.util.List;
 
-import org.dromara.mybatis.jpa.persistence.JpaPageResults;
+import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.BeforeAll;

@@ -18,14 +18,15 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.persistence.provider;
+package org.dromara.mybatis.jpa.provider;
 
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
-import org.dromara.mybatis.jpa.PageResultsSqlCache;
-import org.dromara.mybatis.jpa.persistence.JpaEntity;
-import org.dromara.mybatis.jpa.persistence.JpaService;
-import org.dromara.mybatis.jpa.persistence.JpaPagination;
+import org.dromara.mybatis.jpa.JpaService;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.entity.JpaPagination;
+import org.dromara.mybatis.jpa.entity.PageResultsSqlCache;
+import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.dromara.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
 		_logger.trace("Count original SQL  :\n{}" , selectSql);
 		
-		StringBuffer sql = new StringBuffer(SqlSyntax.SELECT +" "+ SqlSyntax.Functions.COUNT_ONE +" countrows_ ");
+		StringBuffer sql = new StringBuffer(SqlSyntaxConstants.SELECT +" "+ SqlSyntaxConstants.Functions.COUNT_ONE +" countrows_ ");
 		StringBuffer countSql = new StringBuffer();
 
 		if(boundSql.getParameterMappings() == null ||boundSql.getParameterMappings().isEmpty()) {
@@ -69,18 +70,18 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 		String countSqlLowerCase = countSql.toString().toLowerCase();
 		_logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
 		
-		if(countSqlLowerCase.indexOf(SqlSyntax.DISTINCT + " ")>0 //去重
-				||countSqlLowerCase.indexOf(" " + SqlSyntax.GROUPBY + " ")>0 //分组
-				||countSqlLowerCase.indexOf(" " + SqlSyntax.HAVING + " ")>0 //聚合函数
-				||(countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ") 
-						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntax.FROM + " ")
+		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")>0 //去重
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")>0 //分组
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")>0 //聚合函数
+				||(countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ") 
+						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntaxConstants.FROM + " ")
 				) //嵌套
 				) {
 			_logger.trace("Count SQL Complex ");
-			sql.append(SqlSyntax.FROM).append(" (").append(countSql).append(" ) count_table_");
+			sql.append(SqlSyntaxConstants.FROM).append(" (").append(countSql).append(" ) count_table_");
 		}else {
-			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.FROM + " ");
-			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntax.ORDERBY + " ");
+			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ");
+			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.ORDERBY + " ");
 			_logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
 			if(orderByIndex > -1) {
 				sql.append(countSql.substring(fromIndex,orderByIndex));

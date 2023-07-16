@@ -18,15 +18,15 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.persistence.provider;
+package org.dromara.mybatis.jpa.provider;
 
 import java.sql.Types;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.dromara.mybatis.jpa.persistence.JpaEntity;
-import org.dromara.mybatis.jpa.persistence.MapperMetadata;
-import org.dromara.mybatis.jpa.persistence.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

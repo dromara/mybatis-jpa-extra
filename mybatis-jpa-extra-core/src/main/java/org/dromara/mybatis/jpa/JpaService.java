@@ -15,14 +15,16 @@
  */
  
 
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.dromara.mybatis.jpa.PageResultsSqlCache;
+import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.entity.PageResultsSqlCache;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.dromara.mybatis.jpa.util.InstanceUtil;

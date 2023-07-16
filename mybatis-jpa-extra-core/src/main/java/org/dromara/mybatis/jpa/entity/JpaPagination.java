@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

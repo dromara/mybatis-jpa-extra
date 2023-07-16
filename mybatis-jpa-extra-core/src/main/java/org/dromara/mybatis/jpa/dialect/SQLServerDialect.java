@@ -21,7 +21,7 @@ package org.dromara.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.dromara.mybatis.jpa.persistence.JpaPagination;
+import org.dromara.mybatis.jpa.entity.JpaPagination;
 
 public class SQLServerDialect extends Dialect {
 

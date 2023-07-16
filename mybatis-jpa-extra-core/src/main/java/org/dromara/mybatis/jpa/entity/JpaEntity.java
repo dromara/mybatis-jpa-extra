@@ -15,13 +15,14 @@
  */
  
 
-package org.dromara.mybatis.jpa.persistence;
+package org.dromara.mybatis.jpa.entity;
 
 import java.io.Serializable;
 import java.util.UUID;
 
 import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 
 /**
  * Base Entity for Database Table Entity
