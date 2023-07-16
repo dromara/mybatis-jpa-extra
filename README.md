@@ -39,7 +39,7 @@
 
 @Entity
 @Table(name = "STUDENTS")  
-public class Students extends JpaBaseEntity implements Serializable{
+public class Students extends JpaEntity implements Serializable{
 
 	@Id
 	@Column
