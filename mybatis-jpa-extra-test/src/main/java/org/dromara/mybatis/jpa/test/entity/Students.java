@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
-import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
+import org.dromara.mybatis.jpa.persistence.JpaEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,7 +46,7 @@ import jakarta.persistence.TemporalType;
  */
 @Entity
 @Table(name = "STUDENTS")
-public class Students extends JpaBaseEntity implements Serializable {
+public class Students extends JpaEntity implements Serializable {
 	/**
 	 * 
 	 */
@@ -54,7 +54,7 @@ public class Students extends JpaBaseEntity implements Serializable {
 
 	@Id
 	@Column
-	//@GeneratedValue
+	@GeneratedValue
 	// @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
 	// @GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
@@ -63,6 +63,7 @@ public class Students extends JpaBaseEntity implements Serializable {
 	@Column
 	private String stdName;
 	@Column
+	@ColumnDefault("'M'")
 	private String stdGender;
 	@Column
 	private int stdAge;

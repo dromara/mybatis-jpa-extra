@@ -31,7 +31,7 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-import org.dromara.mybatis.jpa.persistence.JpaBaseService;
+import org.dromara.mybatis.jpa.persistence.JpaService;
 import org.dromara.mybatis.jpa.persistence.JpaPagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +78,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, pagination);
 					}else if(statement instanceof PreparedStatementHandler){
-						JpaBaseService.pageResultsBoundSqlCache.put(
+						JpaService.pageResultsBoundSqlCache.put(
 								pagination.getPageResultSelectUUID(), 
 								new PageResultsSqlCache(sql,boundSql)
 								);

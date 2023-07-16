@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
-import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
+import org.dromara.mybatis.jpa.persistence.JpaEntity;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata.SQL_TYPE;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class DeleteProvider <T extends JpaBaseEntity>{
+public class DeleteProvider <T extends JpaEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
 	

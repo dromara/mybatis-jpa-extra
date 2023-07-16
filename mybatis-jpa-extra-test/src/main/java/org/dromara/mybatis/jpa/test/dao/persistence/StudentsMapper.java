@@ -21,7 +21,7 @@ package org.dromara.mybatis.jpa.test.dao.persistence;
 
 import java.util.List;
 
-import org.dromara.mybatis.jpa.persistence.IJpaBaseMapper;
+import org.dromara.mybatis.jpa.persistence.IJpaMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
 
 /**
@@ -29,6 +29,6 @@ import org.dromara.mybatis.jpa.test.entity.Students;
  *
  */
 
-public interface StudentsMapper extends IJpaBaseMapper<Students> {
+public interface StudentsMapper extends IJpaMapper<Students> {
 	public List<Students> queryPageResults1(Students entity);
 }

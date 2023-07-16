@@ -29,7 +29,7 @@ import org.dromara.mybatis.jpa.query.Query;
  * @author Crystal.sea
  * @param <T>
  */
-public interface IJpaBaseMapper<T> {
+public interface IJpaMapper<T> {
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);

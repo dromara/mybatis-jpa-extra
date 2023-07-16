@@ -28,7 +28,7 @@ import org.dromara.mybatis.jpa.id.IdStrategy;
  * @author Crystal.sea
  * 
  */
-public class JpaBaseEntity extends JpaPagination implements Serializable{
+public class JpaEntity extends JpaPagination implements Serializable{
 	/**
 	 * 
 	 */

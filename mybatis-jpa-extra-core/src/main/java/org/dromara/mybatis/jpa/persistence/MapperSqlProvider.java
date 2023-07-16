@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class MapperSqlProvider <T extends JpaBaseEntity>{
+public class MapperSqlProvider <T extends JpaEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperSqlProvider.class);
 	

@@ -45,7 +45,7 @@ import jakarta.persistence.Transient;
  * @author Crystal.Sea
  *
  */
-public class MapperMetadata <T extends JpaBaseEntity>{
+public class MapperMetadata <T extends JpaEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	

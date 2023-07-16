@@ -37,7 +37,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
-import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
+import org.dromara.mybatis.jpa.persistence.JpaEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,11 +80,11 @@ public class AllStatementHandlerInterceptor extends
 			String sql = boundSql.getSql();
 			_logger.debug("prepare  boundSql : {}" , sql);
 			_logger.trace("startsWith select : {}" , sql.toLowerCase().trim().startsWith("select"));
-			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaBaseEntity)) {
+			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaEntity)) {
 				if(statement instanceof SimpleStatementHandler){
-					sql = dialect.getLimitString(sql, (JpaBaseEntity)parameterObject);
+					sql = dialect.getLimitString(sql, (JpaEntity)parameterObject);
 				}else if(statement instanceof PreparedStatementHandler){
-					sql = dialect.getPreparedStatementLimitString(sql, (JpaBaseEntity)parameterObject);
+					sql = dialect.getPreparedStatementLimitString(sql, (JpaEntity)parameterObject);
 				}
 			}
 			metaObject.setValue("boundSql.sql", sql);
@@ -105,12 +105,12 @@ public class AllStatementHandlerInterceptor extends
 			
 			if (
 					boundSql.getSql().toLowerCase().trim().startsWith("select") 
-					&& (parameterObject instanceof JpaBaseEntity)
+					&& (parameterObject instanceof JpaEntity)
 			) {
 				List<ParameterMapping>  pms= boundSql.getParameterMappings();
 				_logger.debug("ParameterMapping " + pms);
 				int parameterSize = pms.size();
-				dialect.setLimitParamters(ps, parameterSize,(JpaBaseEntity)parameterObject);
+				dialect.setLimitParamters(ps, parameterSize,(JpaEntity)parameterObject);
 			}
 		}
 		return invocation.proceed();

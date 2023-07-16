@@ -23,7 +23,7 @@ package org.dromara.mybatis.jpa.persistence.provider;
 import java.util.List;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
-import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
+import org.dromara.mybatis.jpa.persistence.JpaEntity;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class UpdateProvider <T extends JpaBaseEntity>{
+public class UpdateProvider <T extends JpaEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
 

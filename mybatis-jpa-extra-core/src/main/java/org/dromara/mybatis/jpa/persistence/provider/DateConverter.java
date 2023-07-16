@@ -18,29 +18,23 @@ public class DateConverter{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(DateConverter.class);
 	
+	private static final String TIMESTAMP_FORMATTER = "yyyy-MM-dd HH:mm:ss";
+	private static final String DATE_FORMATTER 		= "yyyy-MM-dd";
+	private static final String TIME_FORMATTER 		= "HH:mm:ss";
+			
 	public static  String convert(Object entity ,FieldColumnMapper fieldColumnMapper,boolean isUpdate) {
 		String dateValue = "";
-		if(isUpdate) {
-			return convertDateTime(LocalDateTime.now(),fieldColumnMapper);
-		}
-		if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
-			if(BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
-					|| BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == "") {
-				dateValue = convertDateTime(LocalDateTime.now(),fieldColumnMapper);
-			}else {
-				dateValue = BeanUtil.get(entity, fieldColumnMapper.getFieldName()).toString();
-			}
-		}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Date")) {
-			Date date =(Date)BeanUtil.get(entity, fieldColumnMapper.getFieldName());
+		Date date = (Date)BeanUtil.get(entity, fieldColumnMapper.getFieldName());
+		if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Date")) {
 			if(date == null) {
 				dateValue = convertDateTime(LocalDateTime.now(),fieldColumnMapper);
 			}else {
 				if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.TIMESTAMP) {
-					dateValue = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+					dateValue = new SimpleDateFormat(TIMESTAMP_FORMATTER).format(date);
 				}else if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.DATE) {
-					dateValue = new SimpleDateFormat("yyyy-MM-dd").format(date);
+					dateValue = new SimpleDateFormat(DATE_FORMATTER).format(date);
 				}else if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.TIME) {
-					dateValue = new SimpleDateFormat("HH:mm:ss").format(date);
+					dateValue = new SimpleDateFormat(TIME_FORMATTER).format(date);
 				}
 			}
 		}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("LocalDate")) {
@@ -48,13 +42,13 @@ public class DateConverter{
 			if(localDate == null) {
 				localDate = LocalDate.now();
 			}
-			dateValue = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			dateValue = localDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
 		}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("LocalTime")) {
 			LocalTime localTime =(LocalTime)BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 			if(localTime == null) {
 				localTime = LocalTime.now();
 			}
-			dateValue = localTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+			dateValue = localTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
 		}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("LocalDateTime")) {
 			LocalDateTime localDateTime =(LocalDateTime)BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 			if(localDateTime == null) {
@@ -68,11 +62,11 @@ public class DateConverter{
 	
 	public static String convertDateTime(LocalDateTime localDateTime ,FieldColumnMapper fieldColumnMapper) {
 		if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.TIMESTAMP) {
-			return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			return localDateTime.format(DateTimeFormatter.ofPattern(TIMESTAMP_FORMATTER));
 		}else if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.DATE) {
-			return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			return localDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
 		}else{
-			return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+			return localDateTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
 		}
 	}
 }

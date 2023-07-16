@@ -18,7 +18,7 @@ package org.dromara.mybatis.jpa.persistence.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
-import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
+import org.dromara.mybatis.jpa.persistence.JpaEntity;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata;
 import org.dromara.mybatis.jpa.query.Condition;
 import org.dromara.mybatis.jpa.query.Operator;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class QueryProvider<T extends JpaBaseEntity> {
+public class QueryProvider<T extends JpaEntity> {
 
 	private static final Logger _logger = LoggerFactory.getLogger(QueryProvider.class);
 

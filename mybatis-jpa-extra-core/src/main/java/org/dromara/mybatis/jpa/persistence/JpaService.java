@@ -41,9 +41,9 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *
  * @param <T>
  */
-public  class  JpaBaseService <T extends JpaBaseEntity> {
+public  class  JpaService <T extends JpaEntity> {
 	
-	final static Logger _logger = LoggerFactory.getLogger(JpaBaseService.class);
+	final static Logger _logger = LoggerFactory.getLogger(JpaService.class);
 	
 	@JsonIgnore
 	//定义全局缓存
@@ -68,16 +68,16 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * mapper 
 	 */
 	@JsonIgnore
-	private IJpaBaseMapper<T> mapper = null;
+	private IJpaMapper<T> mapper = null;
 	
-	public JpaBaseService() {}
+	public JpaService() {}
 	
 	/**
 	 * Load mapperClass by class type
 	 * @param cls
 	 */
 	@SuppressWarnings("unchecked")
-	public JpaBaseService(@SuppressWarnings("rawtypes") Class cls) {
+	public JpaService(@SuppressWarnings("rawtypes") Class cls) {
 		_logger.trace("class : {}" , cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
@@ -94,12 +94,12 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 *  Load mapperClass by class name
 	 * @param mapperClass
 	 */
-	public JpaBaseService(String mapperClass) {
+	public JpaService(String mapperClass) {
 		_logger.trace("class : {}" , mapperClass);
 		this.mapperClass = mapperClass;
 	}
 
-	public void setMapper(IJpaBaseMapper<T> mapper) {
+	public void setMapper(IJpaMapper<T> mapper) {
 		this.mapper = mapper;
 	}
 	
@@ -109,12 +109,12 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * @return IBaseMapper
 	 */
 	@SuppressWarnings( { "unchecked" })
-	public IJpaBaseMapper<T> getMapper() {
+	public IJpaMapper<T> getMapper() {
 		try {
 			if(mapper == null) {
 				String mapperClassBean = StringUtils.firstToLowerCase(mapperClass);
 				_logger.info("mapperClass Bean is {}" , mapperClassBean);
-				mapper = (IJpaBaseMapper<T>) MybatisJpaContext.getBean(mapperClassBean);
+				mapper = (IJpaMapper<T>) MybatisJpaContext.getBean(mapperClassBean);
 			}
 		} catch(Exception e) {
 			_logger.error("getMapper Exception " , e);
@@ -525,7 +525,7 @@ public  class  JpaBaseService <T extends JpaBaseEntity> {
 	 * @param totalCount
 	 * @return
 	 */
-	public Integer calculateTotalPage(JpaBaseEntity entity,Integer totalCount){
+	public Integer calculateTotalPage(JpaEntity entity,Integer totalCount){
 		return (totalCount + entity.getPageSize() - 1) / entity.getPageSize();
 	}
 	

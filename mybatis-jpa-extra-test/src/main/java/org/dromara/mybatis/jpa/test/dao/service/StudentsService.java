@@ -16,13 +16,13 @@
 
 package org.dromara.mybatis.jpa.test.dao.service;
 
-import org.dromara.mybatis.jpa.persistence.JpaBaseService;
+import org.dromara.mybatis.jpa.persistence.JpaService;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentsService extends JpaBaseService<Students> {
+public class StudentsService extends JpaService<Students> {
 
 	public StudentsService() {
 		super(StudentsMapper.class);

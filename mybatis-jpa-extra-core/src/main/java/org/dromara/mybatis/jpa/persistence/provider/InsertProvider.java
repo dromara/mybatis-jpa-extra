@@ -27,7 +27,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.persistence.FieldColumnMapper;
-import org.dromara.mybatis.jpa.persistence.JpaBaseEntity;
+import org.dromara.mybatis.jpa.persistence.JpaEntity;
 import org.dromara.mybatis.jpa.persistence.MapperMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ import jakarta.persistence.GenerationType;
  * @author Crystal.Sea
  *
  */
-public class InsertProvider <T extends JpaBaseEntity>{
+public class InsertProvider <T extends JpaEntity>{
 	
 	private static final Logger _logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
 	
