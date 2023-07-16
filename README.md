@@ -12,13 +12,16 @@
 ## 1、JPA 3注释
 
 ## 1.1、注释
-仅支持6个注释
+支持9个注释
 > * @Entity
 > * @Table
 > * @Column
 > * @Id
 > * @GeneratedValue
 > * @Transient 
+> * @Temporal
+> * @ColumnDefault
+> * @PartitionKey
 
 ## 1.2、主键策略
 
@@ -40,13 +43,16 @@ public class Students extends JpaBaseEntity implements Serializable{
 
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
+	@GeneratedValue
+	//@GeneratedValue(strategy=GenerationType.AUTO,generator="snowflakeid")
+	//@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
 	private String id;
 	@Column
 	private String stdNo;
 	@Column
 	private String stdName;
 	@Column
+	@ColumnDefault("'M'")
 	private String stdGender;
 	@Column
 	private int stdAge;
@@ -56,7 +62,10 @@ public class Students extends JpaBaseEntity implements Serializable{
 	private String stdClass;
 	@Column
 	private byte[] images;
-
+	@Column(insertable = false)
+	@GeneratedValue
+	@Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime modifyDate;
 	//getter setter
 }
 ```

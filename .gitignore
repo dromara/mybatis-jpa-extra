@@ -17,3 +17,4 @@ jdk/*
 */.classpath
 *.xml.versionsBackup
 */*.xml.versionsBackup
+.vscode/settings.json
