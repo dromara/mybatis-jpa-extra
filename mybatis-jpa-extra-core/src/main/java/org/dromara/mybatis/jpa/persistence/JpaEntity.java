@@ -21,22 +21,21 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import org.dromara.mybatis.jpa.id.IdStrategy;
+import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 
 /**
- * BaseDomain for Database Table domain
+ * Base Entity for Database Table Entity
  * 
  * @author Crystal.sea
  * 
  */
 public class JpaEntity extends JpaPagination implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6290127045507211154L;
-	
+
+	private static final long serialVersionUID = -6984977786868857466L;
+
 	public String generateId() {
-		if(MapperMetadata.identifierGeneratorFactory!=null) {
-			return MapperMetadata.identifierGeneratorFactory.generate(IdStrategy.SNOWFLAKEID);
+		if(MapperMetadata.identifierGeneratorFactory != null) {
+			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
 		}else {
 			return UUID.randomUUID().toString().toLowerCase();
 		}

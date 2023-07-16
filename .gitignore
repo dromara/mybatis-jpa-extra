@@ -18,3 +18,4 @@ jdk/*
 *.xml.versionsBackup
 */*.xml.versionsBackup
 .vscode/settings.json
+.vscode/launch.json

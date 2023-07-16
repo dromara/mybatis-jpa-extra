@@ -18,7 +18,6 @@ package org.dromara.mybatis.jpa.test.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.persistence.JpaEntity;
@@ -78,7 +77,7 @@ public class Students extends JpaEntity implements Serializable {
 	@GeneratedValue
 	@Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
-
+	
 	public Students() {
 		super();
 	}
