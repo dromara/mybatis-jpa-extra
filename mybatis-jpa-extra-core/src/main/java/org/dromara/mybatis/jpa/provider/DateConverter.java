@@ -24,8 +24,8 @@ public class DateConverter{
 			
 	public static  String convert(Object entity ,FieldColumnMapper fieldColumnMapper,boolean isUpdate) {
 		String dateValue = "";
-		Date date = (Date)BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 		if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Date")) {
+			Date date = (Date)BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 			if(date == null) {
 				dateValue = convertDateTime(LocalDateTime.now(),fieldColumnMapper);
 			}else {

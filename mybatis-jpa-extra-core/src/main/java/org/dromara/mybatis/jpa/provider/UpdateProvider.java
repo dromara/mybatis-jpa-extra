@@ -48,14 +48,19 @@ public class UpdateProvider <T extends JpaEntity>{
 		SQL sql = new SQL()
 			.UPDATE(MapperMetadata.getTableName(entity.getClass()));
 		
-		for (int i = 0; i < listFields.size(); i++) {
-			FieldColumnMapper fieldColumnMapper = listFields.get(i);
+		FieldColumnMapper partitionKey = null;
+		FieldColumnMapper idFieldColumnMapper = null;
+		for(FieldColumnMapper fieldColumnMapper : listFields) {
 			_logger.trace("Field {} , Type {}",
 							fieldColumnMapper.getFieldName(), fieldColumnMapper.getFieldType());
-			if (fieldColumnMapper.isIdColumn()) {
+			if (fieldColumnMapper.isIdColumn() ) {
+				idFieldColumnMapper = fieldColumnMapper;
 				continue;
 			}
-			
+			if(fieldColumnMapper.getPartitionKey() != null) {
+				partitionKey = fieldColumnMapper;
+				continue;
+			}
 			if(
 				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
 						||fieldColumnMapper.getFieldType().startsWith("byte")
@@ -64,22 +69,36 @@ public class UpdateProvider <T extends JpaEntity>{
 				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())== null
 				&& !fieldColumnMapper.isGenerated()) {
 				//skip null field value
-				_logger.trace("skip  field value is null ");
+				_logger.trace("skip  field {} value is null ",fieldColumnMapper.getFieldName());
 			}else {
 				if(fieldColumnMapper.getColumnAnnotation().updatable()) {
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
-						sql.SET(fieldColumnMapper.getColumnName() + " = '" + DateConverter.convert(entity, fieldColumnMapper,true) + "'");
+						sql.SET(" %s =  '%s' ".formatted(fieldColumnMapper.getColumnName(),DateConverter.convert(entity, fieldColumnMapper,true)));
 					}else {
-						sql.SET(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
+						sql.SET(" %s = #{%s} ".formatted(fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName()));
 					}
 				}
 			}
 		}
-		
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entity.getClass().getSimpleName());
-		sql.WHERE(idFieldColumnMapper.getColumnName() + " = #{" + idFieldColumnMapper.getFieldName() + "}");
-		_logger.trace("Update SQL : \n{}" , sql);
-		return sql.toString();
+		if(idFieldColumnMapper != null) {
+			if(partitionKey != null) {
+				sql.WHERE("""
+						%s = #{%s}
+						and %s = #{%s}
+						""".formatted(
+								partitionKey.getColumnName(),
+								partitionKey.getFieldName(),
+								idFieldColumnMapper.getColumnName(),
+								idFieldColumnMapper.getFieldName())
+						);
+			}else {
+				sql.WHERE("%s = #{%s}" .formatted(idFieldColumnMapper.getColumnName(),idFieldColumnMapper.getFieldName()));
+			}
+			_logger.trace("Update SQL : \n{}" , sql);
+			return sql.toString();
+		}else {
+			return "";
+		}
 	}
 
 }

@@ -18,6 +18,7 @@
 package org.dromara.mybatis.jpa.metadata;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.PartitionKey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -44,6 +45,8 @@ public class FieldColumnMapper {
 	private Temporal 		temporalAnnotation;
 	
 	private ColumnDefault   columnDefault;
+	
+	private PartitionKey    partitionKey;
 	
 	public FieldColumnMapper() {
 		
@@ -126,6 +129,14 @@ public class FieldColumnMapper {
 
 	public void setColumnDefault(ColumnDefault columnDefault) {
 		this.columnDefault = columnDefault;
+	}
+	
+	public PartitionKey getPartitionKey() {
+		return partitionKey;
+	}
+
+	public void setPartitionKey(PartitionKey partitionKey) {
+		this.partitionKey = partitionKey;
 	}
 
 	@Override

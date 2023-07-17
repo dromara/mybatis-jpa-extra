@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
@@ -158,6 +159,18 @@ public class MapperMetadata <T extends JpaEntity>{
 		}
 		return idFieldColumnMapper;
 	}
+	
+	public static  FieldColumnMapper getPartitionKey(String  classSimpleName) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+		FieldColumnMapper partitionKeyColumnMapper = null;
+		for (FieldColumnMapper column : listFields) {
+			if (column.getPartitionKey() != null) {
+				partitionKeyColumnMapper = column;
+				break;
+			}
+		}
+		return partitionKeyColumnMapper;
+	}
 
 	/**
 	 * get select table Column from entityClass, data cache in fieldsMap
@@ -203,7 +216,7 @@ public class MapperMetadata <T extends JpaEntity>{
 			return;
 		}
 		
-		_logger.trace("entityClass " +entityClass);
+		_logger.trace("entityClass {}" , entityClass);
 		
 		Field[] fields = entityClass.getDeclaredFields();
 		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<FieldColumnMapper>(fields.length);
@@ -240,19 +253,23 @@ public class MapperMetadata <T extends JpaEntity>{
 				}
 				
 				if(field.isAnnotationPresent(GeneratedValue.class)) {
-					GeneratedValue generatedValue=(GeneratedValue) field.getAnnotation(GeneratedValue.class);
+					GeneratedValue generatedValue=field.getAnnotation(GeneratedValue.class);
 					fieldColumnMapper.setGeneratedValue(generatedValue);
 					fieldColumnMapper.setGenerated(true);
 				}
 				if (field.isAnnotationPresent(Temporal.class)) {
-					Temporal temporalAnnotation = (Temporal) field.getAnnotation(Temporal.class);
+					Temporal temporalAnnotation = field.getAnnotation(Temporal.class);
 					fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
 				}
 				if (field.isAnnotationPresent(ColumnDefault.class)) {
-					ColumnDefault columnDefault = (ColumnDefault) field.getAnnotation(ColumnDefault.class);
+					ColumnDefault columnDefault = field.getAnnotation(ColumnDefault.class);
 					fieldColumnMapper.setColumnDefault(columnDefault);
 				}
-				_logger.trace("FieldColumnMapper : " + fieldColumnMapper);
+				if (field.isAnnotationPresent(PartitionKey.class)) {
+					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
+					fieldColumnMapper.setPartitionKey(partitionKey);
+				}
+				_logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
 				fieldColumnMapperList.add(fieldColumnMapper);
 			}
 			
@@ -260,7 +277,7 @@ public class MapperMetadata <T extends JpaEntity>{
 		}
 		
 		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);
-		_logger.trace("fieldsMap : " + fieldsMap);
+		_logger.trace("fieldsMap : {}" , fieldsMap);
 
 	}
 	

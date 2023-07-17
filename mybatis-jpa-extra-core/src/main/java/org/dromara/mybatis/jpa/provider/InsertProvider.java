@@ -69,7 +69,7 @@ public class InsertProvider <T extends JpaEntity>{
 					&& StringUtils.isBlank(BeanUtil.getValue(entity, fieldColumnMapper.getFieldName()))
 					&& !fieldColumnMapper.isGenerated()) {
 					//skip null field value
-					_logger.trace("skip  field value is null ");
+					_logger.trace("skip  field {} value is null ",fieldColumnMapper.getFieldName());
 				}else {
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
 						sql.VALUES(fieldColumnMapper.getColumnName(),"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
@@ -80,12 +80,12 @@ public class InsertProvider <T extends JpaEntity>{
 							)) {
 						generatedValue(sql , entity , fieldColumnMapper);
 					}else {
-						sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+						sql.VALUES(fieldColumnMapper.getColumnName(),"#{%s}".formatted(fieldColumnMapper.getFieldName()));
 					}
 				}
 			}
 		}
-		_logger.trace("Insert SQL : \n" + sql);
+		_logger.trace("Insert SQL : \n{}" , sql);
 		return sql.toString();
 	}
 	
@@ -102,7 +102,7 @@ public class InsertProvider <T extends JpaEntity>{
 				genValue = IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
 			}
 			BeanUtil.set(entity, fieldColumnMapper.getFieldName(),genValue);
-			sql.VALUES(fieldColumnMapper.getColumnName(),"#{" + fieldColumnMapper.getFieldName() + "}");
+			sql.VALUES(fieldColumnMapper.getColumnName(),"#{%s}".formatted(fieldColumnMapper.getFieldName()));
 		}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
 			sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
 		}else if(generatedValue.strategy()==GenerationType.IDENTITY){

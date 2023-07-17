@@ -45,16 +45,30 @@ public class DeleteProvider <T extends JpaEntity>{
 		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
 			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.REMOVE_SQL);
 		}
-		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn((entityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn((entityClass).getSimpleName());
+		FieldColumnMapper partitionKey = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
 		
 		SQL sql=new SQL()
-        	.DELETE_FROM(tableName)
-        	.WHERE(idFieldColumnMapper.getColumnName() 
-        			+ " = #{" +idFieldColumnMapper.getFieldName() + ",javaType=string,jdbcType=VARCHAR}");  
+        	.DELETE_FROM(tableName);
+		if(partitionKey!=null) {
+			sql.WHERE("""
+					%s = #{%s,javaType=string,jdbcType=VARCHAR}
+					and
+					%s  = #{%s,javaType=string,jdbcType=VARCHAR}
+					""".formatted(
+							partitionKey.getColumnName() ,
+							partitionKey.getFieldName(),
+							idFieldColumnMapper.getColumnName(),
+							idFieldColumnMapper.getFieldName())
+        			);  
+		}else {
+			sql.WHERE("%s = #{%s,javaType=string,jdbcType=VARCHAR}"
+					.formatted(idFieldColumnMapper.getColumnName(),idFieldColumnMapper.getFieldName()) );  
+		}
 		
         String deleteSql = sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.REMOVE_SQL,deleteSql);
-        _logger.trace("Delete SQL \n"+deleteSql);
+        _logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     }  
 	
@@ -68,7 +82,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
 				keyValue += ",'" + value + "'";
-				_logger.trace("batch delete by id " + value);
+				_logger.trace("batch delete by id {}" , value);
 			}
 		}
 		//remove ;
@@ -81,7 +95,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		
         String deleteSql=sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
-        _logger.trace("Delete SQL \n" + deleteSql);
+        _logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
 	
@@ -95,7 +109,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
 				keyValue += ",'" + value + "'";
-				_logger.trace("logic delete by id " + value);
+				_logger.trace("logic delete by id {}" , value);
 			}
 		}
 		//remove ;
@@ -109,7 +123,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		
         String deleteSql = sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
-        _logger.trace("logic Delete SQL \n" + deleteSql);
+        _logger.trace("logic Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
 	
