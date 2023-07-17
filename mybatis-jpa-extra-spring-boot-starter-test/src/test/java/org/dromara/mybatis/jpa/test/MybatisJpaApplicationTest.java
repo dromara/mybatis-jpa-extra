@@ -20,9 +20,9 @@ package org.dromara.mybatis.jpa.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
-import org.dromara.mybatis.jpa.util.MybatisJpaContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

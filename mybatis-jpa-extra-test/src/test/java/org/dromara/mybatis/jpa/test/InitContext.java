@@ -3,8 +3,8 @@ package org.dromara.mybatis.jpa.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
-import org.dromara.mybatis.jpa.util.MybatisJpaContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

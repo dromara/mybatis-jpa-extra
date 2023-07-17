@@ -15,10 +15,11 @@
  */
  
 
-package org.dromara.mybatis.jpa.util;
+package org.dromara.mybatis.jpa.spring;
+
+import java.time.LocalDateTime;
 
 import org.apache.commons.lang.SystemUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -106,7 +107,12 @@ public final class MybatisJpaContext {
 	 * @return HttpServletRequest
 	 */
 	public static HttpServletRequest getRequest(){
-		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+		ServletRequestAttributes servletRequestAttributes =(ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+		if(servletRequestAttributes !=  null) {
+			return servletRequestAttributes.getRequest();
+		}else {
+			return null;
+		}
 	}
 
 	/**
@@ -127,31 +133,32 @@ public final class MybatisJpaContext {
 
 	public static String version() {
 		if(VERSION == null) {
-			StringBuffer version =
-					new StringBuffer("---------------------------------------------------------------------------------\n");
-					  version.append("+                                MyBatis JPA Extra \n");
-					  version.append("+\n");
-					  version.append(String.format("+                 %sCopyright 2018 - %s https://gitee.com/dromara/mybatis-jpa-extra/\n",
-		        			    (char)0xA9 , new DateTime().getYear()
-		        			));
-					  version.append("+                 Licensed under the Apache License, Version 2.0 \n");
-	
-				        
-					  version.append("---------------------------------------------------------------------------------\n");
-					  version.append("+                                JAVA    \n");
-					  version.append(String.format("+                 %s java version %s, class %s\n",
-				                        SystemUtils.JAVA_VENDOR,
-				                        SystemUtils.JAVA_VERSION,
-				                        SystemUtils.JAVA_CLASS_VERSION
-				                    ));
-					  version.append(String.format("+                 %s (build %s, %s)\n",
-				                        SystemUtils.JAVA_VM_NAME,
-				                        SystemUtils.JAVA_VM_VERSION,
-				                        SystemUtils.JAVA_VM_INFO
-				                    ));
-					  version.append("---------------------------------------------------------------------------------\n");
-			 VERSION = version.toString();
+			return 
+					String.format("""
+						---------------------------------------------------------------------------------
+						-              JAVA    
+						-              %s java version %s, class %s
+						-              %s (build %s, %s)
+						---------------------------------------------------------------------------------
+						-                                MyBatis JPA Extra 
+						-						                                
+						-              %sCopyright 2018 - %s https://gitee.com/dromara/mybatis-jpa-extra/
+						-
+						-              Licensed under the Apache License, Version 2.0 
+						---------------------------------------------------------------------------------
+						""",
+						SystemUtils.JAVA_VENDOR,
+						SystemUtils.JAVA_VERSION,
+						SystemUtils.JAVA_CLASS_VERSION,
+						SystemUtils.JAVA_VM_NAME,
+						SystemUtils.JAVA_VM_VERSION,
+						SystemUtils.JAVA_VM_INFO,
+						(char)0xA9,
+						LocalDateTime.now().getYear()
+					);
 		}
 		return VERSION;
 	}
+	
+	
 }
