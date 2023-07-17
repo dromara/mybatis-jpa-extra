@@ -42,7 +42,7 @@ import jakarta.persistence.GenerationType;
  */
 public class InsertProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
 	
 	/**
 	 * @param entity
@@ -56,7 +56,7 @@ public class InsertProvider <T extends JpaEntity>{
 		
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper = listFields.get(i);
-			_logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
+			logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
 			if(fieldColumnMapper.getColumnAnnotation().insertable()) {
 				if(fieldColumnMapper.getColumnDefault() != null) {
 					sql.VALUES(fieldColumnMapper.getColumnName(),"" + fieldColumnMapper.getColumnDefault().value() + "");
@@ -69,7 +69,7 @@ public class InsertProvider <T extends JpaEntity>{
 					&& StringUtils.isBlank(BeanUtil.getValue(entity, fieldColumnMapper.getFieldName()))
 					&& !fieldColumnMapper.isGenerated()) {
 					//skip null field value
-					_logger.trace("skip  field {} value is null ",fieldColumnMapper.getFieldName());
+					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
 				}else {
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
 						sql.VALUES(fieldColumnMapper.getColumnName(),"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
@@ -85,7 +85,7 @@ public class InsertProvider <T extends JpaEntity>{
 				}
 			}
 		}
-		_logger.trace("Insert SQL : \n{}" , sql);
+		logger.trace("Insert SQL : \n{}" , sql);
 		return sql.toString();
 	}
 	

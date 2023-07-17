@@ -27,6 +27,7 @@ import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.Query;
 
 /**
+ * IJpa Mapper
  * @author Crystal.sea
  * @param <T>
  */

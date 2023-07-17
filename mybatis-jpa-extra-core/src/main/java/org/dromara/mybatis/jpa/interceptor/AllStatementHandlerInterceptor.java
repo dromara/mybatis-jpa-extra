@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 })
 public class AllStatementHandlerInterceptor extends
 		AbstractStatementHandlerInterceptor implements Interceptor {
-	protected Logger _logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
+	protected static Logger logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
 	
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
@@ -78,8 +78,8 @@ public class AllStatementHandlerInterceptor extends
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			_logger.debug("prepare  boundSql : {}" , sql);
-			_logger.trace("startsWith select : {}" , sql.toLowerCase().trim().startsWith("select"));
+			logger.debug("prepare  boundSql : {}" , sql);
+			logger.trace("startsWith select : {}" , sql.toLowerCase().trim().startsWith("select"));
 			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaEntity)) {
 				if(statement instanceof SimpleStatementHandler){
 					sql = dialect.getLimitString(sql, (JpaEntity)parameterObject);
@@ -98,7 +98,7 @@ public class AllStatementHandlerInterceptor extends
 			PreparedStatement ps = (PreparedStatement) statement;
 			StatementHandler statementHandler = getStatementHandler(invocation);
 			RowBounds rowBounds = getRowBounds(statementHandler);
-			_logger.debug(rowBounds.toString());
+			logger.debug("rowBounds {}", rowBounds);
 			MetaObject metaObject=SystemMetaObject.forObject(statementHandler);
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statementHandler.getBoundSql();
@@ -108,7 +108,7 @@ public class AllStatementHandlerInterceptor extends
 					&& (parameterObject instanceof JpaEntity)
 			) {
 				List<ParameterMapping>  pms= boundSql.getParameterMappings();
-				_logger.debug("ParameterMapping " + pms);
+				logger.debug("ParameterMapping {}" , pms);
 				int parameterSize = pms.size();
 				dialect.setLimitParamters(ps, parameterSize,(JpaEntity)parameterObject);
 			}

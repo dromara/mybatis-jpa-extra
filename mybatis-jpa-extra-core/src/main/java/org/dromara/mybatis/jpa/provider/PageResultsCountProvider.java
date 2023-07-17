@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PageResultsCountProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(PageResultsCountProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(PageResultsCountProvider.class);
 	
 	/**
 	 * @param entity
@@ -52,7 +52,7 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
 		
 		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
-		_logger.trace("Count original SQL  :\n{}" , selectSql);
+		logger.trace("Count original SQL  :\n{}" , selectSql);
 		
 		StringBuffer sql = new StringBuffer(SqlSyntaxConstants.SELECT +" "+ SqlSyntaxConstants.Functions.COUNT_ONE +" countrows_ ");
 		StringBuffer countSql = new StringBuffer();
@@ -68,7 +68,7 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 			countSql.append(selectSql);
 		}
 		String countSqlLowerCase = countSql.toString().toLowerCase();
-		_logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
+		logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
 		
 		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")>0 //去重
 				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")>0 //分组
@@ -77,12 +77,12 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntaxConstants.FROM + " ")
 				) //嵌套
 				) {
-			_logger.trace("Count SQL Complex ");
+			logger.trace("Count SQL Complex ");
 			sql.append(SqlSyntaxConstants.FROM).append(" (").append(countSql).append(" ) count_table_");
 		}else {
 			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ");
 			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.ORDERBY + " ");
-			_logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
+			logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
 			if(orderByIndex > -1) {
 				sql.append(countSql.substring(fromIndex,orderByIndex));
 			}else {
@@ -91,7 +91,7 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 		}
 		//删除缓存
 		JpaService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
-		_logger.trace("Count SQL : \n{}" , sql);
+		logger.trace("Count SQL : \n{}" , sql);
 		return sql.toString();
 	}
 	

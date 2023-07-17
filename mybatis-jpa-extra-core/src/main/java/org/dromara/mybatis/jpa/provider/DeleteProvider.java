@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DeleteProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
 	
 	public String remove(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
@@ -68,7 +68,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		
         String deleteSql = sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.REMOVE_SQL,deleteSql);
-        _logger.trace("Delete SQL \n{}" , deleteSql);
+        logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     }  
 	
@@ -78,24 +78,24 @@ public class DeleteProvider <T extends JpaEntity>{
 		MapperMetadata.buildColumnList(entityClass);
 		String tableName = MapperMetadata.getTableName(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
-		String keyValue="";
+		StringBuffer keyValue = new StringBuffer();
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
-				keyValue += ",'" + value + "'";
-				_logger.trace("batch delete by id {}" , value);
+				keyValue.append(",'").append(value).append("'");
+				logger.trace("logic delete by id {}" , value);
 			}
 		}
 		//remove ;
-		keyValue = keyValue.substring(1).replaceAll(";", "");
+		String keyValues = keyValue.substring(1).replaceAll(";", "");
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql=new SQL()
         	.DELETE_FROM(tableName)
-        	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
+        	.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),keyValues));  
 		
         String deleteSql=sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
-        _logger.trace("Delete SQL \n{}" , deleteSql);
+        logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
 	
@@ -105,25 +105,25 @@ public class DeleteProvider <T extends JpaEntity>{
 		MapperMetadata.buildColumnList(entityClass);
 		String tableName = MapperMetadata.getTableName(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get("idList");
-		String keyValue="";
+		StringBuffer keyValue = new StringBuffer();
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
-				keyValue += ",'" + value + "'";
-				_logger.trace("logic delete by id {}" , value);
+				keyValue.append(",'").append(value).append("'");
+				logger.trace("logic delete by id {}" , value);
 			}
 		}
-		//remove ;
-		keyValue = keyValue.substring(1).replaceAll(";", "");
+		
+		String keyValues = keyValue.substring(1).replaceAll(";", "");//remove ;
 		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql=new SQL()
         	.UPDATE(tableName)
         	.SET("status = 9")
-        	.WHERE(idFieldColumnMapper.getColumnName()+" in ( "+keyValue+" )");  
+        	.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),keyValues));  
 		
         String deleteSql = sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
-        _logger.trace("logic Delete SQL \n{}" , deleteSql);
+        logger.trace("logic Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
 	

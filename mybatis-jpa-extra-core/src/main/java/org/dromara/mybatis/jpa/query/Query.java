@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Query {
 
-	public final static class OrderType {
+	public static final  class OrderType {
 
-		public final static String ASC 	= "asc";
+		public static final String ASC 	= "asc";
 		
-		public final static String DESC = "desc";
+		public static final String DESC = "desc";
 	}
 	
 	ArrayList<Condition> conditions = new ArrayList<Condition>();

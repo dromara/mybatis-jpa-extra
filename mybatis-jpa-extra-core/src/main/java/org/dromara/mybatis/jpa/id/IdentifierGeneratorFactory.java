@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class IdentifierGeneratorFactory {
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(IdentifierGeneratorFactory.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(IdentifierGeneratorFactory.class);
 	
 	public static ConcurrentHashMap<String, IdentifierGenerator>identifierGeneratorMap = new ConcurrentHashMap<String, IdentifierGenerator>();
 	
@@ -57,7 +57,7 @@ public class IdentifierGeneratorFactory {
 			return;
 		}
 		IdentifierGeneratorFactory.identifierGeneratorMap.put(strategy, generator);
-		_logger.debug( "Registering IdentifierGenerator strategy [{}] -> [{}]", strategy, generator.getClass().getName() );
+		logger.debug( "Registering IdentifierGenerator strategy [{}] -> [{}]", strategy, generator.getClass().getName() );
 	}
 	
 	public static boolean exists(String strategy) {

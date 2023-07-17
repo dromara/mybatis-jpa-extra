@@ -32,7 +32,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
-import org.dromara.mybatis.jpa.MyBatisSessionFactoryBean;
+import org.dromara.mybatis.jpa.MyBatisJpaSessionFactoryBean;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata.CASE_TYPE;
@@ -143,7 +143,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
     //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
 	//mybatis-jpa
-    MyBatisSessionFactoryBean factory = new MyBatisSessionFactoryBean();
+    MyBatisJpaSessionFactoryBean factory = new MyBatisJpaSessionFactoryBean();
     factory.setDataSource(dataSource);
     if (properties.getConfiguration() == null || properties.getConfiguration().getVfsImpl() == null) {
       factory.setVfs(SpringBootVFS.class);

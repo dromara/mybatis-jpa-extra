@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FindProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(FindProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(FindProvider.class);
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
@@ -50,7 +50,7 @@ public class FindProvider <T extends JpaEntity>{
 		SQL sql=  MapperMetadata.buildSelect(entityClass);
 		
         String findAllSql = sql.toString(); 
-        _logger.trace("Find All SQL \n" + findAllSql);
+        logger.trace("Find All SQL \n{}" , findAllSql);
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.FINDALL_SQL,findAllSql);
         return findAllSql;  
     }
@@ -72,14 +72,14 @@ public class FindProvider <T extends JpaEntity>{
 		}else {
 			int countMatches = StringUtils.countMatches(filterSql, "?");
 			if(args.length < countMatches) {
-				_logger.error("args length {} < parameter placeholder {}" ,  countMatches,args.length);
+				logger.error("args length {} < parameter placeholder {}" ,  countMatches,args.length);
 				throw new Exception("args length < parameter placeholder");
 			}
 			
 			String filterSqls [] = filterSql.split("\\?");
 			StringBuffer sqlBuffer = new StringBuffer("");
 			for(int i = 0 ;i < args.length ; i++){
-				_logger.trace("Find args[{}] {}" , i, args[i]);
+				logger.trace("Find args[{}] {}" , i, args[i]);
 				if( argTypes[i] == Types.VARCHAR 
 						||argTypes[i] == Types.NVARCHAR 
 						||argTypes[i] == Types.CHAR
@@ -103,7 +103,7 @@ public class FindProvider <T extends JpaEntity>{
 		SQL sql = MapperMetadata.buildSelect(entityClass).WHERE(filterSql);
 		
         String findSql = sql.toString(); 
-        _logger.trace("Find SQL \n" + findSql);
+        logger.trace("Find SQL \n{}" , findSql);
 
         return findSql;  
     }

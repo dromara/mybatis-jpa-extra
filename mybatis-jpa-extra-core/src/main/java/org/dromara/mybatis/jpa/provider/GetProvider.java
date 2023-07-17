@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GetProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(GetProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(GetProvider.class);
 	
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
@@ -46,15 +46,14 @@ public class GetProvider <T extends JpaEntity>{
 			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.GET_SQL);
 		}
 		
-		FieldColumnMapper idFieldColumnMapper=MapperMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql = MapperMetadata.buildSelect(entityClass)
-        	.WHERE(idFieldColumnMapper.getColumnName() 
-        			+ " = #{"+idFieldColumnMapper.getFieldName() + "}");  
+        	.WHERE("%s = #{%s}".formatted(idFieldColumnMapper.getColumnName(),idFieldColumnMapper.getFieldName()));  
 		
         String getSql = sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.GET_SQL,getSql);
-        _logger.trace("Get SQL \n" + getSql);
+        logger.trace("Get SQL \n{}" , getSql);
         return getSql;  
     }
 }

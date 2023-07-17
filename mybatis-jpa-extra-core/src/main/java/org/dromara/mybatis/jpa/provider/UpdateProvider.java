@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UpdateProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
 
 	/**
 	 * @param entity
@@ -51,7 +51,7 @@ public class UpdateProvider <T extends JpaEntity>{
 		FieldColumnMapper partitionKey = null;
 		FieldColumnMapper idFieldColumnMapper = null;
 		for(FieldColumnMapper fieldColumnMapper : listFields) {
-			_logger.trace("Field {} , Type {}",
+			logger.trace("Field {} , Type {}",
 							fieldColumnMapper.getFieldName(), fieldColumnMapper.getFieldType());
 			if (fieldColumnMapper.isIdColumn() ) {
 				idFieldColumnMapper = fieldColumnMapper;
@@ -69,7 +69,7 @@ public class UpdateProvider <T extends JpaEntity>{
 				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())== null
 				&& !fieldColumnMapper.isGenerated()) {
 				//skip null field value
-				_logger.trace("skip  field {} value is null ",fieldColumnMapper.getFieldName());
+				logger.trace("skip {}({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
 			}else {
 				if(fieldColumnMapper.getColumnAnnotation().updatable()) {
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
@@ -94,7 +94,7 @@ public class UpdateProvider <T extends JpaEntity>{
 			}else {
 				sql.WHERE("%s = #{%s}" .formatted(idFieldColumnMapper.getColumnName(),idFieldColumnMapper.getFieldName()));
 			}
-			_logger.trace("Update SQL : \n{}" , sql);
+			logger.trace("Update SQL : \n{}" , sql);
 			return sql.toString();
 		}else {
 			return "";

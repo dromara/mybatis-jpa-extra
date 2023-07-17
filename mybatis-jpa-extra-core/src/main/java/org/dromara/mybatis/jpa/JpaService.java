@@ -39,13 +39,14 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 
 
 /**
+ * JPA Service
  * @author Crystal.Sea
  *
  * @param <T>
  */
 public  class  JpaService <T extends JpaEntity> {
 	
-	final static Logger _logger = LoggerFactory.getLogger(JpaService.class);
+	final static Logger logger = LoggerFactory.getLogger(JpaService.class);
 	
 	@JsonIgnore
 	//定义全局缓存
@@ -80,16 +81,16 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public JpaService(@SuppressWarnings("rawtypes") Class cls) {
-		_logger.trace("class : {}" , cls.getSimpleName());
+		logger.trace("class : {}" , cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 		if (pType != null && pType.length >= 1) {
 			this.entityClass = (Class<T>) pType[0];
 		} else {
-			_logger.error("invalide initail, need generic type parameter! ");
+			logger.error("invalide initail, need generic type parameter! ");
 			throw new RuntimeException("invalide initail, need generic type parameter!");
 		}
-		_logger.trace("class : {}" , entityClass.getSimpleName());
+		logger.trace("class : {}" , entityClass.getSimpleName());
 	}
 
 	/**
@@ -97,7 +98,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param mapperClass
 	 */
 	public JpaService(String mapperClass) {
-		_logger.trace("class : {}" , mapperClass);
+		logger.trace("class : {}" , mapperClass);
 		this.mapperClass = mapperClass;
 	}
 
@@ -115,11 +116,11 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			if(mapper == null) {
 				String mapperClassBean = StringUtils.firstToLowerCase(mapperClass);
-				_logger.info("mapperClass Bean is {}" , mapperClassBean);
+				logger.info("mapperClass Bean is {}" , mapperClassBean);
 				mapper = (IJpaMapper<T>) MybatisJpaContext.getBean(mapperClassBean);
 			}
 		} catch(Exception e) {
-			_logger.error("getMapper Exception " , e);
+			logger.error("getMapper Exception " , e);
 		} finally {
 			
 		}
@@ -169,7 +170,7 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
 		} catch (Exception e) {
-			_logger.error("queryPageResults Exception " , e);
+			logger.error("queryPageResults Exception " , e);
 		}
 		entity.setPageable(false);
 		Integer totalPage = resultslist.size();
@@ -197,9 +198,9 @@ public  class  JpaService <T extends JpaEntity> {
 				entity = (T) entityClass.getDeclaredConstructor().newInstance();
 			}
 			count = getMapper().queryPageResultsCount(entity);
-			_logger.debug("queryCount count : {}" , count);
+			logger.debug("queryCount count : {}" , count);
 		} catch(Exception e) {
-			_logger.error("queryPageResultsCount Exception " , e);
+			logger.error("queryPageResultsCount Exception " , e);
 		}
 		return count;
 	}
@@ -217,7 +218,7 @@ public  class  JpaService <T extends JpaEntity> {
 			}
 			return getMapper().query(entity);
 		} catch(Exception e) {
-			_logger.error("query Exception " , e);
+			logger.error("query Exception " , e);
 		}
 		return null;
 	}
@@ -232,7 +233,7 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			return getMapper().filterByQuery((T)entityClass.getDeclaredConstructor().newInstance(),query);
 		} catch(Exception e) {
-			_logger.error("query Exception " , e);
+			logger.error("query Exception " , e);
 		}
 		return null;
 	}
@@ -245,7 +246,7 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			return getMapper().findAll(this.entityClass);
 		} catch(Exception e) {
-			_logger.error("findAll Exception " , e);
+			logger.error("findAll Exception {}" , e);
 		}
 		return null;
 	}
@@ -267,7 +268,7 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			return getMapper().find(this.entityClass,filter ,args , argTypes);
 		} catch(Exception e) {
-			_logger.error("findAll Exception " , e);
+			logger.error("findAll Exception " , e);
 		}
 		return null;
 	}
@@ -296,7 +297,7 @@ public  class  JpaService <T extends JpaEntity> {
 			List<T> findList = find(filter ,args , argTypes);
 			return  (findList == null ||findList.size() == 0) ? null : findList.get(0);
 		} catch(Exception e) {
-			_logger.error("findAll Exception " , e);
+			logger.error("findAll Exception " , e);
 		}
 		return null;
 	}
@@ -323,7 +324,7 @@ public  class  JpaService <T extends JpaEntity> {
 			List<T> entityList = getMapper().query(entity);
 			return ((entityList != null) && ( entityList.size() > 0 ))?entityList.get(0) : null;
 		} catch(Exception e) {
-			_logger.error("load Exception " , e);
+			logger.error("load Exception " , e);
 		}
 		return null;
 	}
@@ -335,10 +336,10 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public T get(String id) {
 		try {
-			_logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , id);
+			logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , id);
 			return  getMapper().get(this.entityClass,id);
 		} catch(Exception e) {
-			_logger.error("get Exception " , e);
+			logger.error("get Exception " , e);
 		}
 		return null;
 	}
@@ -352,10 +353,10 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean insert(T entity) {
 		try {
 			Integer count = getMapper().insert(entity);
-			_logger.debug("insert count : {}" , count);
+			logger.debug("insert count : {}" , count);
 			return  count > 0;
 		} catch(Exception e) {
-			_logger.error("insert Exception " , e);
+			logger.error("insert Exception " , e);
 		}
 		return false;
 	}
@@ -374,11 +375,11 @@ public  class  JpaService <T extends JpaEntity> {
 						count ++;
 					}
 				}
-				_logger.debug("Insert Batch count : {}" , count);
+				logger.debug("Insert Batch count : {}" , count);
 				return count > 0;
 			}
 		} catch(Exception e) {
-			_logger.error("Insert Batch Exception " , e);
+			logger.error("Insert Batch Exception " , e);
 		}
 		return false;
 	}
@@ -414,10 +415,10 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean update(T entity) {
 		try {
 			Integer count=getMapper().update(entity);
-			_logger.debug("update count : {}" , count);
+			logger.debug("update count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("update Exception " , e);
+			logger.error("update Exception " , e);
 		}
 		return false;
 	}
@@ -430,10 +431,10 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean delete(T entity) {
 		try {
 			Integer count=getMapper().delete(entity);
-			_logger.debug("delete count : {}" , count);
+			logger.debug("delete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("delete Exception " , e);
+			logger.error("delete Exception " , e);
 		}
 		return false;
 	}
@@ -445,12 +446,12 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean deleteBatch(List<String> idList) {
 		try {
-			_logger.trace("deleteBatch {}" , idList);
+			logger.trace("deleteBatch {}" , idList);
 			Integer count = getMapper().deleteBatch(this.entityClass,idList);
-			_logger.debug("deleteBatch count : {}" , count);
+			logger.debug("deleteBatch count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("deleteBatch Exception " , e);
+			logger.error("deleteBatch Exception " , e);
 		}
 		return false;
 	}
@@ -474,22 +475,22 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean remove(String id){
 		try {
 			Integer count=getMapper().remove(this.entityClass,id);
-			_logger.debug("remove count : {}" , count);
+			logger.debug("remove count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("remove Exception " , e);
+			logger.error("remove Exception " , e);
 		}
 		return false;
 	}
 	
 	public boolean logicDelete(List<String> idList) {
 		try {
-			_logger.trace("logicDelete {}" , idList);
+			logger.trace("logicDelete {}" , idList);
 			Integer count = getMapper().logicDelete(this.entityClass,idList);
-			_logger.debug("logicDelete count : {}" , count);
+			logger.debug("logicDelete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			_logger.error("logicDelete Exception " , e);
+			logger.error("logicDelete Exception " , e);
 		}
 		return true;
 	}

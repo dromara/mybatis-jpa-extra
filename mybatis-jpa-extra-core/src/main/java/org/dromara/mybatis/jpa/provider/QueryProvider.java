@@ -33,10 +33,10 @@ import org.slf4j.LoggerFactory;
  */
 public class QueryProvider<T extends JpaEntity> {
 
-	private static final Logger _logger = LoggerFactory.getLogger(QueryProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
 	public String filterByQuery(T entity, Query query) {
-		_logger.trace("Query \n" + query);
+		logger.trace("Query \n{}" , query);
 		SQL sql = MapperMetadata.buildSelect(entity.getClass()).WHERE(buildQuery(query));
 		
 		if (query.getGroupBy() != null) {
@@ -45,7 +45,7 @@ public class QueryProvider<T extends JpaEntity> {
 		if (query.getOrderBy() != null) {
 			sql.ORDER_BY(buildQueryOrderBy(query));
 		}
-		_logger.trace("filter By Query SQL \n" + sql.toString());
+		logger.trace("filter By Query SQL \n{}" , sql.toString());
 		return sql.toString();
 	}
 
@@ -179,26 +179,28 @@ public class QueryProvider<T extends JpaEntity> {
 		SQL sql = MapperMetadata.buildSelect(entity.getClass());
 
 		for (FieldColumnMapper fieldColumnMapper : MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName())) {
-			String fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
+			Object fieldValue = BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 			String fieldType = fieldColumnMapper.getFieldType().toLowerCase();
 
-			_logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumnName(), fieldType,
+			logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumnName(), fieldType,
 					fieldValue);
 
-			if (fieldValue == null 
-					|| (fieldType.equals("string") && fieldValue.equals(""))
-					|| (fieldType.startsWith("byte") && fieldValue == null)
-					|| (fieldType.equals("int") && fieldValue.equals("0"))
-					|| (fieldType.equals("long") && fieldValue.equals("0"))
-					|| (fieldType.equals("integer") && fieldValue.equals("0"))
-					|| (fieldType.equals("float") && fieldValue.equals("0.0"))
-					|| (fieldType.equals("double") && fieldValue.equals("0.0"))) {
+			if (fieldValue == null ) {
+				logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
 				// skip null field value
-			} else {
+			} else if((fieldType.equals("string") && fieldValue.equals(""))
+					|| (fieldType.startsWith("byte"))
+					|| (fieldType.equals("Int") && fieldValue.equals("0"))
+					|| (fieldType.equals("Long") && fieldValue.equals("0"))
+					|| (fieldType.equals("Integer") && fieldValue.equals("0"))
+					|| (fieldType.equals("Float") && fieldValue.equals("0.0"))
+					|| (fieldType.equals("Double") && fieldValue.equals("0.0"))){
+				
+			}else {
 				sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
 			}
 		}
-		_logger.trace("filter By Entity SQL \n" + sql.toString());
+		logger.trace("filter By Entity SQL \n{}" , sql.toString());
 		return sql.toString();
 	}
 

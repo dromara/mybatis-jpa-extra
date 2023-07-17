@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 @Intercepts( {
 		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class })})
 public class StatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {
-	protected Logger _logger = LoggerFactory.getLogger(StatementHandlerInterceptor.class);
+	protected static Logger logger = LoggerFactory.getLogger(StatementHandlerInterceptor.class);
 	
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
@@ -68,14 +68,14 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			_logger.trace("parameter object  ==> {}" , parameterObject);
+			logger.trace("parameter object  ==> {}" , parameterObject);
 			//判断是否select语句及需要分页支持
 			if ((parameterObject instanceof JpaPagination)
 					&& (sql.toLowerCase().trim().startsWith("select")) ) {
 				JpaPagination pagination=(JpaPagination)parameterObject;
 				//分页标识
 				if(pagination.isPageable()){
-					_logger.trace("prepare  boundSql  ==> {}" , removeBreakingWhitespace(sql));
+					logger.trace("prepare  boundSql  ==> {}" , removeBreakingWhitespace(sql));
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, pagination);
 					}else if(statement instanceof PreparedStatementHandler){
@@ -85,7 +85,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 								);
 						sql = dialect.getLimitString(sql, pagination);
 					}
-					_logger.trace("prepare dialect boundSql : {}" , removeBreakingWhitespace(sql));
+					logger.trace("prepare dialect boundSql : {}" , removeBreakingWhitespace(sql));
 					metaObject.setValue("boundSql.sql", sql);
 				}
 				

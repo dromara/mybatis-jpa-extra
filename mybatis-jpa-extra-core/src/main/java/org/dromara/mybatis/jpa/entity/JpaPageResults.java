@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * PageResults 前端控件的组装类,可以和JqGrid结合
+ * PageResults 前端控件的组装类
  * 需要提供
  * 		1、当前页码 currentPage
  * 		2、每页显示记录数 pageResults
@@ -34,23 +34,23 @@ import org.slf4j.LoggerFactory;
  * @param <T>
  */
 public  class JpaPageResults <T>{
-	private final Logger _logger = LoggerFactory.getLogger(JpaPageResults.class);
+	private static final  Logger logger = LoggerFactory.getLogger(JpaPageResults.class);
 	
-	private int page=0;//当前页
+	private int page		= 0;//当前页
 	
-	private int total=0;//当前页记录数
+	private int total		= 0;//当前页记录数
 	
-	private int totalPage=0;//总页数
+	private int totalPage	= 0;//总页数
 	
-	private Long records=0L;//总记录数
+	private Long records	= 0L;//总记录数
 	
-	private List<T> rows;//记录列表
+	private List<T> rows;		 //记录列表
 	
 	/**
 	 * 
 	 */
 	public JpaPageResults() {
-		_logger.debug("Grid.");
+		logger.debug("JpaPageResults.");
 		
 	}
 	/**
@@ -60,7 +60,7 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,Long recordsCount) {
 		pageCount(currentPage,pageResults, recordsCount);
-		_logger.debug("JpaPageResults : {} , records : {} , total : {}",page,records,total);
+		logger.debug("JpaPageResults : {} , records : {} , total : {}",page,records,total);
 	}
 	/**
 	 * 构造函数
@@ -71,7 +71,7 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,Long recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
-		this.rows=rows;
+		this.rows = rows;
 	}
 	
 	/**
@@ -83,7 +83,7 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,Integer recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
-		this.rows=rows;
+		this.rows = rows;
 	}
 	
 	/**
@@ -96,8 +96,8 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,int totalPage,Long recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
-		this.rows=rows;
-		this.totalPage=totalPage;
+		this.rows = rows;
+		this.totalPage = totalPage;
 	}
 	
 	/**
@@ -110,8 +110,8 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,int totalPage,Integer recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
-		this.rows=rows;
-		this.totalPage=totalPage;
+		this.rows = rows;
+		this.totalPage = totalPage;
 	}
 	
 	/**
@@ -136,8 +136,8 @@ public  class JpaPageResults <T>{
 	public void pageCount(int currentPage,int pageResults,Integer recordsCount){
 		this.page=currentPage;
 		//通过总记录数和每页显示记录数计算出当前页记录数
-		this.total=(int) ((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
-		this.records=Long.parseLong(recordsCount+"");
+		this.total =(int) ((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
+		this.records = Long.parseLong(recordsCount+"");
 	}
 	/**
 	 * @return the page
@@ -199,12 +199,11 @@ public  class JpaPageResults <T>{
 	public void setRows(List<T> rows) {
 		this.rows = rows;
 	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("JpaPageResults [_logger=");
-		builder.append(_logger);
-		builder.append(", page=");
+		builder.append("JpaPageResults [page=");
 		builder.append(page);
 		builder.append(", total=");
 		builder.append(total);

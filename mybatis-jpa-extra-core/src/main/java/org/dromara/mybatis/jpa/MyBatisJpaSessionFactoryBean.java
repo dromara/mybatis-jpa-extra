@@ -28,8 +28,12 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
-	protected Logger _logger = LoggerFactory.getLogger(MyBatisSessionFactoryBean.class);
+
+/**
+ * MyBatisJpaSessionFactoryBean
+ */
+public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
+	protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
 	private List<Interceptor> interceptors = Collections.emptyList();
 	
 	private int timeout = 30 ;
@@ -51,7 +55,7 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		SqlSessionFactory factory = super.buildSqlSessionFactory();
 		
 		Configuration config = factory.getConfiguration();
-		_logger.debug("buildSqlSessionFactory : {}" , config.toString());
+		logger.debug("buildSqlSessionFactory : {}" , config.toString());
 		for (Interceptor interceptor : interceptors) {
 			config.addInterceptor(interceptor);
 		}
@@ -64,13 +68,13 @@ public class MyBatisSessionFactoryBean extends SqlSessionFactoryBean {
 		
 		if(config.getDefaultStatementTimeout() == null 
 				|| config.getDefaultStatementTimeout() == 0) {
-			_logger.debug("set StatementTimeout as default");
+			logger.debug("set StatementTimeout as default");
 			config.setDefaultStatementTimeout(timeout);
 		}
-		_logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
-		if(_logger.isTraceEnabled()) {
+		logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
+		if(logger.isTraceEnabled()) {
 			for(String mappedStatementName : config.getMappedStatementNames()) {
-				_logger.trace("MappedStatementName {} " ,mappedStatementName);
+				logger.trace("MappedStatementName {} " ,mappedStatementName);
 			}
 		}
 		return factory;

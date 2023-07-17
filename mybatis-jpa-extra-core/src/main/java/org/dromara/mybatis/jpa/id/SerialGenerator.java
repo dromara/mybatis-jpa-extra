@@ -20,20 +20,21 @@ package org.dromara.mybatis.jpa.id;
 import java.util.Date;
 
 import org.dromara.mybatis.jpa.util.MacAddress;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SerialGenerator  implements IdentifierGenerator{
-
+	private static final Logger logger 	= 	LoggerFactory.getLogger(SerialGenerator.class);
 	/**
 	 * 历史时间
 	 */
-	public static  	String 	OLD_DATETIME="";
+	private static String 	OLD_DATETIME		= "";
 	//当前序列
-	public static int 		STATIC_SEQUENCE=0;
+	public static  int 		STATIC_SEQUENCE		= 0;
 	//节点
-	public static String 	STATIC_NODE_NUMBER="--";
+	public static  String 	STATIC_NODE_NUMBER	= "--";
 	//配置信息属性
-	public String ipAddressNodeValue="";
+	public String  ipAddressNodeValue			= "";
 	
 	public String generate(Object object) {
 		return  next();
@@ -44,14 +45,14 @@ public class SerialGenerator  implements IdentifierGenerator{
 	 * @return 流水号
 	 */
 	public  synchronized String next(){
-		String currentDateTime=getCurrentSystemDateTime();
+		String currentDateTime = getCurrentSystemDateTime();
 		
-		if(null==currentDateTime){
+		if(null == currentDateTime){
 			LoggerFactory.getLogger(SerialGenerator.class).error("获取系统日期失败");
 			return null;
 		}
 		
-		StringBuffer sequenceNumber=new StringBuffer();
+		StringBuffer sequenceNumber = new StringBuffer();
 		
 		sequenceNumber.append(currentDateTime.substring(0, 8));
 		sequenceNumber.append(getNodeNumber());
@@ -62,12 +63,12 @@ public class SerialGenerator  implements IdentifierGenerator{
 	
 	public  final String getNodeNumber(){
 		if(STATIC_NODE_NUMBER.equals("--")){
-			LoggerFactory.getLogger(SerialGenerator.class).info("ipAddressNodeValue : "+ipAddressNodeValue);
+			logger.info("ipAddressNodeValue : {}" , ipAddressNodeValue);
 			if(ipAddressNodeValue.indexOf(",")>-1){
 				
 				String hostIpAddress=MacAddress.getAllHostMacAddress();//获得本机IP
 				
-				LoggerFactory.getLogger(SerialGenerator.class).info("hostIpAddress : "+hostIpAddress);
+				logger.info("hostIpAddress : {}" , hostIpAddress);
 				
 				String []ipAddressValues=ipAddressNodeValue.split(",");
 				for(String ipvalue : ipAddressValues){
@@ -77,12 +78,12 @@ public class SerialGenerator  implements IdentifierGenerator{
 					}
 				}
 			}else{
-				STATIC_NODE_NUMBER="01";
+				STATIC_NODE_NUMBER = "01";
 			}
 			
-			LoggerFactory.getLogger(SerialGenerator.class).info("STATIC_NODE_SEQUENCE_NUMBER : "+STATIC_NODE_NUMBER);
+			logger.info("STATIC_NODE_SEQUENCE_NUMBER : {}" ,STATIC_NODE_NUMBER);
 			if(STATIC_NODE_NUMBER.length()!=2){
-				LoggerFactory.getLogger(SerialGenerator.class).error("系统节点号必须2位");
+				logger.error("系统节点号必须2位");
 			}
 		}
 		return STATIC_NODE_NUMBER;
@@ -109,8 +110,8 @@ public class SerialGenerator  implements IdentifierGenerator{
 			 * 判断是否是新的时间，如果是新时间则STATIC_SEQUENCE从0开始计数
 			 */
 			if(!currentdatetime.equals(OLD_DATETIME)){
-				STATIC_SEQUENCE=0;
-				OLD_DATETIME=currentdatetime;
+				STATIC_SEQUENCE = 0;
+				OLD_DATETIME = currentdatetime;
 			}
 		}
 		return currentdatetime;

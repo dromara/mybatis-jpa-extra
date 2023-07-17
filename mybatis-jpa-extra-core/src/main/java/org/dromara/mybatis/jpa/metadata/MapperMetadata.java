@@ -49,7 +49,7 @@ import jakarta.persistence.Transient;
  */
 public class MapperMetadata <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
 	public  static class SQL_TYPE{
 		public static String 	GET_SQL							= "_GET_SQL";
@@ -96,7 +96,7 @@ public class MapperMetadata <T extends JpaEntity>{
 	 */
 	public static String getTableName(Class<?> entityClass) {
 		String entityClassName = entityClass.getSimpleName();
-		_logger.debug("entity Class Name {}" , entityClassName);
+		logger.debug("entity Class Name {}" , entityClassName);
 		if(tableNameMap.containsKey(entityClassName)) {
 			return tableNameMap.get(entityClassName);
 		}
@@ -105,9 +105,9 @@ public class MapperMetadata <T extends JpaEntity>{
 		String catalog = null;
 		//must use @Entity to ORM class
 		Entity entity =(Entity)entityClass.getAnnotation(Entity.class);
-		_logger.trace("entity {}" , entity);
+		logger.trace("entity {}" , entity);
 		Table table = (Table)entityClass.getAnnotation(Table.class);
-		_logger.trace("table {}" , table);
+		logger.trace("table {}" , table);
 		if(entity != null ) {
 			if(entity.name() != null && !entity.name().equals("")) {
 				tableName = entity.name();
@@ -118,12 +118,12 @@ public class MapperMetadata <T extends JpaEntity>{
 				}
 				if(table.schema() != null && !table.schema().equals("")) {
 					schema = table.schema();
-					_logger.trace("schema {}" , schema);
+					logger.trace("schema {}" , schema);
 				}
 				
 				if(table.catalog() != null && !table.catalog().equals("")) {
 					catalog = table.catalog();
-					_logger.trace("catalog {}" , catalog);
+					logger.trace("catalog {}" , catalog);
 				}
 			}
 			
@@ -144,7 +144,7 @@ public class MapperMetadata <T extends JpaEntity>{
 		
 		tableName = TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + tableName + TABLE_COLUMN_ESCAPE_CHAR : tableName;
 		tableNameMap.put(entityClassName,tableName);
-		_logger.trace("Table Name {}" , tableName);
+		logger.trace("Table Name {}" , tableName);
 		return tableName;
 	}
 	
@@ -189,7 +189,7 @@ public class MapperMetadata <T extends JpaEntity>{
 							.append(" ")
 							.append(fieldColumnMapper.getFieldName());
 			}
-			_logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
+			logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
 					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
 		}
 		return selectColumn.toString();
@@ -216,7 +216,7 @@ public class MapperMetadata <T extends JpaEntity>{
 			return;
 		}
 		
-		_logger.trace("entityClass {}" , entityClass);
+		logger.trace("entityClass {}" , entityClass);
 		
 		Field[] fields = entityClass.getDeclaredFields();
 		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<FieldColumnMapper>(fields.length);
@@ -269,7 +269,7 @@ public class MapperMetadata <T extends JpaEntity>{
 					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
 					fieldColumnMapper.setPartitionKey(partitionKey);
 				}
-				_logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
+				logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
 				fieldColumnMapperList.add(fieldColumnMapper);
 			}
 			
@@ -277,7 +277,7 @@ public class MapperMetadata <T extends JpaEntity>{
 		}
 		
 		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);
-		_logger.trace("fieldsMap : {}" , fieldsMap);
+		logger.trace("fieldsMap : {}" , fieldsMap);
 
 	}
 	

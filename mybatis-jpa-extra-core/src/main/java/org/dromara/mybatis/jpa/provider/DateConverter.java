@@ -16,7 +16,7 @@ import jakarta.persistence.TemporalType;
 
 public class DateConverter{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(DateConverter.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(DateConverter.class);
 	
 	private static final String TIMESTAMP_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 	private static final String DATE_FORMATTER 		= "yyyy-MM-dd";
@@ -56,7 +56,7 @@ public class DateConverter{
 			}
 			dateValue = convertDateTime(localDateTime,fieldColumnMapper);
 		}
-		_logger.debug("Date Value {}" ,dateValue);
+		logger.debug("Date Value {}" ,dateValue);
 		return dateValue;
 	}
 	

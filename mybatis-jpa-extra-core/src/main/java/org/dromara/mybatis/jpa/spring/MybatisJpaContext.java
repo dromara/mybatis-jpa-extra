@@ -41,7 +41,7 @@ import jakarta.servlet.http.HttpSession;
  */
 public final class MybatisJpaContext {
 
-	private static final Logger _logger = LoggerFactory.getLogger(MybatisJpaContext.class);
+	private static final Logger logger = LoggerFactory.getLogger(MybatisJpaContext.class);
 	
 	private static String VERSION = null;
 	
@@ -59,7 +59,7 @@ public final class MybatisJpaContext {
 		mybatisJpaContext = applicationContext;
 		
 		if (mybatisJpaContext.containsBean("propertySourcesPlaceholderConfigurer")) {
-			_logger.trace("init MybatisJpaContext properties");
+			logger.trace("init MybatisJpaContext properties");
             PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = 
                     ((PropertySourcesPlaceholderConfigurer) applicationContext
                     .getBean("propertySourcesPlaceholderConfigurer"));

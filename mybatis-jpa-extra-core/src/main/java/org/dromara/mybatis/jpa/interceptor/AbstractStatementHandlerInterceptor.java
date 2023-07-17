@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractStatementHandlerInterceptor  implements Interceptor {
-	protected Logger _logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected Dialect dialect;
 	
@@ -40,7 +40,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	 * @param dialect the dialect to set
 	 */
 	public void setDialect(Dialect dialect) {
-		_logger.debug("dialect from bean : {}" , dialect);
+		logger.debug("dialect from bean : {}" , dialect);
 		this.dialect = dialect;
 	}
 
@@ -51,18 +51,18 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	public void setDialectString(String dialectString) {
 		this.dialectString = dialectString;
 		try {
-			_logger.debug("dialect from String : {}" , dialectString);
+			logger.debug("dialect from String : {}" , dialectString);
 			this.dialect =(Dialect)Class.forName(dialectString).getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			_logger.error("Dialect new error : " , e);
+			logger.error("Dialect new error : " , e);
 		} 
 	}
 
 	protected StatementHandler getStatementHandler(Invocation invocation) {
 		StatementHandler statement = (StatementHandler) invocation.getTarget();
 		if (statement instanceof RoutingStatementHandler) {
-			MetaObject metaObject=SystemMetaObject.forObject(statement);
-			StatementHandler statementHandler=(StatementHandler)metaObject.getValue("delegate");
+			MetaObject metaObject = SystemMetaObject.forObject(statement);
+			StatementHandler statementHandler = (StatementHandler)metaObject.getValue("delegate");
 			return statementHandler;
 		
 		}
@@ -70,7 +70,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	}
 	
 	protected RowBounds getRowBounds(StatementHandler statement) {
-			MetaObject metaObject=SystemMetaObject.forObject(statement);
+			MetaObject metaObject = SystemMetaObject.forObject(statement);
 			RowBounds rowBounds=(RowBounds)metaObject.getValue("rowBounds");
 			return rowBounds;
 	}

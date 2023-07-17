@@ -25,7 +25,7 @@ import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 
 /**
- * Base Entity for Database Table Entity
+ * JPA Entity for Database Table Entity
  * 
  * @author Crystal.sea
  * 

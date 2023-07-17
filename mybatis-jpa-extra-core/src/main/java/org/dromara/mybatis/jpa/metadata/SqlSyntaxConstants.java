@@ -2,17 +2,17 @@ package org.dromara.mybatis.jpa.metadata;
 
 public class SqlSyntaxConstants {
 	
-	public  final  static String SELECT 	= "select";
+	public static  final  String SELECT 	= "select";
 	
-	public  final  static String DISTINCT 	= "distinct";
+	public static  final  String DISTINCT 	= "distinct";
 	
-	public  final  static String FROM 		= "from";
+	public static  final  String FROM 		= "from";
 	
-	public  final  static String GROUPBY	= "group by";
+	public static  final  String GROUPBY	= "group by";
 	
-	public  final  static String ORDERBY 	= "order by";
+	public static  final  String ORDERBY 	= "order by";
 	
-	public  final  static String HAVING 	= "having";
+	public static final   String HAVING 	= "having";
 	
 	public class Functions{
 		

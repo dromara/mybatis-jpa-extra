@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.ISOChronology;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 描述: Twitter的分布式自增ID雪花算法snowflake (Java版)
@@ -31,7 +33,7 @@ import org.joda.time.chrono.ISOChronology;
  * @create 2021-04-17
  **/
 public class SnowFlakeIdGenerator  implements IdentifierGenerator{
-
+	private static final Logger logger 	= 	LoggerFactory.getLogger(SnowFlakeIdGenerator.class);
     /**
      * 起始的时间戳
      */
@@ -83,7 +85,7 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
                 }
             }
         } catch (Exception e) {
-           System.err.println(" getDatacenterId: " + e.getMessage());
+        	logger.error(" getDatacenterId Exception" , e);
         }
     }
     
@@ -158,7 +160,7 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     
     public SnowFlakeIdGenerator parse(long id) {
         String sonwFlakeId = Long.toBinaryString(id);
-        System.out.println(sonwFlakeId);
+        logger.debug("SonwFlake Id {}" , sonwFlakeId);
         int len = sonwFlakeId.length();
         int sequenceStart = (int) (len < MACHINE_LEFT ? 0 : len - MACHINE_LEFT);
         int workerStart = (int) (len < DATACENTER_LEFT ? 0 : len - DATACENTER_LEFT);
@@ -173,9 +175,7 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
         long diffTime = Long.parseLong(time, 2);
         long timeLong = diffTime + START_STMP;
         
-        SnowFlakeIdGenerator snowFlakeIdParse =new SnowFlakeIdGenerator(dataCenterIdInt,workerIdInt,sequenceInt,timeLong);
-        
-        return snowFlakeIdParse;
+        return new SnowFlakeIdGenerator(dataCenterIdInt,workerIdInt,sequenceInt,timeLong);
     }
 
     private static Date fromatTime(long date) {
@@ -228,6 +228,6 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
 
 	@Override
 	public String generate(Object object) {
-		return this.nextId()+"";
+		return this.nextId() + "";
 	}
 }

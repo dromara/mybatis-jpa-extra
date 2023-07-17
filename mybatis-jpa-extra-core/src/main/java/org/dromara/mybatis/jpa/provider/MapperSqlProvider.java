@@ -34,10 +34,10 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class MapperSqlProvider <T extends JpaEntity>{
 	
-	private static final Logger _logger 	= 	LoggerFactory.getLogger(MapperSqlProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperSqlProvider.class);
 	
 	public MapperSqlProvider() {
-		_logger.debug("constructor init .");
+		logger.debug("constructor init .");
 	}
 
 	public String get(Map<String, Object>  parametersMap) {
