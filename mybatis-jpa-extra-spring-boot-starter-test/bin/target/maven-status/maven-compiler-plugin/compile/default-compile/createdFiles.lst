@@ -1,7 +1,0 @@
-org\apache\mybatis\jpa\starter\MybatisAutoConfiguration.class
-org\apache\mybatis\jpa\starter\MybatisAutoConfiguration$MapperScannerRegistrarNotFoundConfiguration.class
-META-INF\spring-configuration-metadata.json
-org\apache\mybatis\jpa\starter\MybatisAutoConfiguration$AutoConfiguredMapperScannerRegistrar.class
-org\apache\mybatis\jpa\starter\ConfigurationCustomizer.class
-org\apache\mybatis\jpa\starter\MybatisProperties.class
-org\apache\mybatis\jpa\starter\SpringBootVFS.class

@@ -45,11 +45,26 @@ public class GetProvider <T extends JpaEntity>{
 		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.GET_SQL)) {
 			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.GET_SQL);
 		}
-		
+		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
+		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
-		SQL sql = MapperMetadata.buildSelect(entityClass)
-        	.WHERE("%s = #{%s}".formatted(idFieldColumnMapper.getColumnName(),idFieldColumnMapper.getFieldName()));  
+		SQL sql = MapperMetadata.buildSelect(entityClass);
+		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
+			sql.WHERE(" %s = #{%s} and %s = #{%s} "
+					.formatted(
+							partitionKeyColumnMapper.getColumnName() ,
+							partitionKeyValue,
+							idFieldColumnMapper.getColumnName(),
+							idFieldColumnMapper.getFieldName())
+        			); 
+		}else {
+			sql.WHERE("%s = #{%s}"
+					.formatted(
+							idFieldColumnMapper.getColumnName(),
+							idFieldColumnMapper.getFieldName())
+					);  
+		}
 		
         String getSql = sql.toString(); 
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.GET_SQL,getSql);

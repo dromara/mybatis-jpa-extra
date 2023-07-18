@@ -46,7 +46,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 public  class  JpaService <T extends JpaEntity> {
 	
-	final static Logger logger = LoggerFactory.getLogger(JpaService.class);
+	static final  Logger logger = LoggerFactory.getLogger(JpaService.class);
 	
 	@JsonIgnore
 	//定义全局缓存
@@ -81,7 +81,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	@SuppressWarnings("unchecked")
 	public JpaService(@SuppressWarnings("rawtypes") Class cls) {
-		logger.trace("class : {}" , cls.getSimpleName());
+		logger.trace("class name : {}" , cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 		if (pType != null && pType.length >= 1) {
@@ -145,7 +145,7 @@ public  class  JpaService <T extends JpaEntity> {
 		
 		Integer totalCount = 0;
 		if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
-			totalCount=totalPage;
+			totalCount = totalPage;
 		}else {
 			totalCount = parseCount(getMapper().queryPageResultsCount(entity));
 		}
@@ -169,20 +169,21 @@ public  class  JpaService <T extends JpaEntity> {
 		List<T> resultslist = null;
 		try {
 			resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
+			entity.setPageable(false);
+			Integer totalPage = resultslist.size();
+			
+			Integer totalCount = 0;
+			if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
+				totalCount = totalPage;
+			}else {
+				totalCount = parseCount(getMapper().queryPageResultsCount(entity));
+			}
+			
+			return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
 		} catch (Exception e) {
 			logger.error("queryPageResults Exception " , e);
 		}
-		entity.setPageable(false);
-		Integer totalPage = resultslist.size();
-		
-		Integer totalCount = 0;
-		if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
-			totalCount = totalPage;
-		}else {
-			totalCount = parseCount(getMapper().queryPageResultsCount(entity));
-		}
-		
-		return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
+		return null;
 	}
 	
 	/**
@@ -337,7 +338,23 @@ public  class  JpaService <T extends JpaEntity> {
 	public T get(String id) {
 		try {
 			logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , id);
-			return  getMapper().get(this.entityClass,id);
+			return  getMapper().get(this.entityClass,id,null);
+		} catch(Exception e) {
+			logger.error("get Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 * query one entity by entity id
+	 * @param id
+	 * @param partitionKey
+	 * @return T
+	 */
+	public T get(String id,String partitionKey) {
+		try {
+			logger.debug("entityClass  {} , primaryKey {} , partitionKey {}" , entityClass.toGenericString() , id,partitionKey);
+			return  getMapper().get(this.entityClass,id,partitionKey);
 		} catch(Exception e) {
 			logger.error("get Exception " , e);
 		}
@@ -430,7 +447,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean delete(T entity) {
 		try {
-			Integer count=getMapper().delete(entity);
+			Integer count = getMapper().delete(entity);
 			logger.debug("delete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -441,13 +458,31 @@ public  class  JpaService <T extends JpaEntity> {
 	
 	/**
 	 * batch delete entity by id List
-	 * @param ids
-	 * @return
+	 * @param idList
+	 * @return boolean
 	 */
 	public boolean deleteBatch(List<String> idList) {
 		try {
 			logger.trace("deleteBatch {}" , idList);
-			Integer count = getMapper().deleteBatch(this.entityClass,idList);
+			Integer count = getMapper().deleteBatch(this.entityClass,idList,null);
+			logger.debug("deleteBatch count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("deleteBatch Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 * batch delete entity by id List
+	 * @param idList
+	 * @param partitionKey
+	 * @return boolean
+	 */
+	public boolean deleteBatch(List<String> idList,String partitionKey) {
+		try {
+			logger.trace("deleteBatch {} , partitionKey {}" , idList , partitionKey);
+			Integer count = getMapper().deleteBatch(this.entityClass , idList , partitionKey);
 			logger.debug("deleteBatch count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -459,22 +494,45 @@ public  class  JpaService <T extends JpaEntity> {
 	/**
 	 * batch delete entity by ids,split with ,
 	 * @param ids
-	 * @return
+	 * @return boolean
 	 */
 	public boolean deleteBatch(String ids) {
 		List<String> idList = StringUtils.string2List(ids, ",");
 		return deleteBatch(idList);
 	}
+	
+	/**
+	 * batch delete entity by ids,split with ,
+	 * @param ids
+	 * @param partitionKey
+	 * @return
+	 */
+	public boolean deleteBatch(String ids,String partitionKey) {
+		List<String> idList = StringUtils.string2List(ids, ",");
+		return deleteBatch(idList,partitionKey);
+	}
+	
 
-	public boolean deleteBatch(String ids , String split) {
-		List<String> idList = StringUtils.string2List(ids, split);
+	/**
+	 * batch delete entity by ids , split with ,
+	 * @param ids
+	 * @param split
+	 * @return
+	 */
+	public boolean deleteBatchSplit(String ids , String split) {
+		List<String> idList = StringUtils.string2List(ids, StringUtils.isBlank(split)? "," : split );
 		return deleteBatch(idList);
 	}
 	
-	
+	/**
+	 * delete one entity by id
+	 * @param id
+	 * @return
+	 */
 	public boolean remove(String id){
 		try {
-			Integer count=getMapper().remove(this.entityClass,id);
+			logger.debug("id {} " , id );
+			Integer count=getMapper().remove(this.entityClass,id,null);
 			logger.debug("remove count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -483,10 +541,33 @@ public  class  JpaService <T extends JpaEntity> {
 		return false;
 	}
 	
+	/**
+	 * delete one entity by id
+	 * @param id
+	 * @param partitionKey
+	 * @return
+	 */
+	public boolean remove(String id,String partitionKey){
+		try {
+			logger.debug("id {} , partitionKey {}" , id , partitionKey);
+			Integer count = getMapper().remove(this.entityClass,id,partitionKey);
+			logger.debug("remove count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("remove Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 * logicDelete entity by ids
+	 * @param idList
+	 * @return
+	 */
 	public boolean logicDelete(List<String> idList) {
 		try {
-			logger.trace("logicDelete {}" , idList);
-			Integer count = getMapper().logicDelete(this.entityClass,idList);
+			logger.trace("logicDelete idList {}" , idList);
+			Integer count = getMapper().logicDelete(this.entityClass,idList,null);
 			logger.debug("logicDelete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -495,13 +576,42 @@ public  class  JpaService <T extends JpaEntity> {
 		return true;
 	}
 	
+	/**
+	 * logicDelete entity by ids
+	 * @param idList
+	 * @param partitionKey
+	 * @return
+	 */
+	public boolean logicDelete(List<String> idList,String partitionKey) {
+		try {
+			logger.trace("logicDelete idList {} , partitionKey {}" , idList , partitionKey);
+			Integer count = getMapper().logicDelete(this.entityClass,idList,partitionKey);
+			logger.debug("logicDelete count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("logicDelete Exception " , e);
+		}
+		return true;
+	}
+	
+	/**
+	 * logicDelete entity by ids
+	 * @param ids string
+	 * @return
+	 */
 	public boolean logicDelete(String ids) {
 		List<String> idList = StringUtils.string2List(ids, ",");
 		return logicDelete(idList);
 	}
 	
-	public boolean logicDelete(String ids , String split) {
-		List<String> idList = StringUtils.string2List(ids, split);
+	/**
+	 * logicDelete entity by ids
+	 * @param ids string
+	 * @param split
+	 * @return
+	 */
+	public boolean logicDeleteSplit(String ids , String split) {
+		List<String> idList = StringUtils.string2List(ids, StringUtils.isBlank(split)? "," : split );
 		return logicDelete(idList);
 	}
 	

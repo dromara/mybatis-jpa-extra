@@ -23,6 +23,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.Query;
 
@@ -46,7 +47,7 @@ public interface IJpaMapper<T> {
 	public Integer queryPageResultsCount(T entity);
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
-	public List<T> findAll(@Param ("entityClass")Class<?> entityClass);
+	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
 
 	/**
 	 *  query by id
@@ -55,8 +56,9 @@ public interface IJpaMapper<T> {
 	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "get")
 	public T get(
-					@Param ("entityClass")Class<?> entityClass,
-					@Param ("id") String id);
+					@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass,
+					@Param (MapperMetadata.PARAMETER_ID) String id,
+					@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
 	
 	
 	//follow function for insert update and delete
@@ -79,24 +81,27 @@ public interface IJpaMapper<T> {
 	 * @return
 	 */
 	@DeleteProvider(type = MapperSqlProvider.class, method = "remove")
-	public Integer remove(	@Param ("entityClass")Class<?> entityClass,
-							@Param ("id") String id);
-	
+	public Integer remove(	@Param (MapperMetadata.ENTITY_CLASS)			Class<?> entityClass,
+							@Param (MapperMetadata.PARAMETER_ID) String id,
+							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+		
 	@DeleteProvider(type = MapperSqlProvider.class, method = "deleteBatch")
 	public Integer deleteBatch(	
-							@Param ("entityClass")Class<?> entityClass,
-							@Param ("idList") List<String> idList);	
+							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> entityClass,
+							@Param (MapperMetadata.PARAMETER_ID_LIST)	 	List<String> idList,
+							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);	
 	
 	@DeleteProvider(type = MapperSqlProvider.class, method = "logicDelete")
 	public Integer logicDelete(	
-							@Param ("entityClass")	Class<?> 	entityClass,
-							@Param ("idList") 		List<String> idList);
+							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
+							@Param (MapperMetadata.PARAMETER_ID_LIST) 		List<String> idList,
+							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "find")
-	public List<T> find(	@Param ("entityClass")	Class<?> 	entityClass,
-							@Param ("filter")		String 		filter,
-							@Param ("args") 		Object[] 	args, 
-							@Param ("argTypes") 	int[] 		argTypes);
+	public List<T> find(	@Param (MapperMetadata.ENTITY_CLASS)	Class<?> 	entityClass,
+							@Param (MapperMetadata.QUERY_FILTER)	String 		filter,
+							@Param (MapperMetadata.QUERY_ARGS) 		Object[] 	args, 
+							@Param (MapperMetadata.QUERY_ARGTYPES) 	int[] 		argTypes);
 	
 	
 	

@@ -19,3 +19,5 @@ jdk/*
 */*.xml.versionsBackup
 .vscode/settings.json
 .vscode/launch.json
+*/bin/*
+*\bin\*

@@ -52,26 +52,29 @@ public class MapperMetadata <T extends JpaEntity>{
 	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
 	public  static class SQL_TYPE{
-		public static String 	GET_SQL							= "_GET_SQL";
-		public static String 	FINDALL_SQL						= "_FINDALL_SQL";
-		public static String 	REMOVE_SQL						= "_REMOVE_SQL";
-		public static String 	BATCHDELETE_SQL					= "_BATCHDELETE_SQL";
-		public static String 	LOGICDELETE_SQL					= "_LOGICDELETE_SQL";
-		
-		
+		public static final String 	GET_SQL							= "_GET_SQL";
+		public static final String 	FINDALL_SQL						= "_FINDALL_SQL";
+		public static final String 	REMOVE_SQL						= "_REMOVE_SQL";
+		public static final String 	BATCHDELETE_SQL					= "_BATCHDELETE_SQL";
+		public static final String 	LOGICDELETE_SQL					= "_LOGICDELETE_SQL";
 	}
 	
-	public static 			String ENTITY_CLASS					= "entityClass";
+	public static 	final		String ENTITY_CLASS				= "entityClass";
 	
-	public static 			String QUERY_FILTER					= "filter";
-	public static 			String QUERY_ARGS					= "args";
-	public static 			String QUERY_ARGTYPES				= "argTypes";
+	public static 	final		String QUERY_FILTER				= "filter";
+	public static 	final		String QUERY_ARGS				= "args";
+	public static 	final		String QUERY_ARGTYPES			= "argTypes";
+	
+	public static 	final		String PARAMETER_PARTITION_KEY	= "partitionKey";
+	public static 	final		String PARAMETER_ID_LIST		= "idList";
+	public static 	final		String PARAMETER_ID				= "id";
 	/**
 	 * 表名和字段名
 	 */
 	public static int 		TABLE_COLUMN_CASE 					= CASE_TYPE.LOWERCASE;
 	public static boolean   TABLE_COLUMN_ESCAPE                 = false;
 	public static String    TABLE_COLUMN_ESCAPE_CHAR            =  "`";
+	public static String    PARTITION_COLUMN           			=  "inst_id";
 	
 	public static class CASE_TYPE{
 		public static int 		NORMAL 							= 0;

@@ -4,7 +4,7 @@
 	<!--parent -->
 	<groupId>org.dromara.mybatis-jpa-extra</groupId>
 	<artifactId>mybatis-jpa-extra-parent</artifactId>
-	<version>3.0.1</version>
+	<version>3.1</version>
 	<packaging>pom</packaging>
 	
 	<!--modules -->
@@ -16,7 +16,7 @@
 	</modules>
  
  	<properties>
-		<mybatis.jpa.extra.version>3.0.1</mybatis.jpa.extra.version><!--project version-->
+		<mybatis.jpa.extra.version>3.1</mybatis.jpa.extra.version><!--project version-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>17</jdk.version>
 		<servlet-api.version>6.0.0</servlet-api.version>
@@ -76,13 +76,13 @@
 			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-
+    <!--
 	<scm>
 		<connection>scm:git@github.com:dromara/mybatis-jpa-extra.git</connection>
 		<developerConnection>scm:git@github.com:dromara/mybatis-jpa-extra.git</developerConnection>
 		<url>git@github.com:dromara/mybatis-jpa-extra.git</url>
 	</scm>
-
+-->
 	<developers>
 		<developer>
 			<name>MaxKeyTop</name>
@@ -476,7 +476,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Gpg Signature -->
+			<!-- Gpg Signature 本地打包要注释-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -491,6 +491,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			 
 		</plugins>
 	</build>    	        
 </project>
