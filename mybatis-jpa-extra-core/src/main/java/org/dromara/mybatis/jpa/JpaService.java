@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.entity.PageResultsSqlCache;
+import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -50,7 +50,7 @@ public  class  JpaService <T extends JpaEntity> {
 	
 	@JsonIgnore
 	//定义全局缓存
-	public static final Cache<String, PageResultsSqlCache> pageResultsBoundSqlCache = 
+	public static final Cache<String, JpaPageResultsSqlCache> pageResultsBoundSqlCache = 
 							Caffeine.newBuilder()
 								.expireAfterWrite(300, TimeUnit.SECONDS)
 								.build();

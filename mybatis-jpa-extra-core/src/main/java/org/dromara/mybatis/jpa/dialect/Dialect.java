@@ -21,7 +21,7 @@ package org.dromara.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 
-import org.dromara.mybatis.jpa.entity.JpaPagination;
+import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,19 +77,19 @@ public abstract class Dialect {
 	 * @return The modified query statement with the limit applied.
 	 */
 
-	public String getLimitString(String query, JpaPagination pagination) {
+	public String getLimitString(String query, JpaPage page) {
 		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
 	}
 	
 	
 	
 	
-	public String getPreparedStatementLimitString(String query, JpaPagination pagination) {
+	public String getPreparedStatementLimitString(String query, JpaPage page) {
 		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
 	}
 	
 	
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
+	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage pagination) {
 		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
 	}
 	

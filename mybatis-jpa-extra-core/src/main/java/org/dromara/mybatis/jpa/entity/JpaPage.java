@@ -29,7 +29,7 @@ import jakarta.persistence.Transient;
  * @author Crystal.Sea
  *
  */
-public class JpaPagination {
+public class JpaPage {
 	
 	public static final int MAX_RESULTS = 10000;
 	

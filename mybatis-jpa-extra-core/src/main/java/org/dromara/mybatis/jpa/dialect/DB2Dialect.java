@@ -20,7 +20,7 @@ package org.dromara.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.dromara.mybatis.jpa.entity.JpaPagination;
+import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class DB2Dialect extends Dialect {
 
@@ -35,9 +35,9 @@ public class DB2Dialect extends Dialect {
 	}
 	
 	@Override
-	public String getLimitString(String sql,  JpaPagination pagination) {
-		if ( pagination.getPageSize() == 0 ) {
-			return sql + " fetch first " + pagination.getStartRow() + " rows only";
+	public String getLimitString(String sql,  JpaPage page) {
+		if ( page.getPageSize() == 0 ) {
+			return sql + " fetch first " + page.getStartRow() + " rows only";
 		}
 		
 		StringBuilder pagingSelectSql = new StringBuilder( sql.length() + 200 )
@@ -46,20 +46,20 @@ public class DB2Dialect extends Dialect {
 				)
 				.append( sql )  //nest the main query in an outer select
 				.append(" fetch first ")
-				.append(pagination.getPageSize())
+				.append(page.getPageSize())
 				.append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > " )
-				.append(pagination.getStartRow())
+				.append(page.getStartRow())
 				.append(" order by rownumber_");
 		
 		return pagingSelectSql.toString();
 	}
 	
 	@Override
-	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
+	public String getPreparedStatementLimitString(String sql,  JpaPage page) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
-		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
+		if(page.getPageSize()>0&&page.getStartRow()>0){
 			return sql +  " limit ? , ?";
-		}else if(pagination.getPageSize()>0){
+		}else if(page.getPageSize()>0){
 			return sql +  " limit  ? ";
 		}else{
 			return sql +  " limit ?";
@@ -68,14 +68,14 @@ public class DB2Dialect extends Dialect {
 	
 	
 	@Override
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
+	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
 		
 		try {
-			if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
-				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
-			}else if(pagination.getPageSize()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
+			if(page.getPageSize()>0&&page.getStartRow()>0){
+				preparedStatement.setInt(++parameterSize, page.getPageSize());
+				preparedStatement.setInt(++parameterSize, page.getPageSize());
+			}else if(page.getPageSize()>0){
+				preparedStatement.setInt(++parameterSize, page.getPageSize());
 			}else{
 				preparedStatement.setInt(++parameterSize, 1000);
 			}

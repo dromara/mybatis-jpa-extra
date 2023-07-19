@@ -24,8 +24,8 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.dromara.mybatis.jpa.JpaService;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.entity.JpaPagination;
-import org.dromara.mybatis.jpa.entity.PageResultsSqlCache;
+import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
 import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.dromara.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
@@ -44,10 +44,10 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 	 * @return executePageResultsCount sql String
 	 */
 	public String executePageResultsCount(T entity) {
-		JpaPagination pagination=(JpaPagination)entity;
+		JpaPage page=(JpaPage)entity;
 		//获取缓存数据
-		PageResultsSqlCache pageResultsSqlCache = 
-				JpaService.pageResultsBoundSqlCache.getIfPresent(pagination.getPageResultSelectUUID());
+		JpaPageResultsSqlCache pageResultsSqlCache = 
+				JpaService.pageResultsBoundSqlCache.getIfPresent(page.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
 		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
 		
@@ -90,7 +90,7 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 			}
 		}
 		//删除缓存
-		JpaService.pageResultsBoundSqlCache.invalidate(pagination.getPageResultSelectUUID());
+		JpaService.pageResultsBoundSqlCache.invalidate(page.getPageResultSelectUUID());
 		logger.trace("Count SQL : \n{}" , sql);
 		return sql.toString();
 	}

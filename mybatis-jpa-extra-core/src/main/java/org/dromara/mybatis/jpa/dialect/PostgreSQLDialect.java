@@ -20,7 +20,7 @@ package org.dromara.mybatis.jpa.dialect;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.dromara.mybatis.jpa.entity.JpaPagination;
+import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class PostgreSQLDialect extends Dialect {
 
@@ -35,19 +35,19 @@ public class PostgreSQLDialect extends Dialect {
 	}
 	
 	@Override
-	public String getLimitString(String sql,  JpaPagination pagination) {
+	public String getLimitString(String sql,  JpaPage page) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
-		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " limit " + pagination.getPageSize() +" offset  " + pagination.getStartRow() ;
-		}else if(pagination.getPageSize() > 0){
-			return sql +  " limit " + pagination.getPageSize();
+		if(page.getPageSize()>0&&page.getStartRow()>0){
+			return sql +  " limit " + page.getPageSize() +" offset  " + page.getStartRow() ;
+		}else if(page.getPageSize() > 0){
+			return sql +  " limit " + page.getPageSize();
 		}else{
 			return sql +  " limit 1000";
 		}
 	}
 	
 	@Override
-	public String getPreparedStatementLimitString(String sql,  JpaPagination pagination) {
+	public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
 		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
 			return sql +  " limit ? offset ?";
@@ -59,14 +59,14 @@ public class PostgreSQLDialect extends Dialect {
 	}
 	
 	@Override
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPagination pagination) {
+	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
 		
 		try {
-			if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
-				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
-			}else if(pagination.getPageSize()>0){
-				preparedStatement.setInt(++parameterSize, pagination.getPageSize());
+			if(page.getPageSize()>0&&page.getStartRow()>0){
+				preparedStatement.setInt(++parameterSize, page.getPageSize());
+				preparedStatement.setInt(++parameterSize, page.getPageSize());
+			}else if(page.getPageSize()>0){
+				preparedStatement.setInt(++parameterSize, page.getPageSize());
 			}else{
 				preparedStatement.setInt(++parameterSize, 1000);
 			}

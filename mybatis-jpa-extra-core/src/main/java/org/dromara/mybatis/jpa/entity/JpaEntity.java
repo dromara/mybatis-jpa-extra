@@ -30,7 +30,7 @@ import org.dromara.mybatis.jpa.metadata.MapperMetadata;
  * @author Crystal.sea
  * 
  */
-public class JpaEntity extends JpaPagination implements Serializable{
+public class JpaEntity extends JpaPage implements Serializable{
 
 	private static final long serialVersionUID = -6984977786868857466L;
 

@@ -32,8 +32,8 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.dromara.mybatis.jpa.JpaService;
-import org.dromara.mybatis.jpa.entity.JpaPagination;
-import org.dromara.mybatis.jpa.entity.PageResultsSqlCache;
+import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,20 +70,20 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			String sql = boundSql.getSql();
 			logger.trace("parameter object  ==> {}" , parameterObject);
 			//判断是否select语句及需要分页支持
-			if ((parameterObject instanceof JpaPagination)
+			if ((parameterObject instanceof JpaPage)
 					&& (sql.toLowerCase().trim().startsWith("select")) ) {
-				JpaPagination pagination=(JpaPagination)parameterObject;
+				JpaPage page=(JpaPage)parameterObject;
 				//分页标识
-				if(pagination.isPageable()){
+				if(page.isPageable()){
 					logger.trace("prepare  boundSql  ==> {}" , removeBreakingWhitespace(sql));
 					if(statement instanceof SimpleStatementHandler){
-						sql = dialect.getLimitString(sql, pagination);
+						sql = dialect.getLimitString(sql, page);
 					}else if(statement instanceof PreparedStatementHandler){
 						JpaService.pageResultsBoundSqlCache.put(
-								pagination.getPageResultSelectUUID(), 
-								new PageResultsSqlCache(sql,boundSql)
+								page.getPageResultSelectUUID(), 
+								new JpaPageResultsSqlCache(sql,boundSql)
 								);
-						sql = dialect.getLimitString(sql, pagination);
+						sql = dialect.getLimitString(sql, page);
 					}
 					logger.trace("prepare dialect boundSql : {}" , removeBreakingWhitespace(sql));
 					metaObject.setValue("boundSql.sql", sql);
