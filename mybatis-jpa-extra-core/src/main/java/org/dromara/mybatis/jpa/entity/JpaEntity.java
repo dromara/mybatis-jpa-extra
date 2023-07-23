@@ -17,7 +17,6 @@
 
 package org.dromara.mybatis.jpa.entity;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import org.dromara.mybatis.jpa.id.IdStrategy;
@@ -30,10 +29,9 @@ import org.dromara.mybatis.jpa.metadata.MapperMetadata;
  * @author Crystal.sea
  * 
  */
-public class JpaEntity extends JpaPage implements Serializable{
+public class JpaEntity extends JpaPage{
 
-	private static final long serialVersionUID = -6984977786868857466L;
-
+	@Override
 	public String generateId() {
 		if(MapperMetadata.identifierGeneratorFactory != null) {
 			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);

@@ -85,7 +85,7 @@ public class MapperSqlProvider <T extends JpaEntity>{
 	 * @return insert sql String
 	 */
 	public String queryPageResultsCount(T entity) {
-		return new PageResultsCountProvider().executePageResultsCount(entity);
+		return new PageResultsCountProvider().executeCount(entity);
 	}
 	
 	public String query(T entity) {
@@ -95,5 +95,12 @@ public class MapperSqlProvider <T extends JpaEntity>{
 	public String filterByQuery(T entity,Query query) {
 		return new QueryProvider().filterByQuery(entity,query);
 	}
-
+	
+	public String queryPage(Map<String, Object>  parametersMap) {
+		return new QueryPageProvider().queryPage(parametersMap);
+	}
+	
+	public String queryPageByCondition(Map<String, Object>  parametersMap) {
+		return new QueryPageProvider().queryPageByCondition(parametersMap);
+	}
 }

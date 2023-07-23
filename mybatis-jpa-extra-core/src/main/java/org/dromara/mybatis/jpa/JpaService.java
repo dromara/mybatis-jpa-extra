@@ -20,11 +20,9 @@ package org.dromara.mybatis.jpa;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -34,8 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 
 
 /**
@@ -46,14 +42,8 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 public  class  JpaService <T extends JpaEntity> {
 	
-	static final  Logger logger = LoggerFactory.getLogger(JpaService.class);
+	private static final  Logger logger = LoggerFactory.getLogger(JpaService.class);
 	
-	@JsonIgnore
-	//定义全局缓存
-	public static final Cache<String, JpaPageResultsSqlCache> pageResultsBoundSqlCache = 
-							Caffeine.newBuilder()
-								.expireAfterWrite(300, TimeUnit.SECONDS)
-								.build();
 	/**
 	 * mapper class
 	 */
@@ -129,61 +119,88 @@ public  class  JpaService <T extends JpaEntity> {
 
 	//follow function for Query
 	
+	public JpaPageResults<T> queryPage(JpaPage page , T entity) {
+		try {
+			beforePageResults(page);
+			List<T> resultslist = getMapper().queryPage(page, entity);
+			return buildPageResults(page , resultslist);
+		}catch (Exception e) {
+			logger.error("queryPage Exception " , e);
+		}
+		return null;
+	}
+	
+	public JpaPageResults<T> queryPage(JpaPage page ,Query query) {
+		try {
+			beforePageResults(page);
+			List<T> resultslist = getMapper().queryPageByCondition(page, query , this.entityClass);
+			return buildPageResults(page , resultslist);
+		}catch (Exception e) {
+			logger.error("queryPage Exception " , e);
+		}
+		return null;
+	}
+	
 	/**
 	 * query page list entity by entity 
 	 * @param entity
 	 * @return
 	 */
 	public JpaPageResults<T> queryPageResults(T entity) {
-		entity.setPageResultSelectUUID(entity.generateId());
-		entity.setStartRow(calculateStartRow(entity.getPageNumber() ,entity.getPageSize()));
-		
-		entity.setPageable(true);
-		List<T> resultslist = getMapper().queryPageResults(entity);
-		entity.setPageable(false);
-		Integer totalPage = resultslist.size();
-		
-		Integer totalCount = 0;
-		if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
-			totalCount = totalPage;
-		}else {
-			totalCount = parseCount(getMapper().queryPageResultsCount(entity));
-		}
-		
-		return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
+		return queryPageResults("queryPageResults" , null , entity);
 	}
 	
+	public JpaPageResults<T> queryPageResults(JpaPage page , T entity) {
+		return queryPageResults("queryPageResults" , page , entity);
+	}
 	
-	//follow function for Query
+	/**
+	 * query page list entity by entity 
+	 * @param entity
+	 * @return
+	 */
+	public JpaPageResults<T> queryPageResults(String mapperId,T entity) {
+		return queryPageResults(mapperId , null , entity);
+	}
+	
 	/**
 	 * query page list entity by entity 
 	 * @param entity
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public JpaPageResults<T> queryPageResults(String mapperId,T entity) {
-		entity.setPageResultSelectUUID(entity.generateId());
-		entity.setStartRow(calculateStartRow(entity.getPageNumber() ,entity.getPageSize()));
-		
-		entity.setPageable(true);
-		List<T> resultslist = null;
+	public JpaPageResults<T> queryPageResults(String mapperId,JpaPage page ,T entity) {
 		try {
-			resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
-			entity.setPageable(false);
-			Integer totalPage = resultslist.size();
-			
-			Integer totalCount = 0;
-			if(entity.getPageNumber() == 1 && totalPage < entity.getPageSize()) {
-				totalCount = totalPage;
-			}else {
-				totalCount = parseCount(getMapper().queryPageResultsCount(entity));
-			}
-			
-			return new JpaPageResults<T>(entity.getPageNumber(),entity.getPageSize(),totalPage,totalCount,resultslist);
-		} catch (Exception e) {
+			beforePageResults(entity);
+			List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, 
+					page == null ? new Object[]{entity} : new Object[]{page , entity});
+			return buildPageResults(entity , resultslist);
+		}catch (NoSuchMethodException e) {
+			logger.error("Mapper no queryPageResults Method Exception " , e);
+		}catch (Exception e) {
 			logger.error("queryPageResults Exception " , e);
 		}
 		return null;
+	}
+	
+	private void beforePageResults(JpaPage page) {
+		page.setPageResultSelectUUID(page.generateId());
+		page.setStartRow(calculateStartRow(page.getPageNumber() ,page.getPageSize()));
+		page.setPageable(true);
+	}
+	
+	private JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
+		page.setPageable(false);
+		Integer totalPage = resultslist.size();
+		
+		Integer totalCount = 0;
+		if(page.getPageNumber() == 1 && totalPage < page.getPageSize()) {
+			totalCount = totalPage;
+		}else {
+			totalCount = parseCount(getMapper().queryPageResultsCount(page));
+		}
+		
+		return new JpaPageResults<T>(page.getPageNumber(),page.getPageSize(),totalPage,totalCount,resultslist);
 	}
 	
 	/**
@@ -191,14 +208,10 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param entity
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public Integer queryPageResultsCount(T entity) {
+	public Integer queryPageResultsCount(JpaPage page) {
 		Integer count = 0;
 		try {
-			if(entity == null) {
-				entity = (T) entityClass.getDeclaredConstructor().newInstance();
-			}
-			count = getMapper().queryPageResultsCount(entity);
+			count = getMapper().queryPageResultsCount(page);
 			logger.debug("queryCount count : {}" , count);
 		} catch(Exception e) {
 			logger.error("queryPageResultsCount Exception " , e);
@@ -316,21 +329,6 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 *  query one entity by entity
-	 * @param entity
-	 * @return
-	 */
-	public T load(T entity) {
-		try {
-			List<T> entityList = getMapper().query(entity);
-			return ((entityList != null) && ( entityList.size() > 0 ))?entityList.get(0) : null;
-		} catch(Exception e) {
-			logger.error("load Exception " , e);
-		}
-		return null;
-	}
-	
-	/**
 	 * query one entity by entity id
 	 * @param id
 	 * @return
@@ -416,8 +414,8 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @return boolean
 	 */
 	public boolean merge(T entity) {
-		T loadedEntity = load(entity);
-		if(loadedEntity == null) {
+		List<T> resultList = query(entity);
+		if(resultList == null || resultList.isEmpty()) {
 			return insert(entity);
 		}else {
 			return update(entity);
@@ -616,13 +614,13 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	
-	//follow is  for query grid paging
+	//follow is  for query paging
 	/**
 	 * parse Object Count to Integer
 	 * @param totalCount
 	 * @return
 	 */
-	public Integer parseCount(Object totalCount){
+	protected Integer parseCount(Object totalCount){
 		Integer retTotalCount=0;
 		if(totalCount == null) {
 			return retTotalCount;
@@ -638,7 +636,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param totalCount
 	 * @return
 	 */
-	public Integer calculateTotalPage(JpaEntity entity,Integer totalCount){
+	protected Integer calculateTotalPage(JpaEntity entity,Integer totalCount){
 		return (totalCount + entity.getPageSize() - 1) / entity.getPageSize();
 	}
 	
@@ -648,7 +646,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param pageResults
 	 * @return
 	 */
-	public Integer calculateStartRow(Integer page,Integer pageSize){
+	protected Integer calculateStartRow(Integer page,Integer pageSize){
 		return (page - 1) * pageSize;
 	}
 }

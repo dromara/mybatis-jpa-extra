@@ -51,7 +51,7 @@ public class MapperMetadata <T extends JpaEntity>{
 	
 	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
-	public  static class SQL_TYPE{
+	public  static  class SQL_TYPE{
 		public static final String 	GET_SQL							= "_GET_SQL";
 		public static final String 	FINDALL_SQL						= "_FINDALL_SQL";
 		public static final String 	REMOVE_SQL						= "_REMOVE_SQL";
@@ -60,6 +60,13 @@ public class MapperMetadata <T extends JpaEntity>{
 	}
 	
 	public static 	final		String ENTITY_CLASS				= "entityClass";
+	
+	public static 	final		String ENTITY					= "entity";
+	
+	
+	public static 	final		String PAGE						= "page";
+	
+	public static 	final		String CONDITION				= "condition";
 	
 	public static 	final		String QUERY_FILTER				= "filter";
 	public static 	final		String QUERY_ARGS				= "args";
@@ -83,12 +90,12 @@ public class MapperMetadata <T extends JpaEntity>{
 	}
 	
 	
-	public transient static ConcurrentMap<String, List<FieldColumnMapper>> 	
+	public static ConcurrentMap<String, List<FieldColumnMapper>> 	
 											fieldsMap 	= 	new ConcurrentHashMap<String, List<FieldColumnMapper>>();
 	
-	public transient static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<String, String>();
+	public static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<String, String>();
 	
-	public transient static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<String, String>();
+	public static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<String, String>();
 	
 	public static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
 	

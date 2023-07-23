@@ -20,9 +20,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
-import org.dromara.mybatis.jpa.query.Condition;
-import org.dromara.mybatis.jpa.query.Operator;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,143 +36,19 @@ public class QueryProvider<T extends JpaEntity> {
 
 	public String filterByQuery(T entity, Query query) {
 		logger.trace("Query \n{}" , query);
-		SQL sql = MapperMetadata.buildSelect(entity.getClass()).WHERE(buildQuery(query));
+		SQL sql = MapperMetadata.buildSelect(entity.getClass()).WHERE(QueryBuilder.build(query));
 		
 		if (query.getGroupBy() != null) {
-			sql.GROUP_BY(buildQueryGroupBy(query));
+			sql.GROUP_BY(QueryBuilder.buildGroupBy(query));
 		}
 		if (query.getOrderBy() != null) {
-			sql.ORDER_BY(buildQueryOrderBy(query));
+			sql.ORDER_BY(QueryBuilder.buildOrderBy(query));
 		}
 		logger.trace("filter By Query SQL \n{}" , sql.toString());
 		return sql.toString();
 	}
 
-	public String buildQuery(Query query) {
-		StringBuffer conditionString = new StringBuffer("");
-		for (Condition condition : query.getConditions()) {
-			condition.setColumn(condition.getColumn().replaceAll("'", "").replaceAll(" ", "").replace(";", ""));
-			if (condition.getExpression().equals(Operator.and) 
-					|| condition.getExpression().equals(Operator.or)) {
 
-				conditionString.append(" ").append(condition.getExpression().getOperator()).append(" ");
-
-				if (condition.getValue() != null && condition.getValue() instanceof Query) {
-					conditionString.append(" ( ").append(buildQuery((Query) condition.getValue())).append(" ) ");
-				}
-
-			} else if (condition.getExpression().equals(Operator.like)
-					|| condition.getExpression().equals(Operator.notLike)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append("'%").append(condition.getValue().toString()).append("%'");
-
-			} else if (condition.getExpression().equals(Operator.likeLeft)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append("'%").append(condition.getValue().toString()).append("'");
-
-			} else if (condition.getExpression().equals(Operator.likeRight)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append("'").append(condition.getValue().toString()).append("%'");
-
-			} else if (condition.getExpression().equals(Operator.eq) 
-					|| condition.getExpression().equals(Operator.notEq)
-
-					|| condition.getExpression().equals(Operator.gt) 
-					|| condition.getExpression().equals(Operator.ge)
-
-					|| condition.getExpression().equals(Operator.lt) 
-					|| condition.getExpression().equals(Operator.le)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append(getConditionValue(condition.getValue()));
-
-			} else if (condition.getExpression().equals(Operator.between)
-					|| condition.getExpression().equals(Operator.notBetween)) {
-
-				conditionString
-						.append(" ( ").append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append(getConditionValue(condition.getValue()));
-				conditionString.append(" and ");
-				conditionString.append(getConditionValue(condition.getValue2()))
-								.append(" ) ");
-
-			} else if (condition.getExpression().equals(Operator.isNull)
-					|| condition.getExpression().equals(Operator.isNotNull)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator());
-
-			} else if (condition.getExpression().equals(Operator.in)
-					|| condition.getExpression().equals(Operator.notIn)) {
-				if (condition.getValue().getClass().isArray()) {
-					conditionString.append(condition.getColumn()).append(" ")
-							.append(condition.getExpression().getOperator());
-					conditionString.append(" ( ");
-					StringBuffer conditionArray = new StringBuffer();
-					Object[] objects = (Object[]) condition.getValue();
-					for (Object object : objects) {
-						if (conditionArray.length() > 0) {
-							conditionArray.append(" , ");
-						}
-						conditionArray.append(getConditionValue(object));
-					}
-					conditionString.append(conditionArray);
-					conditionString.append(" ) ");
-				}
-			} else if (condition.getExpression().equals(Operator.condition)) {
-				conditionString.append(condition.getColumn().replace(";", ""));
-			}
-		}
-		return conditionString.toString();
-	}
-
-	String buildQueryGroupBy(Query query) {
-		StringBuffer groupBy = new StringBuffer();
-		for (Condition condition : query.getGroupBy()) {
-			if (groupBy.length() > 0) {
-				groupBy.append(" , ");
-			}
-			groupBy.append(condition.getColumn());
-		}
-		return groupBy.toString();
-	}
-
-	String buildQueryOrderBy(Query query) {
-		StringBuffer orderBy = new StringBuffer();
-		for (Condition condition : query.getGroupBy()) {
-			if (orderBy.length() > 0) {
-				orderBy.append(" , ");
-			}
-			orderBy.append(condition.getColumn()).append(" ").append(condition.getValue());
-		}
-		return orderBy.toString();
-	}
-
-	public String getConditionValue(Object value) {
-		StringBuffer conditionString = new StringBuffer("");
-		String valueType = value.getClass().getSimpleName().toLowerCase();
-		if (valueType.equals("string") 
-				|| valueType.equals("char")) {
-			conditionString.append("'").append(String.valueOf(value).replaceAll("'", "")).append("'");
-		} else if (valueType.equals("int") 
-				|| valueType.equals("long") 
-				|| valueType.equals("integer")
-				|| valueType.equals("float") 
-				|| valueType.equals("double")) {
-			conditionString.append("").append(value).append("");
-		} else {
-			conditionString.append("'").append(String.valueOf(value).replaceAll("'", "")).append("'");
-		}
-		return conditionString.toString();
-	}
 
 	public String query(T entity) {
 		SQL sql = MapperMetadata.buildSelect(entity.getClass());
@@ -185,16 +60,16 @@ public class QueryProvider<T extends JpaEntity> {
 			logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumnName(), fieldType,
 					fieldValue);
 
-			if (fieldValue == null ) {
+			if(fieldValue == null ) {
 				logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
 				// skip null field value
 			} else if((fieldType.equals("string") && fieldValue.equals(""))
 					|| (fieldType.startsWith("byte"))
 					|| (fieldType.equals("Int") && fieldValue.equals("0"))
-					|| (fieldType.equals("Long") && fieldValue.equals("0"))
-					|| (fieldType.equals("Integer") && fieldValue.equals("0"))
-					|| (fieldType.equals("Float") && fieldValue.equals("0.0"))
-					|| (fieldType.equals("Double") && fieldValue.equals("0.0"))){
+					|| (fieldType.equals("Long")&& fieldValue.equals("0"))
+					|| (fieldType.equals("Integer")&& fieldValue.equals("0"))
+					|| (fieldType.equals("Float")&& fieldValue.equals("0.0"))
+					|| (fieldType.equals("Double")&& fieldValue.equals("0.0"))){
 				
 			}else {
 				sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");

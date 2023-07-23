@@ -19,7 +19,9 @@ package org.dromara.mybatis.jpa.test;
 
 import java.util.List;
 
+import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,6 +48,42 @@ public class PageResultsTestRunner {
 		 long page =results.getPage();//当前页
 		 _logger.info("records {} , totalPage {} , total {} , page {} ",
 				 records,totalPage,total,page);
+		 for (Students s : rowsStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
+	
+	@Test
+	public void queryPage() throws Exception{
+		_logger.info("queryPage...");
+		 JpaPage page = new JpaPage();
+		 Students student = new Students();
+		 student.setStdGender("M");
+		 student.setStdAge(40);
+		 page.setPageSize(20);
+		 page.setPageable(true);
+		 
+		 JpaPageResults<Students>  results = service.queryPage(page,student);
+		 List<Students> rowsStudents = results.getRows();
+		 _logger.info("records {} , totalPage {} , total {} , page {} ",
+				 results.getRecords(),results.getTotalPage(),results.getTotal(),results.getPage());
+		 for (Students s : rowsStudents) {
+			 _logger.info("Students "+s);
+		 }
+	}
+	
+	@Test
+	public void queryPageByCondition() throws Exception{
+		_logger.info("queryPage...");
+		 JpaPage page = new JpaPage();
+		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
+		 page.setPageSize(20);
+		 page.setPageable(true);
+		 
+		 JpaPageResults<Students>  results = service.queryPage(page,condition);
+		 List<Students> rowsStudents = results.getRows();
+		 _logger.info("records {} , totalPage {} , total {} , page {} ",
+				 results.getRecords(),results.getTotalPage(),results.getTotal(),results.getPage());
 		 for (Students s : rowsStudents) {
 			 _logger.info("Students "+s);
 		 }

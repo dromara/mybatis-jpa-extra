@@ -65,11 +65,17 @@ public class Query {
 	* @return Query
 	 */
 	public Query eq(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.eq,column,value));
+		eq( true , column , value);
 		return this;
 	}
 	
+	public Query eq(boolean isTrue , String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.eq,column,value));
+		}
+		return this;
+	}
 	
 	/**
 	 * 不等于 <>
@@ -78,8 +84,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query notEq(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.notEq,column,value));
+		notEq( true , column , value);
+		return this;
+	}
+	
+	public Query notEq(boolean isTrue ,String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.notEq,column,value));
+		}
 		return this;
 	}
 	
@@ -90,8 +103,15 @@ public class Query {
 	 * @return
 	 */
 	public Query in(String column, Object ... value) {
-		joint();
-		conditions.add(new Condition(Operator.in,column,value));
+		in( true , column , value);
+		return this;
+	}
+	
+	public Query in(boolean isTrue ,String column, Object ... value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.in,column,value));
+		}
 		return this;
 	}
 	
@@ -102,8 +122,15 @@ public class Query {
 	 * @return
 	 */
 	public Query notIn(String column, Object ... value) {
-		joint();
-		conditions.add(new Condition(Operator.notIn,column,value));
+		notIn( true , column , value);
+		return this;
+	}
+	
+	public Query notIn(boolean isTrue ,String column, Object ... value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.notIn,column,value));
+		}
 		return this;
 	}
 	
@@ -114,8 +141,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query gt(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.gt,column,value));
+		gt( true , column , value);
+		return this;
+	}
+	
+	public Query gt(boolean isTrue ,String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.gt,column,value));
+		}
 		return this;
 	}
 	
@@ -126,8 +160,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query ge(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.ge,column,value));
+		ge( true , column , value);
+		return this;
+	}
+	
+	public Query ge(boolean isTrue ,String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.ge,column,value));
+		}
 		return this;
 	}
 	
@@ -138,8 +179,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query lt(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.lt,column,value));
+		lt(true,column,value);
+		return this;
+	}
+	
+	public Query lt(boolean isTrue , String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.lt,column,value));
+		}
 		return this;
 	}
 	
@@ -150,8 +198,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query le(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.le,column,value));
+		le(true,column,value);
+		return this;
+	}
+	
+	public Query le(boolean isTrue ,String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.le,column,value));
+		}
 		return this;
 	}
 	
@@ -162,8 +217,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query like(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.like,column,value));
+		like(true,column,value);
+		return this;
+	}
+	
+	public Query like(boolean isTrue , String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.like,column,value));
+		}
 		return this;
 	}
 	
@@ -174,11 +236,17 @@ public class Query {
 	 * @return Query
 	 */
 	public Query notLike(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.notLike,column,value));
+		notLike(true,column,value);
 		return this;
 	}
 	
+	public Query notLike(boolean isTrue , String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.notLike,column,value));
+		}
+		return this;
+	}
 	
 	/**
 	 * column like '%value'
@@ -187,8 +255,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query likeLeft(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.likeLeft,column,value));
+		likeLeft(true,column,value);
+		return this;
+	}
+	
+	public Query likeLeft(boolean isTrue ,String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.likeLeft,column,value));
+		}
 		return this;
 	}
 	
@@ -199,8 +274,15 @@ public class Query {
 	 * @return Query
 	 */
 	public Query likeRight(String column, Object value) {
-		joint();
-		conditions.add(new Condition(Operator.likeRight,column,value));
+		likeRight(true,column,value);
+		return this;
+	}
+	
+	public Query likeRight(boolean isTrue ,String column, Object value) {
+		if(isTrue) {
+			joint();
+			conditions.add(new Condition(Operator.likeRight,column,value));
+		}
 		return this;
 	}
 	

@@ -31,9 +31,11 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-import org.dromara.mybatis.jpa.JpaService;
+import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.provider.PageResultsCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,24 +64,35 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 
 	private Object prepare(Invocation invocation) throws Throwable {
 		StatementHandler statement = getStatementHandler(invocation);
-		if (statement instanceof SimpleStatementHandler 
-				|| statement instanceof PreparedStatementHandler) {
-			MetaObject metaObject=SystemMetaObject.forObject(statement);
-			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
+		if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
+			MetaObject metaObject = SystemMetaObject.forObject(statement);
+			Object parameterObject = metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			logger.trace("parameter object  ==> {}" , parameterObject);
+			logger.trace("parameter class {} object  ==> {}" , parameterObject.getClass().getCanonicalName(),parameterObject);
 			//判断是否select语句及需要分页支持
-			if ((parameterObject instanceof JpaPage)
-					&& (sql.toLowerCase().trim().startsWith("select")) ) {
-				JpaPage page=(JpaPage)parameterObject;
+			if (sql.toLowerCase().trim().startsWith("select")) {
+				JpaPage page = null;
+				if((parameterObject instanceof JpaPage)) {
+					page = (JpaPage)parameterObject;
+				}else if((parameterObject instanceof ParamMap)
+						&& ((ParamMap<?>)parameterObject).containsKey(MapperMetadata.PAGE)) {
+					page = (JpaPage)((ParamMap<?>)parameterObject).get(MapperMetadata.PAGE);
+				}else {
+					for (Object key : ((ParamMap<?>)parameterObject).entrySet()){
+						if(((ParamMap<?>)parameterObject).get(key) instanceof JpaPage) {
+							page = (JpaPage) ((ParamMap<?>)parameterObject).get(key);
+							break;
+						}
+					}
+				}
 				//分页标识
-				if(page.isPageable()){
+				if(page != null && page.isPageable()){
 					logger.trace("prepare  boundSql  ==> {}" , removeBreakingWhitespace(sql));
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, page);
 					}else if(statement instanceof PreparedStatementHandler){
-						JpaService.pageResultsBoundSqlCache.put(
+						PageResultsCountProvider.pageResultsBoundSqlCache.put(
 								page.getPageResultSelectUUID(), 
 								new JpaPageResultsSqlCache(sql,boundSql)
 								);
@@ -88,9 +101,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 					logger.trace("prepare dialect boundSql : {}" , removeBreakingWhitespace(sql));
 					metaObject.setValue("boundSql.sql", sql);
 				}
-				
 			}
-			
 		}
 		return invocation.proceed();
 	}	

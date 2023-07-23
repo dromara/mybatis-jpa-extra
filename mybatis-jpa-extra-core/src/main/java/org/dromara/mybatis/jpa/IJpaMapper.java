@@ -23,6 +23,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.Query;
@@ -39,15 +40,24 @@ public interface IJpaMapper<T> {
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "filterByQuery")
 	public List<T> filterByQuery(T entity,Query query);
-	
-	//follow function for Query
-	public List<T> queryPageResults(T entity);
 
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryPageResultsCount")
-	public Integer queryPageResultsCount(T entity);
-	
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
+
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "queryPageResultsCount")
+	public Integer queryPageResultsCount(JpaPage page);
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "queryPage")
+	public List<T> queryPage(
+					@Param (MapperMetadata.PAGE)JpaPage page,
+					@Param (MapperMetadata.ENTITY) T entity);
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "queryPageByCondition")
+	public List<T> queryPageByCondition(
+					@Param (MapperMetadata.PAGE) JpaPage page,
+					@Param (MapperMetadata.CONDITION) Query query,
+					@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
 
 	/**
 	 *  query by id

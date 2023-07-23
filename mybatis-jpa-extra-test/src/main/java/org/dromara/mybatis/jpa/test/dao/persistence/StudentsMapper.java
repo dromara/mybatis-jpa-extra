@@ -31,4 +31,6 @@ import org.dromara.mybatis.jpa.test.entity.Students;
 
 public interface StudentsMapper extends IJpaMapper<Students> {
 	public List<Students> queryPageResults1(Students entity);
+	
+	public List<Students> queryPageResults(Students entity);
 }

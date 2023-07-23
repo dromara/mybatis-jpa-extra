@@ -20,6 +20,12 @@
  */
 package org.dromara.mybatis.jpa.entity;
 
+import java.util.UUID;
+
+import org.dromara.mybatis.jpa.id.IdStrategy;
+import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Transient;
@@ -30,6 +36,14 @@ import jakarta.persistence.Transient;
  *
  */
 public class JpaPage {
+	
+	public String generateId() {
+		if(MapperMetadata.identifierGeneratorFactory != null) {
+			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+		}else {
+			return UUID.randomUUID().toString().toLowerCase();
+		}
+	}
 	
 	public static final int MAX_RESULTS = 10000;
 	
@@ -244,7 +258,7 @@ public class JpaPage {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("JpaPagination [rows=");
+		builder.append("JpaPage [rows=");
 		builder.append(rows);
 		builder.append(", pageSize=");
 		builder.append(pageSize);

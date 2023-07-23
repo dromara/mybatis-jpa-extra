@@ -20,9 +20,10 @@
  */
 package org.dromara.mybatis.jpa.provider;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
-import org.dromara.mybatis.jpa.JpaService;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
@@ -30,6 +31,9 @@ import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.dromara.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * @author Crystal.Sea
@@ -39,15 +43,18 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 	
 	private static final Logger logger 	= 	LoggerFactory.getLogger(PageResultsCountProvider.class);
 	
+	//定义全局缓存
+	public static final Cache<String, JpaPageResultsSqlCache> pageResultsBoundSqlCache = 
+							Caffeine.newBuilder()
+								.expireAfterWrite(300, TimeUnit.SECONDS)
+								.build();
 	/**
 	 * @param entity
 	 * @return executePageResultsCount sql String
 	 */
-	public String executePageResultsCount(T entity) {
-		JpaPage page=(JpaPage)entity;
+	public String executeCount(JpaPage page) {
 		//获取缓存数据
-		JpaPageResultsSqlCache pageResultsSqlCache = 
-				JpaService.pageResultsBoundSqlCache.getIfPresent(page.getPageResultSelectUUID());
+		JpaPageResultsSqlCache pageResultsSqlCache = getPageResultsCache(page.getPageResultSelectUUID());
 		//多个空格 tab 替换成1个空格
 		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
 		
@@ -89,10 +96,15 @@ public class PageResultsCountProvider <T extends JpaEntity>{
 				sql.append(countSql.substring(fromIndex));
 			}
 		}
-		//删除缓存
-		JpaService.pageResultsBoundSqlCache.invalidate(page.getPageResultSelectUUID());
 		logger.trace("Count SQL : \n{}" , sql);
 		return sql.toString();
+	}
+	
+	private JpaPageResultsSqlCache getPageResultsCache(String selectUUID) {
+		JpaPageResultsSqlCache cache = pageResultsBoundSqlCache.getIfPresent(selectUUID);
+		//删除缓存
+		pageResultsBoundSqlCache.invalidate(selectUUID);
+		return cache;
 	}
 	
 }
