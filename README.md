@@ -12,7 +12,7 @@
 ## 1、JPA 3注释
 
 ## 1.1、注释
-支持9个注释
+支持10个注释
 > * @Entity
 > * @Table
 > * @Column
@@ -20,8 +20,9 @@
 > * @GeneratedValue
 > * @Transient 
 > * @Temporal
-> * @ColumnDefault
 > * @PartitionKey
+> * @ColumnDefault
+> * @ColumnLogic
 
 ## 1.2、主键策略
 
@@ -66,6 +67,9 @@ public class Students extends JpaEntity implements Serializable{
 	@GeneratedValue
 	@Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
+	@ColumnLogic
+	@Column(name ="is_deleted")
+	private int isDeleted;
 	//getter setter
 }
 ```
