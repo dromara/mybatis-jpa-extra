@@ -79,12 +79,14 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 						&& ((ParamMap<?>)parameterObject).containsKey(MapperMetadata.PAGE)) {
 					page = (JpaPage)((ParamMap<?>)parameterObject).get(MapperMetadata.PAGE);
 				}else {
-					for (Object key : ((ParamMap<?>)parameterObject).entrySet()){
-						if(((ParamMap<?>)parameterObject).get(key) instanceof JpaPage) {
-							page = (JpaPage) ((ParamMap<?>)parameterObject).get(key);
-							break;
+					try {
+						for (Object key : ((ParamMap<?>)parameterObject).entrySet()){
+							if(((ParamMap<?>)parameterObject).get(key) instanceof JpaPage) {
+								page = (JpaPage) ((ParamMap<?>)parameterObject).get(key);
+								break;
+							}
 						}
-					}
+					}catch(Exception e) {}
 				}
 				//分页标识
 				if(page != null && page.isPageable()){

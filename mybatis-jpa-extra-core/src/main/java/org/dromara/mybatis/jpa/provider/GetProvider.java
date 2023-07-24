@@ -50,20 +50,26 @@ public class GetProvider <T extends JpaEntity>{
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql = MapperMetadata.buildSelect(entityClass);
+		
+		sql.WHERE(" %s = #{%s}"
+				.formatted(
+						idFieldColumnMapper.getColumnName(),
+						idFieldColumnMapper.getFieldName())
+				);
+		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-			sql.WHERE(" %s = #{%s} and %s = #{%s} "
+			sql.WHERE(" %s = #{%s} ".formatted(
+					partitionKeyColumnMapper.getColumnName() ,
+					partitionKeyValue));
+		}
+		
+		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE(" %s = %s"
 					.formatted(
-							partitionKeyColumnMapper.getColumnName() ,
-							partitionKeyValue,
-							idFieldColumnMapper.getColumnName(),
-							idFieldColumnMapper.getFieldName())
-        			); 
-		}else {
-			sql.WHERE("%s = #{%s}"
-					.formatted(
-							idFieldColumnMapper.getColumnName(),
-							idFieldColumnMapper.getFieldName())
-					);  
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumnLogic().value())
+					);
 		}
 		
         String getSql = sql.toString(); 

@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.ColumnLogic;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
@@ -170,6 +171,18 @@ public class MapperMetadata <T extends JpaEntity>{
 		return idFieldColumnMapper;
 	}
 	
+	public static  FieldColumnMapper getLogicColumn(String  classSimpleName) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+		FieldColumnMapper logicColumnMapper = null;
+		for (int i = 0; i < listFields.size(); i++) {
+			if (listFields.get(i).isLogicDelete()) {
+				logicColumnMapper = listFields.get(i);
+				break;
+			}
+		}
+		return logicColumnMapper;
+	}
+	
 	public static  FieldColumnMapper getPartitionKey(String  classSimpleName) {
 		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
 		FieldColumnMapper partitionKeyColumnMapper = null;
@@ -278,6 +291,11 @@ public class MapperMetadata <T extends JpaEntity>{
 				if (field.isAnnotationPresent(PartitionKey.class)) {
 					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
 					fieldColumnMapper.setPartitionKey(partitionKey);
+				}
+				if (field.isAnnotationPresent(ColumnLogic.class)) {
+					ColumnLogic columnLogic = field.getAnnotation(ColumnLogic.class);
+					fieldColumnMapper.setColumnLogic(columnLogic);
+					fieldColumnMapper.setLogicDelete(true);
 				}
 				logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
 				fieldColumnMapperList.add(fieldColumnMapper);

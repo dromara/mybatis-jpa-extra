@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.ColumnLogic;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 import jakarta.persistence.Column;
@@ -77,6 +78,11 @@ public class Students extends JpaEntity implements Serializable {
 	@GeneratedValue
 	@Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
+	
+	@ColumnLogic
+	@Column(name ="is_deleted")
+	private int isDeleted;
+	
 	
 	public Students() {
 		super();
@@ -156,6 +162,14 @@ public class Students extends JpaEntity implements Serializable {
 
 	public void setModifyDate(LocalDateTime modifyDate) {
 		this.modifyDate = modifyDate;
+	}
+
+	public int getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	@Override

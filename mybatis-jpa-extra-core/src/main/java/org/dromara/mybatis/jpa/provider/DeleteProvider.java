@@ -131,12 +131,19 @@ public class DeleteProvider <T extends JpaEntity>{
 		}
 		
 		String keyValues = keyValue.substring(1).replaceAll(";", "");//remove ;
-		
+		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
-		SQL sql=new SQL().UPDATE(tableName).SET(" status = 9 ");
+		SQL sql=new SQL()
+				.UPDATE(tableName)
+				.SET(" %s = %s ".formatted(
+						logicColumnMapper.getColumnName(),
+						logicColumnMapper.getColumnLogic().delete()
+					)
+				);
+		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE("%s = #{%s} and %s  in ( %s )"
 					.formatted(

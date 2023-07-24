@@ -61,6 +61,9 @@ public class UpdateProvider <T extends JpaEntity>{
 				partitionKey = fieldColumnMapper;
 				continue;
 			}
+			if(fieldColumnMapper.isLogicDelete()) {
+				continue;
+			}
 			if(
 				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
 						||fieldColumnMapper.getFieldType().startsWith("byte")

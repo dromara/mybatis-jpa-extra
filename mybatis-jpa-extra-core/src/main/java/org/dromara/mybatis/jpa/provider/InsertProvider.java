@@ -60,6 +60,8 @@ public class InsertProvider <T extends JpaEntity>{
 			if(fieldColumnMapper.getColumnAnnotation().insertable()) {
 				if(fieldColumnMapper.getColumnDefault() != null) {
 					sql.VALUES(fieldColumnMapper.getColumnName(),"" + fieldColumnMapper.getColumnDefault().value() + "");
+				}else if(fieldColumnMapper.isLogicDelete()) {
+					sql.VALUES(fieldColumnMapper.getColumnName(),"" + fieldColumnMapper.getColumnLogic().value() + "");
 				}else if(
 					(
 						fieldColumnMapper.getFieldType().equalsIgnoreCase("String")

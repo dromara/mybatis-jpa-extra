@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.util.StringUtils;
@@ -48,7 +49,14 @@ public class FindProvider <T extends JpaEntity>{
 		}
 		
 		SQL sql=  MapperMetadata.buildSelect(entityClass);
-		
+		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE(" %s = %s"
+					.formatted(
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumnLogic().value())
+					);
+		}
         String findAllSql = sql.toString(); 
         logger.trace("Find All SQL \n{}" , findAllSql);
         MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.FINDALL_SQL,findAllSql);

@@ -75,11 +75,18 @@ public class QueryPageProvider <T extends JpaEntity>{
 				if(!conditions.isEmpty()) {
 					conditions.append(" and ");
 				}
-				conditions.append(
-						" %s = #{%s.%s} ".formatted(
-								fieldColumnMapper.getColumnName(),
-								MapperMetadata.ENTITY,
-								fieldColumnMapper.getFieldName()));
+				if(fieldColumnMapper.isLogicDelete()) {
+					conditions.append(
+							" %s = %s ".formatted(
+									fieldColumnMapper.getColumnName(),
+									fieldColumnMapper.getColumnLogic().value()));
+				}else {
+					conditions.append(
+							" %s = #{%s.%s} ".formatted(
+									fieldColumnMapper.getColumnName(),
+									MapperMetadata.ENTITY,
+									fieldColumnMapper.getFieldName()));
+				}
 			}
 		}
 		
@@ -105,8 +112,16 @@ public class QueryPageProvider <T extends JpaEntity>{
 		}
 		SQL sql = new SQL()
 			.SELECT(column).FROM(MapperMetadata.getTableName(entityClass))
-			.WHERE(QueryBuilder.build(condition));
+			.WHERE("( " + QueryBuilder.build(condition) +" ) ");
 		
+		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE(" ( %s = %s )" 
+					.formatted(
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumnLogic().value())
+					);
+		}
 		logger.trace("query Page By Condition SQL : \n{}" , sql);
 		return sql.toString();
 	}

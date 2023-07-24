@@ -18,6 +18,7 @@
 package org.dromara.mybatis.jpa.metadata;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.ColumnLogic;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 
 import jakarta.persistence.Column;
@@ -38,6 +39,8 @@ public class FieldColumnMapper {
 	
 	private boolean 		generated	=	false;
 	
+	private boolean 		logicDelete	=	false;
+	
 	private GeneratedValue 	generatedValue;
 	
 	private	Column 			columnAnnotation;
@@ -47,6 +50,8 @@ public class FieldColumnMapper {
 	private ColumnDefault   columnDefault;
 	
 	private PartitionKey    partitionKey;
+	
+	private ColumnLogic     columnLogic;
 	
 	public FieldColumnMapper() {
 		
@@ -137,6 +142,22 @@ public class FieldColumnMapper {
 
 	public void setPartitionKey(PartitionKey partitionKey) {
 		this.partitionKey = partitionKey;
+	}
+
+	public boolean isLogicDelete() {
+		return logicDelete;
+	}
+
+	public void setLogicDelete(boolean logicDelete) {
+		this.logicDelete = logicDelete;
+	}
+
+	public ColumnLogic getColumnLogic() {
+		return columnLogic;
+	}
+
+	public void setColumnLogic(ColumnLogic columnLogic) {
+		this.columnLogic = columnLogic;
 	}
 
 	@Override
