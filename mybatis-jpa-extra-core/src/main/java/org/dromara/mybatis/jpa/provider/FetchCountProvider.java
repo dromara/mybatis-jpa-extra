@@ -39,9 +39,9 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  * @author Crystal.Sea
  *
  */
-public class PageResultsCountProvider <T extends JpaEntity>{
+public class FetchCountProvider <T extends JpaEntity>{
 	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(PageResultsCountProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(FetchCountProvider.class);
 	
 	//定义全局缓存
 	public static final Cache<String, JpaPageResultsSqlCache> pageResultsBoundSqlCache = 

@@ -29,18 +29,18 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PageResultsTestRunner {
-	private static final Logger _logger = LoggerFactory.getLogger(PageResultsTestRunner.class);
+public class FetchPageResultsTestRunner {
+	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 	public static StudentsService service;
 
 	@Test
-	public void queryPageResults() throws Exception{
+	public void fetchPageResults() throws Exception{
 		
-		_logger.info("queryPageResults...");
+		_logger.info("fetchPageResults...");
 		 Students student=new Students();
 		 student.setPageSize(10);
 		 student.calculate(21);
-		 JpaPageResults<Students>  results = service.queryPageResults(student);
+		 JpaPageResults<Students>  results = service.fetchPageResults(student);
 		 List<Students> rowsStudents = results.getRows();
 		 long records =results.getRecords();//当前页记录数量
 		 long totalPage =results.getTotalPage();//总页数
@@ -54,8 +54,8 @@ public class PageResultsTestRunner {
 	}
 	
 	@Test
-	public void queryPage() throws Exception{
-		_logger.info("queryPage...");
+	public void fetch() throws Exception{
+		_logger.info("fetch...");
 		 JpaPage page = new JpaPage();
 		 Students student = new Students();
 		 student.setStdGender("M");
@@ -63,7 +63,7 @@ public class PageResultsTestRunner {
 		 page.setPageSize(20);
 		 page.setPageable(true);
 		 
-		 JpaPageResults<Students>  results = service.queryPage(page,student);
+		 JpaPageResults<Students>  results = service.fetch(page,student);
 		 List<Students> rowsStudents = results.getRows();
 		 _logger.info("records {} , totalPage {} , total {} , page {} ",
 				 results.getRecords(),results.getTotalPage(),results.getTotal(),results.getPage());
@@ -73,14 +73,14 @@ public class PageResultsTestRunner {
 	}
 	
 	@Test
-	public void queryPageByCondition() throws Exception{
-		_logger.info("queryPage...");
+	public void fetchByCondition() throws Exception{
+		_logger.info("fetchByCondition...");
 		 JpaPage page = new JpaPage();
 		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
 		 page.setPageSize(20);
 		 page.setPageable(true);
 		 
-		 JpaPageResults<Students>  results = service.queryPage(page,condition);
+		 JpaPageResults<Students>  results = service.fetch(page,condition);
 		 List<Students> rowsStudents = results.getRows();
 		 _logger.info("records {} , totalPage {} , total {} , page {} ",
 				 results.getRecords(),results.getTotalPage(),results.getTotal(),results.getPage());
@@ -90,9 +90,9 @@ public class PageResultsTestRunner {
 	}
 	
 	@Test
-	public void queryPageResultsByMapperId() throws Exception{
+	public void fetchPageResultsByMapperId() throws Exception{
 
-		_logger.info("queryPageResults by mapperId...");
+		_logger.info("fetchPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
 		 //student.setStdMajor(政治");
@@ -100,7 +100,7 @@ public class PageResultsTestRunner {
 		 student.setPageNumber(2);
 		 
 		 JpaPageResults<Students>  results =
-				 service.queryPageResults("queryPageResults1",student);
+				 service.fetchPageResults("fetchPageResults1",student);
 		 List<Students> rowsStudents = results.getRows();
 		 long records =results.getRecords();//当前页记录数量
 		 long totalPage =results.getTotalPage();//总页数

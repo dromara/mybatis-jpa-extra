@@ -34,7 +34,7 @@ public class QueryProvider<T extends JpaEntity> {
 
 	private static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
-	public String filterByQuery(T entity, Query query) {
+	public String filterByCondition(T entity, Query query) {
 		logger.trace("Query \n{}" , query);
 		SQL sql = MapperMetadata.buildSelect(entity.getClass()).WHERE(QueryBuilder.build(query));
 		

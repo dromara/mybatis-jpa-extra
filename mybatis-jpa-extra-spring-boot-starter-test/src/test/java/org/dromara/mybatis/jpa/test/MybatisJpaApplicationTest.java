@@ -100,31 +100,31 @@ public class MybatisJpaApplicationTest{
 	}
 
 	@Test
-	public void queryPageResults() throws Exception{
+	public void fetchPageResults() throws Exception{
 		
-		_logger.info("queryPageResults...");
+		_logger.info("fetchPageResults...");
 		 Students student=new Students();
 		 student.setStdGender("M");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 List<Students> allListStudents = 
-				 studentsService.queryPageResults(student).getRows();
+				 studentsService.fetchPageResults(student).getRows();
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }
 	}
 	
 	@Test
-	public void queryPageResultsByMapperId() throws Exception{
+	public void fetchPageResultsByMapperId() throws Exception{
 
-		_logger.info("queryPageResults by mapperId...");
+		_logger.info("fetchPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 
 		 List<Students> allListStudents = 
-				 studentsService.queryPageResults("queryPageResults1",student).getRows();
+				 studentsService.fetchPageResults("fetchPageResults1",student).getRows();
 		 for (Students s : allListStudents) {
 			 _logger.info("Students "+s);
 		 }

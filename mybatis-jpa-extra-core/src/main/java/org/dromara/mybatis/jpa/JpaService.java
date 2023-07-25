@@ -117,26 +117,26 @@ public  class  JpaService <T extends JpaEntity> {
 		return mapper;
 	}
 
-	//follow function for Query
+	//follow function for fetch page
 	
-	public JpaPageResults<T> queryPage(JpaPage page , T entity) {
+	public JpaPageResults<T> fetch(JpaPage page , T entity) {
 		try {
 			beforePageResults(page);
-			List<T> resultslist = getMapper().queryPage(page, entity);
+			List<T> resultslist = getMapper().fetch(page, entity);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
-			logger.error("queryPage Exception " , e);
+			logger.error("fetch Exception " , e);
 		}
 		return null;
 	}
 	
-	public JpaPageResults<T> queryPage(JpaPage page ,Query query) {
+	public JpaPageResults<T> fetch(JpaPage page ,Query query) {
 		try {
 			beforePageResults(page);
-			List<T> resultslist = getMapper().queryPageByCondition(page, query , this.entityClass);
+			List<T> resultslist = getMapper().fetchByCondition(page, query , this.entityClass);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
-			logger.error("queryPage Exception " , e);
+			logger.error("fetch Exception " , e);
 		}
 		return null;
 	}
@@ -146,12 +146,12 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param entity
 	 * @return
 	 */
-	public JpaPageResults<T> queryPageResults(T entity) {
-		return queryPageResults("queryPageResults" , null , entity);
+	public JpaPageResults<T> fetchPageResults(T entity) {
+		return fetchPageResults("fetchPageResults" , null , entity);
 	}
 	
-	public JpaPageResults<T> queryPageResults(JpaPage page , T entity) {
-		return queryPageResults("queryPageResults" , page , entity);
+	public JpaPageResults<T> fetchPageResults(JpaPage page , T entity) {
+		return fetchPageResults("fetchPageResults" , page , entity);
 	}
 	
 	/**
@@ -159,8 +159,8 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param entity
 	 * @return
 	 */
-	public JpaPageResults<T> queryPageResults(String mapperId,T entity) {
-		return queryPageResults(mapperId , null , entity);
+	public JpaPageResults<T> fetchPageResults(String mapperId,T entity) {
+		return fetchPageResults(mapperId , null , entity);
 	}
 	
 	/**
@@ -169,7 +169,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public JpaPageResults<T> queryPageResults(String mapperId,JpaPage page ,T entity) {
+	public JpaPageResults<T> fetchPageResults(String mapperId,JpaPage page ,T entity) {
 		try {
 			beforePageResults(entity);
 			List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, 
@@ -197,7 +197,7 @@ public  class  JpaService <T extends JpaEntity> {
 		if(page.getPageNumber() == 1 && totalPage < page.getPageSize()) {
 			totalCount = totalPage;
 		}else {
-			totalCount = parseCount(getMapper().queryPageResultsCount(page));
+			totalCount = parseCount(getMapper().fetchCount(page));
 		}
 		
 		return new JpaPageResults<T>(page.getPageNumber(),page.getPageSize(),totalPage,totalCount,resultslist);
@@ -208,17 +208,18 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param entity
 	 * @return
 	 */
-	public Integer queryPageResultsCount(JpaPage page) {
+	public Integer fetchCount(JpaPage page) {
 		Integer count = 0;
 		try {
-			count = getMapper().queryPageResultsCount(page);
-			logger.debug("queryCount count : {}" , count);
+			count = getMapper().fetchCount(page);
+			logger.debug("fetchCount count : {}" , count);
 		} catch(Exception e) {
-			logger.error("queryPageResultsCount Exception " , e);
+			logger.error("fetchCount Exception " , e);
 		}
 		return count;
 	}
 	
+	//follow function for query
 	/**
 	 *  query list entity by entity 
 	 * @param entity
@@ -245,7 +246,7 @@ public  class  JpaService <T extends JpaEntity> {
 	@SuppressWarnings("unchecked")
 	public List<T> query(Query query) {
 		try {
-			return getMapper().filterByQuery((T)entityClass.getDeclaredConstructor().newInstance(),query);
+			return getMapper().filterByCondition((T)entityClass.getDeclaredConstructor().newInstance(),query);
 		} catch(Exception e) {
 			logger.error("query Exception " , e);
 		}
@@ -260,7 +261,7 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			return getMapper().findAll(this.entityClass);
 		} catch(Exception e) {
-			logger.error("findAll Exception {}" , e);
+			logger.error("findAll Exception" , e);
 		}
 		return null;
 	}

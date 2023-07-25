@@ -80,27 +80,29 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new UpdateProvider().update(entity);
 	}
 
+	
+	public String fetch(Map<String, Object>  parametersMap) {
+		return new FetchProvider().fetch(parametersMap);
+	}
+	
+	public String fetchByCondition(Map<String, Object>  parametersMap) {
+		return new FetchProvider().fetchByCondition(parametersMap);
+	}
+	
 	/**
 	 * @param entity
 	 * @return insert sql String
 	 */
-	public String queryPageResultsCount(T entity) {
-		return new PageResultsCountProvider().executeCount(entity);
+	public String fetchCount(T entity) {
+		return new FetchCountProvider().executeCount(entity);
 	}
 	
 	public String query(T entity) {
 		return new QueryProvider().query(entity);
 	}
 	
-	public String filterByQuery(T entity,Query query) {
-		return new QueryProvider().filterByQuery(entity,query);
+	public String filterByCondition(T entity,Query query) {
+		return new QueryProvider().filterByCondition(entity,query);
 	}
-	
-	public String queryPage(Map<String, Object>  parametersMap) {
-		return new QueryPageProvider().queryPage(parametersMap);
-	}
-	
-	public String queryPageByCondition(Map<String, Object>  parametersMap) {
-		return new QueryPageProvider().queryPageByCondition(parametersMap);
-	}
+
 }

@@ -35,7 +35,7 @@ import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
-import org.dromara.mybatis.jpa.provider.PageResultsCountProvider;
+import org.dromara.mybatis.jpa.provider.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +94,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, page);
 					}else if(statement instanceof PreparedStatementHandler){
-						PageResultsCountProvider.pageResultsBoundSqlCache.put(
+						FetchCountProvider.pageResultsBoundSqlCache.put(
 								page.getPageResultSelectUUID(), 
 								new JpaPageResultsSqlCache(sql,boundSql)
 								);

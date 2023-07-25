@@ -38,23 +38,23 @@ public interface IJpaMapper<T> {
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "filterByQuery")
-	public List<T> filterByQuery(T entity,Query query);
+	@SelectProvider(type = MapperSqlProvider.class, method = "filterByCondition")
+	public List<T> filterByCondition(T entity,Query query);
 
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
 
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryPageResultsCount")
-	public Integer queryPageResultsCount(JpaPage page);
+	@SelectProvider(type = MapperSqlProvider.class, method = "fetchCount")
+	public Integer fetchCount(JpaPage page);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryPage")
-	public List<T> queryPage(
+	@SelectProvider(type = MapperSqlProvider.class, method = "fetch")
+	public List<T> fetch(
 					@Param (MapperMetadata.PAGE)JpaPage page,
 					@Param (MapperMetadata.ENTITY) T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryPageByCondition")
-	public List<T> queryPageByCondition(
+	@SelectProvider(type = MapperSqlProvider.class, method = "fetchByCondition")
+	public List<T> fetchByCondition(
 					@Param (MapperMetadata.PAGE) JpaPage page,
 					@Param (MapperMetadata.CONDITION) Query query,
 					@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);

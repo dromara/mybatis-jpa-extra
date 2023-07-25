@@ -37,15 +37,15 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class QueryPageProvider <T extends JpaEntity>{
+public class FetchProvider <T extends JpaEntity>{
 	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(QueryPageProvider.class);
+	private static final Logger logger 	= 	LoggerFactory.getLogger(FetchProvider.class);
 
 	/**
 	 * @param entity
 	 * @return update sql String
 	 */
-	public String queryPage(Map<String, Object>  parametersMap) {
+	public String fetch(Map<String, Object>  parametersMap) {
 		@SuppressWarnings("unchecked")
 		T entity = (T)parametersMap.get(MapperMetadata.ENTITY);
 		MapperMetadata.buildColumnList(entity.getClass());
@@ -101,7 +101,7 @@ public class QueryPageProvider <T extends JpaEntity>{
 	 * @param entity
 	 * @return update sql String
 	 */
-	public String queryPageByCondition(Map<String, Object>  parametersMap) {
+	public String fetchByCondition(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(MapperMetadata.CONDITION);
 		MapperMetadata.buildColumnList(entityClass);

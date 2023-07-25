@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class InitContext {
-	private static final Logger _logger = LoggerFactory.getLogger(PageResultsTestRunner.class);
+	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 	public static ApplicationContext context;
 	
 	//Initialization ApplicationContext for Project

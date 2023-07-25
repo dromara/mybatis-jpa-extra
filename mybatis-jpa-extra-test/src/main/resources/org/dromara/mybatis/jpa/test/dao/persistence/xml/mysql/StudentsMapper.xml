@@ -18,7 +18,7 @@
 		</if>
 	</sql>
 	
-    <select id="queryPageResults" parameterType="Students" resultType="Students">
+    <select id="fetchPageResults" parameterType="Students" resultType="Students">
     	SELECT 
     		ID		   ,
 			STDNO      ,
@@ -33,7 +33,7 @@
     </select>
    
  
-     <select id="queryPageResults1" parameterType="Students" resultType="Students">
+     <select id="fetchPageResults1" parameterType="Students" resultType="Students">
     	SELECT 
     		ID		   ,
 			STDNO      ,
