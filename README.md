@@ -210,8 +210,8 @@ public class Students extends JpaEntity implements Serializable{
 	//根据链式条件构造器查询
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
-	public void filterByQuery() throws Exception{
-		_logger.info("filterByQuery...");
+	public void queryByCondition() throws Exception{
+		_logger.info("query by condition ...");
 		List<Students> listStudents = service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
 				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
@@ -223,13 +223,13 @@ public class Students extends JpaEntity implements Serializable{
 ```java
 	//根据实体分页查询
 	@Test
-	public void queryPageResults() throws Exception{
-		_logger.info("queryPageResults...");
+	public void fetchPageResults() throws Exception{
+		_logger.info("fetchPageResults...");
 		 Students student=new Students();
 		 student.setPageSize(10);
 		 //student.setPageNumber(2);
 		 student.calculate(21);
-		 JpaPageResults<Students>  results = service.queryPageResults(student);
+		 JpaPageResults<Students>  results = service.fetchPageResults(student);
 		 List<Students> rowsStudents = results.getRows();
 		 long records =results.getRecords();//当前页记录数量
 		 long totalPage =results.getTotalPage();//总页数
@@ -239,14 +239,14 @@ public class Students extends JpaEntity implements Serializable{
 
 	//mapper id分页查询
 	@Test
-	public void queryPageResultsByMapperId() throws Exception{
-		_logger.info("queryPageResults by mapperId...");
+	public void fetchPageResultsByMapperId() throws Exception{
+		_logger.info("fetchPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 JpaPageResults<Students>  results =
-				 service.queryPageResults("queryPageResults1",student);
+				 service.fetchPageResults("fetchPageResults1",student);
 	}
 ```
 
@@ -270,7 +270,7 @@ public class Students extends JpaEntity implements Serializable{
 		</if>
 	</sql>
 	
-    <select id="queryPageResults" parameterType="Students" resultType="Students">
+    <select id="fetchPageResults" parameterType="Students" resultType="Students">
     	SELECT 
     		ID		   ,
 			STDNO      ,
@@ -283,7 +283,7 @@ public class Students extends JpaEntity implements Serializable{
     	<include refid="sql_condition"/>
     </select>
  
-     <select id="queryPageResults1" parameterType="Students" resultType="Students">
+     <select id="fetchPageResults1" parameterType="Students" resultType="Students">
     	SELECT 
     		ID		   ,
 			STDNO      ,

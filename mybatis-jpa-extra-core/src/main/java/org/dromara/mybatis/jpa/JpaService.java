@@ -246,7 +246,7 @@ public  class  JpaService <T extends JpaEntity> {
 	@SuppressWarnings("unchecked")
 	public List<T> query(Query query) {
 		try {
-			return getMapper().filterByCondition((T)entityClass.getDeclaredConstructor().newInstance(),query);
+			return getMapper().queryByCondition((T)entityClass.getDeclaredConstructor().newInstance(),query);
 		} catch(Exception e) {
 			logger.error("query Exception " , e);
 		}

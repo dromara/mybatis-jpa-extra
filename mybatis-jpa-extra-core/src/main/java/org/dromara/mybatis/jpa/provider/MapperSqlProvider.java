@@ -101,8 +101,8 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new QueryProvider().query(entity);
 	}
 	
-	public String filterByCondition(T entity,Query query) {
-		return new QueryProvider().filterByCondition(entity,query);
+	public String queryByCondition(T entity,Query query) {
+		return new QueryProvider().queryByCondition(entity,query);
 	}
 
 }

@@ -38,8 +38,8 @@ public interface IJpaMapper<T> {
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "filterByCondition")
-	public List<T> filterByCondition(T entity,Query query);
+	@SelectProvider(type = MapperSqlProvider.class, method = "queryByCondition")
+	public List<T> queryByCondition(T entity,Query query);
 
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);

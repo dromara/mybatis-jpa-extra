@@ -42,6 +42,18 @@ public class QueryTestRunner {
 		 }
 	}
 	
+	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
+	@Test
+	public void queryByCondition() throws Exception{
+		_logger.info("query by condition ...");
+		List<Students> listStudents =service.query(
+				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
+				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
+		 for (Students s : listStudents) {
+			 _logger.info("Students {}" , s);
+		 }
+	}
+	
 	@Test
 	public void find() throws Exception{
 		_logger.info("find by filter  StdNo = '10024' or StdNo = '10004'");
@@ -52,18 +64,6 @@ public class QueryTestRunner {
 				new int[]{Types.VARCHAR,Types.INTEGER}
 			);
 		
-		 for (Students s : listStudents) {
-			 _logger.info("Students {}" , s);
-		 }
-	}
-	
-	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
-	@Test
-	public void filterByQuery() throws Exception{
-		_logger.info("find by Query ...");
-		List<Students> listStudents =service.query(
-				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
-				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
 		 for (Students s : listStudents) {
 			 _logger.info("Students {}" , s);
 		 }
