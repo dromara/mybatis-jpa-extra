@@ -17,7 +17,13 @@ public class Query {
 	
 	ArrayList<Condition> orderBy ;
 	
-	
+	public Query() {
+		super();
+	}
+
+	public Query builder(){
+		return new Query();
+	}
 	
 	public ArrayList<Condition> getConditions() {
 		return conditions;
@@ -69,8 +75,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query eq(boolean isTrue , String column, Object value) {
-		if(isTrue) {
+	public Query eq(boolean expression , String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.eq,column,value));
 		}
@@ -88,8 +94,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query notEq(boolean isTrue ,String column, Object value) {
-		if(isTrue) {
+	public Query notEq(boolean expression ,String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.notEq,column,value));
 		}
@@ -107,8 +113,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query in(boolean isTrue ,String column, Object ... value) {
-		if(isTrue) {
+	public Query in(boolean expression ,String column, Object ... value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.in,column,value));
 		}
@@ -126,8 +132,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query notIn(boolean isTrue ,String column, Object ... value) {
-		if(isTrue) {
+	public Query notIn(boolean expression ,String column, Object ... value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.notIn,column,value));
 		}
@@ -145,8 +151,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query gt(boolean isTrue ,String column, Object value) {
-		if(isTrue) {
+	public Query gt(boolean expression ,String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.gt,column,value));
 		}
@@ -164,8 +170,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query ge(boolean isTrue ,String column, Object value) {
-		if(isTrue) {
+	public Query ge(boolean expression ,String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.ge,column,value));
 		}
@@ -183,8 +189,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query lt(boolean isTrue , String column, Object value) {
-		if(isTrue) {
+	public Query lt(boolean expression , String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.lt,column,value));
 		}
@@ -202,8 +208,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query le(boolean isTrue ,String column, Object value) {
-		if(isTrue) {
+	public Query le(boolean expression ,String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.le,column,value));
 		}
@@ -221,8 +227,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query like(boolean isTrue , String column, Object value) {
-		if(isTrue) {
+	public Query like(boolean expression , String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.like,column,value));
 		}
@@ -240,8 +246,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query notLike(boolean isTrue , String column, Object value) {
-		if(isTrue) {
+	public Query notLike(boolean expression , String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.notLike,column,value));
 		}
@@ -259,8 +265,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query likeLeft(boolean isTrue ,String column, Object value) {
-		if(isTrue) {
+	public Query likeLeft(boolean expression ,String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.likeLeft,column,value));
 		}
@@ -278,8 +284,8 @@ public class Query {
 		return this;
 	}
 	
-	public Query likeRight(boolean isTrue ,String column, Object value) {
-		if(isTrue) {
+	public Query likeRight(boolean expression ,String column, Object value) {
+		if(expression) {
 			joint();
 			conditions.add(new Condition(Operator.likeRight,column,value));
 		}
