@@ -61,7 +61,7 @@ public class MapperSqlProvider <T extends JpaEntity>{
     } 
 	
 	public String logicDelete(Map<String, Object>  parametersMap) { 
-		return new DeleteProvider().logicDelete(parametersMap);
+		return new LogicDeleteProvider().logicDelete(parametersMap);
     }
 	
 	/**

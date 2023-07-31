@@ -34,48 +34,13 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class DeleteProvider <T extends JpaEntity>{
+public class LogicDeleteProvider <T extends JpaEntity>{
 	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
-	
-	public String remove(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
-			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.REMOVE_SQL);
-		}
-		
-		String idValue = (String) parametersMap.get(MapperMetadata.PARAMETER_ID);
-		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn((entityClass).getSimpleName());
-		
-		SQL sql=new SQL().DELETE_FROM(tableName);
-		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-			sql.WHERE(" %s = #{%s} and %s = '%s' "
-					.formatted(
-							partitionKeyColumnMapper.getColumnName() ,
-							partitionKeyValue,
-							idFieldColumnMapper.getColumnName(),
-							idValue)
-        			);  
-		}else {
-			sql.WHERE("%s = '%s'"
-					.formatted(
-							idFieldColumnMapper.getColumnName(),
-							idValue) 
-					);  
-		}
-		
-        String deleteSql = sql.toString(); 
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.REMOVE_SQL,deleteSql);
-        logger.trace("Delete SQL \n{}" , deleteSql);
-        return deleteSql;  
-    }  
+	private static final Logger logger 	= 	LoggerFactory.getLogger(LogicDeleteProvider.class);
+
 	
 	@SuppressWarnings("unchecked")
-	public String batchDelete(Map<String, Object>  parametersMap) { 
+	public String logicDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
 		String tableName = MapperMetadata.getTableName(entityClass);
@@ -88,14 +53,20 @@ public class DeleteProvider <T extends JpaEntity>{
 				logger.trace("logic delete by id {}" , value);
 			}
 		}
-		//remove ;
-		String keyValues = keyValue.substring(1).replaceAll(";", "");
 		
+		String keyValues = keyValue.substring(1).replaceAll(";", "");//remove ;
+		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
 		
-		SQL sql=new SQL().DELETE_FROM(tableName);
+		SQL sql=new SQL()
+				.UPDATE(tableName)
+				.SET(" %s = %s ".formatted(
+						logicColumnMapper.getColumnName(),
+						logicColumnMapper.getColumnLogic().delete()
+					)
+				);
 		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE("%s = #{%s} and %s  in ( %s )"
@@ -109,10 +80,11 @@ public class DeleteProvider <T extends JpaEntity>{
 			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),keyValues));  
 		}
 		
-        String deleteSql=sql.toString(); 
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
-        logger.trace("Delete SQL \n{}" , deleteSql);
+        String deleteSql = sql.toString(); 
+        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
+        logger.trace("logic Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
+	
 
 }
