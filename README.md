@@ -146,27 +146,29 @@ public class Students extends JpaEntity implements Serializable{
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
 		service.deleteBatch(idList);
 	}
-	
-	//根据ID批量逻辑删除
-	@Test
-	void logicDelete() throws Exception{
-		List<String> idList = new ArrayList<String>();
-		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		service.logicDelete(idList);
-	}
+```
+## 2.2、逻辑删除
+```java    
+    //根据ID批量逻辑删除
+    @Test
+    void logicDelete() throws Exception{
+        List<String> idList = new ArrayList<String>();
+        idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+        idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+        idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
+        idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+        service.logicDelete(idList);
+    }
 
-	//根据ID批量删除
-	@Test
-	void batchDeleteByIds() throws Exception{
-		service.deleteBatch("2");
-		service.deleteBatch("2,639178432667713536");
-	}
+    //根据ID批量删除
+    @Test
+    void batchDeleteByIds() throws Exception{
+        service.deleteBatch("2");
+        service.deleteBatch("2,639178432667713536");
+    }
 ```
 
-## 2.2、Find查询和Qruey构造器
+## 2.3、Find查询和Qruey构造器
 
 ```java
 	//springJDBC 的查询方式
@@ -189,7 +191,7 @@ public class Students extends JpaEntity implements Serializable{
 	}
 ```
 
-## 2.3、分页查询并count数据量
+## 2.4、单表分页查询
 
 ```java
     //根据实体分页查询
@@ -214,25 +216,29 @@ public class Students extends JpaEntity implements Serializable{
          Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
          JpaPageResults<Students>  results = service.fetch(page,condition);
     }
-    
-	//根据实体分页查询,fetchPageResults在mapper的xml中配置
-	@Test
-	void fetchPageResults() throws Exception{
-		 Students student=new Students();
-		 student.setPageSize(10);
-		 student.calculate(21);
-		 JpaPageResults<Students>  results = service.fetchPageResults(student);
-	}
+```
 
-	//mapper id分页查询,fetchPageResults1在mapper的xml中配置
-	@Test
-	void fetchPageResultsByMapperId() throws Exception{
-		 Students student=new Students();
-		 student.setStdGender("M");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 JpaPageResults<Students> results = service.fetchPageResults("fetchPageResults1",student);
-	}
+## 2.5、根据mapper的xml分页查询
+
+```java
+    //根据实体分页查询,fetchPageResults在mapper的xml中配置
+    @Test
+    void fetchPageResults() throws Exception{
+         Students student=new Students();
+         student.setPageSize(10);
+         student.calculate(21);
+         JpaPageResults<Students>  results = service.fetchPageResults(student);
+    }
+
+    //mapper id分页查询,fetchPageResults1在mapper的xml中配置
+    @Test
+    void fetchPageResultsByMapperId() throws Exception{
+         Students student=new Students();
+         student.setStdGender("M");
+         student.setPageSize(10);
+         student.setPageNumber(2);
+         JpaPageResults<Students> results = service.fetchPageResults("fetchPageResults1",student);
+    }
 ```
 
 ## 3、mapper配置
