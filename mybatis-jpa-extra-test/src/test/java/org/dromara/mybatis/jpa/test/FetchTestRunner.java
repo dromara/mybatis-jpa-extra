@@ -58,9 +58,10 @@ public class FetchTestRunner {
 	void fetchByCondition() throws Exception{
 		_logger.info("fetchByCondition...");
 		 JpaPage page = new JpaPage();
-		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
 		 page.setPageSize(20);
 		 page.setPageable(true);
+		 
+		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
 		 
 		 JpaPageResults<Students>  results = service.fetch(page,condition);
 		 List<Students> rowsStudents = results.getRows();
