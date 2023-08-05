@@ -30,9 +30,15 @@ public class LogicDeleteTestRunner {
 	private static final Logger _logger = LoggerFactory.getLogger(LogicDeleteTestRunner.class);
 	public static StudentsService service;
 
-	
 	@Test
 	void logicDelete() throws Exception{
+		_logger.info("batchDeleteByIds...");
+		service.logicDelete("2");
+		service.logicDelete("2,639178432667713536");
+	}
+	
+	@Test
+	void logicBatchDelete() throws Exception{
 		_logger.info("logicDelete...");
 		List<String> idList=new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
@@ -43,10 +49,9 @@ public class LogicDeleteTestRunner {
 	}
 	
 	@Test
-	void batchDeleteByIds() throws Exception{
+	void logicDeleteSplit() throws Exception{
 		_logger.info("batchDeleteByIds...");
-		service.deleteBatch("2");
-		service.deleteBatch("2,639178432667713536");
+		service.logicDeleteSplit("2,639178432667713536",",");
 	}
 	
 	@BeforeAll

@@ -86,36 +86,26 @@ public class Students extends JpaEntity implements Serializable{
 		student.setStdClass("4");
 		service.insert(student);
 	}
-	
 	//查询数据实体并更新
 	@Test
 	void update() throws Exception{
 		Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
-		student.setImages(null);
-		service.update(student);
-		student.setImages("ssss".getBytes());
+		student.setStdMajor("政治");
 		service.update(student);
 	}
-	
 	//根据实体查询并更新
 	@Test
 	void merge() throws Exception{
 		Students student = new Students();
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
 		student.setStdMajor("政治");
 		student.setStdClass("4");
 		service.merge(student);
 	}
-
 	//根据ID查询
 	@Test
 	void get() throws Exception{
 		Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
 	}
-	
 	//根据实体查询
 	@Test
 	void query() throws Exception{
@@ -123,43 +113,25 @@ public class Students extends JpaEntity implements Serializable{
 		student.setStdGender("M");
 		List<Students> listStudents = service.query(student);
 	}
-
 	//查询所有记录
 	@Test
 	void findAll() throws Exception{
 		List<Students> listStudents = service.findAll();
 	}
-
 	//根据ID删除
 	@Test
 	void remove() throws Exception{
 		service.remove("921d3377-937a-4578-b1e2-92fb23b5e512");
 	}
-	
 	//根据ID集合批量删除
 	@Test
 	void batchDelete() throws Exception{
 		List<String> idList = new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+		//...
 		service.deleteBatch(idList);
 	}
-```
-## 2.2、逻辑删除
-```java    
-    //根据ID批量逻辑删除
-    @Test
-    void logicDelete() throws Exception{
-        List<String> idList = new ArrayList<String>();
-        idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-        idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-        idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-        idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-        service.logicDelete(idList);
-    }
-
     //根据ID批量删除
     @Test
     void batchDeleteByIds() throws Exception{
@@ -167,12 +139,35 @@ public class Students extends JpaEntity implements Serializable{
         service.deleteBatch("2,639178432667713536");
     }
 ```
+## 2.2、逻辑删除
+```java    
+    //根据ID删除或者ID字符串分隔符,批量逻辑删除
+	@Test
+	void logicDelete() throws Exception{
+		service.logicDelete("2");
+		service.logicDelete("2,639178432667713536");
+	}
+	//根据IDS批量逻辑删除
+	@Test
+	void logicBatchDelete() throws Exception{
+		List<String> idList=new ArrayList<String>();
+		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+		//...
+		service.logicDelete(idList);
+	}
+	//根据IDS字符串和分割符批量逻辑删除
+	@Test
+	void logicDeleteSplit() throws Exception{
+		service.logicDeleteSplit("2,639178432667713536",",");
+	}
+
+```
 
 ## 2.3、Find查询和Qruey构造器
 
 ```java
-	//springJDBC 的查询方式
-	//where StdNo = '10024' or StdNo = '10004'
+	//SpringJDBC的查询方式 where StdNo = '10024' or StdNo = '10004'
 	@Test
 	void find() throws Exception{
 		List<Students> listStudents = service.find(" StdNo = ? or StdNo = ?  ",
@@ -180,7 +175,6 @@ public class Students extends JpaEntity implements Serializable{
 							new int[]{Types.VARCHAR,Types.INTEGER}
 						);
 	}
-
 	//根据链式条件构造器查询
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
@@ -202,12 +196,9 @@ public class Students extends JpaEntity implements Serializable{
          page.setPageable(true);
          Students student = new Students();
          student.setStdGender("M");
-         student.setStdAge(40);
          JpaPageResults<Students>  results = service.fetch(page,student);
     }
-    
-    //根据Query条件分页查询
-    //where stdMajor = '政治' and STDAGE > 30
+    //根据Query条件分页查询 where stdMajor = '政治' and STDAGE > 30
     @Test
     void fetchByCondition() throws Exception{
          JpaPage page = new JpaPage();
@@ -221,16 +212,16 @@ public class Students extends JpaEntity implements Serializable{
 ## 2.5、根据mapper的xml分页查询
 
 ```java
-    //根据实体分页查询,fetchPageResults在mapper的xml中配置
+    //根据Mapper xml配置fetchPageResults分页查询
     @Test
     void fetchPageResults() throws Exception{
          Students student=new Students();
+		 student.setStdGender("M");
          student.setPageSize(10);
          student.calculate(21);
          JpaPageResults<Students>  results = service.fetchPageResults(student);
     }
-
-    //mapper id分页查询,fetchPageResults1在mapper的xml中配置
+    //根据Mapper xml id分页查询,fetchPageResults1在mapper的xml中配置
     @Test
     void fetchPageResultsByMapperId() throws Exception{
          Students student=new Students();
