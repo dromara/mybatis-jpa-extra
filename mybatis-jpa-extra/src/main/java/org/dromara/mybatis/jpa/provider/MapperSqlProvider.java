@@ -48,6 +48,10 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new FindProvider().find(parametersMap);  
     }
 	
+	public String findByIds(Map<String, Object>  parametersMap) {  
+		return new FindProvider().findByIds(parametersMap);  
+    }
+	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		return new FindProvider().findAll(parametersMap);  
     }

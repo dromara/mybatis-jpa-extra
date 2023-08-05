@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
@@ -327,6 +328,74 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public T findOne(String filter) {
 		return findOne( filter ,null , null);
+	}
+	
+	/**
+	 * find entity by id List
+	 * @param idList
+	 * @return List<T>
+	 */
+	public List<T> findByIds(List<String> idList) {
+		try {
+			logger.trace("findByIds {}" , idList);
+			List<T> findList = getMapper().findByIds(this.entityClass,idList,null);
+			logger.trace("findByIds count : {}" , findList.size());
+			return findList;
+		} catch(Exception e) {
+			logger.error("findByIds Exception " , e);
+		}
+		return Collections.emptyList();
+	}
+	
+	/**
+	 * find entity by id List
+	 * @param idList
+	 * @param partitionKey
+	 * @return List<T>
+	 */
+	public List<T> findByIds(List<String> idList,String partitionKey) {
+		try {
+			logger.trace("findByIds {} , partitionKey {}" , idList , partitionKey);
+			List<T> findList = getMapper().findByIds(this.entityClass , idList , partitionKey);
+			logger.debug("findByIds count : {}" , findList.size());
+			return findList;
+		} catch(Exception e) {
+			logger.error("findByIds Exception " , e);
+		}
+		return Collections.emptyList();
+	}
+	
+	/**
+	 * find entity by ids,split with ,
+	 * @param ids
+	 * @return List<T>
+	 */
+	public List<T> findByIds(String ids) {
+		List<String> idList = StringUtils.string2List(ids, ",");
+		return findByIds(idList);
+	}
+	
+	/**
+	 * find entity by ids,split with ,
+	 * @param ids
+	 * @param partitionKey
+	 * @return
+	 */
+	public List<T> findByIds(String ids,String partitionKey) {
+		List<String> idList = StringUtils.string2List(ids, ",");
+		return findByIds(idList,partitionKey);
+	}
+	
+
+	/**
+	 * find  entity by ids , split with ,
+	 * @param ids
+	 * @param split
+	 * @return List<T>
+	 */
+	public List<T> findByIdsSplit(String ids , String split) {
+		List<String> idList = StringUtils.string2List(ids, StringUtils.isBlank(split)? "," : split );
+		return findByIds(idList);
 	}
 	
 	/**

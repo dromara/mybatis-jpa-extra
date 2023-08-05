@@ -32,7 +32,7 @@ public class CurdTestRunner {
 	public static StudentsService service;
 	
 	@Test
-	public void insert() throws Exception{
+	void insert() throws Exception{
 		_logger.info("insert...");
 		Students student=new Students();
 		student.setStdNo("10024");
@@ -48,7 +48,7 @@ public class CurdTestRunner {
 	}
 	
 	@Test
-	public void merge() throws Exception{
+	void merge() throws Exception{
 		_logger.info("merge...");
 		Students student=new Students();
 		student.setStdNo("10024");
@@ -65,7 +65,7 @@ public class CurdTestRunner {
 	}
 
 	@Test
-	public void get() throws Exception{
+	void get() throws Exception{
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
 		System.out.println("Students "+student);
@@ -90,13 +90,13 @@ public class CurdTestRunner {
 	}
 	
 	@Test
-	public void remove() throws Exception{
+	void remove() throws Exception{
 		_logger.info("remove...");
 		service.remove("921d3377-937a-4578-b1e2-92fb23b5e512");
 	}
 	
 	@Test
-	public void batchDelete() throws Exception{
+	void batchDelete() throws Exception{
 		_logger.info("batchDelete...");
 		List<String> idList=new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
@@ -104,33 +104,6 @@ public class CurdTestRunner {
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
 		service.deleteBatch(idList);
-	}
-	
-	@Test
-	public void logicDelete() throws Exception{
-		_logger.info("logicDelete...");
-		List<String> idList=new ArrayList<String>();
-		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		service.logicDelete(idList);
-	}
-	
-	@Test
-	public void batchDeleteByIds() throws Exception{
-		_logger.info("batchDeleteByIds...");
-		service.deleteBatch("2");
-		service.deleteBatch("2,639178432667713536");
-	}
-
-	@Test
-	public void findAll() throws Exception{
-		_logger.info("findAll...");
-		List<Students> allListStudents =service.findAll();
-		 for (Students s : allListStudents) {
-			 _logger.info("Students "+s);
-		 }
 	}
 	
 	@BeforeAll

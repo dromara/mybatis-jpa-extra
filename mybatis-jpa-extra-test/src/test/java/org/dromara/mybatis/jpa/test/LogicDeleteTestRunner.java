@@ -1,5 +1,5 @@
 /*
- * Copyright [2022] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,40 +17,36 @@
 
 package org.dromara.mybatis.jpa.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
-import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QueryTestRunner {
-	private static final Logger _logger = LoggerFactory.getLogger(QueryTestRunner.class);
-	
+public class LogicDeleteTestRunner {
+	private static final Logger _logger = LoggerFactory.getLogger(LogicDeleteTestRunner.class);
 	public static StudentsService service;
+
 	
 	@Test
-	void query() throws Exception{
-		_logger.info("find...");
-		List<Students> listStudents =service.query(new Students("10024"));
-		 for (Students s : listStudents) {
-			 _logger.info("Students {}" , s);
-		 }
+	void logicDelete() throws Exception{
+		_logger.info("logicDelete...");
+		List<String> idList=new ArrayList<String>();
+		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
+		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+		service.logicDelete(idList);
 	}
 	
-	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
-	void queryByCondition() throws Exception{
-		_logger.info("query by condition ...");
-		List<Students> listStudents =service.query(
-				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
-				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
-		 for (Students s : listStudents) {
-			 _logger.info("Students {}" , s);
-		 }
+	void batchDeleteByIds() throws Exception{
+		_logger.info("batchDeleteByIds...");
+		service.deleteBatch("2");
+		service.deleteBatch("2,639178432667713536");
 	}
 	
 	@BeforeAll

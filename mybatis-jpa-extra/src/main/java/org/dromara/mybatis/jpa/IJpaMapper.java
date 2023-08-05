@@ -44,6 +44,12 @@ public interface IJpaMapper<T> {
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
 
+	@SelectProvider(type = MapperSqlProvider.class, method = "findByIds")
+	public List<T> findByIds(	
+							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
+							@Param (MapperMetadata.PARAMETER_ID_LIST) 		List<String> idList,
+							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+	
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "fetchCount")
 	public Integer fetchCount(JpaPage page);

@@ -21,6 +21,7 @@
 package org.dromara.mybatis.jpa.provider;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
@@ -115,5 +116,42 @@ public class FindProvider <T extends JpaEntity>{
 
         return findSql;  
     }
+	
+	public String findByIds(Map<String, Object>  parametersMap) { 
+		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
+		MapperMetadata.buildColumnList(parameterEntityClass);
+		ArrayList <String> parameterIds = (ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
+		
+		StringBuffer keyValue = new StringBuffer();
+		for(String value : parameterIds) {
+			if(value.trim().length() > 0) {
+				keyValue.append(",'").append(value).append("'");
+				logger.trace("find by id {}" , value);
+			}
+		}
+		
+		String idsValues = keyValue.substring(1).replaceAll(";", "");//remove ;
+		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
+		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((parameterEntityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(parameterEntityClass.getSimpleName());
+		
+		SQL sql = MapperMetadata.buildSelect(parameterEntityClass);
+		
+		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
+			sql.WHERE("%s = #{%s} and %s  in ( %s )"
+					.formatted(
+							partitionKeyColumnMapper.getColumnName() ,
+							partitionKeyValue,
+							idFieldColumnMapper.getColumnName(),
+							idsValues)
+        			);  
+		}else {
+			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),idsValues));  
+		}
+		
+        String findByIdsSql = sql.toString(); 
+        logger.trace("Find by ids SQL \n{}" , findByIdsSql);
+        return findByIdsSql;  
+    } 
 	
 }
