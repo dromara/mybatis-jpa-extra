@@ -148,11 +148,25 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @return
 	 */
 	public JpaPageResults<T> fetchPageResults(T entity) {
-		return fetchPageResults("fetchPageResults" , null , entity);
+		try {
+			beforePageResults(entity);
+			List<T> resultslist = getMapper().fetchPageResults(entity);
+			return buildPageResults(entity , resultslist);
+		}catch (Exception e) {
+			logger.error("fetchPageResults Exception " , e);
+		}
+		return null;
 	}
 	
 	public JpaPageResults<T> fetchPageResults(JpaPage page , T entity) {
-		return fetchPageResults("fetchPageResults" , page , entity);
+		try {
+			beforePageResults(entity);
+			List<T> resultslist = getMapper().fetchPageResults(page , entity);
+			return buildPageResults(entity , resultslist);
+		}catch (Exception e) {
+			logger.error("fetchPageResults page Exception " , e);
+		}
+		return null;
 	}
 	
 	/**
@@ -177,20 +191,20 @@ public  class  JpaService <T extends JpaEntity> {
 					page == null ? new Object[]{entity} : new Object[]{page , entity});
 			return buildPageResults(entity , resultslist);
 		}catch (NoSuchMethodException e) {
-			logger.error("Mapper no queryPageResults Method Exception " , e);
+			logger.error("Mapper no fetchPageResults Method Exception " , e);
 		}catch (Exception e) {
-			logger.error("queryPageResults Exception " , e);
+			logger.error("fetchPageResults Exception " , e);
 		}
 		return null;
 	}
 	
-	private void beforePageResults(JpaPage page) {
+	protected void beforePageResults(JpaPage page) {
 		page.setPageResultSelectUUID(page.generateId());
 		page.setStartRow(calculateStartRow(page.getPageNumber() ,page.getPageSize()));
 		page.setPageable(true);
 	}
 	
-	private JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
+	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
 		page.setPageable(false);
 		Integer totalPage = resultslist.size();
 		

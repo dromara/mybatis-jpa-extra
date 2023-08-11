@@ -56,7 +56,7 @@
 	</properties>
 
 	<name>mybatis-jpa-extra</name>
-	<description>简化MyBatis CUID操作,增强SELECT分页查询</description>
+	<description>mybatis-jpa-extra-parent</description>
 	<url>https://github.com/dromara/mybatis-jpa-extra</url>
 
 	<issueManagement>
@@ -475,7 +475,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Gpg Signature 本地打包要注释-->
+			<!-- Gpg Signature 本地打包要注释
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -490,7 +490,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			 
+			 -->
 		</plugins>
 	</build>    	        
 </project>

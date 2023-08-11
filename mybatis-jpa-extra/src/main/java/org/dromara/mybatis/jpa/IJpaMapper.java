@@ -65,6 +65,11 @@ public interface IJpaMapper<T> {
 					@Param (MapperMetadata.CONDITION) Query query,
 					@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
 
+	//
+	public List<T> fetchPageResults(T entity);
+	
+	public List<T> fetchPageResults(@Param (MapperMetadata.PAGE) JpaPage page ,@Param (MapperMetadata.ENTITY) T entity);
+	
 	/**
 	 *  query by id
 	 * @param id
