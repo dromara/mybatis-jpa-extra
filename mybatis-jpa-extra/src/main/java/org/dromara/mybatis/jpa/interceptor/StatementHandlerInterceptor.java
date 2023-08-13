@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 @Intercepts( {
 		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class })})
 public class StatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {
-	protected static Logger logger = LoggerFactory.getLogger(StatementHandlerInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(StatementHandlerInterceptor.class);
 	
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
@@ -73,8 +73,8 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			//判断是否select语句及需要分页支持
 			if (sql.toLowerCase().trim().startsWith("select")) {
 				JpaPage page = null;
-				if((parameterObject instanceof JpaPage)) {
-					page = (JpaPage)parameterObject;
+				if((parameterObject instanceof JpaPage parameterObjectPage)) {
+					page = parameterObjectPage;
 				}else if((parameterObject instanceof ParamMap)
 						&& ((ParamMap<?>)parameterObject).containsKey(MapperMetadata.PAGE)) {
 					page = (JpaPage)((ParamMap<?>)parameterObject).get(MapperMetadata.PAGE);
@@ -90,7 +90,8 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 				}
 				//分页标识
 				if(page != null && page.isPageable()){
-					logger.trace("prepare  boundSql  ==> {}" , removeBreakingWhitespace(sql));
+					String boundSqlRemoveBreakingWhitespace = removeBreakingWhitespace(sql);
+					logger.trace("prepare  boundSql  ==> {}" , boundSqlRemoveBreakingWhitespace);
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, page);
 					}else if(statement instanceof PreparedStatementHandler){
@@ -100,7 +101,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 								);
 						sql = dialect.getLimitString(sql, page);
 					}
-					logger.trace("prepare dialect boundSql : {}" , removeBreakingWhitespace(sql));
+					logger.trace("prepare dialect boundSql : {}" , boundSqlRemoveBreakingWhitespace);
 					metaObject.setValue("boundSql.sql", sql);
 				}
 			}

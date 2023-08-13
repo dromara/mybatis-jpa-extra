@@ -21,6 +21,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
@@ -112,9 +114,7 @@ public  class  JpaService <T extends JpaEntity> {
 			}
 		} catch(Exception e) {
 			logger.error("getMapper Exception " , e);
-		} finally {
-			
-		}
+		} 
 		return mapper;
 	}
 
@@ -215,7 +215,7 @@ public  class  JpaService <T extends JpaEntity> {
 			totalCount = parseCount(getMapper().fetchCount(page));
 		}
 		
-		return new JpaPageResults<T>(page.getPageNumber(),page.getPageSize(),totalPage,totalCount,resultslist);
+		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),totalPage,totalCount,resultslist);
 	}
 	
 	/**
@@ -250,7 +250,7 @@ public  class  JpaService <T extends JpaEntity> {
 		} catch(Exception e) {
 			logger.error("query Exception " , e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -265,7 +265,7 @@ public  class  JpaService <T extends JpaEntity> {
 		} catch(Exception e) {
 			logger.error("query Exception " , e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -278,7 +278,7 @@ public  class  JpaService <T extends JpaEntity> {
 		} catch(Exception e) {
 			logger.error("findAll Exception" , e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 	
 	
@@ -300,7 +300,7 @@ public  class  JpaService <T extends JpaEntity> {
 		} catch(Exception e) {
 			logger.error("findAll Exception " , e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -325,7 +325,7 @@ public  class  JpaService <T extends JpaEntity> {
 	public T findOne(String filter , Object[] args , int[] argTypes) {
 		try {
 			List<T> findList = find(filter ,args , argTypes);
-			return  (findList == null ||findList.size() == 0) ? null : findList.get(0);
+			return  CollectionUtils.isEmpty(findList) ? null : findList.get(0);
 		} catch(Exception e) {
 			logger.error("findAll Exception " , e);
 		}

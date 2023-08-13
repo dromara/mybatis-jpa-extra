@@ -107,6 +107,15 @@ public class JpaPage {
 	@Transient
 	protected String    pageResultSelectUUID;
 	
+	
+	public JpaPage(){}
+	
+	public JpaPage(int pageNumber , int pageSize){
+		this.pageNumber = pageNumber;
+		this.pageSize = pageSize;
+		this.pageable = true;
+	}
+
 	@JsonIgnore
 	public int getRows() {
 		return rows;

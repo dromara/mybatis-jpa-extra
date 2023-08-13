@@ -1,6 +1,9 @@
 package org.dromara.mybatis.jpa.query;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 
 public class Query {
 
@@ -11,7 +14,7 @@ public class Query {
 		public static final String DESC = "desc";
 	}
 	
-	ArrayList<Condition> conditions = new ArrayList<Condition>();
+	ArrayList<Condition> conditions = new ArrayList<>();
 	
 	ArrayList<Condition> groupBy ;
 	
@@ -21,23 +24,23 @@ public class Query {
 		super();
 	}
 
-	public Query builder(){
+	public static Query builder(){
 		return new Query();
 	}
 	
-	public ArrayList<Condition> getConditions() {
+	public List<Condition> getConditions() {
 		return conditions;
 	}
 
-	public ArrayList<Condition> getOrderBy() {
+	public List<Condition> getOrderBy() {
 		return orderBy;
 	}
 
 	public void joint() {
-		if(conditions.size() >= 1) {
+		if(CollectionUtils.isNotEmpty(conditions)) {
 			Operator lastJoint = conditions.get(conditions.size() -1).getExpression();
 			if(lastJoint.equals(Operator.and)
-					||lastJoint.equals(Operator.or)) {
+					||lastJoint.equals(Operator.or)){
 			}else {
 				and();
 			}
@@ -310,7 +313,7 @@ public class Query {
 	 * @param value
 	 * @return Query
 	 */
-	public Query isNotNull(String column, Object value) {
+	public Query isNotNull(String column) {
 		joint();
 		conditions.add(new Condition(Operator.isNotNull,column,null));
 		return this;
@@ -354,7 +357,7 @@ public class Query {
 	
 	public Query groupBy(String column) {
 		if(groupBy == null) {
-			this.groupBy = new ArrayList<Condition>();
+			this.groupBy = new ArrayList<>();
 		}
 		groupBy.add(new Condition(Operator.group,column,""));
 		return this;
@@ -362,13 +365,13 @@ public class Query {
 	
 	public Query orderBy(String column,String orderType) {
 		if(orderBy == null) {
-			this.orderBy = new ArrayList<Condition>();
+			this.orderBy = new ArrayList<>();
 		}
 		orderBy.add(new Condition(Operator.order,column,orderType));
 		return this;
 	}
 
-	public ArrayList<Condition> getGroupBy() {
+	public List<Condition> getGroupBy() {
 		return groupBy;
 	}
 

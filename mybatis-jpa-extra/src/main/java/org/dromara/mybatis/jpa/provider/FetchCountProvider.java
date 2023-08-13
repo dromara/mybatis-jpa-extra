@@ -58,7 +58,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 		//多个空格 tab 替换成1个空格
 		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
 		
-		BoundSql boundSql = (BoundSql)pageResultsSqlCache.getBoundSql();
+		BoundSql boundSql = pageResultsSqlCache.getBoundSql();
 		logger.trace("Count original SQL  :\n{}" , selectSql);
 		
 		StringBuffer sql = new StringBuffer(SqlSyntaxConstants.SELECT +" "+ SqlSyntaxConstants.Functions.COUNT_ONE +" countrows_ ");

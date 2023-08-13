@@ -85,7 +85,7 @@ public class FindProvider <T extends JpaEntity>{
 				throw new Exception("args length < parameter placeholder");
 			}
 			
-			String filterSqls [] = filterSql.split("\\?");
+			String[] filterSqls  = filterSql.split("\\?");
 			StringBuffer sqlBuffer = new StringBuffer("");
 			for(int i = 0 ;i < args.length ; i++){
 				logger.trace("Find args[{}] {}" , i, args[i]);

@@ -51,11 +51,12 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 		this.dialect = dialect;
 	}
 	
+	@Override
 	protected SqlSessionFactory buildSqlSessionFactory() throws Exception {
 		SqlSessionFactory factory = super.buildSqlSessionFactory();
 		
 		Configuration config = factory.getConfiguration();
-		logger.debug("buildSqlSessionFactory : {}" , config.toString());
+		logger.debug("buildSqlSessionFactory : {}" , config);
 		for (Interceptor interceptor : interceptors) {
 			config.addInterceptor(interceptor);
 		}

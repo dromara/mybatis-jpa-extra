@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.dialect;
 
 import java.sql.PreparedStatement;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.slf4j.Logger;
@@ -44,17 +45,17 @@ public abstract class Dialect {
 	
 	static {
 		
-		dialectMap=new HashMap<String,String>();
+		dialectMap=new HashMap<>();
 		dialectMap.put("db2", 			"org.dromara.mybatis.jpa.dialect.DB2Dialect");
 		dialectMap.put("derby", 		"org.dromara.mybatis.jpa.dialect.DerbyDialect");
-		dialectMap.put("mysql", 		"org.dromara.mybatis.jpa.dialect.MySQLDialect");
+		dialectMap.put(DEFAULT_DIALECT, "org.dromara.mybatis.jpa.dialect.MySQLDialect");
 		dialectMap.put("oracle", 		"org.dromara.mybatis.jpa.dialect.OracleDialect");
 		dialectMap.put("postgresql", 	"org.dromara.mybatis.jpa.dialect.PostgreSQLDialect");
 		dialectMap.put("highgo", 		"org.dromara.mybatis.jpa.dialect.HighgoDialect");
 		dialectMap.put("sqlserver", 	"org.dromara.mybatis.jpa.dialect.SQLServerDialect");
 		
 		
-		_logger.trace("Dialect Mapper : \n"+dialectMap);
+		_logger.trace("Dialect Mapper : \n{}" ,dialectMap);
 	}
 	
 	// constructors and factory methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,7 +102,7 @@ public abstract class Dialect {
 	/**
 	 * @return the dialectMap
 	 */
-	public static HashMap<String, String> getDialectMap() {
+	public static Map<String, String> getDialectMap() {
 		return dialectMap;
 	}
 	

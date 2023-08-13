@@ -136,7 +136,7 @@ public  class JpaPageResults <T>{
 	public void pageCount(int currentPage,int pageResults,Integer recordsCount){
 		this.page=currentPage;
 		//通过总记录数和每页显示记录数计算出当前页记录数
-		this.total =(int) ((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
+		this.total =((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
 		this.records = Long.parseLong(recordsCount+"");
 	}
 	/**

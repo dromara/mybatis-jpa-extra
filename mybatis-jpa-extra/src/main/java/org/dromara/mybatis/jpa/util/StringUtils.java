@@ -64,7 +64,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		if (string != null && !string.equals("")) {
 			strs = string.split(split);
 		}
-		ArrayList<String> resultList = new ArrayList<String>(0);
+		ArrayList<String> resultList = new ArrayList<>(0);
 		for (int i = 0; i < strs.length; i++) {
 			if (strs[i] != null&& !strs[i].equals("")) {
 				resultList.add(strs[i]);

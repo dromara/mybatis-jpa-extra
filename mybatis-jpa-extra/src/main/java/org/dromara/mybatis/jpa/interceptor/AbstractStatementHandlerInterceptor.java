@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractStatementHandlerInterceptor  implements Interceptor {
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected Dialect dialect;
 	
@@ -62,8 +62,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 		StatementHandler statement = (StatementHandler) invocation.getTarget();
 		if (statement instanceof RoutingStatementHandler) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			StatementHandler statementHandler = (StatementHandler)metaObject.getValue("delegate");
-			return statementHandler;
+			return (StatementHandler)metaObject.getValue("delegate");
 		
 		}
 		return statement;
@@ -71,8 +70,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	
 	protected RowBounds getRowBounds(StatementHandler statement) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			RowBounds rowBounds=(RowBounds)metaObject.getValue("rowBounds");
-			return rowBounds;
+			return (RowBounds)metaObject.getValue("rowBounds");
 	}
 	
 	protected boolean hasBounds(RowBounds rowBounds) {

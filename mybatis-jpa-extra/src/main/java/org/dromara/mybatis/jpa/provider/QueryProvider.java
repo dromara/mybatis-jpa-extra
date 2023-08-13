@@ -44,7 +44,7 @@ public class QueryProvider<T extends JpaEntity> {
 		if (query.getOrderBy() != null) {
 			sql.ORDER_BY(QueryBuilder.buildOrderBy(query));
 		}
-		logger.trace("filter By Query SQL \n{}" , sql.toString());
+		logger.trace("filter By Query SQL \n{}" , sql);
 		return sql.toString();
 	}
 
@@ -70,12 +70,12 @@ public class QueryProvider<T extends JpaEntity> {
 					|| (fieldType.equals("Integer")&& fieldValue.equals("0"))
 					|| (fieldType.equals("Float")&& fieldValue.equals("0.0"))
 					|| (fieldType.equals("Double")&& fieldValue.equals("0.0"))){
-				
+				// skip default field value
 			}else {
 				sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
 			}
 		}
-		logger.trace("filter By Entity SQL \n{}" , sql.toString());
+		logger.trace("filter By Entity SQL \n{}" , sql);
 		return sql.toString();
 	}
 

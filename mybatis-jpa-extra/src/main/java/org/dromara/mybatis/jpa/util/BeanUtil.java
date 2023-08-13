@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.LogFactory;
 
 public class BeanUtil {
@@ -65,10 +66,7 @@ public class BeanUtil {
 	
 	@SuppressWarnings("rawtypes")
 	public static boolean isNotNull(Collection collection) {
-		if(collection != null && collection.size() > 0) {
-			return true;
-		}
-		return false;
+		return  CollectionUtils.isNotEmpty(collection);
 	}
 	
 	@SuppressWarnings("rawtypes")

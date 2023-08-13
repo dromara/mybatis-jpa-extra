@@ -91,12 +91,11 @@ public class MapperMetadata <T extends JpaEntity>{
 	}
 	
 	
-	public static ConcurrentMap<String, List<FieldColumnMapper>> 	
-											fieldsMap 	= 	new ConcurrentHashMap<String, List<FieldColumnMapper>>();
+	public static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
 	
-	public static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<String, String>();
+	public static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<>();
 	
-	public static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<String, String>();
+	public static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<>();
 	
 	public static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
 	
@@ -115,9 +114,9 @@ public class MapperMetadata <T extends JpaEntity>{
 		String schema = null;
 		String catalog = null;
 		//must use @Entity to ORM class
-		Entity entity =(Entity)entityClass.getAnnotation(Entity.class);
+		Entity entity = entityClass.getAnnotation(Entity.class);
 		logger.trace("entity {}" , entity);
-		Table table = (Table)entityClass.getAnnotation(Table.class);
+		Table table = entityClass.getAnnotation(Table.class);
 		logger.trace("table {}" , table);
 		if(entity != null ) {
 			if(entity.name() != null && !entity.name().equals("")) {
@@ -242,7 +241,7 @@ public class MapperMetadata <T extends JpaEntity>{
 		logger.trace("entityClass {}" , entityClass);
 		
 		Field[] fields = entityClass.getDeclaredFields();
-		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<FieldColumnMapper>(fields.length);
+		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<>(fields.length);
 
 		for (Field field : fields) {
 			//skip Transient field
@@ -251,11 +250,11 @@ public class MapperMetadata <T extends JpaEntity>{
 			}
 			
 			if (field.isAnnotationPresent(Column.class)) {
-				FieldColumnMapper fieldColumnMapper=new FieldColumnMapper();
+				FieldColumnMapper fieldColumnMapper = new FieldColumnMapper();
 				fieldColumnMapper.setFieldName( field.getName());
 				fieldColumnMapper.setFieldType(field.getType().getSimpleName());
 				String columnName = "";
-				Column columnAnnotation = (Column) field.getAnnotation(Column.class);
+				Column columnAnnotation = field.getAnnotation(Column.class);
 				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
 				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
 				    columnName = columnAnnotation.name();
