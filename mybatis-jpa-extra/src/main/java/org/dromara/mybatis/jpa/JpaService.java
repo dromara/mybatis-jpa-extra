@@ -269,6 +269,21 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
+	 *  load entity by Query 
+	 * @param entity
+	 * @return
+	 */
+	public T load(Query query) {
+		try {
+			List<T> loadList = query(query);
+			return  CollectionUtils.isEmpty(loadList) ? null : loadList.get(0);
+		} catch(Exception e) {
+			logger.error("load One Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
 	 * findAll from table
 	 * @return
 	 */
