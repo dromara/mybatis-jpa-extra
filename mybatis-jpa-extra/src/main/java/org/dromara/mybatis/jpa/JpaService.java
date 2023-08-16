@@ -258,10 +258,9 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param entity
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public List<T> query(Query query) {
 		try {
-			return getMapper().queryByCondition((T)entityClass.getDeclaredConstructor().newInstance(),query);
+			return getMapper().queryByCondition(entityClass,query);
 		} catch(Exception e) {
 			logger.error("query Exception " , e);
 		}
@@ -434,7 +433,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public T get(String id) {
 		try {
-			logger.debug("entityClass  {} , primaryKey {}" , entityClass.toGenericString() , id);
+			logger.debug("entityClass  {} , primaryKey {}" , entityClass , id);
 			return  getMapper().get(this.entityClass,id,null);
 		} catch(Exception e) {
 			logger.error("get Exception " , e);
@@ -450,7 +449,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public T get(String id,String partitionKey) {
 		try {
-			logger.debug("entityClass  {} , primaryKey {} , partitionKey {}" , entityClass.toGenericString() , id,partitionKey);
+			logger.debug("entityClass  {} , primaryKey {} , partitionKey {}" , entityClass , id,partitionKey);
 			return  getMapper().get(this.entityClass,id,partitionKey);
 		} catch(Exception e) {
 			logger.error("get Exception " , e);
@@ -528,7 +527,24 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean update(T entity) {
 		try {
-			Integer count=getMapper().update(entity);
+			Integer count = getMapper().update(entity);
+			logger.debug("update count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("update Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 *  update entity by Query 
+	 * @param setSql
+	 * @param query
+	 * @return
+	 */
+	public boolean update(String setSql , Query query) {
+		try {
+			Integer count =  getMapper().updateByCondition(entityClass,setSql,query);
 			logger.debug("update count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -549,6 +565,22 @@ public  class  JpaService <T extends JpaEntity> {
 			return count > 0;
 		} catch(Exception e) {
 			logger.error("delete Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 * delete entity by Query
+	 * @param Query
+	 * @return
+	 */
+	public boolean delete(Query query) {
+		try {
+			Integer count = getMapper().deleteByQuery(entityClass , query);
+			logger.debug("delete by query count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("delete by query Exception " , e);
 		}
 		return false;
 	}
@@ -712,6 +744,21 @@ public  class  JpaService <T extends JpaEntity> {
 		return logicDelete(idList);
 	}
 	
+	/**
+	 * logic Delete entity by Query
+	 * @param Query
+	 * @return
+	 */
+	public boolean logicDelete(Query query) {
+		try {
+			Integer count = getMapper().logicDeleteByQuery(entityClass , query);
+			logger.debug("delete count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("delete Exception " , e);
+		}
+		return false;
+	}
 	
 	//follow is  for query paging
 	/**

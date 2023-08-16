@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.BeforeAll;
@@ -90,6 +91,12 @@ public class CurdTestRunner {
 	}
 	
 	@Test
+	void updateByQuery() throws Exception{
+		_logger.info("updateByQuery...");
+		service.update("id = '5'",Query.builder().eq("id", "2"));
+	}
+	
+	@Test
 	void remove() throws Exception{
 		_logger.info("remove...");
 		service.remove("921d3377-937a-4578-b1e2-92fb23b5e512");
@@ -106,11 +113,18 @@ public class CurdTestRunner {
 		service.deleteBatch(idList);
 	}
 	
+	
 	@Test
 	void batchDeleteByIds() throws Exception{
 		_logger.info("batchDeleteByIds...");
 		service.deleteBatch("2");
 		service.deleteBatch("2,639178432667713536");
+	}
+	
+	@Test
+	void deleteByQuery() throws Exception{
+		_logger.info("deleteByQuery...");
+		service.delete(Query.builder().eq("id", "2"));
 	}
 	
 	@BeforeAll

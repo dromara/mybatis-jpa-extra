@@ -17,6 +17,8 @@
 
 package org.dromara.mybatis.jpa.id;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.Date;
 
 import org.dromara.mybatis.jpa.util.MacAddress;
@@ -36,6 +38,8 @@ public class SerialGenerator  implements IdentifierGenerator{
 	//配置信息属性
 	public String  ipAddressNodeValue			= "";
 	
+	private long datacenterId;  //数据中心
+	
 	public String generate(Object object) {
 		return  next();
 	}
@@ -46,11 +50,6 @@ public class SerialGenerator  implements IdentifierGenerator{
 	 */
 	public  synchronized String next(){
 		String currentDateTime = getCurrentSystemDateTime();
-		
-		if(null == currentDateTime){
-			LoggerFactory.getLogger(SerialGenerator.class).error("获取系统日期失败");
-			return null;
-		}
 		
 		StringBuffer sequenceNumber = new StringBuffer();
 		
@@ -66,13 +65,13 @@ public class SerialGenerator  implements IdentifierGenerator{
 			logger.info("ipAddressNodeValue : {}" , ipAddressNodeValue);
 			if(ipAddressNodeValue.indexOf(",")>-1){
 				
-				String hostIpAddress=MacAddress.getAllHostMacAddress();//获得本机IP
+				String hostIpAddress = MacAddress.getAllHostMacAddress();//获得本机IP
 				
 				logger.info("hostIpAddress : {}" , hostIpAddress);
 				
-				String []ipAddressValues=ipAddressNodeValue.split(",");
+				String []ipAddressValues = ipAddressNodeValue.split(",");
 				for(String ipvalue : ipAddressValues){
-					String[] ipNode=ipvalue.split("=");
+					String[] ipNode = ipvalue.split("=");
 					if(ipNode!=null&&ipNode.length>0&&hostIpAddress.indexOf(ipNode[0])>-1){
 						STATIC_NODE_NUMBER=ipNode[1];
 					}
@@ -105,7 +104,7 @@ public class SerialGenerator  implements IdentifierGenerator{
 		String currentdatetime=null;
 		synchronized(OLD_DATETIME)
 		{
-			currentdatetime=(new java.text.SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
+			currentdatetime = (new java.text.SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
 			/**
 			 * 判断是否是新的时间，如果是新时间则STATIC_SEQUENCE从0开始计数
 			 */
@@ -125,5 +124,27 @@ public class SerialGenerator  implements IdentifierGenerator{
 		this.ipAddressNodeValue = ipAddressNodeValue;
 		getNodeNumber();
 	}
+	
+    public void  setIpAddressNodeValue(InetAddress inetAddress) {
+        long id = 0L;
+        try {
+            if (null == inetAddress) {
+            	inetAddress = InetAddress.getLocalHost();
+            }
+            NetworkInterface network = NetworkInterface.getByInetAddress(inetAddress);
+            if (null == network) {
+                id = 1L;
+            } else {
+                byte[] mac = network.getHardwareAddress();
+                if (null != mac) {
+                    id = ((0x000000FF & (long) mac[mac.length - 2]) | (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
+                    id = id % (datacenterId + 1);
+                }
+            }
+            this.ipAddressNodeValue = String.valueOf(id);
+        } catch (Exception e) {
+        	logger.error(" getDatacenterId Exception" , e);
+        }
+    }
 	
 }

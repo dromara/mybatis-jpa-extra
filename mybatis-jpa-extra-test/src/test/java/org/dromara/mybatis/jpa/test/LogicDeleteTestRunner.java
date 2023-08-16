@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,12 @@ public class LogicDeleteTestRunner {
 	void logicDeleteSplit() throws Exception{
 		_logger.info("batchDeleteByIds...");
 		service.logicDeleteSplit("2,639178432667713536",",");
+	}
+	
+	@Test
+	void logicDeleteByQuery() throws Exception{
+		_logger.info("logicDeleteByQuery...");
+		service.logicDelete(Query.builder().eq("id", "2"));
 	}
 	
 	@BeforeAll

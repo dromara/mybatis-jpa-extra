@@ -25,6 +25,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +104,19 @@ public class UpdateProvider <T extends JpaEntity>{
 		}else {
 			return "";
 		}
+	}
+	
+	public String updateByCondition(Class<?> entityClass,String setSql, Query query) {
+		logger.trace("update By Query \n{}" , query);
+		MapperMetadata.buildColumnList(entityClass);
+		String tableName = MapperMetadata.getTableName(entityClass);
+		
+		SQL sql = new SQL()
+				.UPDATE(tableName)
+				.SET(setSql).WHERE(QueryBuilder.build(query));
+		
+		logger.trace("update By Query  SQL \n{}" , sql);
+		return sql.toString();
 	}
 
 }

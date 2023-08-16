@@ -64,9 +64,17 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new DeleteProvider().batchDelete(parametersMap);
     } 
 	
+	public String deleteByQuery(Class<?> entityClass,Query query) { 
+		return new DeleteProvider().deleteByQuery(entityClass,query);
+    } 
+	
 	public String logicDelete(Map<String, Object>  parametersMap) { 
 		return new LogicDeleteProvider().logicDelete(parametersMap);
     }
+	
+	public String logicDeleteByQuery(Class<?> entityClass,Query query) { 
+		return new LogicDeleteProvider().logicDeleteByQuery(entityClass,query);
+    } 
 	
 	/**
 	 * @param entity
@@ -84,6 +92,9 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new UpdateProvider().update(entity);
 	}
 
+	public String updateByCondition(Class<?> entityClass,String setSql,Query query) {
+		return new UpdateProvider().updateByCondition(entityClass,setSql,query);
+	}
 	
 	public String fetch(Map<String, Object>  parametersMap) {
 		return new FetchProvider().fetch(parametersMap);
@@ -105,8 +116,8 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new QueryProvider().query(entity);
 	}
 	
-	public String queryByCondition(T entity,Query query) {
-		return new QueryProvider().queryByCondition(entity,query);
+	public String queryByCondition(Class<?> entityClass,Query query) {
+		return new QueryProvider().queryByCondition(entityClass,query);
 	}
 
 }

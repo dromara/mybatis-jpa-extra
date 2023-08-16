@@ -27,6 +27,8 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,5 +116,16 @@ public class DeleteProvider <T extends JpaEntity>{
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
+	
+	public String deleteByQuery(Class<?> entityClass, Query query) {
+		logger.trace("delete By Query \n{}" , query);
+		MapperMetadata.buildColumnList(entityClass);
+		String tableName = MapperMetadata.getTableName(entityClass);
+		SQL sql = new SQL().DELETE_FROM(tableName).WHERE(QueryBuilder.build(query));
+		
+		logger.trace("delete By Query SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
 
 }

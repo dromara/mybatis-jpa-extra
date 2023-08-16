@@ -34,9 +34,9 @@ public class QueryProvider<T extends JpaEntity> {
 
 	private static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
-	public String queryByCondition(T entity, Query query) {
+	public String queryByCondition(Class<?> entityClass, Query query) {
 		logger.trace("Query \n{}" , query);
-		SQL sql = MapperMetadata.buildSelect(entity.getClass()).WHERE(QueryBuilder.build(query));
+		SQL sql = MapperMetadata.buildSelect(entityClass).WHERE(QueryBuilder.build(query));
 		
 		if (query.getGroupBy() != null) {
 			sql.GROUP_BY(QueryBuilder.buildGroupBy(query));

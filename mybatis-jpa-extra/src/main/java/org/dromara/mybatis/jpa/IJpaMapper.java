@@ -39,7 +39,7 @@ public interface IJpaMapper<T> {
 	public List<T> query(T entity);
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "queryByCondition")
-	public List<T> queryByCondition(T entity,Query query);
+	public List<T> queryByCondition(Class<?> entityClass,Query query);
 
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
@@ -89,13 +89,18 @@ public interface IJpaMapper<T> {
 	@UpdateProvider(type = MapperSqlProvider.class, method = "update")
 	public Integer update(T entity);
 
-
+	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByCondition")
+	public Integer updateByCondition(Class<?> entityClass , String setSql, Query query);	
 	/**
 	 * delete by entity parameter
 	 * @param entity
 	 * @return
 	 */
 	public Integer delete(T entity);
+	
+	@DeleteProvider(type = MapperSqlProvider.class, method = "deleteByQuery")
+	public Integer deleteByQuery(Class<?> entityClass , Query query);	
+	
 	/**
 	 * delete by id
 	 * @param id
@@ -112,11 +117,14 @@ public interface IJpaMapper<T> {
 							@Param (MapperMetadata.PARAMETER_ID_LIST)	 	List<String> idList,
 							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);	
 	
-	@DeleteProvider(type = MapperSqlProvider.class, method = "logicDelete")
+	@UpdateProvider(type = MapperSqlProvider.class, method = "logicDelete")
 	public Integer logicDelete(	
 							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
 							@Param (MapperMetadata.PARAMETER_ID_LIST) 		List<String> idList,
 							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+	
+	@UpdateProvider(type = MapperSqlProvider.class, method = "logicDeleteByQuery")
+	public Integer logicDeleteByQuery(Class<?> entityClass , Query query);	
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "find")
 	public List<T> find(	@Param (MapperMetadata.ENTITY_CLASS)	Class<?> 	entityClass,
