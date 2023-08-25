@@ -9,6 +9,17 @@
 
 4.提供starter,**简化SpringBoot集成**;
 
+5.数据库支持
+| 数据库          |   支持  |
+| :-----          | :----   |
+| **MySQL**       | ✔      | 
+| **PostgreSQL**  | ✔      | 
+| **Oracle**      | ✔      |
+| **SqlServer**   | ✔      |
+| **DB2**         | ✔      |
+| **Derby**       | ✔      |
+
+
 ## 1、JPA 3注释
 
 ## 1.1、注释
