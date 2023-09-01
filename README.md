@@ -202,9 +202,7 @@ public class Students extends JpaEntity implements Serializable{
     //根据实体分页查询
     @Test
     void fetch() throws Exception{
-         JpaPage page = new JpaPage();
-         page.setPageSize(20);
-         page.setPageable(true);
+         JpaPage page = new JpaPage(1);
          Students student = new Students();
          student.setStdGender("M");
          JpaPageResults<Students>  results = service.fetch(page,student);
@@ -212,9 +210,7 @@ public class Students extends JpaEntity implements Serializable{
     //根据Query条件分页查询 where stdMajor = '政治' and STDAGE > 30
     @Test
     void fetchByCondition() throws Exception{
-         JpaPage page = new JpaPage();
-         page.setPageSize(20);
-         page.setPageable(true);
+         JpaPage page = new JpaPage(1,20);
          Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
          JpaPageResults<Students>  results = service.fetch(page,condition);
     }
@@ -228,8 +224,7 @@ public class Students extends JpaEntity implements Serializable{
     void fetchPageResults() throws Exception{
          Students student=new Students();
          student.setStdGender("M");
-         student.setPageSize(10);
-         student.calculate(21);
+         student.setPageNumber(1);
          JpaPageResults<Students>  results = service.fetchPageResults(student);
     }
     //根据Mapper xml id分页查询,fetchPageResults1在mapper的xml中配置
@@ -237,8 +232,7 @@ public class Students extends JpaEntity implements Serializable{
     void fetchPageResultsByMapperId() throws Exception{
          Students student=new Students();
          student.setStdGender("M");
-         student.setPageSize(10);
-         student.setPageNumber(2);
+         student.setPageNumber(1);
          JpaPageResults<Students> results = service.fetchPageResults("fetchPageResults1",student);
     }
 ```
@@ -265,39 +259,21 @@ public class Students extends JpaEntity implements Serializable{
     
     <select id="fetchPageResults" parameterType="Students" resultType="Students">
         SELECT 
-            ID         ,
-            STDNO      ,
-            STDNAME    ,
-            STDGENDER  ,
-            STDAGE     ,
-            STDMAJOR   ,
-            STDCLASS 
+			id , stdno , stdname ,stdgender , stdage , stdmajor , stdclass 
         FROM STUDENTS 
         <include refid="sql_condition"/>
     </select>
  
      <select id="fetchPageResults1" parameterType="Students" resultType="Students">
         SELECT 
-            ID         ,
-            STDNO      ,
-            STDNAME    ,
-            STDGENDER  ,
-            STDAGE     ,
-            STDMAJOR   ,
-            STDCLASS 
+            id , stdno , stdname ,stdgender , stdage , stdmajor , stdclass 
         FROM STUDENTS 
         <include refid="sql_condition"/>
     </select>
        
      <select id="queryBy" parameterType="Students" resultType="Students">
         SELECT 
-            ID         ,
-            STDNO      ,
-            STDNAME    ,
-            STDGENDER  ,
-            STDAGE     ,
-            STDMAJOR   ,
-            STDCLASS 
+            id , stdno , stdname ,stdgender , stdage , stdmajor , stdclass 
         FROM ROLES 
         <include refid="sql_condition"/>
     </select>
