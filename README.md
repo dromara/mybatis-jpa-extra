@@ -322,8 +322,6 @@ mybatis.dialect=mysql
 mybatis.type-aliases-package=org.apache.mybatis.jpa.test.entity
 mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/${mybatis.dialect}/*.xml
 mybatis.table-column-escape=true
-mybatis.table-column-snowflake-datacenter-id=1
-mybatis.table-column-snowflake-machine-id=1
 #mybatis.table-column-escape-char=`
 ```
 
