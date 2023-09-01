@@ -110,6 +110,11 @@ public class JpaPage {
 	
 	public JpaPage(){}
 	
+	public JpaPage(int pageNumber ){
+		this.pageNumber = pageNumber;
+		this.pageable = true;
+	}
+	
 	public JpaPage(int pageNumber , int pageSize){
 		this.pageNumber = pageNumber;
 		this.pageSize = pageSize;
