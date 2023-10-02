@@ -26,13 +26,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Temporal;
 
 public class FieldColumnMapper {
-	//class field name
+	/**
+	 * class field name
+	 */
 	private String 			fieldName;
 	
-	//class field type
+	/**
+	 * class field type
+	 */
 	private String 			fieldType;
 	
-	//table column name
+	/**
+	 * table column name
+	 */
 	private String 			columnName;
 	
 	private boolean 		idColumn	=	false;

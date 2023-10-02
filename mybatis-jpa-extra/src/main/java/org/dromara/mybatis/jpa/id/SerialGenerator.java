@@ -31,14 +31,22 @@ public class SerialGenerator  implements IdentifierGenerator{
 	 * 历史时间
 	 */
 	private static String 	OLD_DATETIME		= "";
-	//当前序列
+	/**
+	 * 当前序列
+	 */
 	public static  int 		STATIC_SEQUENCE		= 0;
-	//节点
+	/**
+	 * 节点
+	 */
 	public static  String 	STATIC_NODE_NUMBER	= "--";
-	//配置信息属性
+	/**
+	 * 配置信息属性
+	 */
 	public String  ipAddressNodeValue			= "";
-	
-	private long datacenterId;  //数据中心
+	/**
+	 * 数据中心
+	 */
+	private long datacenterId; 
 	
 	public String generate(Object object) {
 		return  next();

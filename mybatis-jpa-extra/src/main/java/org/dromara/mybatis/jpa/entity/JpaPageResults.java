@@ -36,22 +36,32 @@ import org.slf4j.LoggerFactory;
 public  class JpaPageResults <T>{
 	private static final  Logger logger = LoggerFactory.getLogger(JpaPageResults.class);
 	
-	private int page		= 0;//当前页
-	
-	private int total		= 0;//当前页记录数
-	
-	private int totalPage	= 0;//总页数
-	
-	private Long records	= 0L;//总记录数
-	
-	private List<T> rows;		 //记录列表
+	/**
+	 * 当前页
+	 */
+	private int page		= 0;
+	/**
+	 * 当前页记录数
+	 */
+	private int total		= 0;
+	/**
+	 * 总页数
+	 */
+	private int totalPage	= 0;
+	/**
+	 * 总记录数
+	 */
+	private Long records	= 0L;
+	/**
+	 * 记录行数据
+	 */
+	private List<T> rows;		 
 	
 	/**
 	 * 
 	 */
 	public JpaPageResults() {
 		logger.debug("JpaPageResults.");
-		
 	}
 	/**
 	 * @param currentPage

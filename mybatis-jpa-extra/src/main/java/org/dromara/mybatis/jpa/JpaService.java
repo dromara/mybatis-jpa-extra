@@ -110,7 +110,7 @@ public  class  JpaService <T extends JpaEntity> {
 			if(mapper == null) {
 				String mapperClassBean = StringUtils.firstToLowerCase(mapperClass);
 				logger.info("mapperClass Bean is {}" , mapperClassBean);
-				mapper = (IJpaMapper<T>) MybatisJpaContext.getBean(mapperClassBean);
+				mapper = MybatisJpaContext.getBean(mapperClassBean,IJpaMapper.class);
 			}
 		} catch(Exception e) {
 			logger.error("getMapper Exception " , e);

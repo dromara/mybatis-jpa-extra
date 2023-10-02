@@ -33,10 +33,13 @@ import org.slf4j.LoggerFactory;
  * MyBatisJpaSessionFactoryBean
  */
 public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
+	
 	protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
+	
 	private List<Interceptor> interceptors = Collections.emptyList();
 	
 	private int timeout = 30 ;
+	
 	private String dialect = Dialect.DEFAULT_DIALECT;
 	
 	public void setInterceptors(List<Interceptor> interceptors) {
@@ -83,8 +86,5 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 	
 	public SqlSessionFactory build() throws Exception {
 		return buildSqlSessionFactory();
-	}
-
-
-	
+	}	
 }

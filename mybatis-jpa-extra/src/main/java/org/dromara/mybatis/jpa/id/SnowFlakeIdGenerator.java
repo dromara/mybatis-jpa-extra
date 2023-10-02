@@ -40,11 +40,17 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     private static final  long START_STMP = 1480166465631L;
 
     /**
-     * 每一部分占用的位数
+     * 每一部分占用的位数，序列号占用的位数
      */
-    private static final  long SEQUENCE_BIT = 12; //序列号占用的位数
-    private static final  long MACHINE_BIT = 5;   //机器标识占用的位数
-    private static final  long DATACENTER_BIT = 5;//数据中心占用的位数
+    private static final  long SEQUENCE_BIT = 12; 
+    /**
+     * 机器标识占用的位数
+     */
+    private static final  long MACHINE_BIT = 5;   
+    /**
+     * 数据中心占用的位数
+     */
+    private static final  long DATACENTER_BIT = 5;
 
     /**
      * 每一部分的最大值
@@ -60,10 +66,22 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     private static final long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
     private static final long TIMESTMP_LEFT = DATACENTER_LEFT + DATACENTER_BIT;
 
-    private long datacenterId;  //数据中心
-    private long machineId;     //机器标识
-    private long sequence = 0L; //序列号
-    private long lastStmp = -1L;//上一次时间戳
+    /**
+     * 数据中心
+     */
+    private long datacenterId;  
+    /**
+     * 机器标识
+     */
+    private long machineId;     
+    /**
+     * 序列号
+     */
+    private long sequence = 0L; 
+    /**
+     * 上一次时间戳
+     */
+    private long lastStmp = -1L;
     private String dateTime;
 
     public SnowFlakeIdGenerator() {}
