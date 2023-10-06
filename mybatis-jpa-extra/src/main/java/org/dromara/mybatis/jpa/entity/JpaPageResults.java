@@ -24,11 +24,12 @@ import org.slf4j.LoggerFactory;
 /**
  * PageResults 前端控件的组装类
  * 需要提供
- * 		1、当前页码 currentPage
- * 		2、每页显示记录数 pageResults
- * 		3、总记录数 recordsCount
- * 		4、记录的列表 List<T> rows
- * 		5、当前页记录数 total
+ * 		1、当前页码 		page
+ * 		2、当前页记录数 	total
+ * 		3、总页数		 	totalPage
+ * 		4、总记录数 		records
+ * 		5、记录的列表 	List<T> rows
+
  * @author Crystal.Sea
  *
  * @param <T>
@@ -39,19 +40,22 @@ public  class JpaPageResults <T>{
 	/**
 	 * 当前页
 	 */
-	private int page		= 0;
+	private int page			= 0;
 	/**
 	 * 当前页记录数
 	 */
-	private int total		= 0;
+	private int total			= 0;
+	
 	/**
 	 * 总页数
 	 */
-	private int totalPage	= 0;
+	private int totalPage		= 0;
+	
 	/**
 	 * 总记录数
 	 */
-	private Long records	= 0L;
+	private Long records		= 0L;
+	
 	/**
 	 * 记录行数据
 	 */
@@ -70,7 +74,7 @@ public  class JpaPageResults <T>{
 	 */
 	public JpaPageResults(int currentPage,int pageResults,Long recordsCount) {
 		pageCount(currentPage,pageResults, recordsCount);
-		logger.debug("JpaPageResults : {} , records : {} , total : {}",page,records,total);
+		logger.debug("JpaPageResults : {} , records : {} , totalPage : {}",page,records,totalPage);
 	}
 	/**
 	 * 构造函数
@@ -107,7 +111,7 @@ public  class JpaPageResults <T>{
 	public JpaPageResults(int currentPage,int pageResults,int totalPage,Long recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
 		this.rows = rows;
-		this.totalPage = totalPage;
+		this.total = totalPage;
 	}
 	
 	/**
@@ -121,7 +125,7 @@ public  class JpaPageResults <T>{
 	public JpaPageResults(int currentPage,int pageResults,int totalPage,Integer recordsCount,List<T> rows) {
 		pageCount(currentPage,pageResults, recordsCount);
 		this.rows = rows;
-		this.totalPage = totalPage;
+		this.total = totalPage;
 	}
 	
 	/**
@@ -131,9 +135,9 @@ public  class JpaPageResults <T>{
 	 * @param recordsCount
 	 */
 	public void pageCount(int currentPage,int pageResults,Long recordsCount){
-		this.page=currentPage;
+		this.page = currentPage;
 		//通过总记录数和每页显示记录数计算出当前页记录数
-		this.total=(int) ((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
+		this.totalPage=(int) ((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
 		this.records=recordsCount;
 	}
 	
@@ -144,46 +148,40 @@ public  class JpaPageResults <T>{
 	 * @param recordsCount
 	 */
 	public void pageCount(int currentPage,int pageResults,Integer recordsCount){
-		this.page=currentPage;
+		this.page = currentPage;
 		//通过总记录数和每页显示记录数计算出当前页记录数
-		this.total =((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
-		this.records = Long.parseLong(recordsCount+"");
+		this.totalPage =((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
+		this.records = Long.valueOf(recordsCount);
 	}
+	
 	/**
 	 * @return the page
 	 */
 	public int getPage() {
 		return page;
 	}
+	
 	/**
 	 * @param page the page to set
 	 */
 	public void setPage(int page) {
 		this.page = page;
 	}
-	/**
-	 * @return the total
-	 */
-	public int getTotal() {
-		return total;
-	}
-	/**
-	 * @param total the total to set
-	 */
-	public void setTotal(int total) {
-		this.total = total;
-	}
-	/**
-	 * @return the totalPage
-	 */
+
 	public int getTotalPage() {
 		return totalPage;
 	}
-	/**
-	 * @param totalPage the totalPage to set
-	 */
+	
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
+	}
+	
+	public int getTotal() {
+		return total;
+	}
+	
+	public void setTotal(int total) {
+		this.total = total;
 	}
 	/**
 	 * @return the records
@@ -197,12 +195,14 @@ public  class JpaPageResults <T>{
 	public void setRecords(Long records) {
 		this.records = records;
 	}
+	
 	/**
 	 * @return the rows
 	 */
 	public List<T> getRows() {
 		return rows;
 	}
+	
 	/**
 	 * @param rows the rows to set
 	 */
@@ -226,7 +226,5 @@ public  class JpaPageResults <T>{
 		builder.append("]");
 		return builder.toString();
 	}
-	
-
 
 }

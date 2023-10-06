@@ -37,16 +37,8 @@ import jakarta.persistence.Transient;
  */
 public class JpaPage {
 	
-	public String generateId() {
-		if(MapperMetadata.identifierGeneratorFactory != null) {
-			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
-		}else {
-			return UUID.randomUUID().toString().toLowerCase();
-		}
-	}
-	
 	public static final int MAX_RESULTS = 10000;
-	
+
 	@JsonIgnore
 	@Transient
 	protected int rows;
@@ -121,6 +113,15 @@ public class JpaPage {
 		this.pageable = true;
 	}
 
+	
+	public String generateId() {
+		if(MapperMetadata.identifierGeneratorFactory != null) {
+			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+		}else {
+			return UUID.randomUUID().toString().toLowerCase();
+		}
+	}
+	
 	@JsonIgnore
 	public int getRows() {
 		return rows;
@@ -182,7 +183,7 @@ public class JpaPage {
 
 	public void calculate(int startRow) {
 		if(startRow <= pageSize) {
-			startRow = 0;
+			this.startRow = 0;
 			setPageNumber(1);
 		}else {
 			setPageNumber(startRow/pageSize + (startRow%pageSize == 0 ? 0 : 1));

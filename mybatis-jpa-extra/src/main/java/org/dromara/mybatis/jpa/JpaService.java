@@ -206,16 +206,16 @@ public  class  JpaService <T extends JpaEntity> {
 	
 	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
 		page.setPageable(false);
-		Integer totalPage = resultslist.size();
+		Integer total = resultslist.size();
 		
 		Integer totalCount = 0;
-		if(page.getPageNumber() == 1 && totalPage < page.getPageSize()) {
-			totalCount = totalPage;
+		if(page.getPageNumber() == 1 && total < page.getPageSize()) {
+			totalCount = total;
 		}else {
 			totalCount = parseCount(getMapper().fetchCount(page));
 		}
 		
-		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),totalPage,totalCount,resultslist);
+		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),total,totalCount,resultslist);
 	}
 	
 	/**

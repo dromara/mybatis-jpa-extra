@@ -36,17 +36,13 @@ public class FetchPageResultsTestRunner {
 		
 		_logger.info("fetchPageResults...");
 		 Students student=new Students();
+		 student.setPageNumber(2);
 		 student.setPageSize(10);
-		 student.calculate(21);
 		 JpaPageResults<Students>  results = service.fetchPageResults(student);
-		 List<Students> rowsStudents = results.getRows();
-		 long records =results.getRecords();//当前页记录数量
-		 long totalPage =results.getTotalPage();//总页数
-		 long total =results.getTotal();//总数据量
-		 long page =results.getPage();//当前页
-		 _logger.info("records {} , totalPage {} , total {} , page {} ",
-				 records,totalPage,total,page);
-		 for (Students s : rowsStudents) {
+
+		 _logger.info("records {} , total {} , totalPage {} , page {} ",
+				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+		 for (Students s : results.getRows()) {
 			 _logger.info("Students "+s);
 		 }
 	}
@@ -61,16 +57,11 @@ public class FetchPageResultsTestRunner {
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 
-		 JpaPageResults<Students>  results =
-				 service.fetchPageResults("fetchPageResults1",student);
-		 List<Students> rowsStudents = results.getRows();
-		 long records =results.getRecords();//当前页记录数量
-		 long totalPage =results.getTotalPage();//总页数
-		 long total =results.getTotal();//总数据量
-		 long page =results.getPage();//当前页
-		 _logger.info("records {} , totalPage {} , total {} , page {} ",
-				 records,totalPage,total,page);
-		 for (Students s : rowsStudents) {
+		 JpaPageResults<Students>  results =service.fetchPageResults("fetchPageResults1",student);
+		 
+		 _logger.info("records {} , total {} , totalPage {} , page {} ",
+				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+		 for (Students s : results.getRows()) {
 			 _logger.info("Students "+s);
 		 }
 	}

@@ -46,10 +46,9 @@ public class FetchTestRunner {
 		 page.setPageable(true);
 		 
 		 JpaPageResults<Students>  results = service.fetch(page,student);
-		 List<Students> rowsStudents = results.getRows();
-		 _logger.info("records {} , totalPage {} , total {} , page {} ",
-				 results.getRecords(),results.getTotalPage(),results.getTotal(),results.getPage());
-		 for (Students s : rowsStudents) {
+		 _logger.info("records {} , total {} , totalPage {} , page {} ",
+				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+		 for (Students s : results.getRows()) {
 			 _logger.info("Students "+s);
 		 }
 	}
@@ -64,10 +63,9 @@ public class FetchTestRunner {
 		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
 		 
 		 JpaPageResults<Students>  results = service.fetch(page,condition);
-		 List<Students> rowsStudents = results.getRows();
-		 _logger.info("records {} , totalPage {} , total {} , page {} ",
-				 results.getRecords(),results.getTotalPage(),results.getTotal(),results.getPage());
-		 for (Students s : rowsStudents) {
+		 _logger.info("records {} , total {} , totalPage {} , page {} ",
+				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+		 for (Students s : results.getRows()) {
 			 _logger.info("Students "+s);
 		 }
 	}
