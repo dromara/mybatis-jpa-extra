@@ -12,12 +12,12 @@
 5.数据库支持
 | 数据库          |   支持  |
 | :-----          | :----   |
-| **MySQL**       | ✔      | 
-| **PostgreSQL**  | ✔      | 
-| **Oracle**      | ✔      |
-| **SqlServer**   | ✔      |
-| **DB2**         | ✔      |
-| **Derby**       | ✔      |
+| **MySQL**       | ✅      | 
+| **PostgreSQL**  | ✅      | 
+| **Oracle**      | ✅      |
+| **SqlServer**   | ✅      |
+| **DB2**         | ✅      |
+| **Derby**       | ✅      |
 
 
 ## 1、JPA 3注释
