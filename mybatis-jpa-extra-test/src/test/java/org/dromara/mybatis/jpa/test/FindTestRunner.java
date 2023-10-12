@@ -57,8 +57,7 @@ public class FindTestRunner {
 	void find() throws Exception{
 		_logger.info("find by filter  StdNo = '10024' or StdNo = '10004'");
 
-		List<Students> listStudents = service.find(
-				" StdNo = ? or StdNo = ?  ",
+		List<Students> listStudents = service.find(" StdNo = ? or StdNo = ?  or StdNo ='11111'",
 				new Object[]{"10024","10004"},
 				new int[]{Types.VARCHAR,Types.INTEGER}
 			);

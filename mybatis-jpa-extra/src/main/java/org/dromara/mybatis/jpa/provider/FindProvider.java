@@ -87,24 +87,31 @@ public class FindProvider <T extends JpaEntity>{
 			
 			String[] filterSqls  = filterSql.split("\\?");
 			StringBuffer sqlBuffer = new StringBuffer("");
-			for(int i = 0 ;i < args.length ; i++){
-				logger.trace("Find args[{}] {}" , i, args[i]);
-				if( argTypes[i] == Types.VARCHAR 
-						||argTypes[i] == Types.NVARCHAR 
-						||argTypes[i] == Types.CHAR
-						||argTypes[i] == Types.NCHAR
-						||argTypes[i] == Types.LONGVARCHAR 
-						||argTypes[i] == Types.LONGNVARCHAR) {
-					sqlBuffer
+			for(int i = 0 ;i < filterSqls.length ; i++){
+				logger.trace("Find filterSqls[{}] = {}" , i , filterSqls[i]);
+				if(i < args.length) {
+					logger.trace("Find args[{}] {}" , i, args[i]);
+					if( argTypes[i] == Types.VARCHAR 
+							||argTypes[i] == Types.NVARCHAR 
+							||argTypes[i] == Types.CHAR
+							||argTypes[i] == Types.NCHAR
+							||argTypes[i] == Types.LONGVARCHAR 
+							||argTypes[i] == Types.LONGNVARCHAR) {
+						sqlBuffer
+							.append(filterSqls[i])
+							.append("'")
+							.append(args[i].toString().replaceAll("'", ""))
+							.append("'");
+					}else {
+						sqlBuffer
 						.append(filterSqls[i])
-						.append("'")
-						.append(args[i].toString().replaceAll("'", ""))
-						.append("'");
+						.append(args[i]);
+					}
 				}else {
 					sqlBuffer
-					.append(filterSqls[i])
-					.append(args[i]);
+					.append(filterSqls[i]);
 				}
+				logger.trace("Find append {} time SQL [{}]" ,i + 1, sqlBuffer);
 			}
 			filterSql = StringUtils.lineBreak2Blank(sqlBuffer.toString());
 		}
