@@ -5,14 +5,17 @@ import java.util.Date;
 
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
+import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class InitContext {
+public class BaseTestRunner {
 	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 	public static ApplicationContext context;
+	
+	public static StudentsService service;
 	
 	//Initialization ApplicationContext for Project
 	public StudentsService init(){
@@ -26,5 +29,14 @@ public class InitContext {
 		MybatisJpaContext.init(context);
 		StudentsService service =(StudentsService)MybatisJpaContext.getBean("studentsService");
 		return service;
+	}
+	
+	
+	@BeforeAll
+	public static void initSpringContext(){
+		if(BaseTestRunner.context!=null) {
+			return;
+		}
+		service = new BaseTestRunner().init();
 	}
 }

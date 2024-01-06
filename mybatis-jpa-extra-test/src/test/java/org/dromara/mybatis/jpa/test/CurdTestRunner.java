@@ -21,16 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.query.Query;
-import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CurdTestRunner {
+public class CurdTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(CurdTestRunner.class);
-	public static StudentsService service;
 	
 	@Test
 	void insert() throws Exception{
@@ -127,9 +124,4 @@ public class CurdTestRunner {
 		service.delete(Query.builder().eq("id", "2"));
 	}
 	
-	@BeforeAll
-	public static void initSpringContext(){
-		if(InitContext.context!=null) return;
-		service = new InitContext().init();
-	}
 }

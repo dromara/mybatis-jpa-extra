@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Dialect {
 
-	private static final Logger _logger 			= 	LoggerFactory.getLogger(Dialect.class);
+	private static final Logger logger 			= 	LoggerFactory.getLogger(Dialect.class);
 
 	public static final String DEFAULT_BATCH_SIZE	= 	"20";
 	public static final String NO_BATCH 			= 	"0";
@@ -55,10 +55,8 @@ public abstract class Dialect {
 		dialectMap.put("sqlserver", 	"org.dromara.mybatis.jpa.dialect.SQLServerDialect");
 		
 		
-		_logger.trace("Dialect Mapper : \n{}" ,dialectMap);
+		logger.trace("Dialect Mapper : \n{}" ,dialectMap);
 	}
-	
-	// constructors and factory methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	protected Dialect() {
 

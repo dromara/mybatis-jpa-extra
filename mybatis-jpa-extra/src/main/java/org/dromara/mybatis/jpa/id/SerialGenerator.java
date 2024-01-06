@@ -48,6 +48,7 @@ public class SerialGenerator  implements IdentifierGenerator{
 	 */
 	private long datacenterId; 
 	
+	@Override
 	public String generate(Object object) {
 		return  next();
 	}

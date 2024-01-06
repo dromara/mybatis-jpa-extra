@@ -25,7 +25,7 @@ public class IdentifierGeneratorFactory {
 	
 	private static final Logger logger 	= 	LoggerFactory.getLogger(IdentifierGeneratorFactory.class);
 	
-	public static ConcurrentHashMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
+	static ConcurrentHashMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
 	
 	public IdentifierGeneratorFactory() {
 		register(IdStrategy.UUID		, new UUIDGenerator());

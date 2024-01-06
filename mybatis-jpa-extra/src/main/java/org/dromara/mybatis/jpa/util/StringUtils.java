@@ -20,6 +20,8 @@ package org.dromara.mybatis.jpa.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
 	public static boolean isNumeric(String val) {
@@ -76,8 +78,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
 	public static String list2String(List<String> list, String split) {
 		String string = "";
-		if (list == null)
+		if (CollectionUtils.isEmpty(list)) {
 			return string;
+		}
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i) != null && !list.get(i).equals("")) {
 				string += list.get(i) + split;

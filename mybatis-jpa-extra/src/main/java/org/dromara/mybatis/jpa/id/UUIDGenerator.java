@@ -21,6 +21,7 @@ import java.util.UUID;
 
 public class UUIDGenerator implements IdentifierGenerator{
 
+	@Override
 	public String generate(Object object) {
 		return UUID.randomUUID().toString().toLowerCase();
 	}

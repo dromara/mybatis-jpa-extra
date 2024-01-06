@@ -29,13 +29,6 @@ import java.lang.reflect.Method;
  */
 public class InstanceUtil {
 
-	/**
-	 * 
-	 */
-	public InstanceUtil() {
-	}
-
-
 	public static Object newInstance(String className) {
 		Class<?> cls;
 		try {

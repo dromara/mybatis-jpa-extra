@@ -43,7 +43,9 @@ public class FetchCountProvider <T extends JpaEntity>{
 	
 	private static final Logger logger 	= 	LoggerFactory.getLogger(FetchCountProvider.class);
 	
-	//定义全局缓存
+	/**
+	 * 定义全局缓存
+	 */
 	public static final Cache<String, JpaPageResultsSqlCache> pageResultsBoundSqlCache = 
 							Caffeine.newBuilder()
 								.expireAfterWrite(300, TimeUnit.SECONDS)
@@ -54,7 +56,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 	 */
 	public String executeCount(JpaPage page) {
 		//获取缓存数据
-		JpaPageResultsSqlCache pageResultsSqlCache = getPageResultsCache(page.getPageResultSelectUUID());
+		JpaPageResultsSqlCache pageResultsSqlCache = getPageResultsCache(page.getPageResultSelectId());
 		//多个空格 tab 替换成1个空格
 		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
 		
@@ -100,10 +102,10 @@ public class FetchCountProvider <T extends JpaEntity>{
 		return sql.toString();
 	}
 	
-	private JpaPageResultsSqlCache getPageResultsCache(String selectUUID) {
-		JpaPageResultsSqlCache cache = pageResultsBoundSqlCache.getIfPresent(selectUUID);
+	private JpaPageResultsSqlCache getPageResultsCache(String selectId) {
+		JpaPageResultsSqlCache cache = pageResultsBoundSqlCache.getIfPresent(selectId);
 		//删除缓存
-		pageResultsBoundSqlCache.invalidate(selectUUID);
+		pageResultsBoundSqlCache.invalidate(selectId);
 		return cache;
 	}
 	

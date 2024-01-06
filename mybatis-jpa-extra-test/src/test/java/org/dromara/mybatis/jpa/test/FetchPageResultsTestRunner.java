@@ -17,19 +17,14 @@
 
 package org.dromara.mybatis.jpa.test;
 
-import java.util.List;
-
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FetchPageResultsTestRunner {
+public class FetchPageResultsTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
-	public static StudentsService service;
 
 	@Test
 	void fetchPageResults() throws Exception{
@@ -64,12 +59,6 @@ public class FetchPageResultsTestRunner {
 		 for (Students s : results.getRows()) {
 			 _logger.info("Students "+s);
 		 }
-	}
-	
-	@BeforeAll
-	public static void initSpringContext(){
-		if(InitContext.context!=null) return;
-		service = new InitContext().init();
 	}
 
 }

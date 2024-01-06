@@ -96,7 +96,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 						sql = dialect.getLimitString(sql, page);
 					}else if(statement instanceof PreparedStatementHandler){
 						FetchCountProvider.pageResultsBoundSqlCache.put(
-								page.getPageResultSelectUUID(), 
+								page.getPageResultSelectId(), 
 								new JpaPageResultsSqlCache(sql,boundSql)
 								);
 						sql = dialect.getLimitString(sql, page);

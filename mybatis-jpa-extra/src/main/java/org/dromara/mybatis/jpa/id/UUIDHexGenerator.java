@@ -23,6 +23,7 @@ import org.dromara.mybatis.jpa.util.BytesHelper;
 public class UUIDHexGenerator implements IdentifierGenerator{
 	private String sep = "-";
 
+	@Override
 	public String generate(Object object) {
 		return format( getIP() ) + sep
 				+ format( getJVM() ) + sep

@@ -63,13 +63,13 @@ public class QueryProvider<T extends JpaEntity> {
 			if(fieldValue == null ) {
 				logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
 				// skip null field value
-			} else if((fieldType.equals("string") && fieldValue.equals(""))
-					|| (fieldType.startsWith("byte"))
-					|| (fieldType.equals("Int") && fieldValue.equals("0"))
-					|| (fieldType.equals("Long")&& fieldValue.equals("0"))
-					|| (fieldType.equals("Integer")&& fieldValue.equals("0"))
-					|| (fieldType.equals("Float")&& fieldValue.equals("0.0"))
-					|| (fieldType.equals("Double")&& fieldValue.equals("0.0"))){
+			} else if(("string".equals(fieldType) && "".equals(fieldValue))
+					|| ("byte".startsWith(fieldType))
+					|| ("Int".equals(fieldType) && "0".equals(fieldValue))
+					|| ("Long".equals(fieldType)&& "0".equals(fieldValue))
+					|| ("Integer".equals(fieldType)&& "0".equals(fieldValue))
+					|| ("Float".equals(fieldType)&& "0.0".equals(fieldValue))
+					|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
 				// skip default field value
 			}else {
 				sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");

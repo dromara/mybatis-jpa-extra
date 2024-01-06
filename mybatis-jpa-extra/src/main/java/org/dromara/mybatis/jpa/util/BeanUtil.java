@@ -33,8 +33,10 @@ import org.apache.commons.logging.LogFactory;
 public class BeanUtil {
 	
 	public static void copyBean(Object  origin,Object target) {
-		if( origin == null || target == null) return;
-		try {				
+		if( origin == null || target == null) {
+			return;
+		}
+		try {
 			BeanUtils.copyProperties( origin, target);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,7 +45,9 @@ public class BeanUtil {
 		
 	public static Object cloneSupper(Object origin) {			
 		Object target = null;
-		if(origin == null) return target;
+		if(origin == null) {
+			return target;
+		}
 		try {				
 			target = InstanceUtil.newInstance(origin.getClass().getSuperclass());
 			BeanUtils.copyProperties(target,origin);
@@ -54,7 +58,9 @@ public class BeanUtil {
 	}
 		
 	public static String getValue(Object bean,String  field ) {
-		if(bean == null) return null;
+		if(bean == null) {
+			return null;
+		}
 		String retVal = "";
 		try {
 			retVal = BeanUtils.getProperty(bean, field);
@@ -200,8 +206,9 @@ public class BeanUtil {
 		Map<String, String> map = new HashMap<>();
 		for (int i = 0; i < flds.length; i++) {
 			String fieldName = flds[i].getName();
-			if (isPublicProperty(cls, fieldName))
+			if (isPublicProperty(cls, fieldName)) {
 				map.put(flds[i].getName(), flds[i].getType().getName());
+			}
 		}
 		return map;
 	}
@@ -223,41 +230,64 @@ public class BeanUtil {
 			if(BeanUtil.get(entity, field.getName())==null){
 				return false;
 			}else{
-				fillValue = BeanUtil.get(entity, field.getName()).toString();
+				Object getValue = BeanUtil.get(entity, field.getName());
+				fillValue = getValue == null? null : getValue.toString();
 			}
 		} catch (IllegalArgumentException e1) {
 			e1.printStackTrace();
 		} 
 		if(fieldType.equals("java.lang.String")){
-			if(String.valueOf(fillValue)==null)isFieldNotEmpty= false;
+			if(String.valueOf(fillValue)==null) {
+				isFieldNotEmpty= false;
+			}
         }else if(fieldType.equals("int")){
-        	if(Integer.parseInt(fillValue)==0)isFieldNotEmpty= false;
+        	if(Integer.parseInt(fillValue)==0) {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("long")){
-        	if(Long.parseLong(fillValue)==0)isFieldNotEmpty= false;
+        	if(Long.parseLong(fillValue)==0) {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("java.lang.Long")){
-        	if(Long.parseLong(fillValue)==0)isFieldNotEmpty= false;
+        	if(Long.parseLong(fillValue)==0) {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("double")){
-        	if(Double.valueOf(fillValue)==0.0d)isFieldNotEmpty= false;
+        	if(Double.valueOf(fillValue)==0.0d) {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("float")){
-        	if(Float.parseFloat(fillValue)==0.0f)isFieldNotEmpty= false;
+        	if(Float.parseFloat(fillValue)==0.0f) {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("java.util.Date")){ 
         	try {
         		value=BeanUtil.get(entity, field.getName());
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} 
-			if(value==null)isFieldNotEmpty= false;
+			if(value==null) {
+				isFieldNotEmpty= false;
+			}
         }else if(fieldType.equals("java.lang.Object")){
 			value=BeanUtil.get(entity, field.getName());
-			if(value==null)isFieldNotEmpty= false;
+			if(value==null) {
+				isFieldNotEmpty= false;
+			}
         }else if(fieldType.equals("char")){
-        	if(Character.valueOf(fillValue.charAt(0))=='\u0000')isFieldNotEmpty= false;
+        	if(fillValue !=null && Character.valueOf(fillValue.charAt(0))=='\u0000') {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("boolean")){
         	value= Boolean.parseBoolean(fillValue);
         }else if(fieldType.equals("short")){
-        	if(Short.parseShort(fillValue)==0)isFieldNotEmpty= false;
+        	if(Short.parseShort(fillValue)==0) {
+        		isFieldNotEmpty= false;
+        	}
         }else if(fieldType.equals("byte")){
-        	if(Byte.parseByte(fillValue)==0)isFieldNotEmpty= false;
+        	if(Byte.parseByte(fillValue)==0) {
+        		isFieldNotEmpty= false;
+        	}
         }
 		
 		LogFactory.getLog(BeanUtil.class).debug("isFieldNotEmpty() fieldName : "+field.getName()+", fieldType : "+fieldType+", Value : "+fillValue+", isFieldNotEmpty : "+isFieldNotEmpty);
@@ -284,10 +314,8 @@ public class BeanUtil {
 		Field[] flds = target.getClass().getDeclaredFields();
 		for (int i = 0; i < flds.length; i++) {
 			String name = flds[i].getName();
-			if(isPublicProperty(origin,name)){
-				if(get(origin,name)!=null){
-					set(target,name,get(origin,name));
-				}
+			if(isPublicProperty(origin,name) && get(origin,name)!=null){
+				set(target,name,get(origin,name));
 			}
 		}
 	}
@@ -349,7 +377,9 @@ public class BeanUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(beanFiledMap==null)return bean;
+		if(beanFiledMap==null) {
+			return bean;
+		}
 		Iterator<?> fieldit = beanFiledMap.entrySet().iterator(); 
 		LogFactory.getLog(BeanUtils.class).debug("mapToBean() *******************************************");
 		LogFactory.getLog(BeanUtils.class).debug("mapToBean() "+bean.getClass().getName());
@@ -359,7 +389,9 @@ public class BeanUtil {
             String fieldName = entry.getKey().toString();
             Object value = null;
             String fieldType=(String)beanFiledMap.get(fieldName);
-            if(valueMap.get(fieldName)==null)continue;
+            if(valueMap.get(fieldName)==null) {
+            	continue;
+            }
             String fillValue=valueMap.get(fieldName).toString();
             LogFactory.getLog(BeanUtils.class).debug("mapToBean() field "+(i++)+" : "+fieldName+" = "+fillValue+" type : "+fieldType);  
             if(fieldType.equals("java.lang.String")){

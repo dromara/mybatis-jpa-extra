@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class UUIDHexGeneratorTest {
 	private static final Logger _logger = LoggerFactory.getLogger(UUIDHexGeneratorTest.class);
+	
 	@Test
 	public  void generator() {
 		UUIDHexGenerator uhg=new UUIDHexGenerator();

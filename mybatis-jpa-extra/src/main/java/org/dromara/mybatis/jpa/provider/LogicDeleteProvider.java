@@ -56,7 +56,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 			}
 		}
 		
-		String keyValues = keyValue.substring(1).replaceAll(";", "");//remove ;
+		String keyValues = keyValue.substring(1).replace(";", "");//remove ;
 		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());

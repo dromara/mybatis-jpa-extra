@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public class AllStatementHandlerInterceptor extends
 		AbstractStatementHandlerInterceptor implements Interceptor {
 	private static Logger logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
-	
+	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();
 		if ("prepare".equals(m.getName())) { // prepare Statement
@@ -62,10 +62,12 @@ public class AllStatementHandlerInterceptor extends
 		return invocation.proceed();
 	}
 
+	@Override
 	public Object plugin(Object target) {
 		return Plugin.wrap(target, this);
 	}
 
+	@Override
 	public void setProperties(Properties properties) {
 	}
 	

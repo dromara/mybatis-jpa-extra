@@ -199,7 +199,7 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	protected void beforePageResults(JpaPage page) {
-		page.setPageResultSelectUUID(page.generateId());
+		page.setPageResultSelectId(page.generateId());
 		page.setStartRow(calculateStartRow(page.getPageNumber() ,page.getPageSize()));
 		page.setPageable(true);
 	}
