@@ -79,9 +79,9 @@ public class FetchCountProvider <T extends JpaEntity>{
 		String countSqlLowerCase = countSql.toString().toLowerCase();
 		logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
 		
-		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")>0 //去重
-				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")>0 //分组
-				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")>0 //聚合函数
+		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")> -1 //去重
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")> -1 //分组
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")> -1 //聚合函数
 				||(countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ") 
 						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntaxConstants.FROM + " ")
 				) //嵌套

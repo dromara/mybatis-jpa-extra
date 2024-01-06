@@ -54,9 +54,11 @@ public class DB2Dialect extends Dialect {
 		return pagingSelectSql.toString();
 	}
 	
+	/**
+	 * LIMIT #{pageResults}  OFFSET #{startRow}
+	 */
 	@Override
 	public String getPreparedStatementLimitString(String sql,  JpaPage page) {
-		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(page.getPageSize()>0&&page.getStartRow()>0){
 			return sql +  " limit ? , ?";
 		}else if(page.getPageSize()>0){

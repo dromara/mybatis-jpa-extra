@@ -100,7 +100,7 @@ public class FindProvider <T extends JpaEntity>{
 						sqlBuffer
 							.append(filterSqls[i])
 							.append("'")
-							.append(args[i].toString().replaceAll("'", ""))
+							.append(args[i].toString().replace("'", ""))
 							.append("'");
 					}else {
 						sqlBuffer
@@ -137,7 +137,7 @@ public class FindProvider <T extends JpaEntity>{
 			}
 		}
 		
-		String idsValues = keyValue.substring(1).replaceAll(";", "");//remove ;
+		String idsValues = keyValue.substring(1).replace(";", "");//remove ;
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((parameterEntityClass).getSimpleName());
 		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(parameterEntityClass.getSimpleName());

@@ -85,9 +85,9 @@ public class MapperMetadata <T extends JpaEntity>{
 	public static String    PARTITION_COLUMN           			=  "inst_id";
 	
 	public static class CASE_TYPE{
-		public static int 		NORMAL 							= 0;
-		public static int 		LOWERCASE 						= 1;
-		public static int 		UPPERCASE 						= 2;
+		public static final int 		NORMAL 							= 0;
+		public static final int 		LOWERCASE 						= 1;
+		public static final int 		UPPERCASE 						= 2;
 	}
 	
 	
@@ -314,8 +314,7 @@ public class MapperMetadata <T extends JpaEntity>{
 	 * @return case
 	 */
 	public static String tableColumnCaseConverter(String name) {
-		if(TABLE_COLUMN_CASE  == CASE_TYPE.NORMAL) {}
-		else if(TABLE_COLUMN_CASE  == CASE_TYPE.LOWERCASE) {
+		if(TABLE_COLUMN_CASE  == CASE_TYPE.LOWERCASE) {
 			name = name.toLowerCase();
 		}else if(TABLE_COLUMN_CASE  == CASE_TYPE.UPPERCASE) {
 			name = name.toUpperCase();

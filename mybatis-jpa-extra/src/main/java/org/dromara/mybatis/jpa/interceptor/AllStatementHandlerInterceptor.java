@@ -38,6 +38,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,13 +81,12 @@ public class AllStatementHandlerInterceptor extends
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			logger.debug("prepare  boundSql : {}" , sql);
-			logger.trace("startsWith select : {}" , sql.toLowerCase().trim().startsWith("select"));
-			if (sql.toLowerCase().trim().startsWith("select") && (parameterObject instanceof JpaEntity)) {
+			logger.debug("startsWith select : {} , prepare  boundSql : {}" , isSelectSql(sql),sql);
+			if (isSelectSql(sql) && (parameterObject instanceof JpaEntity jpaEntity)) {
 				if(statement instanceof SimpleStatementHandler){
-					sql = dialect.getLimitString(sql, (JpaEntity)parameterObject);
+					sql = dialect.getLimitString(sql, jpaEntity);
 				}else if(statement instanceof PreparedStatementHandler){
-					sql = dialect.getPreparedStatementLimitString(sql, (JpaEntity)parameterObject);
+					sql = dialect.getPreparedStatementLimitString(sql, jpaEntity);
 				}
 			}
 			metaObject.setValue("boundSql.sql", sql);
@@ -96,8 +96,7 @@ public class AllStatementHandlerInterceptor extends
 
 	private Object parameterize(Invocation invocation) throws Throwable {
 		Statement statement = (Statement) invocation.getArgs()[0];
-		if (statement instanceof PreparedStatement) {
-			PreparedStatement ps = (PreparedStatement) statement;
+		if (statement instanceof PreparedStatement ps) {
 			StatementHandler statementHandler = getStatementHandler(invocation);
 			RowBounds rowBounds = getRowBounds(statementHandler);
 			logger.debug("rowBounds {}", rowBounds);
@@ -105,14 +104,11 @@ public class AllStatementHandlerInterceptor extends
 			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statementHandler.getBoundSql();
 			
-			if (
-					boundSql.getSql().toLowerCase().trim().startsWith("select") 
-					&& (parameterObject instanceof JpaEntity)
-			) {
+			if (isSelectSql(boundSql.getSql()) && (parameterObject instanceof JpaEntity jpaEntity)) {
 				List<ParameterMapping>  pms= boundSql.getParameterMappings();
 				logger.debug("ParameterMapping {}" , pms);
 				int parameterSize = pms.size();
-				dialect.setLimitParamters(ps, parameterSize,(JpaEntity)parameterObject);
+				dialect.setLimitParamters(ps, parameterSize,jpaEntity);
 			}
 		}
 		return invocation.proceed();
@@ -127,6 +123,10 @@ public class AllStatementHandlerInterceptor extends
 		//	metaObject.setValue("rowBounds", RowBounds.DEFAULT);
 		//}
 		return invocation.proceed();
+	}
+	
+	private boolean isSelectSql(String sql) {
+		return sql.toLowerCase().trim().startsWith(SqlSyntaxConstants.SELECT.toLowerCase());
 	}
 
 	

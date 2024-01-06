@@ -123,12 +123,7 @@ public class BeanUtil {
 	}
 
 	public static Boolean isPublicProperty(Object bean, String fieldName) {
-		if (isSetProperty(bean.getClass(), fieldName)
-				&& isGetProperty(bean.getClass(), fieldName)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isSetProperty(bean.getClass(), fieldName) && isGetProperty(bean.getClass(), fieldName);
 	}
 
 	public static <T> Boolean isSetProperty(Class<T> cls, String fieldName) {
@@ -284,10 +279,8 @@ public class BeanUtil {
         	if(Short.parseShort(fillValue)==0) {
         		isFieldNotEmpty= false;
         	}
-        }else if(fieldType.equals("byte")){
-        	if(Byte.parseByte(fillValue)==0) {
-        		isFieldNotEmpty= false;
-        	}
+        }else if(fieldType.equals("byte") && Byte.parseByte(fillValue)==0){
+        	isFieldNotEmpty= false;
         }
 		
 		LogFactory.getLog(BeanUtil.class).debug("isFieldNotEmpty() fieldName : "+field.getName()+", fieldType : "+fieldType+", Value : "+fillValue+", isFieldNotEmpty : "+isFieldNotEmpty);
@@ -354,7 +347,7 @@ public class BeanUtil {
 	
 	
 	public static <T> Map<String, Object> beanToMap( T  bean){
-		Map <String,Object> mapBean=new HashMap<String,Object>();
+		Map <String,Object> mapBean=new HashMap<>();
 		Field[] flds = bean.getClass().getDeclaredFields();
 		LogFactory.getLog(BeanUtils.class).debug("beanToMap() *******************************************");
 		LogFactory.getLog(BeanUtils.class).debug("beanToMap() "+bean.getClass().getName());
