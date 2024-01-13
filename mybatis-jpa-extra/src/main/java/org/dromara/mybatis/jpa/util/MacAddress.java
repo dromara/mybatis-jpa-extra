@@ -36,12 +36,12 @@ import org.slf4j.LoggerFactory;
 public class MacAddress {
 	private static final  Logger logger = LoggerFactory.getLogger(MacAddress.class);
 	
-	public static final String osName;
+	public static final String OS_NAME;
 	
 	static{
 		Properties prop = System.getProperties();
-		osName = prop.getProperty("os.name");
-		logger.info("OS : {}" , osName); 
+		OS_NAME = prop.getProperty("os.name");
+		logger.info("OS : {}" , OS_NAME); 
 	}
 	
 	public static  String  getAllHostMacAddress(){  
@@ -72,7 +72,7 @@ public class MacAddress {
 		StringBuffer sb = new StringBuffer("");
 		for(int i=0; i<mac.length; i++) {
 			if(i!=0) {
-				if(osName.startsWith("win") || osName.startsWith("Win") ){
+				if(OS_NAME.startsWith("win") || OS_NAME.startsWith("Win") ){
 					sb.append("-");//win
 				}else{
 					sb.append(":");//linux

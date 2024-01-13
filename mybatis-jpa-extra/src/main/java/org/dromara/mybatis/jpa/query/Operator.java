@@ -1,9 +1,13 @@
 package org.dromara.mybatis.jpa.query;
 
 public enum Operator {
-	
+	/**
+	 * and
+	 */
 	and("and"),
-	
+	/**
+	 * or
+	 */
 	or("or"),
 	
 	/** 等于= */
@@ -28,6 +32,7 @@ public enum Operator {
 	
 	/** between查询 */
 	between("between"),
+	/** not between查询 */
 	notBetween("not between"),
 	/** 模糊查询,两边模糊查询,like '%xx%' */
 	like("like"),
@@ -37,14 +42,25 @@ public enum Operator {
 	likeLeft("like"),
 	/** 右模糊查询,like 'xx%' */
 	likeRight("like"),
-	
+	/**
+	 * 空
+	 */
 	isNull("is null"),
+	/**
+	 * 不为空
+	 */
 	isNotNull("is not null"),
-	
+	/**
+	 * 条件
+	 */
 	condition("condition"),
-	
+	/**
+	 * 分组
+	 */
 	group("group"),
-	
+	/**
+	 * 	排序
+	 */
 	order("order"),
 	;
 	

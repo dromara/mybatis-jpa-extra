@@ -31,8 +31,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class QueryProvider<T extends JpaEntity> {
-
-	private static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
+	static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
 	public String queryByCondition(Class<?> entityClass, Query query) {
 		logger.trace("Query \n{}" , query);

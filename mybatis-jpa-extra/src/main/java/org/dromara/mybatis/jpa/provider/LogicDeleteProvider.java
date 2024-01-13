@@ -36,9 +36,8 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class LogicDeleteProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(LogicDeleteProvider.class);
+public class LogicDeleteProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(LogicDeleteProvider.class);
 
 	
 	@SuppressWarnings("unchecked")

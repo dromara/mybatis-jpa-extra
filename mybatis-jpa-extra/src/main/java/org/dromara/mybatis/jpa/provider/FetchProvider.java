@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
@@ -37,9 +38,8 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class FetchProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(FetchProvider.class);
+public class FetchProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(FetchProvider.class);
 
 	/**
 	 * @param entity
@@ -57,20 +57,19 @@ public class FetchProvider <T extends JpaEntity>{
 		SQL sql = new SQL()
 			.SELECT(column).FROM(MapperMetadata.getTableName(entity.getClass()));
 		StringBuffer conditions = new StringBuffer();
+		
 		for(FieldColumnMapper fieldColumnMapper : listFields) {
+			Object fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
+			String fieldType = fieldColumnMapper.getFieldType();
 			logger.trace("Field {} , Type {} , Value {}",
 							fieldColumnMapper.getFieldName(), 
 							fieldColumnMapper.getFieldType(),
-							BeanUtil.get(entity, fieldColumnMapper.getFieldName()));
-			if(
-				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
-						||fieldColumnMapper.getFieldType().startsWith("byte")
-						||fieldColumnMapper.getFieldType().startsWith("int")
-						||BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
-				)
-				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())== null) {
+							fieldValue);
+			if(fieldValue == null ||fieldValue.toString().equalsIgnoreCase("null")|| fieldType.startsWith("byte")) {
 				//skip null field value
-				logger.trace("skip {}({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
+				logger.trace("skip {}({}) is null ",fieldColumnMapper.getFieldName(),fieldType);
+			}else if(fieldType.equalsIgnoreCase("String")&&StringUtils.isBlank((String)fieldValue)){
+				logger.trace("skip {}({}) is Blank ",fieldColumnMapper.getFieldName(),fieldType);
 			}else {
 				if(!conditions.isEmpty()) {
 					conditions.append(" and ");

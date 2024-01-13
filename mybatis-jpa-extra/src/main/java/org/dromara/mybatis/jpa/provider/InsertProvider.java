@@ -40,9 +40,8 @@ import jakarta.persistence.GenerationType;
  * @author Crystal.Sea
  *
  */
-public class InsertProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
+public class InsertProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
 	
 	/**
 	 * @param entity
@@ -68,7 +67,7 @@ public class InsertProvider <T extends JpaEntity>{
 						||fieldColumnMapper.getFieldType().startsWith("byte")
 						||BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
 					)
-					&& StringUtils.isBlank(BeanUtil.getValue(entity, fieldColumnMapper.getFieldName()))
+					&& StringUtils.isBlank((String)BeanUtil.getValue(entity, fieldColumnMapper.getFieldName()))
 					&& !fieldColumnMapper.isGenerated()) {
 					//skip null field value
 					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());

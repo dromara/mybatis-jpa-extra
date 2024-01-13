@@ -25,8 +25,8 @@ public class UUIDHexGenerator implements IdentifierGenerator{
 
 	@Override
 	public String generate(Object object) {
-		return format( getIP() ) + sep
-				+ format( getJVM() ) + sep
+		return format( getIp() ) + sep
+				+ format( getJvm() ) + sep
 				+ format( getHiTime() ) + sep
 				+ format( getLoTime() ) + sep
 				+ format( getCount() );
@@ -65,7 +65,7 @@ public class UUIDHexGenerator implements IdentifierGenerator{
 	 * Unique across JVMs on this machine (unless they load this class
 	 * in the same quater second - very unlikely)
 	 */
-	protected int getJVM() {
+	protected int getJvm() {
 		return JVM;
 	}
 
@@ -85,7 +85,7 @@ public class UUIDHexGenerator implements IdentifierGenerator{
 	/**
 	 * Unique in a local network
 	 */
-	protected int getIP() {
+	protected int getIp() {
 		return IP;
 	}
 

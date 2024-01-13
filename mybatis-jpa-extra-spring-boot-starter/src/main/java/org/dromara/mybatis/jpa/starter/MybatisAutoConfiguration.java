@@ -36,6 +36,7 @@ import org.dromara.mybatis.jpa.MyBatisJpaSessionFactoryBean;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata.CASE_TYPE;
+import org.dromara.mybatis.jpa.starter.ConfigurationCustomizer;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperFactoryBean;

@@ -26,7 +26,7 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
-import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
+import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.dromara.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
@@ -39,14 +39,13 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  * @author Crystal.Sea
  *
  */
-public class FetchCountProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(FetchCountProvider.class);
+public class FetchCountProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(FetchCountProvider.class);
 	
 	/**
 	 * 定义全局缓存
 	 */
-	public static final Cache<String, JpaPageResultsSqlCache> pageResultsBoundSqlCache = 
+	public static final Cache<String, JpaPageSqlCache> PAGE_BOUNDSQL_CACHE = 
 							Caffeine.newBuilder()
 								.expireAfterWrite(300, TimeUnit.SECONDS)
 								.build();
@@ -56,11 +55,11 @@ public class FetchCountProvider <T extends JpaEntity>{
 	 */
 	public String executeCount(JpaPage page) {
 		//获取缓存数据
-		JpaPageResultsSqlCache pageResultsSqlCache = getPageResultsCache(page.getPageResultSelectId());
+		JpaPageSqlCache pageSqlCache = getPageSqlCache(page.getPageSelectId());
 		//多个空格 tab 替换成1个空格
-		String selectSql = StringUtils.lineBreak2Blank(pageResultsSqlCache.getSql());
+		String selectSql = StringUtils.lineBreak2Blank(pageSqlCache.getSql());
 		
-		BoundSql boundSql = pageResultsSqlCache.getBoundSql();
+		BoundSql boundSql = pageSqlCache.getBoundSql();
 		logger.trace("Count original SQL  :\n{}" , selectSql);
 		
 		StringBuffer sql = new StringBuffer(SqlSyntaxConstants.SELECT +" "+ SqlSyntaxConstants.Functions.COUNT_ONE +" countrows_ ");
@@ -79,9 +78,12 @@ public class FetchCountProvider <T extends JpaEntity>{
 		String countSqlLowerCase = countSql.toString().toLowerCase();
 		logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
 		
-		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")> -1 //去重
-				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")> -1 //分组
-				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")> -1 //聚合函数
+		/*
+		 * 判断 1,去重 2,分组 3,聚合函数
+		 */
+		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")> -1 
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")> -1 
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")> -1 
 				||(countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ") 
 						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntaxConstants.FROM + " ")
 				) //嵌套
@@ -102,10 +104,14 @@ public class FetchCountProvider <T extends JpaEntity>{
 		return sql.toString();
 	}
 	
-	private JpaPageResultsSqlCache getPageResultsCache(String selectId) {
-		JpaPageResultsSqlCache cache = pageResultsBoundSqlCache.getIfPresent(selectId);
-		//删除缓存
-		pageResultsBoundSqlCache.invalidate(selectId);
+	/**
+	 * 查询并删除缓存
+	 * @param selectId
+	 * @return
+	 */
+	private JpaPageSqlCache getPageSqlCache(String selectId) {
+		JpaPageSqlCache cache = PAGE_BOUNDSQL_CACHE.getIfPresent(selectId);
+		PAGE_BOUNDSQL_CACHE.invalidate(selectId);
 		return cache;
 	}
 	

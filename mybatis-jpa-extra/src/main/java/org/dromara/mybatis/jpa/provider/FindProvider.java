@@ -38,8 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class FindProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(FindProvider.class);
+	static final Logger logger 	= 	LoggerFactory.getLogger(FindProvider.class);
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);

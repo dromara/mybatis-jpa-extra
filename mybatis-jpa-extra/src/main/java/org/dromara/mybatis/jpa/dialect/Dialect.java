@@ -44,7 +44,6 @@ public abstract class Dialect {
 	protected static HashMap<String,String> dialectMap;
 	
 	static {
-		
 		dialectMap=new HashMap<>();
 		dialectMap.put("db2", 			"org.dromara.mybatis.jpa.dialect.DB2Dialect");
 		dialectMap.put("derby", 		"org.dromara.mybatis.jpa.dialect.DerbyDialect");
@@ -53,7 +52,6 @@ public abstract class Dialect {
 		dialectMap.put("postgresql", 	"org.dromara.mybatis.jpa.dialect.PostgreSQLDialect");
 		dialectMap.put("highgo", 		"org.dromara.mybatis.jpa.dialect.HighgoDialect");
 		dialectMap.put("sqlserver", 	"org.dromara.mybatis.jpa.dialect.SQLServerDialect");
-		
 		
 		logger.trace("Dialect Mapper : \n{}" ,dialectMap);
 	}

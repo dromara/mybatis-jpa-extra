@@ -14,9 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.persistence.TemporalType;
 
-public class DateConverter{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(DateConverter.class);
+public class DateConverter{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(DateConverter.class);
 	
 	private static final String TIMESTAMP_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 	private static final String DATE_FORMATTER 		= "yyyy-MM-dd";

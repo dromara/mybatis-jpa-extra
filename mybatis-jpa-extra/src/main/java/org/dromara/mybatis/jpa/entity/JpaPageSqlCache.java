@@ -19,14 +19,14 @@ package org.dromara.mybatis.jpa.entity;
 
 import org.apache.ibatis.mapping.BoundSql;
 
-public class JpaPageResultsSqlCache {
+public class JpaPageSqlCache {
 	
 	String sql;
 	
 	BoundSql boundSql;
 	
 	
-	public JpaPageResultsSqlCache(String sql, BoundSql boundSql) {
+	public JpaPageSqlCache(String sql, BoundSql boundSql) {
 		super();
 		this.sql = sql;
 		this.boundSql = boundSql;

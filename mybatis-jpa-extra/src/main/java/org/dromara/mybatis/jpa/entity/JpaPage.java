@@ -97,7 +97,7 @@ public class JpaPage {
 	
 	@JsonIgnore
 	@Transient
-	protected String    pageResultSelectId;
+	protected String    pageSelectId;
 	
 	
 	public JpaPage(){}
@@ -262,12 +262,12 @@ public class JpaPage {
 		this.setPageable(true);
 	}
 	
-	public String getPageResultSelectId() {
-		return pageResultSelectId;
+	public String getPageSelectId() {
+		return pageSelectId;
 	}
 
-	public void setPageResultSelectId(String pageResultSelectId) {
-		this.pageResultSelectId = pageResultSelectId;
+	public void setPageSelectId(String pageSelectId) {
+		this.pageSelectId = pageSelectId;
 	}
 
 	@Override
@@ -294,7 +294,7 @@ public class JpaPage {
 		builder.append(", pageable=");
 		builder.append(pageable);
 		builder.append(", pageResultSelectUUID=");
-		builder.append(pageResultSelectId);
+		builder.append(pageSelectId);
 		builder.append("]");
 		return builder.toString();
 	}

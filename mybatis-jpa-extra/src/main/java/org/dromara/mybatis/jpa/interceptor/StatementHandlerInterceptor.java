@@ -33,7 +33,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.dromara.mybatis.jpa.entity.JpaPage;
-import org.dromara.mybatis.jpa.entity.JpaPageResultsSqlCache;
+import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.provider.FetchCountProvider;
 import org.slf4j.Logger;
@@ -95,9 +95,9 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 					if(statement instanceof SimpleStatementHandler){
 						sql = dialect.getLimitString(sql, page);
 					}else if(statement instanceof PreparedStatementHandler){
-						FetchCountProvider.pageResultsBoundSqlCache.put(
-								page.getPageResultSelectId(), 
-								new JpaPageResultsSqlCache(sql,boundSql)
+						FetchCountProvider.PAGE_BOUNDSQL_CACHE.put(
+								page.getPageSelectId(), 
+								new JpaPageSqlCache(sql,boundSql)
 								);
 						sql = dialect.getLimitString(sql, page);
 					}

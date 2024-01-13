@@ -36,9 +36,8 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class DeleteProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
+public class DeleteProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
 	
 	public String remove(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);

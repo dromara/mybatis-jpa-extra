@@ -34,9 +34,8 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class GetProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(GetProvider.class);
+public class GetProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(GetProvider.class);
 	
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);

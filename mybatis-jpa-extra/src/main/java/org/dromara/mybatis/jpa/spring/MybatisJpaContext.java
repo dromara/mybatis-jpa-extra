@@ -40,12 +40,11 @@ import jakarta.servlet.http.HttpSession;
  * @since 3.0
  */
 public final class MybatisJpaContext {
-
-	private static final Logger logger = LoggerFactory.getLogger(MybatisJpaContext.class);
+	static final Logger logger = LoggerFactory.getLogger(MybatisJpaContext.class);
 	
-	private static StandardEnvironment properties;
+	static StandardEnvironment properties;
 	
-	private static ApplicationContext mybatisJpaContext = null;
+	static ApplicationContext jpaContext;
 	
 	/**
 	 * init mybatisJpaContext and properties
@@ -54,9 +53,9 @@ public final class MybatisJpaContext {
 	 */
 	public static void init(ApplicationContext applicationContext) {
 		
-		mybatisJpaContext = applicationContext;
+		jpaContext = applicationContext;
 		
-		if (mybatisJpaContext.containsBean("propertySourcesPlaceholderConfigurer")) {
+		if (jpaContext.containsBean("propertySourcesPlaceholderConfigurer")) {
 			logger.trace("init MybatisJpaContext properties");
             PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = 
                     ((PropertySourcesPlaceholderConfigurer) applicationContext
@@ -84,18 +83,18 @@ public final class MybatisJpaContext {
 	 * @return Object
 	 */
 	public static Object getBean(String id){
-		if(mybatisJpaContext == null) {
+		if(jpaContext == null) {
 			return getApplicationContext().getBean(id);
 		}else {
-			return mybatisJpaContext.getBean(id);
+			return jpaContext.getBean(id);
 		}
 	}
 	
     public static <T> T getBean(String name, Class<T> requiredType) throws BeansException{
-    	if(mybatisJpaContext == null) {
+    	if(jpaContext == null) {
             return getApplicationContext().getBean(name,requiredType);
         }else {
-            return mybatisJpaContext.getBean(name,requiredType);
+            return jpaContext.getBean(name,requiredType);
         }
     };
 	
@@ -125,8 +124,8 @@ public final class MybatisJpaContext {
 		return properties;
 	}
 
-	public static ApplicationContext getMybatisJpaContext() {
-		return mybatisJpaContext;
+	public static ApplicationContext getJpaContext() {
+		return jpaContext;
 	}
 
 	public static String version() {

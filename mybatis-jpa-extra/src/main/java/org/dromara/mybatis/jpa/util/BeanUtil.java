@@ -26,9 +26,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 
 public class BeanUtil {
 	
@@ -57,17 +59,18 @@ public class BeanUtil {
 		return target;
 	}
 		
-	public static String getValue(Object bean,String  field ) {
+	public static Object getValue(Object bean,String  field ) {
 		if(bean == null) {
 			return null;
 		}
-		String retVal = "";
 		try {
-			retVal = BeanUtils.getProperty(bean, field);
+			return PropertyAccessorFactory
+						.forBeanPropertyAccess(bean)
+						.getPropertyValue(field)+"";
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return retVal;
+		return null;
 	}
 	
 	@SuppressWarnings("rawtypes")

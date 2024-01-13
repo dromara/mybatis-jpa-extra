@@ -70,7 +70,7 @@ public class SerialGenerator  implements IdentifierGenerator{
 	}
 	
 	public  final String getNodeNumber(){
-		if(STATIC_NODE_NUMBER.equals("--")){
+		if("--".equals(STATIC_NODE_NUMBER)){
 			logger.info("ipAddressNodeValue : {}" , ipAddressNodeValue);
 			if(ipAddressNodeValue.indexOf(",")>-1){
 				

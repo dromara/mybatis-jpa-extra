@@ -36,8 +36,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class UpdateProvider <T extends JpaEntity>{
-	
-	private static final Logger logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
+	static final Logger logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
 
 	/**
 	 * @param entity
