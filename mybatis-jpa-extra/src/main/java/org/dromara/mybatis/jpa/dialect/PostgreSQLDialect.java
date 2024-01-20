@@ -34,9 +34,11 @@ public class PostgreSQLDialect extends Dialect {
 		return true;
 	}
 	
+	/**
+	 * LIMIT #{pageResults}  OFFSET #{startRow}
+	 */
 	@Override
 	public String getLimitString(String sql,  JpaPage page) {
-		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(page.getPageSize()>0&&page.getStartRow()>0){
 			return sql +  " limit " + page.getPageSize() +" offset  " + page.getStartRow() ;
 		}else if(page.getPageSize() > 0){
@@ -46,9 +48,11 @@ public class PostgreSQLDialect extends Dialect {
 		}
 	}
 	
+	/**
+	 * LIMIT #{pageResults}  OFFSET #{startRow}
+	 */
 	@Override
 	public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
-		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
 			return sql +  " limit ? offset ?";
 		}else if(pagination.getPageSize()>0){
@@ -75,9 +79,6 @@ public class PostgreSQLDialect extends Dialect {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "PostgreSQLDialect [" + PostgreSQLDialect.class + "]";

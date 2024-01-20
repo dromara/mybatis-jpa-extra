@@ -86,9 +86,6 @@ public class DB2Dialect extends Dialect {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "DB2Dialect [" + DB2Dialect.class + "]";

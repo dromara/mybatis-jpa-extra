@@ -53,9 +53,11 @@ public class DerbyDialect extends Dialect {
 		return pagingSelectSql.toString();
 	}
 	
+	/**
+	 * LIMIT #{pageResults}  OFFSET #{startRow}
+	 */
 	@Override
 	public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
-		//LIMIT #{pageResults}  OFFSET #{startRow}
 		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
 			return sql +  " limit ? , ?";
 		}else if(pagination.getPageSize()>0){
@@ -83,9 +85,6 @@ public class DerbyDialect extends Dialect {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "DerbyDialect [" + DerbyDialect.class + "]";
