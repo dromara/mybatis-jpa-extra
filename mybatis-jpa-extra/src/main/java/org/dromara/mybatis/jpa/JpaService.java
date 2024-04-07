@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,13 +39,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
- * JPA Service
+ * JPA Base Service
  * @author Crystal.Sea
  *
  * @param <T>
  */
 public  class  JpaService <T extends JpaEntity> {
-	
 	private static final  Logger logger = LoggerFactory.getLogger(JpaService.class);
 	
 	/**
@@ -81,7 +81,6 @@ public  class  JpaService <T extends JpaEntity> {
 			this.entityClass = (Class<T>) pType[0];
 		} else {
 			logger.error("invalide initail, need generic type parameter! ");
-			throw new RuntimeException("invalide initail, need generic type parameter!");
 		}
 		logger.trace("class : {}" , entityClass.getSimpleName());
 	}
@@ -394,39 +393,6 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 * find entity by ids,split with ,
-	 * @param ids
-	 * @return List<T>
-	 */
-	public List<T> findByIds(String ids) {
-		List<String> idList = StringUtils.string2List(ids, ",");
-		return findByIds(idList);
-	}
-	
-	/**
-	 * find entity by ids,split with ,
-	 * @param ids
-	 * @param partitionKey
-	 * @return
-	 */
-	public List<T> findByIds(String ids,String partitionKey) {
-		List<String> idList = StringUtils.string2List(ids, ",");
-		return findByIds(idList,partitionKey);
-	}
-	
-
-	/**
-	 * find  entity by ids , split with ,
-	 * @param ids
-	 * @param split
-	 * @return List<T>
-	 */
-	public List<T> findByIdsSplit(String ids , String split) {
-		List<String> idList = StringUtils.string2List(ids, StringUtils.isBlank(split)? "," : split );
-		return findByIds(idList);
-	}
-	
-	/**
 	 * query one entity by entity id
 	 * @param id
 	 * @return
@@ -621,39 +587,6 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 * batch delete entity by ids,split with ,
-	 * @param ids
-	 * @return boolean
-	 */
-	public boolean deleteBatch(String ids) {
-		List<String> idList = StringUtils.string2List(ids, ",");
-		return deleteBatch(idList);
-	}
-	
-	/**
-	 * batch delete entity by ids,split with ,
-	 * @param ids
-	 * @param partitionKey
-	 * @return
-	 */
-	public boolean deleteBatch(String ids,String partitionKey) {
-		List<String> idList = StringUtils.string2List(ids, ",");
-		return deleteBatch(idList,partitionKey);
-	}
-	
-
-	/**
-	 * batch delete entity by ids , split with ,
-	 * @param ids
-	 * @param split
-	 * @return
-	 */
-	public boolean deleteBatchSplit(String ids , String split) {
-		List<String> idList = StringUtils.string2List(ids, StringUtils.isBlank(split)? "," : split );
-		return deleteBatch(idList);
-	}
-	
-	/**
 	 * delete one entity by id
 	 * @param id
 	 * @return
@@ -724,23 +657,13 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 * logicDelete entity by ids
-	 * @param ids string
+	 * logicDelete entity by id
+	 * @param id string
 	 * @return
 	 */
-	public boolean logicDelete(String ids) {
-		List<String> idList = StringUtils.string2List(ids, ",");
-		return logicDelete(idList);
-	}
-	
-	/**
-	 * logicDelete entity by ids
-	 * @param ids string
-	 * @param split
-	 * @return
-	 */
-	public boolean logicDeleteSplit(String ids , String split) {
-		List<String> idList = StringUtils.string2List(ids, StringUtils.isBlank(split)? "," : split );
+	public boolean logicDelete(String id) {
+		List<String> idList = new ArrayList<>();
+		idList.add(id);
 		return logicDelete(idList);
 	}
 	

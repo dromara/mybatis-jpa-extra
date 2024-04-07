@@ -32,7 +32,6 @@ public class LogicDeleteTestRunner  extends BaseTestRunner{
 	void logicDelete() throws Exception{
 		_logger.info("batchDeleteByIds...");
 		service.logicDelete("2");
-		service.logicDelete("2,639178432667713536");
 	}
 	
 	@Test
@@ -44,12 +43,6 @@ public class LogicDeleteTestRunner  extends BaseTestRunner{
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
 		service.logicDelete(idList);
-	}
-	
-	@Test
-	void logicDeleteSplit() throws Exception{
-		_logger.info("batchDeleteByIds...");
-		service.logicDeleteSplit("2,639178432667713536",",");
 	}
 	
 	@Test

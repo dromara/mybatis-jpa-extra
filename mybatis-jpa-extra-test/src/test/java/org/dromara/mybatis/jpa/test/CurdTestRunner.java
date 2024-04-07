@@ -110,14 +110,6 @@ public class CurdTestRunner  extends BaseTestRunner{
 		service.deleteBatch(idList);
 	}
 	
-	
-	@Test
-	void batchDeleteByIds() throws Exception{
-		_logger.info("batchDeleteByIds...");
-		service.deleteBatch("2");
-		service.deleteBatch("2,639178432667713536");
-	}
-	
 	@Test
 	void deleteByQuery() throws Exception{
 		_logger.info("deleteByQuery...");
