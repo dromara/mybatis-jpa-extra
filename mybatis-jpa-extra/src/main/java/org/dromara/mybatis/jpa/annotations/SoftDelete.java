@@ -15,8 +15,8 @@ public @interface SoftDelete {
 	/**
 	 * @return a SQL expression that evaluates to the default column value
 	 */
-	String value()  default "1" ;
+	String value()  default "n" ;
 	
-	String delete() default "9" ;
+	String delete() default "y" ;
 	
 }

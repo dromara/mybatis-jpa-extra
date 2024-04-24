@@ -80,9 +80,8 @@ public class Students extends JpaEntity implements Serializable {
     private LocalDateTime modifyDate;
 	
 	@ColumnLogic
-	@Column(name ="is_deleted")
-	private int isDeleted;
-	
+	@Column(name ="deleted")
+	private char deleted;
 	
 	public Students() {
 		super();
@@ -164,12 +163,12 @@ public class Students extends JpaEntity implements Serializable {
 		this.modifyDate = modifyDate;
 	}
 
-	public int getIsDeleted() {
-		return isDeleted;
+	public char getDeleted() {
+		return deleted;
 	}
 
-	public void setIsDeleted(int isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setDeleted(char deleted) {
+		this.deleted = deleted;
 	}
 
 	@Override
