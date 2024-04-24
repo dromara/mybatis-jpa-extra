@@ -64,10 +64,10 @@ public class GetProvider <T extends JpaEntity>{
 		
 		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-			sql.WHERE(" %s = %s"
+			sql.WHERE(" %s = '%s'"
 					.formatted(
 							logicColumnMapper.getColumnName(),
-							logicColumnMapper.getColumnLogic().value())
+							logicColumnMapper.getSoftDelete().value())
 					);
 		}
 		

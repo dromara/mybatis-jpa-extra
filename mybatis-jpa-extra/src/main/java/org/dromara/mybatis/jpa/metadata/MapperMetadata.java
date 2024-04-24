@@ -29,8 +29,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
-import org.dromara.mybatis.jpa.annotations.ColumnLogic;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
+import org.dromara.mybatis.jpa.annotations.SoftDelete;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
@@ -291,9 +291,9 @@ public class MapperMetadata <T extends JpaEntity>{
 					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
 					fieldColumnMapper.setPartitionKey(partitionKey);
 				}
-				if (field.isAnnotationPresent(ColumnLogic.class)) {
-					ColumnLogic columnLogic = field.getAnnotation(ColumnLogic.class);
-					fieldColumnMapper.setColumnLogic(columnLogic);
+				if (field.isAnnotationPresent(SoftDelete.class)) {
+					SoftDelete columnLogic = field.getAnnotation(SoftDelete.class);
+					fieldColumnMapper.setSoftDelete(columnLogic);
 					fieldColumnMapper.setLogicDelete(true);
 				}
 				logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);

@@ -65,7 +65,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 				.UPDATE(tableName)
 				.SET(" %s = '%s' ".formatted(
 						logicColumnMapper.getColumnName(),
-						logicColumnMapper.getColumnLogic().delete()
+						logicColumnMapper.getSoftDelete().delete()
 					)
 				);
 		
@@ -97,7 +97,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 				.UPDATE(tableName)
 				.SET(" %s = '%s' ".formatted(
 						logicColumnMapper.getColumnName(),
-						logicColumnMapper.getColumnLogic().delete()
+						logicColumnMapper.getSoftDelete().delete()
 					)
 				).WHERE(QueryBuilder.build(query));
 		

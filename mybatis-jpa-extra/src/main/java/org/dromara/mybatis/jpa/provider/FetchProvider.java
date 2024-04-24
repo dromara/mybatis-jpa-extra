@@ -78,7 +78,7 @@ public class FetchProvider <T extends JpaEntity>{
 					conditions.append(
 							" %s = %s ".formatted(
 									fieldColumnMapper.getColumnName(),
-									fieldColumnMapper.getColumnLogic().value()));
+									fieldColumnMapper.getSoftDelete().value()));
 				}else {
 					conditions.append(
 							" %s = #{%s.%s} ".formatted(
@@ -115,10 +115,10 @@ public class FetchProvider <T extends JpaEntity>{
 		
 		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-			sql.WHERE(" ( %s = %s )" 
+			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
 							logicColumnMapper.getColumnName(),
-							logicColumnMapper.getColumnLogic().value())
+							logicColumnMapper.getSoftDelete().value())
 					);
 		}
 		logger.trace("query Page By Condition SQL : \n{}" , sql);

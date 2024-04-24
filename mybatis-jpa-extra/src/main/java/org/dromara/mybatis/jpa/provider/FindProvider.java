@@ -51,10 +51,10 @@ public class FindProvider <T extends JpaEntity>{
 		SQL sql=  MapperMetadata.buildSelect(entityClass);
 		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-			sql.WHERE(" %s = %s"
+			sql.WHERE(" %s = '%s'"
 					.formatted(
 							logicColumnMapper.getColumnName(),
-							logicColumnMapper.getColumnLogic().value())
+							logicColumnMapper.getSoftDelete().value())
 					);
 		}
         String findAllSql = sql.toString(); 

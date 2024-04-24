@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
-import org.dromara.mybatis.jpa.annotations.ColumnLogic;
+import org.dromara.mybatis.jpa.annotations.SoftDelete;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 import jakarta.persistence.Column;
@@ -79,7 +79,7 @@ public class Students extends JpaEntity implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
 	
-	@ColumnLogic
+	@SoftDelete
 	@Column(name ="deleted")
 	private char deleted;
 	
