@@ -7,17 +7,17 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/**
- * @see org.dromara.mybatis.jpa.annotations.SoftDelete
- */
 @Target( {FIELD, METHOD} )
 @Retention( RUNTIME )
-public @interface ColumnLogic {
+public @interface Encrypted {
 	/**
-	 * @return a SQL expression that evaluates to the default column value
+	 * @return Encrypt algorithm
 	 */
-	String value()  default "1" ;
+	String algorithm() default "AES" ;
 	
-	String delete() default "9" ;
+	/**
+	 * When true try to use DB encryption rather than local java encryption.
+	 */
+	boolean dbEncrypt() default false;
 	
 }
