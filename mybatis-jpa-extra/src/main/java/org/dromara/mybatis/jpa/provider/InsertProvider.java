@@ -49,7 +49,7 @@ public class InsertProvider <T extends JpaEntity>{
 	 */
 	public String insert(T entity) {
 		MapperMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());
+		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
 		
 		SQL sql = new SQL().INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
 		

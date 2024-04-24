@@ -192,7 +192,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
     	logger.debug("TableColumn Snowflake init ");
     	IdentifierGeneratorFactory  identifierGeneratorFactory = new IdentifierGeneratorFactory(
     			this.properties.getTableColumnSnowflakeDatacenterId(),this.properties.getTableColumnSnowflakeMachineId());
-    	MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
+    	MapperMetadata.setIdentifierGeneratorFactory(identifierGeneratorFactory);
     }
     
     if (this.databaseIdProvider != null) {

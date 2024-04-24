@@ -82,7 +82,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 		}
 		
         String deleteSql = sql.toString(); 
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
+        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
         logger.trace("logic Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 

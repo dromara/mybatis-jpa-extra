@@ -41,8 +41,8 @@ public class GetProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
 		String tableName = MapperMetadata.getTableName(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.GET_SQL)) {
-			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.GET_SQL);
+		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.GET_SQL)) {
+			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.GET_SQL);
 		}
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
@@ -72,7 +72,7 @@ public class GetProvider <T extends JpaEntity>{
 		}
 		
         String getSql = sql.toString(); 
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.GET_SQL,getSql);
+        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.GET_SQL,getSql);
         logger.trace("Get SQL \n{}" , getSql);
         return getSql;  
     }

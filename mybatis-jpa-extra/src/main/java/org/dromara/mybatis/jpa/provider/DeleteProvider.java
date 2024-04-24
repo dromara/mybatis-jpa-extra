@@ -43,8 +43,8 @@ public class DeleteProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
 		String tableName = MapperMetadata.getTableName(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
-			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.REMOVE_SQL);
+		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
+			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.REMOVE_SQL);
 		}
 		
 		String idValue = (String) parametersMap.get(MapperMetadata.PARAMETER_ID);
@@ -70,7 +70,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		}
 		
         String deleteSql = sql.toString(); 
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.REMOVE_SQL,deleteSql);
+        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.REMOVE_SQL,deleteSql);
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     }  
@@ -111,7 +111,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		}
 		
         String deleteSql=sql.toString(); 
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
+        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.BATCHDELETE_SQL,deleteSql);
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 

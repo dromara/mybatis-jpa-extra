@@ -49,7 +49,7 @@ public class FetchProvider <T extends JpaEntity>{
 		@SuppressWarnings("unchecked")
 		T entity = (T)parametersMap.get(MapperMetadata.ENTITY);
 		MapperMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entity.getClass().getSimpleName());
+		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
@@ -104,7 +104,7 @@ public class FetchProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(MapperMetadata.CONDITION);
 		MapperMetadata.buildColumnList(entityClass);
-		List<FieldColumnMapper> listFields = MapperMetadata.fieldsMap.get(entityClass.getSimpleName());
+		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entityClass.getSimpleName());
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();

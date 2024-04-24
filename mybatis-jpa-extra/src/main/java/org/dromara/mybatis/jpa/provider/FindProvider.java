@@ -44,8 +44,8 @@ public class FindProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		MapperMetadata.buildColumnList(entityClass);
 		String tableName = MapperMetadata.getTableName(entityClass);
-		if (MapperMetadata.sqlsMap.containsKey(tableName + SQL_TYPE.FINDALL_SQL)) {
-			return MapperMetadata.sqlsMap.get(tableName + SQL_TYPE.FINDALL_SQL);
+		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.FINDALL_SQL)) {
+			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.FINDALL_SQL);
 		}
 		
 		SQL sql=  MapperMetadata.buildSelect(entityClass);
@@ -59,7 +59,7 @@ public class FindProvider <T extends JpaEntity>{
 		}
         String findAllSql = sql.toString(); 
         logger.trace("Find All SQL \n{}" , findAllSql);
-        MapperMetadata.sqlsMap.put(tableName + SQL_TYPE.FINDALL_SQL,findAllSql);
+        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.FINDALL_SQL,findAllSql);
         return findAllSql;  
     }
 	

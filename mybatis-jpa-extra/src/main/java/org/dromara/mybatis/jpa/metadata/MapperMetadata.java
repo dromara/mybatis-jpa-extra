@@ -91,13 +91,13 @@ public class MapperMetadata <T extends JpaEntity>{
 	}
 	
 	
-	public static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
 	
-	public static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<>();
 	
-	public static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, String>tableNameMap 	= 	new ConcurrentHashMap<>();
 	
-	public static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
+	static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
 	
 	/**
 	 * getTableName and cache table name
@@ -321,4 +321,38 @@ public class MapperMetadata <T extends JpaEntity>{
 		}
 		return name;
 	}
+
+	public static ConcurrentMap<String, List<FieldColumnMapper>> getFieldsMap() {
+		return fieldsMap;
+	}
+
+	public static void setFieldsMap(ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap) {
+		MapperMetadata.fieldsMap = fieldsMap;
+	}
+
+	public static ConcurrentMap<String, String> getSqlsMap() {
+		return sqlsMap;
+	}
+
+	public static void setSqlsMap(ConcurrentMap<String, String> sqlsMap) {
+		MapperMetadata.sqlsMap = sqlsMap;
+	}
+
+	public static ConcurrentMap<String, String> getTableNameMap() {
+		return tableNameMap;
+	}
+
+	public static void setTableNameMap(ConcurrentMap<String, String> tableNameMap) {
+		MapperMetadata.tableNameMap = tableNameMap;
+	}
+
+	public static IdentifierGeneratorFactory getIdentifierGeneratorFactory() {
+		return identifierGeneratorFactory;
+	}
+
+	public static void setIdentifierGeneratorFactory(IdentifierGeneratorFactory identifierGeneratorFactory) {
+		MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
+	}
+	
+	
 }

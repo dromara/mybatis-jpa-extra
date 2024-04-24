@@ -115,7 +115,7 @@ public class JpaPage {
 
 	
 	public String generateId() {
-		if(MapperMetadata.identifierGeneratorFactory != null) {
+		if(MapperMetadata.getIdentifierGeneratorFactory() != null) {
 			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
 		}else {
 			return UUID.randomUUID().toString().toLowerCase();

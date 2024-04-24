@@ -33,7 +33,7 @@ public class JpaEntity extends JpaPage{
 
 	@Override
 	public String generateId() {
-		if(MapperMetadata.identifierGeneratorFactory != null) {
+		if(MapperMetadata.getIdentifierGeneratorFactory() != null) {
 			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
 		}else {
 			return UUID.randomUUID().toString().toLowerCase();
