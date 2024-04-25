@@ -33,7 +33,7 @@
 > * @Temporal
 > * @PartitionKey
 > * @ColumnDefault
-> * @ColumnLogic
+> * @SoftDelete
 
 ## 1.2、主键策略
 
@@ -74,7 +74,7 @@ public class Students extends JpaEntity implements Serializable{
     @GeneratedValue
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
-    @ColumnLogic
+    @SoftDelete
     @Column(name ="is_deleted")
     private int isDeleted;
     //getter setter
