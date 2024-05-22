@@ -30,7 +30,6 @@ public class IdentifierGeneratorFactory {
 	public IdentifierGeneratorFactory() {
 		register(IdStrategy.UUID		, new UUIDGenerator());
 		register(IdStrategy.UUIDHEX		, new UUIDHexGenerator());
-		register(IdStrategy.SERIAL		, new SerialGenerator());
 		register(IdStrategy.SNOWFLAKEID	, new SnowFlakeIdGenerator());
 		register(IdStrategy.DEFAULT		, new SnowFlakeIdGenerator(null));
 	}
@@ -38,8 +37,6 @@ public class IdentifierGeneratorFactory {
 	public IdentifierGeneratorFactory(long datacenterId, long machineId) {
 		register(IdStrategy.UUID, new UUIDGenerator());
 		register(IdStrategy.UUIDHEX, new UUIDHexGenerator());
-		register(IdStrategy.SERIAL, new SerialGenerator());
-		SerialGenerator.STATIC_NODE_NUMBER = "" + datacenterId + machineId;
 		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 

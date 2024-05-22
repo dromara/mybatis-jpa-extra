@@ -18,7 +18,6 @@
 package org.dromara.mybatis.jpa.test;
 
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.id.SerialGenerator;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.Students;
@@ -43,8 +42,6 @@ public class MybatisJpaApplication implements ApplicationRunner{
     @Autowired
     StudentsService studentsService;
     
-   // @Autowired
-    SerialGenerator serialGenerator;
     @Autowired
     private ApplicationContext applicationContext;
     /**
