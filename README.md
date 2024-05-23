@@ -10,30 +10,31 @@
 4.提供starter,**简化SpringBoot集成**;
 
 5.数据库支持
-| 数据库          |   支持  |
-| :-----          | :----   |
-| **MySQL**       | ✅      | 
-| **PostgreSQL**  | ✅      | 
-| **Oracle**      | ✅      |
-| **SqlServer**   | ✅      |
-| **DB2**         | ✅      |
-| **Derby**       | ✅      |
+|  数据库           |  支持   |
+| ---               | ---   |
+|  **MySQL**        | ✅    |
+|  **PostgreSQL**   | ✅    |
+|  **Oracle**       | ✅    |
+|  **SqlServer**    | ✅    |
+|  **DB2**          | ✅    |
+|  **MySQL**        | ✅    |
 
 
 ## 1、JPA 3注释
 
 ## 1.1、注释
 
-> * @Entity
-> * @Table
-> * @Column
-> * @Id
-> * @GeneratedValue
-> * @Transient 
-> * @Temporal
-> * @PartitionKey
-> * @ColumnDefault
-> * @SoftDelete
+ * @Entity
+ * @Table
+ * @Column
+ * @Id
+ * @GeneratedValue
+ * @Transient 
+ * @Temporal
+ * @PartitionKey
+ * @ColumnDefault
+ * @SoftDelete
+
 
 ## 1.2、主键策略
 
@@ -143,21 +144,9 @@ public class Students extends JpaEntity implements Serializable{
         //...
         service.deleteBatch(idList);
     }
-    //根据ID批量删除
-    @Test
-    void batchDeleteByIds() throws Exception{
-        service.deleteBatch("2");
-        service.deleteBatch("2,639178432667713536");
-    }
 ```
 ## 2.2、逻辑删除
 ```java    
-    //根据ID删除或者ID字符串分隔符,批量逻辑删除
-    @Test
-    void logicDelete() throws Exception{
-        service.logicDelete("2");
-        service.logicDelete("2,639178432667713536");
-    }
     //根据IDS批量逻辑删除
     @Test
     void logicBatchDelete() throws Exception{
@@ -167,12 +156,6 @@ public class Students extends JpaEntity implements Serializable{
         //...
         service.logicDelete(idList);
     }
-    //根据IDS字符串和分割符批量逻辑删除
-    @Test
-    void logicDeleteSplit() throws Exception{
-        service.logicDeleteSplit("2,639178432667713536",",");
-    }
-
 ```
 
 ## 2.3、Find查询和Qruey构造器
@@ -283,7 +266,6 @@ public class Students extends JpaEntity implements Serializable{
     </delete>
 ```
 
-
 ##  4、SpringBoot配置
 
 ```ini
@@ -300,7 +282,6 @@ mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence
 mybatis.table-column-escape=true
 #mybatis.table-column-escape-char=`
 ```
-
 
 ##  5、相关资源
 
