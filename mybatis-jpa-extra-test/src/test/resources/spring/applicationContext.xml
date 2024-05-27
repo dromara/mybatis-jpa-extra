@@ -97,14 +97,6 @@
     <context:component-scan base-package="org.dromara.mybatis.jpa.test.dao.service" />
     
     <bean class ="org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory">
-	    <property name="identifierGeneratorMap" >
-	    	<map>
-		        <entry key="serial" >
-		        	<bean class="org.dromara.mybatis.jpa.id.SerialGenerator">
-		        		<property name="ipAddressNodeValue"  value="F0-76-1C-B0-26-9C=02,"/>
-		        	</bean></entry>
-		    </map>
-	    </property>
     </bean>
     
    	<!-- 

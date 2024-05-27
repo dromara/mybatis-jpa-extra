@@ -1,5 +1,5 @@
 /*
- *    Copyright 2015-2022 the original author or authors.
+ *    Copyright 2015-2023 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -220,19 +220,6 @@ public class MybatisProperties {
     this.configuration = configuration;
   }
 
-  public Resource[] resolveMapperLocations() {
-    return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))
-        .flatMap(location -> Stream.of(getResources(location))).toArray(Resource[]::new);
-  }
-
-  private Resource[] getResources(String location) {
-    try {
-      return resourceResolver.getResources(location);
-    } catch (IOException e) {
-      return new Resource[0];
-    }
-  }
-
 	public String getDialect() {
 		return dialect;
 	}
@@ -281,7 +268,20 @@ public class MybatisProperties {
 		this.tableColumnSnowflakeMachineId = tableColumnSnowflakeMachineId;
 	}
 
-/**
+	public Resource[] resolveMapperLocations() {
+		return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))
+				.flatMap(location -> Stream.of(getResources(location))).toArray(Resource[]::new);
+	}
+
+  private Resource[] getResources(String location) {
+    try {
+      return resourceResolver.getResources(location);
+    } catch (IOException e) {
+      return new Resource[0];
+    }
+  }
+
+  /**
    * The configuration properties for mybatis core module.
    *
    * @since 3.0.0
@@ -469,6 +469,11 @@ public class MybatisProperties {
      * Specify any configuration variables.
      */
     private Properties variables;
+
+    /**
+     * Specifies the database identify value for switching query to use.
+     */
+    private String databaseId;
 
     public Boolean getSafeRowBoundsEnabled() {
       return safeRowBoundsEnabled;
@@ -717,9 +722,16 @@ public class MybatisProperties {
     public void setDefaultEnumTypeHandler(Class<? extends TypeHandler> defaultEnumTypeHandler) {
       this.defaultEnumTypeHandler = defaultEnumTypeHandler;
     }
-    
 
-    void applyTo(Configuration target) {
+    public String getDatabaseId() {
+      return databaseId;
+    }
+
+    public void setDatabaseId(String databaseId) {
+      this.databaseId = databaseId;
+    }
+
+    public void applyTo(Configuration target) {
       PropertyMapper mapper = PropertyMapper.get().alwaysApplyingWhenNonNull();
       mapper.from(getSafeRowBoundsEnabled()).to(target::setSafeRowBoundsEnabled);
       mapper.from(getSafeResultHandlerEnabled()).to(target::setSafeResultHandlerEnabled);
@@ -752,6 +764,7 @@ public class MybatisProperties {
       mapper.from(getDefaultSqlProviderType()).to(target::setDefaultSqlProviderType);
       mapper.from(getConfigurationFactory()).to(target::setConfigurationFactory);
       mapper.from(getDefaultEnumTypeHandler()).to(target::setDefaultEnumTypeHandler);
+      mapper.from(getDatabaseId()).to(target::setDatabaseId);
     }
 
   }

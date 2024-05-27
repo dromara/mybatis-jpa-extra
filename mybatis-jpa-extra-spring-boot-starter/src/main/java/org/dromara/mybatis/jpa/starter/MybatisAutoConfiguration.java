@@ -36,7 +36,6 @@ import org.dromara.mybatis.jpa.MyBatisJpaSessionFactoryBean;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata.CASE_TYPE;
-import org.dromara.mybatis.jpa.starter.ConfigurationCustomizer;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperFactoryBean;
@@ -84,7 +83,6 @@ import org.springframework.util.StringUtils;
  * @author Josh Long
  * @author Kazuki Shimizu
  * @author Eduardo Macarrón
- * @author Crystal.Sea
  */
 @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
@@ -143,7 +141,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
   @ConditionalOnMissingBean
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
     //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-	//mybatis-jpa
+    //mybatis-jpa
     MyBatisJpaSessionFactoryBean factory = new MyBatisJpaSessionFactoryBean();
     factory.setDataSource(dataSource);
     if (properties.getConfiguration() == null || properties.getConfiguration().getVfsImpl() == null) {
@@ -159,7 +157,6 @@ public class MybatisAutoConfiguration implements InitializingBean {
     if (!ObjectUtils.isEmpty(this.interceptors)) {
       factory.setPlugins(this.interceptors);
     }
-    
     //mybatis-jpa
     if (StringUtils.hasLength(this.properties.getDialect())) {
     	factory.setDialect(this.properties.getDialect());
