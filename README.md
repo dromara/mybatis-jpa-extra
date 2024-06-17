@@ -3,11 +3,9 @@
    
 1.Jakarta JPA 3注释**简化CUID操作**;
     
-2.Interceptor实现数据库**SELECT分页查询**;
+2.增强**SELECT分页查询**;
     
 3.**链式**Query查询条件构造器;
-
-4.提供starter,**简化SpringBoot集成**;
 
 5.数据库支持
 |  数据库           |  支持   |
