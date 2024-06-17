@@ -17,7 +17,6 @@
 |  **Oracle**       | ✅    |
 |  **SqlServer**    | ✅    |
 |  **DB2**          | ✅    |
-|  **MySQL**        | ✅    |
 
 
 ## 1、JPA 3注释
