@@ -34,7 +34,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.provider.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

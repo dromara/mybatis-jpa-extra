@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.metadata;
+package org.dromara.mybatis.jpa.meta;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.metadata;
+package org.dromara.mybatis.jpa.meta;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;

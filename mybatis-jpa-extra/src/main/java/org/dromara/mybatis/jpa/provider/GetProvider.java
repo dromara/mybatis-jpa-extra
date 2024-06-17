@@ -24,9 +24,9 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
