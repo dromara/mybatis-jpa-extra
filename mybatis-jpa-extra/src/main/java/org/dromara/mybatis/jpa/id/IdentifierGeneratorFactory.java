@@ -29,14 +29,12 @@ public class IdentifierGeneratorFactory {
 	
 	public IdentifierGeneratorFactory() {
 		register(IdStrategy.UUID		, new UUIDGenerator());
-		register(IdStrategy.UUIDHEX		, new UUIDHexGenerator());
 		register(IdStrategy.SNOWFLAKEID	, new SnowFlakeIdGenerator());
 		register(IdStrategy.DEFAULT		, new SnowFlakeIdGenerator(null));
 	}
 	
 	public IdentifierGeneratorFactory(long datacenterId, long machineId) {
 		register(IdStrategy.UUID, new UUIDGenerator());
-		register(IdStrategy.UUIDHEX, new UUIDHexGenerator());
 		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 

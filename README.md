@@ -42,7 +42,7 @@
 
 | 序号    | 策略      |   支持  |
 | --------| :-----        | :----   |
-| 1     | **AUTO**          | 3种主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID)<br>uuid.hex(UUID十六进制) | 
+| 1     | **AUTO**          | 3种主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID) | 
 | 2     | **SEQUENCE**      | 数据库序列生成，generator值为数据库序列名 | 
 | 3     | **IDENTITY**      | 数据库表自增主键  |
 
