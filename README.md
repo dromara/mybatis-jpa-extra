@@ -3,18 +3,19 @@
    
 1.Jakarta JPA 3注释**简化CUID操作**;
     
-2.增强**SELECT分页查询**;
+2.增强**SELECT分页**查询;
     
 3.**链式**Query查询条件构造器;
 
 4.数据库支持
-|  数据库           |  支持   |
-| ---               | ---   |
-|  **MySQL**        | ✅    |
-|  **PostgreSQL**   | ✅    |
-|  **Oracle**       | ✅    |
-|  **SqlServer**    | ✅    |
-|  **DB2**          | ✅    |
+
+|  数据库        |  支持 |
+| ---           | ---   |
+|  MySQL        | ✅    |
+|  PostgreSQL   | ✅    |
+|  Oracle       | ✅    |
+|  SqlServer    | ✅    |
+|  DB2          | ✅    |
 
 
 ## 1、JPA 3注释
@@ -39,9 +40,9 @@
 
 | 序号    | 策略      |   支持  |
 | --------| :-----        | :----   |
-| 1     | **AUTO**          | 主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID) | 
-| 2     | **SEQUENCE**      | 数据库序列生成，generator值为数据库序列名 | 
-| 3     | **IDENTITY**      | 数据库表自增主键  |
+| 1     | AUTO          | 主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID) | 
+| 2     | SEQUENCE      | 数据库序列生成，generator值为数据库序列名 | 
+| 3     | IDENTITY      | 数据库表自增主键  |
 
 ## 1.3、Java Bean 注释
 
