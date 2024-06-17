@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class UUIDGeneratorTest {
 
 	@Test
-	public void generator() throws Exception{
+	void generator() throws Exception{
 		UUIDGenerator uuidGenerator = new UUIDGenerator();
 		System.out.println(uuidGenerator.generate(uuidGenerator));
 	}

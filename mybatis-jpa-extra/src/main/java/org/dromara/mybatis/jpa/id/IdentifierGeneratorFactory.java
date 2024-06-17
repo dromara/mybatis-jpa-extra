@@ -18,6 +18,8 @@
 package org.dromara.mybatis.jpa.id;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +27,7 @@ public class IdentifierGeneratorFactory {
 	
 	private static final Logger logger 	= 	LoggerFactory.getLogger(IdentifierGeneratorFactory.class);
 	
-	static ConcurrentHashMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
+	static ConcurrentMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
 	
 	public IdentifierGeneratorFactory() {
 		register(IdStrategy.UUID		, new UUIDGenerator());
@@ -38,11 +40,11 @@ public class IdentifierGeneratorFactory {
 		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 
-	public static ConcurrentHashMap<String, IdentifierGenerator> getIdentifierGeneratorMap() {
+	public static ConcurrentMap<String, IdentifierGenerator> getIdentifierGeneratorMap() {
 		return identifierGeneratorMap;
 	}
 
-	public static void setIdentifierGeneratorMap(ConcurrentHashMap<String, IdentifierGenerator> identifierGeneratorMap) {
+	public static void setIdentifierGeneratorMap(ConcurrentMap<String, IdentifierGenerator> identifierGeneratorMap) {
 		IdentifierGeneratorFactory.identifierGeneratorMap = identifierGeneratorMap;
 	}
 
