@@ -78,7 +78,7 @@ public class FetchProvider <T extends JpaEntity>{
 				}
 				if(fieldColumnMapper.isLogicDelete()) {
 					conditions.append(
-							" %s = %s ".formatted(
+							" %s = '%s' ".formatted(
 									fieldColumnMapper.getColumnName(),
 									fieldColumnMapper.getSoftDelete().value()));
 				}else {
