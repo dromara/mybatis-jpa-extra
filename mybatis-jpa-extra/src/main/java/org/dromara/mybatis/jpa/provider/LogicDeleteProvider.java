@@ -25,8 +25,10 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.slf4j.Logger;
@@ -43,8 +45,8 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String logicDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValue = new StringBuffer();
@@ -56,10 +58,10 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 		}
 		
 		String keyValues = keyValue.substring(1).replace(";", "");//remove ;
-		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql=new SQL()
 				.UPDATE(tableName)
@@ -89,9 +91,9 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 	
 	public String logicDeleteByQuery(Class<?> entityClass, Query query) {
 		logger.trace("logic Delete By Query \n{}" , query);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
-		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
 		
 		SQL sql = new SQL()
 				.UPDATE(tableName)

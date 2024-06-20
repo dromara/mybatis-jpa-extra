@@ -19,7 +19,8 @@ package org.dromara.mybatis.jpa.provider;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
-import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -35,7 +36,7 @@ public class QueryProvider<T extends JpaEntity> {
 
 	public String queryByCondition(Class<?> entityClass, Query query) {
 		logger.trace("Query \n{}" , query);
-		SQL sql = MapperMetadata.buildSelect(entityClass).WHERE(QueryBuilder.build(query));
+		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(QueryBuilder.build(query));
 		
 		if (query.getGroupBy() != null) {
 			sql.GROUP_BY(QueryBuilder.buildGroupBy(query));
@@ -50,9 +51,9 @@ public class QueryProvider<T extends JpaEntity> {
 
 
 	public String query(T entity) {
-		SQL sql = MapperMetadata.buildSelect(entity.getClass());
+		SQL sql = TableMetadata.buildSelect(entity.getClass());
 
-		for (FieldColumnMapper fieldColumnMapper : MapperMetadata.getFieldsMap().get(entity.getClass().getSimpleName())) {
+		for (FieldColumnMapper fieldColumnMapper : FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName())) {
 			Object fieldValue = BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 			String fieldType = fieldColumnMapper.getFieldType().toLowerCase();
 

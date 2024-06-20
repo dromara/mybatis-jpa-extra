@@ -25,8 +25,10 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.slf4j.Logger;
@@ -41,16 +43,16 @@ public class DeleteProvider <T extends JpaEntity>{
 	
 	public String remove(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
 			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.REMOVE_SQL);
 		}
 		
 		String idValue = (String) parametersMap.get(MapperMetadata.PARAMETER_ID);
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn((entityClass).getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn((entityClass).getSimpleName());
 		
 		SQL sql=new SQL().DELETE_FROM(tableName);
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
@@ -78,8 +80,8 @@ public class DeleteProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String batchDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValue = new StringBuffer();
@@ -93,8 +95,8 @@ public class DeleteProvider <T extends JpaEntity>{
 		String keyValues = keyValue.substring(1).replace(";", "");
 		
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass.getSimpleName());
 		
 		SQL sql=new SQL().DELETE_FROM(tableName);
 		
@@ -118,8 +120,8 @@ public class DeleteProvider <T extends JpaEntity>{
 	
 	public String deleteByQuery(Class<?> entityClass, Query query) {
 		logger.trace("delete By Query \n{}" , query);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		SQL sql = new SQL().DELETE_FROM(tableName).WHERE(QueryBuilder.build(query));
 		
 		logger.trace("delete By Query SQL \n{}" , sql);

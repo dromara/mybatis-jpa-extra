@@ -27,8 +27,10 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,14 +44,14 @@ public class FindProvider <T extends JpaEntity>{
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.FINDALL_SQL)) {
 			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.FINDALL_SQL);
 		}
 		
-		SQL sql=  MapperMetadata.buildSelect(entityClass);
-		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		SQL sql=  TableMetadata.buildSelect(entityClass);
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
@@ -69,7 +71,7 @@ public class FindProvider <T extends JpaEntity>{
 		int[] argTypes 	 = (int[]) parametersMap.get(MapperMetadata.QUERY_ARGTYPES);
 		String filterSql = parametersMap.get(MapperMetadata.QUERY_FILTER).toString().trim();
 		
-		MapperMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
 		
 		if(filterSql.toLowerCase().startsWith("where")) {
 			filterSql = filterSql.substring(5);
@@ -115,7 +117,7 @@ public class FindProvider <T extends JpaEntity>{
 			filterSql = StringUtils.lineBreak2Blank(sqlBuffer.toString());
 		}
 		
-		SQL sql = MapperMetadata.buildSelect(entityClass).WHERE(filterSql);
+		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(filterSql);
 		
         String findSql = sql.toString(); 
         logger.trace("Find SQL \n{}" , findSql);
@@ -125,7 +127,7 @@ public class FindProvider <T extends JpaEntity>{
 	
 	public String findByIds(Map<String, Object>  parametersMap) { 
 		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(parameterEntityClass);
+		FieldMetadata.buildColumnList(parameterEntityClass);
 		ArrayList <String> parameterIds = (ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValue = new StringBuffer();
@@ -138,10 +140,10 @@ public class FindProvider <T extends JpaEntity>{
 		
 		String idsValues = keyValue.substring(1).replace(";", "");//remove ;
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((parameterEntityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(parameterEntityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((parameterEntityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass.getSimpleName());
 		
-		SQL sql = MapperMetadata.buildSelect(parameterEntityClass);
+		SQL sql = TableMetadata.buildSelect(parameterEntityClass);
 		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE("%s = #{%s} and %s  in ( %s )"

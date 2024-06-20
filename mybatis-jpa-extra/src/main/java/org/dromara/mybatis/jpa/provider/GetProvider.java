@@ -25,8 +25,10 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,16 +41,16 @@ public class GetProvider <T extends JpaEntity>{
 	
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.GET_SQL)) {
 			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.GET_SQL);
 		}
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = MapperMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = MapperMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass.getSimpleName());
 		
-		SQL sql = MapperMetadata.buildSelect(entityClass);
+		SQL sql = TableMetadata.buildSelect(entityClass);
 		
 		sql.WHERE(" %s = #{%s}"
 				.formatted(
@@ -62,7 +64,7 @@ public class GetProvider <T extends JpaEntity>{
 					partitionKeyValue));
 		}
 		
-		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(

@@ -1,0 +1,167 @@
+package org.dromara.mybatis.jpa.meta;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.PartitionKey;
+import org.dromara.mybatis.jpa.annotations.SoftDelete;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.Transient;
+
+public class FieldMetadata {
+	private static final Logger logger 	= 	LoggerFactory.getLogger(FieldMetadata.class);
+	
+	static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
+	
+	public static  FieldColumnMapper getIdColumn(String  classSimpleName) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+		FieldColumnMapper idFieldColumnMapper = null;
+		for (int i = 0; i < listFields.size(); i++) {
+			if (listFields.get(i).isIdColumn()) {
+				idFieldColumnMapper = listFields.get(i);
+				break;
+			}
+		}
+		return idFieldColumnMapper;
+	}
+	
+	public static  FieldColumnMapper getLogicColumn(String  classSimpleName) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+		FieldColumnMapper logicColumnMapper = null;
+		for (int i = 0; i < listFields.size(); i++) {
+			if (listFields.get(i).isLogicDelete()) {
+				logicColumnMapper = listFields.get(i);
+				break;
+			}
+		}
+		return logicColumnMapper;
+	}
+	
+	public static  FieldColumnMapper getPartitionKey(String  classSimpleName) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+		FieldColumnMapper partitionKeyColumnMapper = null;
+		for (FieldColumnMapper column : listFields) {
+			if (column.getPartitionKey() != null) {
+				partitionKeyColumnMapper = column;
+				break;
+			}
+		}
+		return partitionKeyColumnMapper;
+	}
+	
+
+	/**
+	 * get select table Column from entityClass, data cache in fieldsMap
+	 * @param entityClass
+	 * @return selectColumn
+	 */
+	public static String selectColumnMapper(Class<?> entityClass) {
+		StringBuffer selectColumn = new StringBuffer("sel_tmp_table.* ");
+		int columnCount = 0;
+		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getSimpleName())) {
+			columnCount ++;
+			//不同的属性和数据库字段不一致的需要进行映射
+			if(!fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
+				selectColumn.append(",")
+							.append(fieldColumnMapper.getColumnName())
+							.append(" ")
+							.append(fieldColumnMapper.getFieldName());
+			}
+			logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
+					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
+		}
+		return selectColumn.toString();
+	}
+	
+	/**
+	 * buildColumnList
+	 * @param entityClass
+	 */
+	public static void buildColumnList(Class<?> entityClass) {
+		if (fieldsMap.containsKey(entityClass.getSimpleName())) {
+			//run one time
+			return;
+		}
+		
+		logger.trace("entityClass {}" , entityClass);
+		
+		Field[] fields = entityClass.getDeclaredFields();
+		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<>(fields.length);
+
+		for (Field field : fields) {
+			//skip Transient field
+			if(field.isAnnotationPresent(Transient.class)) {
+				continue;
+			}
+			
+			if (field.isAnnotationPresent(Column.class)) {
+				FieldColumnMapper fieldColumnMapper = new FieldColumnMapper();
+				fieldColumnMapper.setFieldName( field.getName());
+				fieldColumnMapper.setFieldType(field.getType().getSimpleName());
+				String columnName = "";
+				Column columnAnnotation = field.getAnnotation(Column.class);
+				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
+				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
+				    columnName = columnAnnotation.name();
+				} else {
+					columnName = field.getName();
+				}
+				
+				columnName = MapperMetadata.tableColumnCaseConverter(columnName);
+				
+				columnName = MapperMetadata.tableColumnEscape(columnName);
+				
+				fieldColumnMapper.setColumnName(columnName);
+				
+				if(field.isAnnotationPresent(Id.class)) {
+					fieldColumnMapper.setIdColumn(true);
+				}
+				
+				if(field.isAnnotationPresent(GeneratedValue.class)) {
+					GeneratedValue generatedValue=field.getAnnotation(GeneratedValue.class);
+					fieldColumnMapper.setGeneratedValue(generatedValue);
+					fieldColumnMapper.setGenerated(true);
+				}
+				if (field.isAnnotationPresent(Temporal.class)) {
+					Temporal temporalAnnotation = field.getAnnotation(Temporal.class);
+					fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
+				}
+				if (field.isAnnotationPresent(ColumnDefault.class)) {
+					ColumnDefault columnDefault = field.getAnnotation(ColumnDefault.class);
+					fieldColumnMapper.setColumnDefault(columnDefault);
+				}
+				if (field.isAnnotationPresent(PartitionKey.class)) {
+					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
+					fieldColumnMapper.setPartitionKey(partitionKey);
+				}
+				if (field.isAnnotationPresent(SoftDelete.class)) {
+					SoftDelete columnLogic = field.getAnnotation(SoftDelete.class);
+					fieldColumnMapper.setSoftDelete(columnLogic);
+					fieldColumnMapper.setLogicDelete(true);
+				}
+				logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
+				fieldColumnMapperList.add(fieldColumnMapper);
+			}
+		}
+		
+		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);
+		logger.trace("fieldsMap : {}" , fieldsMap);
+
+	}
+
+	public static ConcurrentMap<String, List<FieldColumnMapper>> getFieldsMap() {
+		return fieldsMap;
+	}
+
+}

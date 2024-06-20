@@ -27,7 +27,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -48,14 +50,14 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetch(Map<String, Object>  parametersMap) {
 		@SuppressWarnings("unchecked")
 		T entity = (T)parametersMap.get(MapperMetadata.ENTITY);
-		MapperMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
+		FieldMetadata.buildColumnList(entity.getClass());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
 		}
 		SQL sql = new SQL()
-			.SELECT(column).FROM(MapperMetadata.getTableName(entity.getClass()));
+			.SELECT(column).FROM(TableMetadata.getTableName(entity.getClass()));
 		StringBuffer conditions = new StringBuffer();
 		
 		for(FieldColumnMapper fieldColumnMapper : listFields) {
@@ -103,17 +105,17 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetchByCondition(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(MapperMetadata.CONDITION);
-		MapperMetadata.buildColumnList(entityClass);
-		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entityClass.getSimpleName());
+		FieldMetadata.buildColumnList(entityClass);
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entityClass.getSimpleName());
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
 		}
 		SQL sql = new SQL()
-			.SELECT(column).FROM(MapperMetadata.getTableName(entityClass))
+			.SELECT(column).FROM(TableMetadata.getTableName(entityClass))
 			.WHERE("( " + QueryBuilder.build(condition) +" ) ");
 		
-		FieldColumnMapper logicColumnMapper = MapperMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(

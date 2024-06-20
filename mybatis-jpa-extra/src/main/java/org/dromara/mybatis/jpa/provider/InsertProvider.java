@@ -28,7 +28,9 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,10 +50,10 @@ public class InsertProvider <T extends JpaEntity>{
 	 * @return insert sql String
 	 */
 	public String insert(T entity) {
-		MapperMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
+		FieldMetadata.buildColumnList(entity.getClass());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
 		
-		SQL sql = new SQL().INSERT_INTO(MapperMetadata.getTableName(entity.getClass()));
+		SQL sql = new SQL().INSERT_INTO(TableMetadata.getTableName(entity.getClass()));
 		
 		for (int i = 0; i < listFields.size(); i++) {
 			FieldColumnMapper fieldColumnMapper = listFields.get(i);

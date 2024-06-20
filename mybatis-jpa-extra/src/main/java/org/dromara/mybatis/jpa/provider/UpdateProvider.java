@@ -24,7 +24,8 @@ import java.util.List;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
-import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.meta.FieldMetadata;
+import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -43,11 +44,11 @@ public class UpdateProvider <T extends JpaEntity>{
 	 * @return update sql String
 	 */
 	public String update(T entity) {
-		MapperMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = MapperMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
+		FieldMetadata.buildColumnList(entity.getClass());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
 		
 		SQL sql = new SQL()
-			.UPDATE(MapperMetadata.getTableName(entity.getClass()));
+			.UPDATE(TableMetadata.getTableName(entity.getClass()));
 		
 		FieldColumnMapper partitionKey = null;
 		FieldColumnMapper idFieldColumnMapper = null;
@@ -107,8 +108,8 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByCondition(Class<?> entityClass,String setSql, Query query) {
 		logger.trace("update By Query \n{}" , query);
-		MapperMetadata.buildColumnList(entityClass);
-		String tableName = MapperMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(tableName)
