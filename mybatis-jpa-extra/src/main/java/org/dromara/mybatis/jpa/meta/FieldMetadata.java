@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.annotations.SoftDelete;
