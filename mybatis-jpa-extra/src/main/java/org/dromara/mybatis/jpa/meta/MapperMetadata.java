@@ -23,8 +23,6 @@ package org.dromara.mybatis.jpa.meta;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-
-import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class MapperMetadata <T extends JpaEntity>{
+public class MapperMetadata{
 	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
 	public  static  class SQL_TYPE{
@@ -47,7 +45,6 @@ public class MapperMetadata <T extends JpaEntity>{
 	public static 	final		String ENTITY_CLASS				= "entityClass";
 	
 	public static 	final		String ENTITY					= "entity";
-	
 	
 	public static 	final		String PAGE						= "page";
 	
@@ -109,7 +106,6 @@ public class MapperMetadata <T extends JpaEntity>{
 		MapperMetadata.sqlsMap = sqlsMap;
 	}
 
-
 	public static IdentifierGeneratorFactory getIdentifierGeneratorFactory() {
 		return identifierGeneratorFactory;
 	}
@@ -118,5 +114,4 @@ public class MapperMetadata <T extends JpaEntity>{
 		MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
 		logger.debug("Identifier Generator Factory {}",identifierGeneratorFactory);
 	}
-
 }
