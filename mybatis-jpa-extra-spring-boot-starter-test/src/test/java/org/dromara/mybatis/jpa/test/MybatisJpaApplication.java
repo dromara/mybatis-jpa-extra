@@ -65,7 +65,7 @@ public class MybatisJpaApplication implements ApplicationRunner{
 		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
-		 JpaPageResults<Students>  jpaPageResults=studentsService.fetchPageResults("queryPageResults1",student);
+		 JpaPageResults<Students>  jpaPageResults=studentsService.fetchPageResults("fetchPageResults1",student);
 		 for (Students s : jpaPageResults.getRows()) {
 			 _logger.info("Students {}",s);
 		 }
