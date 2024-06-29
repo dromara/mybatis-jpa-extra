@@ -91,16 +91,16 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new UpdateProvider().update(entity);
 	}
 
-	public String updateByCondition(Class<?> entityClass,String setSql,Query query) {
-		return new UpdateProvider().updateByCondition(entityClass,setSql,query);
+	public String updateByQuery(Class<?> entityClass,String setSql,Query query) {
+		return new UpdateProvider().updateByQuery(entityClass,setSql,query);
 	}
 	
 	public String fetch(Map<String, Object>  parametersMap) {
 		return new FetchProvider().fetch(parametersMap);
 	}
 	
-	public String fetchByCondition(Map<String, Object>  parametersMap) {
-		return new FetchProvider().fetchByCondition(parametersMap);
+	public String fetchByQuery(Map<String, Object>  parametersMap) {
+		return new FetchProvider().fetchByQuery(parametersMap);
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new QueryProvider().query(entity);
 	}
 	
-	public String queryByCondition(Class<?> entityClass,Query query) {
-		return new QueryProvider().queryByCondition(entityClass,query);
+	public String queryByQuery(Class<?> entityClass,Query query) {
+		return new QueryProvider().queryByQuery(entityClass,query);
 	}
 
 }

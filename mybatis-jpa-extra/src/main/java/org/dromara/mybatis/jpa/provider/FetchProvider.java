@@ -102,7 +102,7 @@ public class FetchProvider <T extends JpaEntity>{
 	 * @param entity
 	 * @return update sql String
 	 */
-	public String fetchByCondition(Map<String, Object>  parametersMap) {
+	public String fetchByQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(MapperMetadata.CONDITION);
 		FieldMetadata.buildColumnList(entityClass);

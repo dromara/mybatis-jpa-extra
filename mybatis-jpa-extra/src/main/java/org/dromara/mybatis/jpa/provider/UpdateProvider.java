@@ -106,7 +106,7 @@ public class UpdateProvider <T extends JpaEntity>{
 		}
 	}
 	
-	public String updateByCondition(Class<?> entityClass,String setSql, Query query) {
+	public String updateByQuery(Class<?> entityClass,String setSql, Query query) {
 		logger.trace("update By Query \n{}" , query);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);

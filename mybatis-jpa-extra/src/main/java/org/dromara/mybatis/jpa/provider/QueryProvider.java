@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class QueryProvider<T extends JpaEntity> {
 	static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
-	public String queryByCondition(Class<?> entityClass, Query query) {
+	public String queryByQuery(Class<?> entityClass, Query query) {
 		logger.trace("Query \n{}" , query);
 		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(QueryBuilder.build(query));
 		

@@ -38,8 +38,8 @@ public interface IJpaMapper<T> {
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryByCondition")
-	public List<T> queryByCondition(Class<?> entityClass,Query query);
+	@SelectProvider(type = MapperSqlProvider.class, method = "queryByQuery")
+	public List<T> queryByQuery(Class<?> entityClass,Query query);
 
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
@@ -59,8 +59,8 @@ public interface IJpaMapper<T> {
 					@Param (MapperMetadata.PAGE)JpaPage page,
 					@Param (MapperMetadata.ENTITY) T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "fetchByCondition")
-	public List<T> fetchByCondition(
+	@SelectProvider(type = MapperSqlProvider.class, method = "fetchByQuery")
+	public List<T> fetchByQuery(
 					@Param (MapperMetadata.PAGE) JpaPage page,
 					@Param (MapperMetadata.CONDITION) Query query,
 					@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
@@ -89,8 +89,8 @@ public interface IJpaMapper<T> {
 	@UpdateProvider(type = MapperSqlProvider.class, method = "update")
 	public Integer update(T entity);
 
-	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByCondition")
-	public Integer updateByCondition(Class<?> entityClass , String setSql, Query query);	
+	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByQuery")
+	public Integer updateByQuery(Class<?> entityClass , String setSql, Query query);	
 	/**
 	 * delete by entity parameter
 	 * @param entity

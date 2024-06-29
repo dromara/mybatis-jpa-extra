@@ -133,7 +133,7 @@ public  class  JpaService <T extends JpaEntity> {
 	public JpaPageResults<T> fetch(JpaPage page ,Query query) {
 		try {
 			beforePageResults(page);
-			List<T> resultslist = getMapper().fetchByCondition(page, query , this.entityClass);
+			List<T> resultslist = getMapper().fetchByQuery(page, query , this.entityClass);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
 			logger.error("fetch Exception " , e);
@@ -259,7 +259,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public List<T> query(Query query) {
 		try {
-			return getMapper().queryByCondition(entityClass,query);
+			return getMapper().queryByQuery(entityClass,query);
 		} catch(Exception e) {
 			logger.error("query Exception " , e);
 		}
@@ -510,7 +510,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean update(String setSql , Query query) {
 		try {
-			Integer count =  getMapper().updateByCondition(entityClass,setSql,query);
+			Integer count =  getMapper().updateByQuery(entityClass,setSql,query);
 			logger.debug("update count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
