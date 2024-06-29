@@ -27,16 +27,14 @@ public class BaseTestRunner {
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
 
 		MybatisJpaContext.init(context);
-		StudentsService service =(StudentsService)MybatisJpaContext.getBean("studentsService");
+		service =(StudentsService)MybatisJpaContext.getBean("studentsService");
 		return service;
 	}
 	
-	
 	@BeforeAll
 	public static void initSpringContext(){
-		if(BaseTestRunner.context!=null) {
-			return;
+		if(BaseTestRunner.context==null) {
+			new BaseTestRunner().init();
 		}
-		service = new BaseTestRunner().init();
 	}
 }

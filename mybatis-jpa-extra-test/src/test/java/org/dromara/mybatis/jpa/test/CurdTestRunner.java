@@ -30,7 +30,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(CurdTestRunner.class);
 	
 	@Test
-	void insert() throws Exception{
+	void insert(){
 		_logger.info("insert...");
 		Students student=new Students();
 		student.setStdNo("10024");
@@ -45,7 +45,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 	}
 	
 	@Test
-	void merge() throws Exception{
+	void merge(){
 		_logger.info("merge...");
 		Students student=new Students();
 		student.setStdNo("10024");
@@ -68,7 +68,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 	}
 	
 	@Test
-	public void update(){
+	void update(){
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
 		 _logger.info("Students {}",student);

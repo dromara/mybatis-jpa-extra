@@ -51,8 +51,6 @@ public class MybatisJpaApplication implements ApplicationRunner{
     	new SpringApplicationBuilder(MybatisJpaApplication.class) 
          .web(WebApplicationType.NONE) // .REACTIVE, .SERVLET 
          .bannerMode(Banner.Mode.OFF).run(args) ;
-    	
-    	//application.run(args);
     }
     
 	@Override

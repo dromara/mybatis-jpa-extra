@@ -28,15 +28,6 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class MybatisJpaConfig {
-    private int port;
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
 
     @Bean
 	@Primary

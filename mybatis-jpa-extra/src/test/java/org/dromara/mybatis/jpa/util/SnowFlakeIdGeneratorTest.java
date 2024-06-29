@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.test;
+package org.dromara.mybatis.jpa.util;
 
 import org.dromara.mybatis.jpa.id.SnowFlakeIdGenerator;
 import org.junit.jupiter.api.Test;

@@ -31,19 +31,7 @@
 	</bean>
  	
  	<!-- Datastore configuration  -->
- 		<!-- dataSource define begin -->
-	<!-- c3p0 configuration 
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  destroy-method="close" >      
-	    <property name="driverClass" value="${config.datasource.driverclass}"/>      
-	    <property name="jdbcUrl" value="${config.datasource.url}"/>      
-	    <property name="user" value="${config.datasource.username}"/>      
-	    <property name="password" value="${config.datasource.password}"/>  
-	    <property name="maxPoolSize" value="30"/> 
-	    <property name="minPoolSize" value="21"/> 
-	    <property name="initialPoolSize" value="15"/> 
-	    
-	</bean> 
-	-->
+
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"  destroy-method="close" >      
 	   <!--  <property name="driverClass" value="#{dataSoruceConfig.driverClass}"/>     -->  
 	    <property name="url" value="${config.datasource.url}"/>      
@@ -51,23 +39,11 @@
 	    <property name="password" value="${config.datasource.password}"/>      
 	</bean> 
 
-
-	
-  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-    <property name="dataSource" ref="dataSource" />
-  </bean>
-
   <tx:annotation-driven transaction-manager="txManager" />
 
   <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource" />
   </bean>
-
-    <!-- enable autowire 
-    <context:annotation-config />-->
-
-    <!-- enable transaction demarcation with annotations 
-    <tx:annotation-driven />-->
 
 	<!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
 	<bean id="sqlSessionFactory" class="org.dromara.mybatis.jpa.MyBatisJpaSessionFactoryBean">
@@ -98,11 +74,5 @@
     
     <bean class ="org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory">
     </bean>
-    
-   	<!-- 
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlSessionFactory" />
-	</bean>
-	 -->
-	 
+
 </beans>
