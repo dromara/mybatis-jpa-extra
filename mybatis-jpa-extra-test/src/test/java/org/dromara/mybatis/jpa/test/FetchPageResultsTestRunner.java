@@ -27,7 +27,7 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 
 	@Test
-	void fetchPageResults() throws Exception{
+	void fetchPageResults(){
 		
 		_logger.info("fetchPageResults...");
 		 Students student=new Students();
@@ -38,12 +38,12 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
 		 for (Students s : results.getRows()) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 	}
 	
 	@Test
-	void fetchPageResultsByMapperId() throws Exception{
+	void fetchPageResultsByMapperId(){
 
 		_logger.info("fetchPageResults by mapperId...");
 		 Students student=new Students();
@@ -57,7 +57,7 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
 		 for (Students s : results.getRows()) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 	}
 

@@ -28,7 +28,7 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.meta.SqlSyntaxConstants;
-import org.dromara.mybatis.jpa.util.StringUtils;
+import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 		//获取缓存数据
 		JpaPageSqlCache pageSqlCache = getPageSqlCache(page.getPageSelectId());
 		//多个空格 tab 替换成1个空格
-		String selectSql = StringUtils.lineBreak2Blank(pageSqlCache.getSql());
+		String selectSql = StrUtils.lineBreak2Blank(pageSqlCache.getSql());
 		
 		BoundSql boundSql = pageSqlCache.getBoundSql();
 		logger.trace("Count original SQL  :\n{}" , selectSql);

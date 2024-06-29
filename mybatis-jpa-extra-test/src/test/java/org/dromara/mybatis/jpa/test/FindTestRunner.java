@@ -31,16 +31,16 @@ public class FindTestRunner extends BaseTestRunner{
 	
 
 	@Test
-	void findAll() throws Exception{
+	void findAll(){
 		_logger.info("findAll...");
 		List<Students> allListStudents =service.findAll();
 		 for (Students s : allListStudents) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 	}
 	
 	@Test
-	void findByIds() throws Exception{
+	void findByIds(){
 		_logger.info("findByIds...");
 		List<String> idList=new ArrayList<String>();
 		idList.add("8c34448b-c65b-4a4e-a0da-83284d05f909");
@@ -52,7 +52,7 @@ public class FindTestRunner extends BaseTestRunner{
 	
 	
 	@Test
-	void find() throws Exception{
+	void find(){
 		_logger.info("find by filter  StdNo = '10024' or StdNo = '10004'");
 
 		List<Students> listStudents = service.find(" StdNo = ? or StdNo = ?  or StdNo ='11111'",

@@ -29,7 +29,7 @@ public class QueryTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(QueryTestRunner.class);
 	
 	@Test
-	void query() throws Exception{
+	void query(){
 		_logger.info("find...");
 		List<Students> listStudents =service.query(new Students("10024"));
 		 for (Students s : listStudents) {
@@ -39,7 +39,7 @@ public class QueryTestRunner  extends BaseTestRunner{
 	
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
-	void queryByCondition() throws Exception{
+	void queryByCondition(){
 		_logger.info("query by condition ...");
 		List<Students> listStudents =service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})

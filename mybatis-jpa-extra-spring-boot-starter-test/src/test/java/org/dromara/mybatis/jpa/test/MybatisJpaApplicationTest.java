@@ -52,7 +52,7 @@ public class MybatisJpaApplicationTest{
     }
     
     @Test
-	public void insert() throws Exception{
+	void insert() throws Exception{
 		_logger.info("insert...");
 		Students student=new Students();
 		student.setStdNo("10024");
@@ -63,23 +63,21 @@ public class MybatisJpaApplicationTest{
 		student.setStdClass("4");
 		studentsService.insert(student);
 		
-		Thread.sleep(1000);
 		studentsService.remove(student.getId());
 		
 	}
 	
 	@Test
-	public void get() throws Exception{
+	void get(){
 		_logger.info("get...");
 		Students student=studentsService.get("921d3377-937a-4578-b1e2-92fb23b5e512");
 		
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);
+		 _logger.info("Students {}",student);
 
 	}
 	
 	@Test
-	public void remove() throws Exception{
+	void remove(){
 		
 		_logger.info("remove...");
 		Students student=new Students();
@@ -89,7 +87,7 @@ public class MybatisJpaApplicationTest{
 	}
 	
 	@Test
-	public void batchDelete() throws Exception{
+	void batchDelete() throws Exception{
 		_logger.info("batchDelete...");
 		List<String> idList=new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
@@ -100,7 +98,7 @@ public class MybatisJpaApplicationTest{
 	}
 
 	@Test
-	public void fetchPageResults() throws Exception{
+	void fetchPageResults(){
 		
 		_logger.info("fetchPageResults...");
 		 Students student=new Students();
@@ -110,12 +108,12 @@ public class MybatisJpaApplicationTest{
 		 List<Students> allListStudents = 
 				 studentsService.fetchPageResults(student).getRows();
 		 for (Students s : allListStudents) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 	}
 	
 	@Test
-	public void fetchPageResultsByMapperId() throws Exception{
+	void fetchPageResultsByMapperId(){
 
 		_logger.info("fetchPageResults by mapperId...");
 		 Students student=new Students();
@@ -126,19 +124,19 @@ public class MybatisJpaApplicationTest{
 		 List<Students> allListStudents = 
 				 studentsService.fetchPageResults("fetchPageResults1",student).getRows();
 		 for (Students s : allListStudents) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 		 
 	}
 	
 	
 	 @Test
-	 public void findAll() {
+	 void findAll() {
 			_logger.info("---------------- ALL");
 			
 			List<Students> allListStudents=studentsService.findAll();
 			 for (Students s : allListStudents) {
-				 _logger.info("Students "+s);
+				 _logger.info("Students {}",s);
 			 }
 	 }
 	

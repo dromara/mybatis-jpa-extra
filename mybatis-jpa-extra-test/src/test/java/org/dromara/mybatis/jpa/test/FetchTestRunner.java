@@ -29,7 +29,7 @@ public class FetchTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(FetchTestRunner.class);
 	
 	@Test
-	void fetch() throws Exception{
+	void fetch(){
 		_logger.info("fetch...");
 		 JpaPage page = new JpaPage();
 		 Students student = new Students();
@@ -42,12 +42,12 @@ public class FetchTestRunner  extends BaseTestRunner{
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
 		 for (Students s : results.getRows()) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 	}
 	
 	@Test
-	void fetchByCondition() throws Exception{
+	void fetchByCondition(){
 		_logger.info("fetchByCondition...");
 		 JpaPage page = new JpaPage();
 		 page.setPageSize(20);
@@ -59,7 +59,7 @@ public class FetchTestRunner  extends BaseTestRunner{
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
 		 for (Students s : results.getRows()) {
-			 _logger.info("Students "+s);
+			 _logger.info("Students {}",s);
 		 }
 	}
 

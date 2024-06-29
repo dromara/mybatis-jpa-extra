@@ -24,6 +24,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
@@ -31,7 +32,7 @@ import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
-import org.dromara.mybatis.jpa.util.StringUtils;
+import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +79,7 @@ public class FindProvider <T extends JpaEntity>{
 		}
 		
 		if(args == null || args.length == 0) {
-			filterSql = StringUtils.lineBreak2Blank(filterSql);
+			filterSql = StrUtils.lineBreak2Blank(filterSql);
 		}else {
 			int countMatches = StringUtils.countMatches(filterSql, "?");
 			if(args.length < countMatches) {
@@ -114,7 +115,7 @@ public class FindProvider <T extends JpaEntity>{
 				}
 				logger.trace("Find append {} time SQL [{}]" ,i + 1, sqlBuffer);
 			}
-			filterSql = StringUtils.lineBreak2Blank(sqlBuffer.toString());
+			filterSql = StrUtils.lineBreak2Blank(sqlBuffer.toString());
 		}
 		
 		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(filterSql);

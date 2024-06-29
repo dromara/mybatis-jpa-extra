@@ -1,18 +1,21 @@
 package org.dromara.mybatis.jpa.query;
 
-public class QueryBuilder {
-	
-	public static String build(Query query) {
+import java.util.List;
+
+@SuppressWarnings("unchecked")
+public class LambdaQueryBuilder {
+	public static String build(LambdaQuery lambdaQuery) {
 		StringBuffer conditionString = new StringBuffer("");
-		for (Condition condition : query.getConditions()) {
+		List<Condition> conditions = lambdaQuery.getConditions();
+		for (Condition condition : conditions) {
 			condition.setColumn(condition.getColumn().replace("'", "").replace(" ", "").replace(";", ""));
 			if (condition.getExpression().equals(Operator.and) 
 					|| condition.getExpression().equals(Operator.or)) {
 
 				conditionString.append(" ").append(condition.getExpression().getOperator()).append(" ");
 
-				if (condition.getValue() instanceof Query subQuery) {
-					conditionString.append(" ( ").append(build(subQuery)).append(" ) ");
+				if (condition.getValue() instanceof LambdaQuery lambdaQueryValue) {
+					conditionString.append(" ( ").append(build(lambdaQueryValue)).append(" ) ");
 				}
 
 			} else if (condition.getExpression().equals(Operator.like)
@@ -88,9 +91,10 @@ public class QueryBuilder {
 		return conditionString.toString();
 	}
 
-	public static String buildGroupBy(Query query) {
+	public static String buildGroupBy(LambdaQuery lambdaQuery) {
 		StringBuffer groupBy = new StringBuffer();
-		for (Condition condition : query.getGroupBy()) {
+		List<Condition> conditions = lambdaQuery.getGroupBy();
+		for (Condition condition : conditions) {
 			if (groupBy.length() > 0) {
 				groupBy.append(" , ");
 			}
@@ -99,9 +103,11 @@ public class QueryBuilder {
 		return groupBy.toString();
 	}
 
-	public static String buildOrderBy(Query query) {
+	public static String buildOrderBy(LambdaQuery lambdaQuery) {
 		StringBuffer orderBy = new StringBuffer();
-		for (Condition condition : query.getGroupBy()) {
+		
+		List<Condition> conditions = lambdaQuery.getGroupBy();
+		for (Condition condition : conditions) {
 			if (orderBy.length() > 0) {
 				orderBy.append(" , ");
 			}
@@ -110,4 +116,5 @@ public class QueryBuilder {
 		return orderBy.toString();
 	}
 
+	
 }

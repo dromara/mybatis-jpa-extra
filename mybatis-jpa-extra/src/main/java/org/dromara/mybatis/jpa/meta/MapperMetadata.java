@@ -57,6 +57,7 @@ public class MapperMetadata{
 	public static 	final		String PARAMETER_PARTITION_KEY	= "partitionKey";
 	public static 	final		String PARAMETER_ID_LIST		= "idList";
 	public static 	final		String PARAMETER_ID				= "id";
+
 	/**
 	 * 表名和字段名
 	 */

@@ -41,8 +41,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 		student.setStdClass("4");
 		service.insert(student);
 		
-		Thread.sleep(1000);
-		_logger.info("insert id " + student.getId());
+		_logger.info("insert id {}" , student.getId());
 	}
 	
 	@Test
@@ -57,25 +56,22 @@ public class CurdTestRunner  extends BaseTestRunner{
 		student.setStdClass("4");
 		service.merge(student);
 		
-		Thread.sleep(1000);
-		_logger.info("insert id " + student.getId());
+		_logger.info("insert id {}" , student.getId());
 		
 	}
 
 	@Test
-	void get() throws Exception{
+	void get(){
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);
+		 _logger.info("Students {}",student);
 	}
 	
 	@Test
-	public void update() throws Exception{
+	public void update(){
 		_logger.info("get...");
 		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
-		System.out.println("Students "+student);
-		 _logger.info("Students "+student);
+		 _logger.info("Students {}",student);
 		 
 		 _logger.info("update...");
 		 student.setImages(null);
@@ -88,19 +84,19 @@ public class CurdTestRunner  extends BaseTestRunner{
 	}
 	
 	@Test
-	void updateByQuery() throws Exception{
+	void updateByQuery(){
 		_logger.info("updateByQuery...");
 		service.update("id = '5'",Query.builder().eq("id", "2"));
 	}
 	
 	@Test
-	void remove() throws Exception{
+	void remove(){
 		_logger.info("remove...");
 		service.remove("921d3377-937a-4578-b1e2-92fb23b5e512");
 	}
 	
 	@Test
-	void batchDelete() throws Exception{
+	void batchDelete(){
 		_logger.info("batchDelete...");
 		List<String> idList=new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
@@ -111,7 +107,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 	}
 	
 	@Test
-	void deleteByQuery() throws Exception{
+	void deleteByQuery(){
 		_logger.info("deleteByQuery...");
 		service.delete(Query.builder().eq("id", "2"));
 	}

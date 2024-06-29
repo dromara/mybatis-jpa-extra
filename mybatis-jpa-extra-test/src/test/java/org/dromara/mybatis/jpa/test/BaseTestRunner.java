@@ -23,7 +23,7 @@ public class BaseTestRunner {
 		SimpleDateFormat sdf_ymdhms =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startTime  = sdf_ymdhms.format(new Date());
 		_logger.info("-- --Init Start at {}" , startTime);
-		_logger.info("Application dir "+System.getProperty("user.dir"));
+		_logger.info("Application dir {}",System.getProperty("user.dir"));
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
 
 		MybatisJpaContext.init(context);

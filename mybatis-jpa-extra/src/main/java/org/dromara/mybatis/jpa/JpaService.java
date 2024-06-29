@@ -31,7 +31,7 @@ import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
-import org.dromara.mybatis.jpa.util.StringUtils;
+import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +107,7 @@ public  class  JpaService <T extends JpaEntity> {
 	public IJpaMapper<T> getMapper() {
 		try {
 			if(mapper == null) {
-				String mapperClassBean = StringUtils.firstToLowerCase(mapperClass);
+				String mapperClassBean = StrUtils.firstToLowerCase(mapperClass);
 				logger.info("mapperClass Bean is {}" , mapperClassBean);
 				mapper = MybatisJpaContext.getBean(mapperClassBean,IJpaMapper.class);
 			}

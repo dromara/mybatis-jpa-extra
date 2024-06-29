@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class SnowFlakeIdGeneratorTest {
 	private static final Logger _logger = LoggerFactory.getLogger(SnowFlakeIdGeneratorTest.class);
 	@Test
-	public  void generator() {
+	 void generator() {
 		SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator();
 		_logger.info(uhg.generate(""));
 		_logger.info(uhg.generate(""));
