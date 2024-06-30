@@ -63,7 +63,7 @@ public class MybatisJpaApplicationTest{
 		student.setStdClass("4");
 		studentsService.insert(student);
 		
-		studentsService.remove(student.getId());
+		studentsService.delete(student.getId());
 		
 	}
 	
@@ -82,7 +82,7 @@ public class MybatisJpaApplicationTest{
 		_logger.info("remove...");
 		Students student=new Students();
 		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
-		studentsService.remove(student.getId());
+		studentsService.delete(student.getId());
 		
 	}
 	

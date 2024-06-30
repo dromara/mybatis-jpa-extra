@@ -16,11 +16,14 @@
 
 package org.dromara.mybatis.jpa.provider;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
 import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
+import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -47,9 +50,21 @@ public class QueryProvider<T extends JpaEntity> {
 		logger.trace("filter By Query SQL \n{}" , sql);
 		return sql.toString();
 	}
-
-
-
+	
+	public String queryByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
+		logger.trace("LambdaQuery \n{}" , lambdaQuery);
+		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		
+		if (CollectionUtils.isNotEmpty(lambdaQuery.getGroupBy())) {
+			sql.GROUP_BY(LambdaQueryBuilder.buildGroupBy(lambdaQuery));
+		}
+		if (CollectionUtils.isNotEmpty(lambdaQuery.getOrderBy())) {
+			sql.ORDER_BY(LambdaQueryBuilder.buildOrderBy(lambdaQuery));
+		}
+		logger.trace("filter By Query SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
 	public String query(T entity) {
 		SQL sql = TableMetadata.buildSelect(entity.getClass());
 

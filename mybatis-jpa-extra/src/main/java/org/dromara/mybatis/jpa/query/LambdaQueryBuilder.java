@@ -2,7 +2,7 @@ package org.dromara.mybatis.jpa.query;
 
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class LambdaQueryBuilder {
 	public static String build(LambdaQuery lambdaQuery) {
 		StringBuffer conditionString = new StringBuffer("");
@@ -103,6 +103,7 @@ public class LambdaQueryBuilder {
 		return groupBy.toString();
 	}
 
+	
 	public static String buildOrderBy(LambdaQuery lambdaQuery) {
 		StringBuffer orderBy = new StringBuffer();
 		

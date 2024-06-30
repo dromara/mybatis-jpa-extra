@@ -29,6 +29,8 @@ import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
+import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.slf4j.Logger;
@@ -53,7 +55,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
 				keyValue.append(",'").append(value).append("'");
-				logger.trace("logic delete by id {}" , value);
+				logger.trace("delete by id {}" , value);
 			}
 		}
 		
@@ -104,6 +106,24 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 				).WHERE(QueryBuilder.build(query));
 		
 		logger.trace("logic Delete By Query  SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
+	public String logicDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
+		logger.trace("logic Delete By LambdaQuery \n{}" , lambdaQuery);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		
+		SQL sql = new SQL()
+				.UPDATE(tableName)
+				.SET(" %s = '%s' ".formatted(
+						logicColumnMapper.getColumnName(),
+						logicColumnMapper.getSoftDelete().delete()
+					)
+				).WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		
+		logger.trace("logic Delete By LambdaQuery  SQL \n{}" , sql);
 		return sql.toString();
 	}
 

@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +56,9 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new FindProvider().findAll(parametersMap);  
     }
 	
-	public String remove(Map<String, Object>  parametersMap) { 
-        return new DeleteProvider().remove(parametersMap);  
+	//delete
+	public String deleteById(Map<String, Object>  parametersMap) { 
+        return new DeleteProvider().deleteById(parametersMap);  
     }  
 	
 	public String deleteBatch(Map<String, Object>  parametersMap) { 
@@ -67,12 +69,20 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new DeleteProvider().deleteByQuery(entityClass,query);
     } 
 	
+	public String deleteByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) { 
+		return new DeleteProvider().deleteByLambdaQuery(entityClass,lambdaQuery);
+    } 
+	
 	public String logicDelete(Map<String, Object>  parametersMap) { 
 		return new LogicDeleteProvider().logicDelete(parametersMap);
     }
 	
 	public String logicDeleteByQuery(Class<?> entityClass,Query query) { 
 		return new LogicDeleteProvider().logicDeleteByQuery(entityClass,query);
+    } 
+	
+	public String logicDeleteByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) { 
+		return new LogicDeleteProvider().logicDeleteByLambdaQuery(entityClass,lambdaQuery);
     } 
 	
 	/**
@@ -83,6 +93,7 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new InsertProvider().insert(entity);
 	}
 
+	//update
 	/**
 	 * @param entity
 	 * @return update sql String
@@ -95,12 +106,22 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new UpdateProvider().updateByQuery(entityClass,setSql,query);
 	}
 	
+	public String updateByLambdaQuery(Class<?> entityClass,String setSql,LambdaQuery<T> lambdaQuery) {
+		return new UpdateProvider().updateByLambdaQuery(entityClass,setSql,lambdaQuery);
+	}
+	
+	
+	//fetch
 	public String fetch(Map<String, Object>  parametersMap) {
 		return new FetchProvider().fetch(parametersMap);
 	}
 	
 	public String fetchByQuery(Map<String, Object>  parametersMap) {
 		return new FetchProvider().fetchByQuery(parametersMap);
+	}
+	
+	public String fetchByLambdaQuery(Map<String, Object>  parametersMap) {
+		return new FetchProvider().fetchByLambdaQuery(parametersMap);
 	}
 	
 	/**
@@ -111,12 +132,18 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new FetchCountProvider().executeCount(entity);
 	}
 	
+	
+	//query
 	public String query(T entity) {
 		return new QueryProvider().query(entity);
 	}
 	
 	public String queryByQuery(Class<?> entityClass,Query query) {
 		return new QueryProvider().queryByQuery(entityClass,query);
+	}
+	
+	public String queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) {
+		return new QueryProvider().queryByLambdaQuery(entityClass,lambdaQuery);
 	}
 
 }

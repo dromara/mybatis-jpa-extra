@@ -31,7 +31,7 @@ public class LogicDeleteTestRunner  extends BaseTestRunner{
 	@Test
 	void logicDelete(){
 		_logger.info("batchDeleteByIds...");
-		service.logicDelete("2");
+		service.softDelete("2");
 	}
 	
 	@Test
@@ -42,12 +42,12 @@ public class LogicDeleteTestRunner  extends BaseTestRunner{
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
 		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
 		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		service.logicDelete(idList);
+		service.softDelete(idList);
 	}
 	
 	@Test
 	void logicDeleteByQuery(){
 		_logger.info("logicDeleteByQuery...");
-		service.logicDelete(Query.builder().eq("id", "2"));
+		service.softDelete(Query.builder().eq("id", "2"));
 	}
 }

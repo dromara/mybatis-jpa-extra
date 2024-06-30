@@ -26,6 +26,8 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
 import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
+import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -116,6 +118,19 @@ public class UpdateProvider <T extends JpaEntity>{
 				.SET(setSql).WHERE(QueryBuilder.build(query));
 		
 		logger.trace("update By Query  SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
+	public String updateByLambdaQuery(Class<?> entityClass,String setSql, LambdaQuery<T> lambdaQuery) {
+		logger.trace("update By LambdaQuery \n{}" , lambdaQuery);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
+		
+		SQL sql = new SQL()
+				.UPDATE(tableName)
+				.SET(setSql).WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		
+		logger.trace("update By LambdaQuery  SQL \n{}" , sql);
 		return sql.toString();
 	}
 

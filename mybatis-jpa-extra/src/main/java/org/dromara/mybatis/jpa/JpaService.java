@@ -27,6 +27,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -136,7 +137,18 @@ public  class  JpaService <T extends JpaEntity> {
 			List<T> resultslist = getMapper().fetchByQuery(page, query , this.entityClass);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
-			logger.error("fetch Exception " , e);
+			logger.error("fetch by Query Exception " , e);
+		}
+		return null;
+	}
+	
+	public JpaPageResults<T> fetch(JpaPage page ,LambdaQuery<T> lambdaQuery) {
+		try {
+			beforePageResults(page);
+			List<T> resultslist = getMapper().fetchByLambdaQuery(page, lambdaQuery , this.entityClass);
+			return buildPageResults(page , resultslist);
+		}catch (Exception e) {
+			logger.error("fetch by LambdaQuery Exception " , e);
 		}
 		return null;
 	}
@@ -247,7 +259,7 @@ public  class  JpaService <T extends JpaEntity> {
 			}
 			return getMapper().query(entity);
 		} catch(Exception e) {
-			logger.error("query Exception " , e);
+			logger.error("query by entity Exception " , e);
 		}
 		return Collections.emptyList();
 	}
@@ -261,24 +273,23 @@ public  class  JpaService <T extends JpaEntity> {
 		try {
 			return getMapper().queryByQuery(entityClass,query);
 		} catch(Exception e) {
-			logger.error("query Exception " , e);
+			logger.error("query by Query Exception " , e);
 		}
 		return Collections.emptyList();
 	}
 	
 	/**
-	 *  load entity by Query 
+	 *  query list entity by LambdaQuery 
 	 * @param entity
 	 * @return
 	 */
-	public T load(Query query) {
+	public List<T> query(LambdaQuery<T> lambdaQuery) {
 		try {
-			List<T> loadList = query(query);
-			return  CollectionUtils.isEmpty(loadList) ? null : loadList.get(0);
+			return getMapper().queryByLambdaQuery(entityClass,lambdaQuery);
 		} catch(Exception e) {
-			logger.error("load One Exception " , e);
+			logger.error("query by LambdaQuery Exception " , e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -340,7 +351,7 @@ public  class  JpaService <T extends JpaEntity> {
 			List<T> findList = find(filter ,args , argTypes);
 			return  CollectionUtils.isEmpty(findList) ? null : findList.get(0);
 		} catch(Exception e) {
-			logger.error("findAll Exception " , e);
+			logger.error("findOne filter Exception " , e);
 		}
 		return null;
 	}
@@ -511,26 +522,27 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean update(String setSql , Query query) {
 		try {
 			Integer count =  getMapper().updateByQuery(entityClass,setSql,query);
-			logger.debug("update count : {}" , count);
+			logger.debug("update by Query count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("update Exception " , e);
+			logger.error("update by Query Exception " , e);
 		}
 		return false;
 	}
 	
 	/**
-	 * delete entity by entity
-	 * @param entity
+	 *  update entity by Query 
+	 * @param setSql
+	 * @param query
 	 * @return
 	 */
-	public boolean delete(T entity) {
+	public boolean update(String setSql , LambdaQuery <T> lambdaQuery) {
 		try {
-			Integer count = getMapper().delete(entity);
-			logger.debug("delete count : {}" , count);
+			Integer count =  getMapper().updateByLambdaQuery(entityClass,setSql,lambdaQuery);
+			logger.debug("update by LambdaQuery count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("delete Exception " , e);
+			logger.error("update by LambdaQuery Exception " , e);
 		}
 		return false;
 	}
@@ -547,6 +559,22 @@ public  class  JpaService <T extends JpaEntity> {
 			return count > 0;
 		} catch(Exception e) {
 			logger.error("delete by query Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 * delete entity by LambdaQuery
+	 * @param Query
+	 * @return
+	 */
+	public boolean delete(LambdaQuery<T> lambdaQuery) {
+		try {
+			Integer count = getMapper().deleteByLambdaQuery(entityClass , lambdaQuery);
+			logger.debug("delete by LambdaQuery count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("delete by LambdaQuery Exception " , e);
 		}
 		return false;
 	}
@@ -591,14 +619,14 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param id
 	 * @return
 	 */
-	public boolean remove(String id){
+	public boolean delete(String id){
 		try {
 			logger.debug("id {} " , id );
-			Integer count=getMapper().remove(this.entityClass,id,null);
-			logger.debug("remove count : {}" , count);
+			Integer count=getMapper().deleteById(this.entityClass,id,null);
+			logger.debug("delete by id count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("remove Exception " , e);
+			logger.error("delete by id Exception " , e);
 		}
 		return false;
 	}
@@ -609,14 +637,14 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param partitionKey
 	 * @return
 	 */
-	public boolean remove(String id,String partitionKey){
+	public boolean delete(String id,String partitionKey){
 		try {
 			logger.debug("id {} , partitionKey {}" , id , partitionKey);
-			Integer count = getMapper().remove(this.entityClass,id,partitionKey);
-			logger.debug("remove count : {}" , count);
+			Integer count = getMapper().deleteById(this.entityClass,id,partitionKey);
+			logger.debug("delete by id and partitionKey count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("remove Exception " , e);
+			logger.error("delete by id and partitionKey Exception " , e);
 		}
 		return false;
 	}
@@ -626,14 +654,14 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param idList
 	 * @return
 	 */
-	public boolean logicDelete(List<String> idList) {
+	public boolean softDelete(List<String> idList) {
 		try {
-			logger.trace("logicDelete idList {}" , idList);
+			logger.trace("softDelete idList {}" , idList);
 			Integer count = getMapper().logicDelete(this.entityClass,idList,null);
-			logger.debug("logicDelete count : {}" , count);
+			logger.debug("softDelete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("logicDelete Exception " , e);
+			logger.error("softDelete by idList Exception " , e);
 		}
 		return true;
 	}
@@ -644,14 +672,14 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param partitionKey
 	 * @return
 	 */
-	public boolean logicDelete(List<String> idList,String partitionKey) {
+	public boolean softDelete(List<String> idList,String partitionKey) {
 		try {
-			logger.trace("logicDelete idList {} , partitionKey {}" , idList , partitionKey);
+			logger.trace("softDelete idList {} , partitionKey {}" , idList , partitionKey);
 			Integer count = getMapper().logicDelete(this.entityClass,idList,partitionKey);
-			logger.debug("logicDelete count : {}" , count);
+			logger.debug("softDelete idList and partitionKey count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("logicDelete Exception " , e);
+			logger.error("softDelete idList and partitionKey Exception " , e);
 		}
 		return true;
 	}
@@ -661,10 +689,10 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param id string
 	 * @return
 	 */
-	public boolean logicDelete(String id) {
+	public boolean softDelete(String id) {
 		List<String> idList = new ArrayList<>();
 		idList.add(id);
-		return logicDelete(idList);
+		return softDelete(idList);
 	}
 	
 	/**
@@ -672,13 +700,29 @@ public  class  JpaService <T extends JpaEntity> {
 	 * @param Query
 	 * @return
 	 */
-	public boolean logicDelete(Query query) {
+	public boolean softDelete(Query query) {
 		try {
 			Integer count = getMapper().logicDeleteByQuery(entityClass , query);
-			logger.debug("delete count : {}" , count);
+			logger.debug("delete by Query count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("delete Exception " , e);
+			logger.error("delete by Query Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
+	 * logic Delete entity by Query
+	 * @param Query
+	 * @return
+	 */
+	public boolean softDelete(LambdaQuery <T> lambdaQuery) {
+		try {
+			Integer count = getMapper().logicDeleteByLambdaQuery(entityClass , lambdaQuery);
+			logger.debug("delete by LambdaQuery count : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("delete by LambdaQuery Exception " , e);
 		}
 		return false;
 	}

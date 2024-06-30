@@ -29,7 +29,6 @@ import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
 import org.dromara.mybatis.jpa.meta.FieldMetadata;
-import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;

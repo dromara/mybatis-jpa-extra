@@ -30,6 +30,8 @@ import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
 import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
+import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -40,15 +42,16 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
+
+@SuppressWarnings("unchecked")
 public class FetchProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(FetchProvider.class);
 
 	/**
 	 * @param entity
-	 * @return update sql String
+	 * @return fetch sql String
 	 */
 	public String fetch(Map<String, Object>  parametersMap) {
-		@SuppressWarnings("unchecked")
 		T entity = (T)parametersMap.get(MapperMetadata.ENTITY);
 		FieldMetadata.buildColumnList(entity.getClass());
 		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
@@ -100,7 +103,7 @@ public class FetchProvider <T extends JpaEntity>{
 
 	/**
 	 * @param entity
-	 * @return update sql String
+	 * @return fetch sql String
 	 */
 	public String fetchByQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
@@ -123,8 +126,39 @@ public class FetchProvider <T extends JpaEntity>{
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}
-		logger.trace("query Page By Condition SQL : \n{}" , sql);
+		logger.trace("query Page By Query SQL : \n{}" , sql);
 		return sql.toString();
 	}
+	
+	/**
+	 * @param entity
+	 * @return fetch sql String
+	 */
+	public String fetchByLambdaQuery(Map<String, Object>  parametersMap) {
+		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
+		LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(MapperMetadata.CONDITION);
+		FieldMetadata.buildColumnList(entityClass);
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entityClass.getSimpleName());
+		String[] column = new String[listFields.size()] ;
+		for(int i = 0 ; i< listFields.size() ; i++) {
+			column[i] = listFields.get(i).getColumnName();
+		}
+		SQL sql = new SQL()
+			.SELECT(column).FROM(TableMetadata.getTableName(entityClass))
+			.WHERE("( " + LambdaQueryBuilder.build(condition) +" ) ");
+		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE(" ( %s = '%s' )" 
+					.formatted(
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}
+		logger.trace("query Page By LambdaQuery SQL : \n{}" , sql);
+		return sql.toString();
+	}
+	
+	
 
 }

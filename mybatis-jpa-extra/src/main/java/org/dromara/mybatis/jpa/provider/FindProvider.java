@@ -21,7 +21,7 @@
 package org.dromara.mybatis.jpa.provider;
 
 import java.sql.Types;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -126,10 +126,11 @@ public class FindProvider <T extends JpaEntity>{
         return findSql;  
     }
 	
+	@SuppressWarnings("unchecked")
 	public String findByIds(Map<String, Object>  parametersMap) { 
 		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnList(parameterEntityClass);
-		ArrayList <String> parameterIds = (ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
+		List <String> parameterIds = (List<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValue = new StringBuffer();
 		for(String value : parameterIds) {
@@ -139,7 +140,8 @@ public class FindProvider <T extends JpaEntity>{
 			}
 		}
 		
-		String idsValues = keyValue.substring(1).replace(";", "");//remove ;
+		//remove ';'
+		String idsValues = keyValue.substring(1).replace(";", "");
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((parameterEntityClass).getSimpleName());
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass.getSimpleName());

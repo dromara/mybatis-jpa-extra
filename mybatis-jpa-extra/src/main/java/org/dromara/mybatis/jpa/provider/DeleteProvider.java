@@ -29,6 +29,8 @@ import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
+import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.slf4j.Logger;
@@ -41,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class DeleteProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
 	
-	public String remove(Map<String, Object>  parametersMap) { 
+	public String deleteById(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
@@ -128,5 +130,16 @@ public class DeleteProvider <T extends JpaEntity>{
 		return sql.toString();
 	}
 	
-
+	public String deleteByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
+		logger.trace("delete By LambdaQuery \n{}" , lambdaQuery);
+		FieldMetadata.buildColumnList(entityClass);
+		String tableName = TableMetadata.getTableName(entityClass);
+		SQL sql = new SQL().DELETE_FROM(tableName).WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		
+		logger.trace("delete By LambdaQuery SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
+	
+	
 }

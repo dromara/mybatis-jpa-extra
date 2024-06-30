@@ -592,6 +592,10 @@ public class LambdaQuery <T> {
 		return conditions;
 	}
 	
+	public List<Condition> getOrderBy() {
+		return orderBy;
+	}
+
 	@Override
 	public String toString() {
 		return "Query [conditions=" + conditions + ", orderBy=" + orderBy + "]";

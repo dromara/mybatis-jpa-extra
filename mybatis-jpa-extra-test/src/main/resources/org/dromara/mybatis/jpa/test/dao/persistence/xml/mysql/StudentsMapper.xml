@@ -62,13 +62,5 @@
     	FROM ROLES 
     	<include refid="sql_condition"/>
     </select>
-  
-
-    
-    <delete id="delete" parameterType="Students" >
-    	DELETE FROM STUDENTS WHERE ID=#{id}
-    </delete>
-    
-
 
 </mapper>
