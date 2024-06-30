@@ -40,12 +40,12 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class LogicDeleteProvider <T extends JpaEntity>{	
-	static final Logger logger 	= 	LoggerFactory.getLogger(LogicDeleteProvider.class);
+public class SoftDeleteProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(SoftDeleteProvider.class);
 
 	
 	@SuppressWarnings("unchecked")
-	public String logicDelete(Map<String, Object>  parametersMap) { 
+	public String softDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
@@ -55,7 +55,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
 				keyValue.append(",'").append(value).append("'");
-				logger.trace("delete by id {}" , value);
+				logger.trace("softDelete by id {}" , value);
 			}
 		}
 		
@@ -87,12 +87,12 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 		
         String deleteSql = sql.toString(); 
         MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
-        logger.trace("logic Delete SQL \n{}" , deleteSql);
+        logger.trace("softDelete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
 	
-	public String logicDeleteByQuery(Class<?> entityClass, Query query) {
-		logger.trace("logic Delete By Query \n{}" , query);
+	public String softDeleteByQuery(Class<?> entityClass, Query query) {
+		logger.trace("softDelete By Query \n{}" , query);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
@@ -105,12 +105,12 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 					)
 				).WHERE(QueryBuilder.build(query));
 		
-		logger.trace("logic Delete By Query  SQL \n{}" , sql);
+		logger.trace("softDelete By Query  SQL \n{}" , sql);
 		return sql.toString();
 	}
 	
-	public String logicDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
-		logger.trace("logic Delete By LambdaQuery \n{}" , lambdaQuery);
+	public String softDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
+		logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
@@ -123,7 +123,7 @@ public class LogicDeleteProvider <T extends JpaEntity>{
 					)
 				).WHERE(LambdaQueryBuilder.build(lambdaQuery));
 		
-		logger.trace("logic Delete By LambdaQuery  SQL \n{}" , sql);
+		logger.trace("softDelete By LambdaQuery  SQL \n{}" , sql);
 		return sql.toString();
 	}
 

@@ -657,7 +657,7 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean softDelete(List<String> idList) {
 		try {
 			logger.trace("softDelete idList {}" , idList);
-			Integer count = getMapper().logicDelete(this.entityClass,idList,null);
+			Integer count = getMapper().softDelete(this.entityClass,idList,null);
 			logger.debug("softDelete count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -675,7 +675,7 @@ public  class  JpaService <T extends JpaEntity> {
 	public boolean softDelete(List<String> idList,String partitionKey) {
 		try {
 			logger.trace("softDelete idList {} , partitionKey {}" , idList , partitionKey);
-			Integer count = getMapper().logicDelete(this.entityClass,idList,partitionKey);
+			Integer count = getMapper().softDelete(this.entityClass,idList,partitionKey);
 			logger.debug("softDelete idList and partitionKey count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
@@ -702,11 +702,11 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean softDelete(Query query) {
 		try {
-			Integer count = getMapper().logicDeleteByQuery(entityClass , query);
-			logger.debug("delete by Query count : {}" , count);
+			Integer count = getMapper().softDeleteByQuery(entityClass , query);
+			logger.debug("softDelete by Query count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("delete by Query Exception " , e);
+			logger.error("softDelete by Query Exception " , e);
 		}
 		return false;
 	}
@@ -718,11 +718,11 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean softDelete(LambdaQuery <T> lambdaQuery) {
 		try {
-			Integer count = getMapper().logicDeleteByLambdaQuery(entityClass , lambdaQuery);
-			logger.debug("delete by LambdaQuery count : {}" , count);
+			Integer count = getMapper().softDeleteByLambdaQuery(entityClass , lambdaQuery);
+			logger.debug("softDelete by LambdaQuery count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
-			logger.error("delete by LambdaQuery Exception " , e);
+			logger.error("softDelete by LambdaQuery Exception " , e);
 		}
 		return false;
 	}

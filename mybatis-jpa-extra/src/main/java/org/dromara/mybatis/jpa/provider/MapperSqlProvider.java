@@ -73,16 +73,16 @@ public class MapperSqlProvider <T extends JpaEntity>{
 		return new DeleteProvider().deleteByLambdaQuery(entityClass,lambdaQuery);
     } 
 	
-	public String logicDelete(Map<String, Object>  parametersMap) { 
-		return new LogicDeleteProvider().logicDelete(parametersMap);
+	public String softDelete(Map<String, Object>  parametersMap) { 
+		return new SoftDeleteProvider().softDelete(parametersMap);
     }
 	
-	public String logicDeleteByQuery(Class<?> entityClass,Query query) { 
-		return new LogicDeleteProvider().logicDeleteByQuery(entityClass,query);
+	public String softDeleteByQuery(Class<?> entityClass,Query query) { 
+		return new SoftDeleteProvider().softDeleteByQuery(entityClass,query);
     } 
 	
-	public String logicDeleteByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) { 
-		return new LogicDeleteProvider().logicDeleteByLambdaQuery(entityClass,lambdaQuery);
+	public String softDeleteByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) { 
+		return new SoftDeleteProvider().softDeleteByLambdaQuery(entityClass,lambdaQuery);
     } 
 	
 	/**
