@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa.test;
 
 import java.util.List;
 
+import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.Test;
@@ -39,11 +40,22 @@ public class QueryTestRunner  extends BaseTestRunner{
 	
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
-	void queryByCondition(){
-		_logger.info("query by condition ...");
+	void queryByQuery(){
+		_logger.info("query by query ...");
 		List<Students> listStudents =service.query(
 				new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
 				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
+		 for (Students s : listStudents) {
+			 _logger.info("Students {}" , s);
+		 }
+	}
+	
+	@Test
+	void queryByLambdaQuery(){
+		_logger.info("query by LambdaQuery ...");
+		List<Students> listStudents =service.query(
+				new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, new Object[]{"政治","化学"})
+				.or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
 		 for (Students s : listStudents) {
 			 _logger.info("Students {}" , s);
 		 }

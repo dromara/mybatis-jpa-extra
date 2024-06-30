@@ -20,23 +20,25 @@ package org.dromara.mybatis.jpa.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LogicDeleteTestRunner  extends BaseTestRunner{
-	private static final Logger _logger = LoggerFactory.getLogger(LogicDeleteTestRunner.class);
+public class SoftDeleteTestRunner  extends BaseTestRunner{
+	private static final Logger _logger = LoggerFactory.getLogger(SoftDeleteTestRunner.class);
 
 	@Test
-	void logicDelete(){
-		_logger.info("batchDeleteByIds...");
+	void softDelete(){
+		_logger.info("softDelete By Id ...");
 		service.softDelete("2");
 	}
 	
 	@Test
-	void logicBatchDelete(){
-		_logger.info("logicDelete...");
+	void softDeleteByIds(){
+		_logger.info("softDelete by Ids...");
 		List<String> idList=new ArrayList<String>();
 		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
 		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
@@ -46,8 +48,14 @@ public class LogicDeleteTestRunner  extends BaseTestRunner{
 	}
 	
 	@Test
-	void logicDeleteByQuery(){
-		_logger.info("logicDeleteByQuery...");
+	void softDeleteByQuery(){
+		_logger.info("softDelete By Query...");
 		service.softDelete(Query.builder().eq("id", "2"));
+	}
+	
+	@Test
+	void softDeleteByLambdaQuery(){
+		_logger.info("softDelete By LambdaQuery ...");
+		service.softDelete(new LambdaQuery<Students>().eq(Students::getId, "2"));
 	}
 }

@@ -44,11 +44,9 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 	
 	@Test
 	void fetchPageResultsByMapperId(){
-
 		_logger.info("fetchPageResults by mapperId...");
 		 Students student=new Students();
 		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
 		 student.setPageSize(10);
 		 student.setPageNumber(2);
 		 

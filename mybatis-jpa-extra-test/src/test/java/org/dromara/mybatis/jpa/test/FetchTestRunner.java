@@ -47,8 +47,8 @@ public class FetchTestRunner  extends BaseTestRunner{
 	}
 	
 	@Test
-	void fetchByCondition(){
-		_logger.info("fetchByCondition...");
+	void fetchByQuery(){
+		_logger.info("fetch By Query...");
 		 JpaPage page = new JpaPage();
 		 page.setPageSize(20);
 		 page.setPageable(true);
