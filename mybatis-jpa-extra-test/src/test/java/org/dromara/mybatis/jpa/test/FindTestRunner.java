@@ -63,28 +63,6 @@ public class FindTestRunner extends BaseTestRunner{
 		 for (Students s : listStudents) {
 			 _logger.info("Students {}" , s);
 		 }
-	}
-	
-	
-	@Test
-	void findBy(){
-		_logger.info("find by");
-
-		List<Students>  students = service.findByStdNo("10024");
-		for (Students s : students) {
-			 _logger.info("Students {}" , s);
-		 }
-	}
-	
-	@Test
-	void findBy2(){
-		_logger.info("find by 2");
-
-		List<Students>  students = service.findByStdMajorAndStdClass("政治","4");
-		for (Students s : students) {
-			 _logger.info("Students {}" , s);
-		 }
-	}
-	
+	}	
 
 }

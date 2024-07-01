@@ -18,9 +18,6 @@
 package org.dromara.mybatis.jpa.interceptor;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Properties;
@@ -43,6 +40,8 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
 import org.dromara.mybatis.jpa.meta.FieldMetadata;
+import org.dromara.mybatis.jpa.meta.FindByMapper;
+import org.dromara.mybatis.jpa.meta.FindByMetadata;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.provider.FetchCountProvider;
@@ -79,14 +78,10 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 		if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
 			Object parameterObject = metaObject.getValue("parameterHandler.parameterObject");
-			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("mappedStatement");
+			
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
-			String mappedStatementId = mappedStatement.getId();
-			String mappedStatementClassName = mappedStatementId.substring(0, mappedStatementId.lastIndexOf("."));
-			String mappedStatementMethodName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
-			logger.trace("mappedStatementClass {}" ,mappedStatementClassName);
-			logger.trace("methodName {}" , mappedStatementMethodName);
+			
 			logger.trace("parameter {}({})" , parameterObject,parameterObject.getClass().getCanonicalName());
 			//判断是否select语句及需要分页支持
 			if (sql.toLowerCase().trim().startsWith("select")) {
@@ -122,70 +117,51 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 					logger.trace("prepare dialect boundSql : {}" , boundSqlRemoveBreakingWhitespace);
 					metaObject.setValue("boundSql.sql", sql);
 				}
-			}else if(mappedStatementMethodName.startsWith(JpaFindByKeywords.FINDBY) 
-						|| mappedStatementMethodName.startsWith(JpaFindByKeywords.FINDDISTINCTBY)) {
-				boolean isDistinct = false;
-				String removedFindByName = "";
-				if(mappedStatementMethodName.startsWith(JpaFindByKeywords.FINDBY)) {
-					removedFindByName = mappedStatementMethodName.substring(JpaFindByKeywords.FINDBY.length());
-				}else {
-					isDistinct = true;
-					removedFindByName = mappedStatementMethodName.substring(JpaFindByKeywords.FINDDISTINCTBY.length());
-				}
-				
-				logger.trace("removed FindBy name : {}" , removedFindByName);
-				
-				Class<?> mappedStatementClass  = Class.forName(mappedStatementClassName);
-				Type[] pType = mappedStatementClass.getGenericInterfaces();
-				
-				if (pType != null && pType.length >= 1) {
-					ParameterizedType parameterizedType = (ParameterizedType)pType[0];
-					if(parameterizedType != null && parameterizedType.getActualTypeArguments().length > 0) {
-						Class<?> entityClass = (Class<?>)parameterizedType.getActualTypeArguments()[0];
-						logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
-						FieldMetadata.buildColumnList(entityClass);
-						List<FieldColumnMapper> entityFields = FieldMetadata.getFieldsMap().get(entityClass.getSimpleName());
-						Query q = Query.builder();
-						int argIndex = 0;
-						for(FieldColumnMapper fcm: entityFields) {
-							if(removedFindByName.startsWith(StringUtils.capitalize(fcm.getFieldName()))) {
-								logger.trace("FieldName : {} , capitalize {}" , fcm.getFieldName(),StringUtils.capitalize(fcm.getFieldName()));
-								removedFindByName = removedFindByName.substring(fcm.getFieldName().length());
-								String jpaKeyword = JpaFindByKeywords.startKeyword(removedFindByName);
-								if(StringUtils.isNotBlank(jpaKeyword) ) {
-									logger.trace("jpaKeyword : {} " , jpaKeyword);
-									removedFindByName = removedFindByName.substring(jpaKeyword.length());
-								}
-								q.eq(fcm.getColumnName(), ((ParamMap<?>)parameterObject).get("arg"+(argIndex++ )));
-								
-								if(StringUtils.isBlank(removedFindByName)) {
-									break;
-								}
+				return invocation.proceed();
+			}
+			
+			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("mappedStatement");
+			FindByMetadata.build(mappedStatement.getId());
+			FindByMapper findByMapper = FindByMetadata.getFindByMapperMap().get(mappedStatement.getId());
+			if(findByMapper != null && findByMapper.isFindBy()) {
+				findByMapper.parseEntityClass();
+				FieldMetadata.buildColumnList(findByMapper.getEntityClass());
+				List<FieldColumnMapper> entityFields = FieldMetadata.getFieldsMap().get(findByMapper.getEntityClass().getSimpleName());
+				Query q = Query.builder();
+				String removedFindByName = findByMapper.getRemovedFindByName();
+				int argIndex = 0;
+				for(FieldColumnMapper fcm: entityFields) {
+					if(removedFindByName.startsWith(StringUtils.capitalize(fcm.getFieldName()))) {
+						logger.trace("FieldName : {} , capitalize {}" , fcm.getFieldName(),StringUtils.capitalize(fcm.getFieldName()));
+						if(removedFindByName.length() >= fcm.getFieldName().length()) {
+							removedFindByName = removedFindByName.substring(fcm.getFieldName().length());
+							String jpaKeyword = JpaFindByKeywords.startKeyword(removedFindByName);
+							if(StringUtils.isNotBlank(jpaKeyword) ) {
+								logger.trace("JPAKeyword : {} " , jpaKeyword);
+								removedFindByName = removedFindByName.substring(jpaKeyword.length());
 							}
 						}
-						
-						
-						SQL selectSql = TableMetadata.buildSelect(entityClass,isDistinct).WHERE(QueryBuilder.build(q));
-						logger.trace("selectSql : {}" , selectSql);
-						
-						Method[] mappedStatementMethods = mappedStatementClass.getDeclaredMethods();
-						for(Method mappedStatementMethod : mappedStatementMethods) {
-							if(mappedStatementMethodName.endsWith(mappedStatementMethod.getName())) {
-								logger.trace("DeclaredMethod : {}" , mappedStatementMethod.getName());
-								Parameter[]  parameters = mappedStatementMethod.getParameters();
-								for(Parameter parameter : parameters) {
-									logger.trace("Parameter name : {} , type {} , value {}" , parameter.getName(),parameter.getType(),((ParamMap<?>)parameterObject).get(parameter.getName()));
-								}
-							}
+
+						if(parameterObject instanceof ParamMap) {
+							Object parameterValue = ((ParamMap<?>)parameterObject).get("arg"+(argIndex++ ));
+							q.eq(fcm.getColumnName(), parameterValue);
+						}else {
+							q.eq(fcm.getColumnName(), parameterObject);
 						}
 						
-						logger.trace("selectSql : {}" , selectSql);
-						metaObject.setValue("boundSql.sql", selectSql.toString());
+						if(removedFindByName.length() <= fcm.getFieldName().length() || StringUtils.isBlank(removedFindByName)) {
+							break;
+						}
 					}
 				}
-				logger.trace("methodName {}" , mappedStatementMethodName);
+				
+				SQL selectSql = TableMetadata.buildSelect(findByMapper.getEntityClass(),findByMapper.isDistinct()).WHERE(QueryBuilder.build(q));
+				logger.trace("selectSql : {}" , selectSql);
+				metaObject.setValue("boundSql.sql", selectSql.toString());
 			}
+			return invocation.proceed();
 		}
+		
 		return invocation.proceed();
 	}	
 }
