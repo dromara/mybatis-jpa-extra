@@ -16,6 +16,8 @@
 
 package org.dromara.mybatis.jpa.test.dao.service;
 
+import java.util.List;
+
 import org.dromara.mybatis.jpa.JpaService;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
@@ -40,8 +42,11 @@ public class StudentsService extends JpaService<Students> {
 	}
 	
 	
-	public Students findByStdNo(String stdNo) {
+	public List<Students> findByStdNo(String stdNo) {
 		return getMapper().findByStdNo(stdNo);
 	}
-
+	
+	public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass) {
+		return getMapper().findByStdMajorAndStdClass(stdMajor,stdClass);
+	}
 }

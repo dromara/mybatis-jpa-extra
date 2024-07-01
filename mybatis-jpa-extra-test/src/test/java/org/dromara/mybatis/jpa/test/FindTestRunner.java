@@ -70,9 +70,20 @@ public class FindTestRunner extends BaseTestRunner{
 	void findBy(){
 		_logger.info("find by");
 
-		Students s = service.findByStdNo("10024");
+		List<Students>  students = service.findByStdNo("10024");
+		for (Students s : students) {
+			 _logger.info("Students {}" , s);
+		 }
+	}
+	
+	@Test
+	void findBy2(){
+		_logger.info("find by 2");
 
-		_logger.info("Students {}" , s);
+		List<Students>  students = service.findByStdMajorAndStdClass("政治","4");
+		for (Students s : students) {
+			 _logger.info("Students {}" , s);
+		 }
 	}
 	
 

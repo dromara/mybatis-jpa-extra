@@ -36,5 +36,8 @@ public interface StudentsMapper extends IJpaMapper<Students> {
 	public List<Students> fetchPageResults(Students entity);
 	
 	@Select({})
-	public Students findByStdNo(String stdNo);
+	public List<Students> findByStdNo(String stdNo);
+	
+	@Select({})
+	public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass);
 }

@@ -15,6 +15,7 @@ public class TableMetadata {
 	
 	static ConcurrentMap<String, String> tableNameMap 	= 	new ConcurrentHashMap<>();
 	
+	public static final String SELECT_TMP_TABLE = " sel_tmp_table ";
 	/**
 	 * build select from entity Class
 	 * @param entityClass
@@ -23,8 +24,25 @@ public class TableMetadata {
 	public static SQL buildSelect(Class<?> entityClass) {
 		FieldMetadata.buildColumnList(entityClass);
 		return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
-				.FROM(TableMetadata.getTableName(entityClass) + " sel_tmp_table ");
+				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
 	}
+	
+	/**
+	 * build select from entity Class
+	 * @param entityClass
+	 * @return select columns  from table name sel_tmp_table
+	 */
+	public static SQL buildSelect(Class<?> entityClass , boolean distinct) {
+		FieldMetadata.buildColumnList(entityClass);
+		if(distinct) {
+			return new SQL().SELECT_DISTINCT(FieldMetadata.selectColumnMapper(entityClass))
+				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+		}else {
+			return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
+					.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+		}
+	}
+	
 	
 	/**
 	 * getTableName and cache table name
