@@ -15,6 +15,10 @@ public class LambdaQuery <T> {
 	List<Condition> groupBy ;
 	
 	List<Condition> orderBy ;
+	
+	public LambdaQuery() {
+		super();
+	}
 
 	public void joint() {
 		if(CollectionUtils.isNotEmpty(conditions)) {

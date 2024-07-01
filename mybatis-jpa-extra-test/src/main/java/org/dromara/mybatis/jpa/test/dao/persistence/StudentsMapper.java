@@ -21,6 +21,7 @@ package org.dromara.mybatis.jpa.test.dao.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Select;
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
 
@@ -33,4 +34,7 @@ public interface StudentsMapper extends IJpaMapper<Students> {
 	public List<Students> fetchPageResults1(Students entity);
 	
 	public List<Students> fetchPageResults(Students entity);
+	
+	@Select({})
+	public Students findByStdNo(String stdNo);
 }

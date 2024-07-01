@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa.test;
 
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,22 @@ public class FetchTestRunner  extends BaseTestRunner{
 		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
 		 
 		 JpaPageResults<Students>  results = service.fetch(page,condition);
+		 _logger.info("records {} , total {} , totalPage {} , page {} ",
+				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+		 for (Students s : results.getRows()) {
+			 _logger.info("Students {}",s);
+		 }
+	}
+	
+	@Test
+	void fetchByLambdaQuery(){
+		_logger.info("fetch By LambdaQuery...");
+		 JpaPage page = new JpaPage();
+		 page.setPageSize(20);
+		 page.setPageable(true);
+		 LambdaQuery<Students> lambdaQuery =new LambdaQuery<>();
+		 lambdaQuery.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30));
+		 JpaPageResults<Students>  results = service.fetch(page,lambdaQuery);
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
 		 for (Students s : results.getRows()) {

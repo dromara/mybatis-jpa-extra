@@ -38,5 +38,10 @@ public class StudentsService extends JpaService<Students> {
 	public StudentsMapper getMapper() {
 		return (StudentsMapper) super.getMapper();
 	}
+	
+	
+	public Students findByStdNo(String stdNo) {
+		return getMapper().findByStdNo(stdNo);
+	}
 
 }

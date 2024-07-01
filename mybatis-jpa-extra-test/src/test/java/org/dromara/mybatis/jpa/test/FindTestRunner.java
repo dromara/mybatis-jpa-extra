@@ -65,5 +65,15 @@ public class FindTestRunner extends BaseTestRunner{
 		 }
 	}
 	
+	
+	@Test
+	void findBy(){
+		_logger.info("find by");
+
+		Students s = service.findByStdNo("10024");
+
+		_logger.info("Students {}" , s);
+	}
+	
 
 }
