@@ -82,7 +82,9 @@ public class SelectPageSqlBuilder {
 						break;
 					}
 				}
-			}catch(Exception e) {}
+			}catch(Exception e) {
+				logger.error("Exception",e);
+			}
 		}
 		return page;
 	}
