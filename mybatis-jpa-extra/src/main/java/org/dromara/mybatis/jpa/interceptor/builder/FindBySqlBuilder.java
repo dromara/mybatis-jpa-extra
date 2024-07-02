@@ -41,6 +41,7 @@ public class FindBySqlBuilder {
 			FindByMapper findByMapper = new FindByMapper(mappedStatementId);
 			findByMapper.parseFindBy();
 			if(findByMapper.isFindBy()) {
+				logger.trace("mappedStatementId {}  ==> findByMapper {}" , mappedStatementId,findByMapper);
 				FindByMetadata.getFindByMapperMap().put(mappedStatementId, findByMapper);
 			}
 		}
