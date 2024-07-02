@@ -17,7 +17,6 @@
 
 package org.dromara.mybatis.jpa.interceptor;
 
-import java.util.StringTokenizer;
 import org.apache.ibatis.executor.statement.RoutingStatementHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.Interceptor;
@@ -79,13 +78,4 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 				&& rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT);
 	}
 	
-	protected String removeBreakingWhitespace(String original) {
-		    StringTokenizer whitespaceStripper = new StringTokenizer(original);
-		    StringBuilder builder = new StringBuilder();
-		    while (whitespaceStripper.hasMoreTokens()) {
-		      builder.append(whitespaceStripper.nextToken());
-		      builder.append(" ");
-		    }
-		    return builder.toString();
-	}
 }

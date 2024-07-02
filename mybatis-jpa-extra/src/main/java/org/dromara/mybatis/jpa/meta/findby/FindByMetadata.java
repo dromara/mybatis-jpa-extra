@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.meta;
+package org.dromara.mybatis.jpa.meta.findby;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -25,16 +25,6 @@ public class FindByMetadata {
 
 	public static ConcurrentMap<String, FindByMapper> getFindByMapperMap() {
 		return findByMapperMap;
-	}
-	
-	public static void build(String mappedStatementId){
-		if(!FindByMetadata.getFindByMapperMap().containsKey(mappedStatementId)){
-			FindByMapper findByMapper = new FindByMapper(mappedStatementId);
-			findByMapper.parseFindBy();
-			if(findByMapper.isFindBy) {
-				findByMapperMap.put(mappedStatementId, findByMapper);
-			}
-		}
 	}
 	
 }

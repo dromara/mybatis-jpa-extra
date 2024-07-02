@@ -1,0 +1,99 @@
+/*
+ * Copyright [2024] [MaxKey of copyright http://www.maxkey.top]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+
+
+package org.dromara.mybatis.jpa.interceptor.builder;
+
+import java.util.StringTokenizer;
+
+import org.apache.ibatis.binding.MapperMethod.ParamMap;
+import org.apache.ibatis.executor.statement.PreparedStatementHandler;
+import org.apache.ibatis.executor.statement.SimpleStatementHandler;
+import org.apache.ibatis.executor.statement.StatementHandler;
+import org.apache.ibatis.mapping.BoundSql;
+import org.dromara.mybatis.jpa.dialect.Dialect;
+import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
+import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.provider.FetchCountProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class SelectPageSqlBuilder {
+	private static final Logger logger 	= 	LoggerFactory.getLogger(SelectPageSqlBuilder.class);
+	
+	public static SelectPageSql parse(BoundSql boundSql,Object parameterObject){
+		SelectPageSql pageSql   = new SelectPageSql();
+		//判断是否select语句及需要分页支持
+		if (boundSql.getSql().toLowerCase().trim().startsWith("select")) {
+			pageSql.setSelectTrack(true);
+			pageSql.setPage(getJpaPageParameter(parameterObject));
+			//分页标识
+			if(pageSql.getPage() != null && pageSql.getPage().isPageable()){
+				pageSql.setPageable(true);
+			}
+		}
+		return pageSql;
+	}
+	
+	public static String translate(StatementHandler statement,Dialect dialect,BoundSql boundSql,SelectPageSql pageSql) {
+		String  selectSql = boundSql.getSql();
+		String boundSqlRemoveBreakingWhitespace = removeBreakingWhitespace(selectSql);
+		logger.trace("prepare  boundSql  ==> {}" , boundSqlRemoveBreakingWhitespace);
+		if(statement instanceof SimpleStatementHandler){
+			selectSql = dialect.getLimitString(selectSql, pageSql.getPage());
+		}else if(statement instanceof PreparedStatementHandler){
+			FetchCountProvider.PAGE_BOUNDSQL_CACHE.put(
+					pageSql.getPage().getPageSelectId(), 
+					new JpaPageSqlCache(selectSql,boundSql)
+					);
+			selectSql = dialect.getLimitString(selectSql, pageSql.getPage());
+		}
+		logger.trace("prepare dialect boundSql : {}" , boundSqlRemoveBreakingWhitespace);
+		return selectSql;
+	}
+	
+	protected static JpaPage getJpaPageParameter(Object parameterObject) {
+		JpaPage page = null;
+		if((parameterObject instanceof JpaPage parameterObjectPage)) {
+			page = parameterObjectPage;
+		}else if((parameterObject instanceof ParamMap)
+				&& ((ParamMap<?>)parameterObject).containsKey(MapperMetadata.PAGE)) {
+			page = (JpaPage)((ParamMap<?>)parameterObject).get(MapperMetadata.PAGE);
+		}else {
+			try {
+				for (Object key : ((ParamMap<?>)parameterObject).entrySet()){
+					if(((ParamMap<?>)parameterObject).get(key) instanceof JpaPage) {
+						page = (JpaPage) ((ParamMap<?>)parameterObject).get(key);
+						break;
+					}
+				}
+			}catch(Exception e) {}
+		}
+		return page;
+	}
+	
+	protected static String removeBreakingWhitespace(String original) {
+	    StringTokenizer whitespaceStripper = new StringTokenizer(original);
+	    StringBuilder builder = new StringBuilder();
+	    while (whitespaceStripper.hasMoreTokens()) {
+	      builder.append(whitespaceStripper.nextToken());
+	      builder.append(" ");
+	    }
+	    return builder.toString();
+	}
+}
