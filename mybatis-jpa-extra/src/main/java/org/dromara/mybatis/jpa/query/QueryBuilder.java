@@ -99,37 +99,18 @@ public class QueryBuilder {
 					conditionString.append(condition.getColumn()).append(" ")
 							.append(condition.getExpression().getOperator());
 					conditionString.append(" ( ");
-					StringBuffer conditionArray = new StringBuffer();
 					Object[] objects = (Object[]) condition.getValue();
 					if(objects[0] instanceof Collection<?> cObjects) {
-							logger.debug("objects[0] is Collection {}" , cObjects);
-							//for循环读取集合
-					        for (Object element : cObjects) {
-					        	if (conditionArray.length() > 0) {
-									conditionArray.append(" , ");
-								}
-					        	conditionArray.append(ConditionValue.valueOf(element));
-					        	logger.debug("{}",element);
-					        }
+						logger.debug("objects[0] is Collection {}" , cObjects);
+						conditionString.append(buildCollection(cObjects));
 					}else if(objects[0].getClass().isArray()) {
 						objects = (Object[])objects[0];
 						logger.debug("objects[0] is isArray {}" , objects);
-						for (int i = 0 ; i< objects.length ; i++) {
-							if (conditionArray.length() > 0) {
-								conditionArray.append(" , ");
-							}
-							conditionArray.append(ConditionValue.valueOf(objects[i]));
-						}
+						conditionString.append(buildArray(objects));
 					}else {
 						logger.debug("not  isArray {}" , objects);
-						for (int i = 0 ; i< objects.length ; i++) {
-							if (conditionArray.length() > 0) {
-								conditionArray.append(" , ");
-							}
-							conditionArray.append(ConditionValue.valueOf(objects[i]));
-						}
+						conditionString.append(buildArray(objects));
 					}
-					conditionString.append(conditionArray);
 					conditionString.append(" ) ");
 				}
 			} else if (condition.getExpression().equals(Operator.condition)) {
@@ -139,6 +120,29 @@ public class QueryBuilder {
 		return conditionString.toString();
 	}
 
+	private static String buildArray(Object[] objects) {
+		StringBuffer conditionArray = new StringBuffer();
+		for (int i = 0 ; i< objects.length ; i++) {
+			if (conditionArray.length() > 0) {
+				conditionArray.append(" , ");
+			}
+			conditionArray.append(ConditionValue.valueOf(objects[i]));
+		}
+		return conditionArray.toString();
+	}
+	
+	private static String buildCollection(Collection<?> cObjects) {
+		StringBuffer conditionArray = new StringBuffer();
+        for (Object element : cObjects) {//for循环读取集合
+        	if (conditionArray.length() > 0) {
+				conditionArray.append(" , ");
+			}
+        	conditionArray.append(ConditionValue.valueOf(element));
+        	logger.debug("{}",element);
+        }
+		return conditionArray.toString();
+	}
+	
 	public static String buildGroupBy(Query query) {
 		StringBuffer groupBy = new StringBuffer();
 		for (Condition condition : query.getGroupBy()) {
