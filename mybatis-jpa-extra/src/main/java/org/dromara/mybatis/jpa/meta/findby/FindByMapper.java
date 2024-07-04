@@ -20,7 +20,6 @@ package org.dromara.mybatis.jpa.meta.findby;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import org.dromara.mybatis.jpa.query.JpaFindByKeywords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,13 +66,13 @@ public class FindByMapper {
 		mappedStatementMethodName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
 		logger.trace("methodName {}" , mappedStatementMethodName);
 
-		if(mappedStatementMethodName.startsWith(JpaFindByKeywords.FINDBY)) {
+		if(mappedStatementMethodName.startsWith(FindByKeywords.FINDBY)) {
 			isFindBy = true;
-			removedFindByName = mappedStatementMethodName.substring(JpaFindByKeywords.FINDBY.length());
-		}else if(mappedStatementMethodName.startsWith(JpaFindByKeywords.FINDDISTINCTBY)){
+			removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDBY.length());
+		}else if(mappedStatementMethodName.startsWith(FindByKeywords.FINDDISTINCTBY)){
 			isFindBy = true;
 			isDistinct = true;
-			removedFindByName = mappedStatementMethodName.substring(JpaFindByKeywords.FINDDISTINCTBY.length());
+			removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDDISTINCTBY.length());
 		}
 		logger.trace("removed FindBy name : {}" , removedFindByName);
 	}

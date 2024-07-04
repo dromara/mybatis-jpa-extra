@@ -37,9 +37,6 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
-		 for (Students s : results.getRows()) {
-			 _logger.info("Students {}",s);
-		 }
 	}
 	
 	@Test
@@ -54,9 +51,6 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 		 
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
-		 for (Students s : results.getRows()) {
-			 _logger.info("Students {}",s);
-		 }
 	}
 
 }

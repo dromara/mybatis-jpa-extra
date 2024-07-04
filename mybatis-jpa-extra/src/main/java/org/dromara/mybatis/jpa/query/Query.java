@@ -95,6 +95,18 @@ public class Query {
 		return this;
 	}
 	
+	/**
+	 * 等于 =
+	 * @param column
+	 * @param value
+	* @return Query
+	 */
+	public Query ignoreCase(String column, Object value) {
+		joint();
+		conditions.add(new Condition(Operator.ignoreCase,column,value));
+		return this;
+	}
+	
 	public Query eq(boolean expression , String column, Object value) {
 		if(expression) {
 			joint();

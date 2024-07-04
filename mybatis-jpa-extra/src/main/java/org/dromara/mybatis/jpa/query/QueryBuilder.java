@@ -17,7 +17,13 @@
 
 package org.dromara.mybatis.jpa.query;
 
+import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QueryBuilder {
+	private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
 	
 	public static String build(Query query) {
 		StringBuffer conditionString = new StringBuffer("");
@@ -38,6 +44,11 @@ public class QueryBuilder {
 				conditionString.append(condition.getColumn()).append(" ")
 						.append(condition.getExpression().getOperator()).append(" ");
 				conditionString.append("'%").append(condition.getValue().toString()).append("%'");
+
+			}else if (condition.getExpression().equals(Operator.ignoreCase)) {
+				conditionString.append("UPPER(").append(condition.getColumn()).append(") ")
+							   .append(Operator.eq.getOperator()).append(" ");
+				conditionString.append("UPPER(").append(ConditionValue.valueOf(condition.getValue())).append(")");
 
 			} else if (condition.getExpression().equals(Operator.likeLeft)) {
 
@@ -83,17 +94,40 @@ public class QueryBuilder {
 
 			} else if (condition.getExpression().equals(Operator.in)
 					|| condition.getExpression().equals(Operator.notIn)) {
+				
 				if (condition.getValue().getClass().isArray()) {
 					conditionString.append(condition.getColumn()).append(" ")
 							.append(condition.getExpression().getOperator());
 					conditionString.append(" ( ");
 					StringBuffer conditionArray = new StringBuffer();
 					Object[] objects = (Object[]) condition.getValue();
-					for (Object object : objects) {
-						if (conditionArray.length() > 0) {
-							conditionArray.append(" , ");
+					if(objects[0] instanceof Collection<?> cObjects) {
+							logger.debug("objects[0] is Collection {}" , cObjects);
+							//for循环读取集合
+					        for (Object element : cObjects) {
+					        	if (conditionArray.length() > 0) {
+									conditionArray.append(" , ");
+								}
+					        	conditionArray.append(ConditionValue.valueOf(element));
+					        	logger.debug("{}",element);
+					        }
+					}else if(objects[0].getClass().isArray()) {
+						objects = (Object[])objects[0];
+						logger.debug("objects[0] is isArray {}" , objects);
+						for (int i = 0 ; i< objects.length ; i++) {
+							if (conditionArray.length() > 0) {
+								conditionArray.append(" , ");
+							}
+							conditionArray.append(ConditionValue.valueOf(objects[i]));
 						}
-						conditionArray.append(ConditionValue.valueOf(object));
+					}else {
+						logger.debug("not  isArray {}" , objects);
+						for (int i = 0 ; i< objects.length ; i++) {
+							if (conditionArray.length() > 0) {
+								conditionArray.append(" , ");
+							}
+							conditionArray.append(ConditionValue.valueOf(objects[i]));
+						}
 					}
 					conditionString.append(conditionArray);
 					conditionString.append(" ) ");

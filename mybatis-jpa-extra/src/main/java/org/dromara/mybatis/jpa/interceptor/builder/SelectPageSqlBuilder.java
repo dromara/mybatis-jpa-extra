@@ -18,6 +18,7 @@
 
 package org.dromara.mybatis.jpa.interceptor.builder;
 
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
@@ -76,9 +77,9 @@ public class SelectPageSqlBuilder {
 			page = (JpaPage)((ParamMap<?>)parameterObject).get(MapperMetadata.PAGE);
 		}else {
 			try {
-				for (Object key : ((ParamMap<?>)parameterObject).entrySet()){
-					if(((ParamMap<?>)parameterObject).get(key) instanceof JpaPage) {
-						page = (JpaPage) ((ParamMap<?>)parameterObject).get(key);
+				for (Map.Entry<String,?> entry : ((ParamMap<?>)parameterObject).entrySet()){
+					if(entry.getValue() instanceof JpaPage jpaPage) {
+						page = jpaPage;
 						break;
 					}
 				}

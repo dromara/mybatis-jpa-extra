@@ -79,6 +79,10 @@ public enum Operator {
 	 * 	排序
 	 */
 	order("order"),
+	/**
+	 * 忽略大小写
+	 */
+	ignoreCase("ignoreCase"),
 	;
 	
     

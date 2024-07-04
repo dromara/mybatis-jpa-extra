@@ -47,6 +47,100 @@ public class StudentsService extends JpaService<Students> {
 		return getMapper().findByStdNo(stdNo);
 	}
 	
+	public List<Students> findByStdNoIs(String stdNo) {
+		return getMapper().findByStdNoIs(stdNo);
+	}
+	
+	public List<Students> findByStdNoEquals(String stdNo) {
+		return getMapper().findByStdNoEquals(stdNo);
+	}
+	
+	
+	public List<Students> findByStdAgeBetween(int ageStart,int ageEnd){
+		return getMapper().findByStdAgeBetween(ageStart,ageEnd);
+	}
+	
+	public List<Students> findByStdAgeLessThan(int ageLessThan){
+		return getMapper().findByStdAgeLessThan(ageLessThan);
+	}
+	
+	public List<Students> findByStdAgeLessThanEqual(int ageLessThanEqual){
+		return getMapper().findByStdAgeLessThanEqual(ageLessThanEqual);
+	}
+	
+	public List<Students> findByStdAgeAfter(int ageAfter){
+		return getMapper().findByStdAgeAfter(ageAfter);
+	}
+	
+	public List<Students> findByStdAgeBefore(int ageBefore){
+		return getMapper().findByStdAgeBefore(ageBefore);
+	}
+	
+	public List<Students> findByImagesNull(){
+		return getMapper().findByImagesNull();
+	}
+	
+	public List<Students> findByImagesIsNull(){
+		return getMapper().findByImagesIsNull();
+	}
+	
+	public List<Students> findByImagesIsNotNull(){
+		return getMapper().findByImagesIsNotNull();
+	}
+	
+	
+	public List<Students> findByImagesNotNull(){
+		return getMapper().findByImagesNotNull();
+	}
+	
+	public List<Students> findByStdNameLike(String stdName) {
+		return getMapper().findByStdNameLike(stdName);
+	}
+	
+	public List<Students> findByStdNameNotLike(String stdName) {
+		return getMapper().findByStdNameNotLike(stdName);
+	}
+	
+	public List<Students> findByStdNameStartingWith(String stdName) {
+		return getMapper().findByStdNameStartingWith(stdName);
+	}
+	
+	public List<Students> findByStdNameEndingWith(String stdName) {
+		return getMapper().findByStdNameEndingWith(stdName);
+	}
+	
+	public List<Students> findByStdNameContaining(String stdName) {
+		return getMapper().findByStdNameContaining(stdName);
+	}
+	
+	public List<Students> findByStdNameOrderByStdName(String stdName) {
+		return getMapper().findByStdNameOrderByStdName(stdName);
+	}
+	
+	public List<Students> findByStdMajorIn(String... stdMajors) {
+		return getMapper().findByStdMajorIn(stdMajors);
+	}
+	
+	public List<Students> findByStdMajorNotIn(List<String> stdMajors) {
+		return getMapper().findByStdMajorNotIn(stdMajors);
+	}
+	
+	public List<Students> findByDeletedTrue() {
+		return getMapper().findByDeletedTrue();
+	}
+	
+	public List<Students> findByDeletedFalse() {
+		return getMapper().findByDeletedFalse();
+	}
+	
+	public List<Students> findByStdGenderIgnoreCase(String stdGender) {
+		return getMapper().findByStdGenderIgnoreCase(stdGender);
+	}
+	
+	public List<Students> findByStdNoNot(String stdNo) {
+		return getMapper().findByStdNoNot(stdNo);
+	}
+	
 	public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass) {
 		return getMapper().findByStdMajorAndStdClass(stdMajor,stdClass);
 	}

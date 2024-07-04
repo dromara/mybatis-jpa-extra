@@ -21,7 +21,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +32,7 @@ public class FindTestRunner extends BaseTestRunner{
 	@Test
 	void findAll(){
 		_logger.info("findAll...");
-		List<Students> allListStudents =service.findAll();
-		 for (Students s : allListStudents) {
-			 _logger.info("Students {}",s);
-		 }
+		service.findAll();
 	}
 	
 	@Test
@@ -55,14 +51,10 @@ public class FindTestRunner extends BaseTestRunner{
 	void find(){
 		_logger.info("find by filter  StdNo = '10024' or StdNo = '10004'");
 
-		List<Students> listStudents = service.find(" StdNo = ? or StdNo = ?  or StdNo ='11111'",
+		service.find(" StdNo = ? or StdNo = ?  or StdNo ='11111'",
 				new Object[]{"10024","10004"},
 				new int[]{Types.VARCHAR,Types.INTEGER}
 			);
-		
-		 for (Students s : listStudents) {
-			 _logger.info("Students {}" , s);
-		 }
 	}	
 
 }

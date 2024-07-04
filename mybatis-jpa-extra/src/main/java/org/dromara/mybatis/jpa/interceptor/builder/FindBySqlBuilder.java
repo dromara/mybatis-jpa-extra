@@ -27,7 +27,8 @@ import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
 import org.dromara.mybatis.jpa.meta.findby.FindByMapper;
 import org.dromara.mybatis.jpa.meta.findby.FindByMetadata;
-import org.dromara.mybatis.jpa.query.JpaFindByKeywords;
+import org.dromara.mybatis.jpa.meta.findby.FindByKeywords;
+import org.dromara.mybatis.jpa.meta.findby.FindByKeywords.KEY;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
 import org.slf4j.Logger;
@@ -57,20 +58,25 @@ public class FindBySqlBuilder {
 		for(FieldColumnMapper fcm: entityFields) {
 			if(removedFindByName.startsWith(StringUtils.capitalize(fcm.getFieldName()))) {
 				logger.trace("FieldName : {} , capitalize {}" , fcm.getFieldName(),StringUtils.capitalize(fcm.getFieldName()));
+				String findByKeyword = "";
 				if(removedFindByName.length() >= fcm.getFieldName().length()) {
 					removedFindByName = removedFindByName.substring(fcm.getFieldName().length());
-					String jpaKeyword = JpaFindByKeywords.startKeyword(removedFindByName);
-					if(StringUtils.isNotBlank(jpaKeyword) ) {
-						logger.trace("JPAKeyword : {} " , jpaKeyword);
-						removedFindByName = removedFindByName.substring(jpaKeyword.length());
+					findByKeyword = FindByKeywords.startKeyword(removedFindByName);
+					if(StringUtils.isNotBlank(findByKeyword) ) {
+						logger.trace("FindBy Keyword : {} " , findByKeyword);
+						removedFindByName = removedFindByName.substring(findByKeyword.length());
 					}
 				}
 
-				if(parameterObject instanceof ParamMap) {
-					Object parameterValue = ((ParamMap<?>)parameterObject).get("arg"+(argIndex++ ));
-					q.eq(fcm.getColumnName(), parameterValue);
+				if(KEY.Between.equals(findByKeyword)) {
+					appendParameter(q,findByKeyword,fcm.getColumnName(),((ParamMap<?>)parameterObject).get("arg0"),((ParamMap<?>)parameterObject).get("arg1"));
+					break;
+				}else if(parameterObject instanceof ParamMap<?> paramMap) {
+					Object parameterValue = paramMap.get("arg"+(argIndex++ ));
+					logger.trace("FindBy getCanonicalName : {} " , parameterValue.getClass().getCanonicalName());
+					appendParameter(q,findByKeyword,fcm.getColumnName(),parameterValue,null);
 				}else {
-					q.eq(fcm.getColumnName(), parameterObject);
+					appendParameter(q,findByKeyword,fcm.getColumnName(),parameterObject,null);
 				}
 				
 				if(removedFindByName.length() <= fcm.getFieldName().length() || StringUtils.isBlank(removedFindByName)) {
@@ -82,5 +88,53 @@ public class FindBySqlBuilder {
 		SQL selectSql = TableMetadata.buildSelect(findByMapper.getEntityClass(),findByMapper.isDistinct()).WHERE(QueryBuilder.build(q));
 		logger.trace("selectSql : {}" , selectSql);
 		return selectSql.toString();
+	}
+	
+	protected static void  appendParameter(Query q,String operator,String columnName, Object value, Object value1) {
+		if(KEY.And.equals(operator)) {
+			q.and();
+		}else if(KEY.Or.equals(operator)) {
+			q.or();
+		}else if(KEY.Is.equals(operator) || KEY.Equals.equals(operator)) {
+			q.eq(columnName, value);
+		}else if(KEY.Between.equals(operator)) {
+			q.between(columnName, value, value1);
+		}else if(KEY.LessThan.equals(operator) || KEY.Before.equals(operator)) {
+			q.lt(columnName, value);
+		}else if(KEY.LessThanEqual.equals(operator)) {
+			q.le(columnName, value);
+		}else if(KEY.GreaterThan.equals(operator) || KEY.After.equals(operator)) {
+			q.gt(columnName, value);
+		}else if(KEY.GreaterThanEqual.equals(operator)) {
+			q.ge(columnName, value);
+		}else if(KEY.IsNull.equals(operator) || KEY.Null.equals(operator)) {
+			q.isNull(columnName);
+		}else if(KEY.IsNotNull.equals(operator) || KEY.NotNull.equals(operator)) {
+			q.isNotNull(columnName);
+		}else if(KEY.Like.equals(operator)) {
+			q.like(columnName, value);
+		}else if(KEY.NotLike.equals(operator)) {
+			q.notLike(columnName, value);
+		}else if(KEY.StartingWith.equals(operator)) {
+			q.likeLeft(columnName, value);
+		}else if(KEY.EndingWith.equals(operator)) {
+			q.likeRight(columnName, value);
+		}else if(KEY.Containing.equals(operator)) {
+			q.eq(columnName, value);
+		}else if(KEY.OrderBy.equals(operator)) {
+			q.orderBy(columnName,"desc");
+		}else if(KEY.Not.equals(operator)) {
+			q.notEq(columnName, value);
+		}else if(KEY.In.equals(operator)) {
+			q.in(columnName, value);
+		}else if(KEY.NotIn.equals(operator)) {
+			q.notIn(columnName, value);
+		}else if(KEY.True.equals(operator)) {
+			q.eq(columnName, true);
+		}else if(KEY.False.equals(operator)) {
+			q.eq(columnName, false);
+		}else if(KEY.IgnoreCase.equals(operator)) {
+			q.ignoreCase(columnName, value);
+		}
 	}
 }
