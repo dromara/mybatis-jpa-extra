@@ -56,36 +56,58 @@ public class FindBySqlBuilder {
 		String removedFindByName = findByMapper.getRemovedFindByName();
 		int argIndex = 0;
 		for(FieldColumnMapper fcm: entityFields) {
-			if(removedFindByName.startsWith(StringUtils.capitalize(fcm.getFieldName()))) {
-				logger.trace("FieldName : {} , capitalize {}" , fcm.getFieldName(),StringUtils.capitalize(fcm.getFieldName()));
-				String findByKeyword = "";
-				if(removedFindByName.length() >= fcm.getFieldName().length()) {
-					removedFindByName = removedFindByName.substring(fcm.getFieldName().length());
+			String fieldName = fcm.getFieldName();
+			String columnName = fcm.getColumnName();
+			String findByKeyword = "";
+			if(removedFindByName.startsWith(StringUtils.capitalize(fieldName))) {
+				logger.trace("FieldName : {} , capitalize {}" , fieldName,StringUtils.capitalize(fieldName));
+				if(removedFindByName.length() >= fieldName.length()) {
+					removedFindByName = removedFindByName.substring(fieldName.length());
 					findByKeyword = FindByKeywords.startKeyword(removedFindByName);
-					if(StringUtils.isNotBlank(findByKeyword) ) {
+					if(StringUtils.isNotBlank(findByKeyword) && !KEY.OrderBy.equals(findByKeyword)) {
 						logger.trace("FindBy Keyword : {} " , findByKeyword);
 						removedFindByName = removedFindByName.substring(findByKeyword.length());
 					}
 				}
 
 				if(KEY.Between.equals(findByKeyword)) {
-					appendParameter(q,findByKeyword,fcm.getColumnName(),((ParamMap<?>)parameterObject).get("arg0"),((ParamMap<?>)parameterObject).get("arg1"));
+					appendParameter(q,findByKeyword,columnName,((ParamMap<?>)parameterObject).get("arg0"),((ParamMap<?>)parameterObject).get("arg1"));
 					break;
 				}else if(parameterObject instanceof ParamMap<?> paramMap) {
 					Object parameterValue = paramMap.get("arg"+(argIndex++ ));
 					logger.trace("FindBy getCanonicalName : {} " , parameterValue.getClass().getCanonicalName());
-					appendParameter(q,findByKeyword,fcm.getColumnName(),parameterValue,null);
+					appendParameter(q,findByKeyword,columnName,parameterValue,null);
 				}else {
-					appendParameter(q,findByKeyword,fcm.getColumnName(),parameterObject,null);
+					if(KEY.OrderBy.equals(findByKeyword)) {
+						appendParameter(q,KEY.Equals,columnName,parameterObject,null);
+					}else {
+						appendParameter(q,findByKeyword,columnName,parameterObject,null);
+					}
 				}
 				
-				if(removedFindByName.length() <= fcm.getFieldName().length() || StringUtils.isBlank(removedFindByName)) {
+				if(removedFindByName.length() <= fieldName.length() || StringUtils.isBlank(removedFindByName)) {
+					break;
+				}
+			}else {
+				findByKeyword = FindByKeywords.startKeyword(removedFindByName);
+				if(StringUtils.isNotBlank(findByKeyword) && KEY.OrderBy.equals(findByKeyword)) {
+					logger.trace("FindBy Keyword : {} " , findByKeyword);
+					removedFindByName = removedFindByName.substring(findByKeyword.length());
+					logger.trace("FindBy order by columnName : {} " , removedFindByName);
+					String orderBy = "asc";
+					if(removedFindByName.endsWith("Desc")) {
+						orderBy = "desc";
+					}
+					appendParameter(q,KEY.OrderBy,columnName,orderBy,null);
 					break;
 				}
 			}
 		}
-		
+		logger.trace("Query : {}" , q);
 		SQL selectSql = TableMetadata.buildSelect(findByMapper.getEntityClass(),findByMapper.isDistinct()).WHERE(QueryBuilder.build(q));
+		if (q.getOrderBy() != null) {
+			selectSql.ORDER_BY(QueryBuilder.buildOrderBy(q));
+		}
 		logger.trace("selectSql : {}" , selectSql);
 		return selectSql.toString();
 	}
@@ -116,13 +138,13 @@ public class FindBySqlBuilder {
 		}else if(KEY.NotLike.equals(operator)) {
 			q.notLike(columnName, value);
 		}else if(KEY.StartingWith.equals(operator)) {
-			q.likeLeft(columnName, value);
-		}else if(KEY.EndingWith.equals(operator)) {
 			q.likeRight(columnName, value);
+		}else if(KEY.EndingWith.equals(operator)) {
+			q.likeLeft(columnName, value);
 		}else if(KEY.Containing.equals(operator)) {
-			q.eq(columnName, value);
+			q.like(columnName, value);
 		}else if(KEY.OrderBy.equals(operator)) {
-			q.orderBy(columnName,"desc");
+			q.orderBy(columnName,value.toString());
 		}else if(KEY.Not.equals(operator)) {
 			q.notEq(columnName, value);
 		}else if(KEY.In.equals(operator)) {

@@ -51,7 +51,7 @@ public class FindByTestRunner extends BaseTestRunner{
 	}
 	
 	@Test
-	void findBy2(){
+	void findByAnd(){
 		_logger.info("find by 2");
 		service.findByStdMajorAndStdClass("数学","2");
 	}
@@ -144,7 +144,13 @@ public class FindByTestRunner extends BaseTestRunner{
 	@Test
 	void findByOrderBy(){
 		_logger.info("find by OrderBy");
-		service.findByStdNameOrderByStdName("孙");
+		service.findByStdGenderOrderByStdAge("F");
+	}
+	
+	@Test
+	void findByIsOrderBy(){
+		_logger.info("find by OrderBy");
+		service.findByStdNameIsOrderByStdName("F");
 	}
 	
 	@Test

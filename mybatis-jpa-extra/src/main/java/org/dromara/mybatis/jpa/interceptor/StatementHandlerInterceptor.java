@@ -50,7 +50,6 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 		if ("prepare".equals(m.getName())) {
 			return prepare(invocation);
 		}
-		
 		return invocation.proceed();
 	}
 
@@ -67,12 +66,12 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
 			Object parameterObject = metaObject.getValue("parameterHandler.parameterObject");
 			BoundSql boundSql = statement.getBoundSql();
-			SelectPageSql  pageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
-			logger.trace("parameter {}({})" , parameterObject,parameterObject.getClass().getCanonicalName());
+			SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
+			logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
 			//判断是否select语句及需要分页支持
-			if (pageSql.isSelectTrack()) {
-				if(pageSql.isPageable()) {
-					String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,pageSql);
+			if (selectPageSql.isSelectTrack()) {
+				if(selectPageSql.isPageable()) {
+					String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,selectPageSql);
 					metaObject.setValue("boundSql.sql", selectSql);
 				}
 				return invocation.proceed();

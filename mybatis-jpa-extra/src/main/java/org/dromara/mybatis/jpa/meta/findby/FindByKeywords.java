@@ -175,14 +175,12 @@ public class FindByKeywords {
 	static {
 		keywords = new ArrayList<>();
 
+		keywords.add(KEY.OrderBy);
+	
 		keywords.add(KEY.And);
 
 		keywords.add(KEY.Or);
-	
-		keywords.add(KEY.Is);
-	
-		keywords.add(KEY.Equals);
-
+		
 		keywords.add(KEY.Between);
 
 		keywords.add(KEY.LessThanEqual);
@@ -215,8 +213,6 @@ public class FindByKeywords {
 
 		keywords.add(KEY.Containing);
 
-		keywords.add(KEY.OrderBy);
-
 		keywords.add(KEY.NotIn);
 		
 		keywords.add(KEY.Not);
@@ -228,6 +224,13 @@ public class FindByKeywords {
 		keywords.add(KEY.False);
 
 		keywords.add(KEY.IgnoreCase);
+		
+		keywords.add(KEY.Is);
+		
+		keywords.add(KEY.Equals);
+		
+		
+
 	}
 	
 	public static String startKeyword(String key) {

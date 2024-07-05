@@ -88,7 +88,10 @@ public interface StudentsMapper extends IJpaMapper<Students> {
 	public List<Students> findByStdNameContaining(String stdName);
 	
 	@Select({})
-	public List<Students> findByStdNameOrderByStdName(String stdName);
+	public List<Students> findByStdGenderOrderByStdAge(String stdGender);
+	
+	@Select({})
+	public List<Students> findByStdGenderIsOrderByStdAge(String stdGender);
 	
 	@Select({})
 	public List<Students> findByStdMajorIn(String... stdMajors) ;

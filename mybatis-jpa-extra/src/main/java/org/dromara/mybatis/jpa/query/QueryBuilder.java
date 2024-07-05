@@ -156,7 +156,7 @@ public class QueryBuilder {
 
 	public static String buildOrderBy(Query query) {
 		StringBuffer orderBy = new StringBuffer();
-		for (Condition condition : query.getGroupBy()) {
+		for (Condition condition : query.getOrderBy()) {
 			if (orderBy.length() > 0) {
 				orderBy.append(" , ");
 			}

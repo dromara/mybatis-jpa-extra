@@ -113,8 +113,12 @@ public class StudentsService extends JpaService<Students> {
 		return getMapper().findByStdNameContaining(stdName);
 	}
 	
-	public List<Students> findByStdNameOrderByStdName(String stdName) {
-		return getMapper().findByStdNameOrderByStdName(stdName);
+	public List<Students> findByStdGenderOrderByStdAge(String stdGender) {
+		return getMapper().findByStdGenderOrderByStdAge(stdGender);
+	}
+	
+	public List<Students> findByStdNameIsOrderByStdName(String stdGender) {
+		return getMapper().findByStdGenderIsOrderByStdAge(stdGender);
 	}
 	
 	public List<Students> findByStdMajorIn(String... stdMajors) {
