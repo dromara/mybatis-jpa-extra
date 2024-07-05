@@ -66,7 +66,7 @@ public class Students extends JpaEntity implements Serializable {
 	@Column
 	@ColumnDefault("'M'")
 	private String stdGender;
-	@Column
+	@Column(name ="STDAGE")
 	private Integer stdAge;
 	@Column
 	private String stdMajor;

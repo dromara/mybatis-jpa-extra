@@ -53,20 +53,20 @@ public class FindBySqlBuilder {
 		FieldMetadata.buildColumnList(findByMapper.getEntityClass());
 		List<FieldColumnMapper> entityFields = FieldMetadata.getFieldsMap().get(findByMapper.getEntityClass().getSimpleName());
 		Query q = Query.builder();
-		String removedFindByName = findByMapper.getRemovedFindByName();
+		String fieldNameStart = findByMapper.getRemovedFindByName();
 		int argIndex = 0;
 		for(FieldColumnMapper fcm: entityFields) {
 			String fieldName = fcm.getFieldName();
 			String columnName = fcm.getColumnName();
 			String findByKeyword = "";
-			if(removedFindByName.startsWith(StringUtils.capitalize(fieldName))) {
+			if(fieldNameStart.startsWith(StringUtils.capitalize(fieldName))) {
 				logger.trace("FieldName : {} , capitalize {}" , fieldName,StringUtils.capitalize(fieldName));
-				if(removedFindByName.length() >= fieldName.length()) {
-					removedFindByName = removedFindByName.substring(fieldName.length());
-					findByKeyword = FindByKeywords.startKeyword(removedFindByName);
+				if(fieldNameStart.length() >= fieldName.length()) {
+					fieldNameStart = fieldNameStart.substring(fieldName.length());
+					findByKeyword = FindByKeywords.startKeyword(fieldNameStart);
 					if(StringUtils.isNotBlank(findByKeyword) && !KEY.OrderBy.equals(findByKeyword)) {
 						logger.trace("FindBy Keyword : {} " , findByKeyword);
-						removedFindByName = removedFindByName.substring(findByKeyword.length());
+						fieldNameStart = fieldNameStart.substring(findByKeyword.length());
 					}
 				}
 
@@ -85,19 +85,20 @@ public class FindBySqlBuilder {
 					}
 				}
 				
-				if(removedFindByName.length() <= fieldName.length() || StringUtils.isBlank(removedFindByName)) {
+				if(fieldNameStart.length() <= fieldName.length() || StringUtils.isBlank(fieldNameStart)) {
 					break;
 				}
 			}else {
-				findByKeyword = FindByKeywords.startKeyword(removedFindByName);
+				findByKeyword = FindByKeywords.startKeyword(fieldNameStart);
 				if(StringUtils.isNotBlank(findByKeyword) && KEY.OrderBy.equals(findByKeyword)) {
 					logger.trace("FindBy Keyword : {} " , findByKeyword);
-					removedFindByName = removedFindByName.substring(findByKeyword.length());
-					logger.trace("FindBy order by columnName : {} " , removedFindByName);
+					fieldNameStart = fieldNameStart.substring(findByKeyword.length());
+					logger.trace("FindBy order by columnName : {} " , fieldNameStart);
 					String orderBy = "asc";
-					if(removedFindByName.endsWith("Desc")) {
+					if(fieldNameStart.endsWith("Desc")) {
 						orderBy = "desc";
 					}
+					columnName = getColumnNameFromEntityFields(entityFields,fieldNameStart);
 					appendParameter(q,KEY.OrderBy,columnName,orderBy,null);
 					break;
 				}
@@ -110,6 +111,18 @@ public class FindBySqlBuilder {
 		}
 		logger.trace("selectSql : {}" , selectSql);
 		return selectSql.toString();
+	}
+	
+	public static String getColumnNameFromEntityFields(List<FieldColumnMapper> entityFields , String fieldNameStart) {
+		String columnName = "";
+		for(FieldColumnMapper fcm: entityFields) {
+			String fieldName = fcm.getFieldName();
+			if(fieldNameStart.startsWith(StringUtils.capitalize(fieldName))) {
+				columnName = fcm.getColumnName();
+				break;
+			}
+		}
+		return columnName;
 	}
 	
 	protected static void  appendParameter(Query q,String operator,String columnName, Object value, Object value1) {
