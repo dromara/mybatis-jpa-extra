@@ -18,9 +18,9 @@ package org.dromara.mybatis.jpa.crypto.impl;
 
 import java.sql.SQLException;
 
-import org.dromara.mybatis.jpa.crypto.ReciprocalUtils;
-import org.dromara.mybatis.jpa.crypto.SM4;
 import org.dromara.mybatis.jpa.crypto.SymmetricEncrypt;
+import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
+import org.dromara.mybatis.jpa.crypto.utils.SM4Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,7 @@ public class Sm4Encrypt implements SymmetricEncrypt{
     	String encodedPasswordString  = ciphers;
     	if(encodedPasswordString.startsWith(PREFIX)) {
     		try {
-				return SM4.decryptHex_ECB(encodedPasswordString.substring(PREFFIX_LENGTH), salt, SM4.Padding.PKCS7);
+				return SM4Utils.decryptHex_ECB(encodedPasswordString.substring(PREFFIX_LENGTH), salt, SM4Utils.Padding.PKCS7);
 			} catch (Exception e) {
 				logger.error("decryptHex_Sm4 Exception", e);
 			}
@@ -91,7 +91,7 @@ public class Sm4Encrypt implements SymmetricEncrypt{
 		}
 		
 		try {
-			return (PREFIX + SM4.encryptHex_ECB(plain.toString(), salt, SM4.Padding.PKCS7));
+			return (PREFIX + SM4Utils.encryptHex_ECB(plain.toString(), salt, SM4Utils.Padding.PKCS7));
 		} catch (Exception e) {
 			logger.error("encryptHex_Sm4 Exception", e);
 		}

@@ -90,6 +90,14 @@ public final class MybatisJpaContext {
 		}
 	}
 	
+	public static <T> T getBean(Class<T> requiredType){
+		if(jpaContext == null) {
+			return getApplicationContext().getBean(requiredType);
+		}else {
+			return jpaContext.getBean(requiredType);
+		}
+	}
+	
     public static <T> T getBean(String name, Class<T> requiredType) throws BeansException{
     	if(jpaContext == null) {
             return getApplicationContext().getBean(name,requiredType);

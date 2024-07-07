@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dromara.mybatis.jpa.crypto;
+package org.dromara.mybatis.jpa.crypto.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
@@ -37,7 +37,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import static java.util.Objects.isNull;
 
-public class SM4 {
+public class SM4Utils {
 
     private static final int DEFAULT_KEY_SIZE = 128;
     private static final String ALGORITHM = "SM4";

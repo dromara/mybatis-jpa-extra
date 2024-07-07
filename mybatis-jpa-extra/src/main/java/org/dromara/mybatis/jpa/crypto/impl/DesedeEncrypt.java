@@ -18,8 +18,8 @@ package org.dromara.mybatis.jpa.crypto.impl;
 
 import java.sql.SQLException;
 
-import org.dromara.mybatis.jpa.crypto.ReciprocalUtils;
 import org.dromara.mybatis.jpa.crypto.SymmetricEncrypt;
+import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -47,8 +47,7 @@ import org.slf4j.LoggerFactory;
 		@Signature(type = StatementHandler.class, method = "parameterize", args = { Statement.class }),
 		@Signature(type = ResultSetHandler.class, method = "handleResultSets", args = { Statement.class })  
 })
-public class AllStatementHandlerInterceptor extends
-		AbstractStatementHandlerInterceptor implements Interceptor {
+public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {
 	private static Logger logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {

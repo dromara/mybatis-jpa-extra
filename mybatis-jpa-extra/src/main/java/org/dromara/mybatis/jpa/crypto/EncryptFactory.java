@@ -24,6 +24,7 @@ import org.dromara.mybatis.jpa.crypto.impl.AesEncrypt;
 import org.dromara.mybatis.jpa.crypto.impl.DesEncrypt;
 import org.dromara.mybatis.jpa.crypto.impl.DesedeEncrypt;
 import org.dromara.mybatis.jpa.crypto.impl.Sm4Encrypt;
+import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

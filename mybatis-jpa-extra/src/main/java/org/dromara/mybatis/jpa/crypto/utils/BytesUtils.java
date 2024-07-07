@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.crypto;
+package org.dromara.mybatis.jpa.crypto.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

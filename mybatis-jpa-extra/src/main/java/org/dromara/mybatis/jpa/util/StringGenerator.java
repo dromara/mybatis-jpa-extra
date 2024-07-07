@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
-import org.dromara.mybatis.jpa.crypto.Base64Utils;
+import org.dromara.mybatis.jpa.crypto.utils.Base64Utils;
 
 
 public class StringGenerator {

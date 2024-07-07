@@ -23,8 +23,9 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.dromara.mybatis.jpa.crypto.EncryptFactory;
-import org.dromara.mybatis.jpa.crypto.ReciprocalUtils;
+import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
 import org.dromara.mybatis.jpa.dialect.Dialect;
+import org.dromara.mybatis.jpa.interceptor.FieldAutoFillInterceptor;
 import org.dromara.mybatis.jpa.interceptor.FieldEncryptInterceptor;
 import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
@@ -37,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * MyBatisJpaSessionFactoryBean
  */
 public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
-	
 	protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
 	
 	private List<Interceptor> interceptors = Collections.emptyList();
@@ -82,6 +82,7 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 		statementHandlerInterceptor.setDialectString(Dialect.getDialect(dialect));
 		config.addInterceptor(statementHandlerInterceptor);
 		config.addInterceptor(new FieldEncryptInterceptor());
+		config.addInterceptor(new FieldAutoFillInterceptor());
 		
 		if(config.getDefaultStatementTimeout() == null 
 				|| config.getDefaultStatementTimeout() == 0) {
@@ -94,6 +95,7 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 				logger.trace("MappedStatementName {} " ,mappedStatementName);
 			}
 		}
+		
 		return factory;
 	}
 	
