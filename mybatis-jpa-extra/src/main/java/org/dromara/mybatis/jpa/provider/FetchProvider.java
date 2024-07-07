@@ -54,7 +54,7 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetch(Map<String, Object>  parametersMap) {
 		T entity = (T)parametersMap.get(MapperMetadata.ENTITY);
 		FieldMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entity.getClass());
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
@@ -109,7 +109,7 @@ public class FetchProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(MapperMetadata.CONDITION);
 		FieldMetadata.buildColumnList(entityClass);
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entityClass.getSimpleName());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
@@ -118,7 +118,7 @@ public class FetchProvider <T extends JpaEntity>{
 			.SELECT(column).FROM(TableMetadata.getTableName(entityClass))
 			.WHERE("( " + QueryBuilder.build(condition) +" ) ");
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
@@ -138,7 +138,7 @@ public class FetchProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(MapperMetadata.CONDITION);
 		FieldMetadata.buildColumnList(entityClass);
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entityClass.getSimpleName());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
@@ -147,7 +147,7 @@ public class FetchProvider <T extends JpaEntity>{
 			.SELECT(column).FROM(TableMetadata.getTableName(entityClass))
 			.WHERE("( " + LambdaQueryBuilder.build(condition) +" ) ");
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(

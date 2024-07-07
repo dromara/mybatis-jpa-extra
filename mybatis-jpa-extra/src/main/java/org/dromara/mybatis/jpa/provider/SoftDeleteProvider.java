@@ -60,10 +60,10 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		}
 		
 		String keyValues = keyValue.substring(1).replace(";", "");//remove ;
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL()
 				.UPDATE(tableName)
@@ -95,7 +95,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		logger.trace("softDelete By Query \n{}" , query);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(tableName)
@@ -113,7 +113,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(tableName)

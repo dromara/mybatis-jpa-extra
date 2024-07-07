@@ -51,7 +51,7 @@ public class FindBySqlBuilder {
 	public static String translate(FindByMapper findByMapper,Object parameterObject) {
 		findByMapper.parseEntityClass();
 		FieldMetadata.buildColumnList(findByMapper.getEntityClass());
-		List<FieldColumnMapper> entityFields = FieldMetadata.getFieldsMap().get(findByMapper.getEntityClass().getSimpleName());
+		List<FieldColumnMapper> entityFields = FieldMetadata.getFieldsMap(findByMapper.getEntityClass());
 		Query q = Query.builder();
 		String fieldNameStart = findByMapper.getRemovedFindByName();
 		int argIndex = 0;
@@ -65,18 +65,31 @@ public class FindBySqlBuilder {
 					fieldNameStart = fieldNameStart.substring(fieldName.length());
 					findByKeyword = FindByKeywords.startKeyword(fieldNameStart);
 					if(StringUtils.isNotBlank(findByKeyword) && !KEY.OrderBy.equals(findByKeyword)) {
-						logger.trace("FindBy Keyword : {} " , findByKeyword);
 						fieldNameStart = fieldNameStart.substring(findByKeyword.length());
 					}
+					logger.trace("FindBy fieldNameStart : {} " , fieldNameStart);
+					if(StringUtils.isBlank(findByKeyword)){
+						findByKeyword = KEY.Equals;
+					}
+					logger.trace("FindBy Keyword : {} " , findByKeyword);
 				}
 
 				if(KEY.Between.equals(findByKeyword)) {
 					appendParameter(q,findByKeyword,columnName,((ParamMap<?>)parameterObject).get("arg0"),((ParamMap<?>)parameterObject).get("arg1"));
 					break;
 				}else if(parameterObject instanceof ParamMap<?> paramMap) {
+					
 					Object parameterValue = paramMap.get("arg"+(argIndex++ ));
 					logger.trace("FindBy getCanonicalName : {} " , parameterValue.getClass().getCanonicalName());
-					appendParameter(q,findByKeyword,columnName,parameterValue,null);
+					if(KEY.And.equals(findByKeyword)) {
+						appendParameter(q,KEY.Equals,columnName,parameterValue,null);
+						appendParameter(q,KEY.And,columnName,parameterValue,null);
+					}else if(KEY.Or.equals(findByKeyword)) {
+						appendParameter(q,KEY.Equals,columnName,parameterValue,null);
+						appendParameter(q,KEY.Or,columnName,parameterValue,null);
+					}else {
+						appendParameter(q,findByKeyword,columnName,parameterValue,null);
+					}
 				}else {
 					if(KEY.OrderBy.equals(findByKeyword)) {
 						appendParameter(q,KEY.Equals,columnName,parameterObject,null);
@@ -85,7 +98,8 @@ public class FindBySqlBuilder {
 					}
 				}
 				
-				if(fieldNameStart.length() <= fieldName.length() || StringUtils.isBlank(fieldNameStart)) {
+				if(fieldNameStart.length() < fieldName.length() || StringUtils.isBlank(fieldNameStart)) {
+					logger.trace("FindBy break");
 					break;
 				}
 			}else {

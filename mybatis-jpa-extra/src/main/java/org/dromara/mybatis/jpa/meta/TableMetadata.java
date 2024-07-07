@@ -67,7 +67,7 @@ public class TableMetadata {
 	 * @return table name
 	 */
 	public static String getTableName(Class<?> entityClass) {
-		String entityClassName = entityClass.getSimpleName();
+		String entityClassName = entityClass.getName();
 		logger.debug("entity Class Name {}" , entityClassName);
 		if(tableNameMap.containsKey(entityClassName)) {
 			return tableNameMap.get(entityClassName);
@@ -100,7 +100,7 @@ public class TableMetadata {
 			}
 			
 			if(tableName == null) {
-				tableName = entityClassName;
+				tableName = entityClass.getSimpleName();
 			}
 			
 			if(schema != null) {

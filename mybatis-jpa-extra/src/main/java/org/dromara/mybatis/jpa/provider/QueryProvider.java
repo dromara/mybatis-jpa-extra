@@ -68,7 +68,7 @@ public class QueryProvider<T extends JpaEntity> {
 	public String query(T entity) {
 		SQL sql = TableMetadata.buildSelect(entity.getClass());
 
-		for (FieldColumnMapper fieldColumnMapper : FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName())) {
+		for (FieldColumnMapper fieldColumnMapper : FieldMetadata.getFieldsMap(entity.getClass())) {
 			Object fieldValue = BeanUtil.get(entity, fieldColumnMapper.getFieldName());
 			String fieldType = fieldColumnMapper.getFieldType().toLowerCase();
 

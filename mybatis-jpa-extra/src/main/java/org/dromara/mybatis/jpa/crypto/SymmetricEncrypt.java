@@ -15,26 +15,16 @@
  */
  
 
-package org.dromara.mybatis.jpa.annotations;
+package org.dromara.mybatis.jpa.crypto;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.sql.SQLException;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+public interface SymmetricEncrypt {
 
-@Target( {FIELD, METHOD} )
-@Retention( RUNTIME )
-public @interface Encrypted {
-	/**
-	 * @return Encrypt algorithm , SM4 , AES , DES , DESede
-	 */
-	String algorithm() default "AES" ;
+	String decrypt(String ciphers) throws SQLException ;
 	
-	/**
-	 * When true try to use DB encryption rather than local java encryption.
-	 */
-	boolean dbEncrypt() default false;
+	String encrypt(String simple) throws SQLException ;
+	
+	public void setSalt(String salt) ;
 	
 }

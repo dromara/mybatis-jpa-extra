@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.meta;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.dromara.mybatis.jpa.crypto.EncryptFactory;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +77,8 @@ public class MapperMetadata{
 
 	static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
 	
+	static EncryptFactory encryptFactory;
+	
 	/**
 	 * Case Converter
 	 * @param name
@@ -115,4 +118,13 @@ public class MapperMetadata{
 		MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
 		logger.debug("Identifier Generator Factory {}",identifierGeneratorFactory);
 	}
+
+	public static EncryptFactory getEncryptFactory() {
+		return encryptFactory;
+	}
+
+	public static void setEncryptFactory(EncryptFactory encryptFactory) {
+		MapperMetadata.encryptFactory = encryptFactory;
+	}
+	
 }

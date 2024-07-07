@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.Encrypted;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.annotations.SoftDelete;
 import org.slf4j.Logger;
@@ -40,8 +41,8 @@ public class FieldMetadata {
 	
 	static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
 	
-	public static  FieldColumnMapper getIdColumn(String  classSimpleName) {
-		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+	public static  FieldColumnMapper getIdColumn(Class<?> entityClass) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(entityClass.getName());
 		FieldColumnMapper idFieldColumnMapper = null;
 		for (int i = 0; i < listFields.size(); i++) {
 			if (listFields.get(i).isIdColumn()) {
@@ -52,8 +53,8 @@ public class FieldMetadata {
 		return idFieldColumnMapper;
 	}
 	
-	public static  FieldColumnMapper getLogicColumn(String  classSimpleName) {
-		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+	public static  FieldColumnMapper getLogicColumn(Class<?> entityClass) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(entityClass.getName());
 		FieldColumnMapper logicColumnMapper = null;
 		for (int i = 0; i < listFields.size(); i++) {
 			if (listFields.get(i).isLogicDelete()) {
@@ -64,8 +65,8 @@ public class FieldMetadata {
 		return logicColumnMapper;
 	}
 	
-	public static  FieldColumnMapper getPartitionKey(String  classSimpleName) {
-		List<FieldColumnMapper> listFields = fieldsMap.get(classSimpleName);
+	public static  FieldColumnMapper getPartitionKey(Class<?> entityClass) {
+		List<FieldColumnMapper> listFields = fieldsMap.get(entityClass.getName());
 		FieldColumnMapper partitionKeyColumnMapper = null;
 		for (FieldColumnMapper column : listFields) {
 			if (column.getPartitionKey() != null) {
@@ -85,7 +86,7 @@ public class FieldMetadata {
 	public static String selectColumnMapper(Class<?> entityClass) {
 		StringBuffer selectColumn = new StringBuffer(TableMetadata.SELECT_TMP_TABLE + ".* ");
 		int columnCount = 0;
-		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getSimpleName())) {
+		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
 			columnCount ++;
 			//不同的属性和数据库字段不一致的需要进行映射
 			if(!fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
@@ -105,15 +106,14 @@ public class FieldMetadata {
 	 * @param entityClass
 	 */
 	public static void buildColumnList(Class<?> entityClass) {
-		if (fieldsMap.containsKey(entityClass.getSimpleName())) {
-			//run one time
+		String entityClassName = entityClass.getName();
+		logger.trace("entityClass {}" , entityClass);
+		//run one time
+		if (fieldsMap.containsKey(entityClassName)) {
 			return;
 		}
-		
-		logger.trace("entityClass {}" , entityClass);
-		
 		Field[] fields = entityClass.getDeclaredFields();
-		List<FieldColumnMapper>fieldColumnMapperList=new ArrayList<>(fields.length);
+		List<FieldColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
 
 		for (Field field : fields) {
 			//skip Transient field
@@ -122,23 +122,19 @@ public class FieldMetadata {
 			}
 			
 			if (field.isAnnotationPresent(Column.class)) {
-				FieldColumnMapper fieldColumnMapper = new FieldColumnMapper();
-				fieldColumnMapper.setFieldName( field.getName());
-				fieldColumnMapper.setFieldType(field.getType().getSimpleName());
 				String columnName = "";
 				Column columnAnnotation = field.getAnnotation(Column.class);
-				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
 				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
 				    columnName = columnAnnotation.name();
 				} else {
 					columnName = field.getName();
 				}
-				
 				columnName = MapperMetadata.tableColumnCaseConverter(columnName);
-				
 				columnName = MapperMetadata.tableColumnEscape(columnName);
 				
-				fieldColumnMapper.setColumnName(columnName);
+				FieldColumnMapper fieldColumnMapper = new FieldColumnMapper(
+									field,field.getName(),field.getType().getSimpleName(),columnName);
+				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
 				
 				if(field.isAnnotationPresent(Id.class)) {
 					fieldColumnMapper.setIdColumn(true);
@@ -166,18 +162,25 @@ public class FieldMetadata {
 					fieldColumnMapper.setSoftDelete(columnLogic);
 					fieldColumnMapper.setLogicDelete(true);
 				}
+				
+				if (field.isAnnotationPresent(Encrypted.class)) {
+					Encrypted columnEncrypted = field.getAnnotation(Encrypted.class);
+					fieldColumnMapper.setEncrypted(true);
+					fieldColumnMapper.setEncryptedAnnotation(columnEncrypted);
+				}
+				
 				logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
 				fieldColumnMapperList.add(fieldColumnMapper);
 			}
 		}
 		
-		fieldsMap.put(entityClass.getSimpleName(), fieldColumnMapperList);
+		fieldsMap.put(entityClassName, fieldColumnMapperList);
 		logger.trace("fieldsMap : {}" , fieldsMap);
 
 	}
 
-	public static ConcurrentMap<String, List<FieldColumnMapper>> getFieldsMap() {
-		return fieldsMap;
+	public static List<FieldColumnMapper> getFieldsMap(Class<?> entityClass) {
+		return fieldsMap.get(entityClass.getName());
 	}
 
 }

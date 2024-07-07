@@ -53,8 +53,8 @@ public class DeleteProvider <T extends JpaEntity>{
 		
 		String idValue = (String) parametersMap.get(MapperMetadata.PARAMETER_ID);
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn((entityClass).getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL().DELETE_FROM(tableName);
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
@@ -97,8 +97,8 @@ public class DeleteProvider <T extends JpaEntity>{
 		String keyValues = keyValue.substring(1).replace(";", "");
 		
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL().DELETE_FROM(tableName);
 		

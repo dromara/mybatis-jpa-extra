@@ -52,7 +52,7 @@ public class FindProvider <T extends JpaEntity>{
 		}
 		
 		SQL sql=  TableMetadata.buildSelect(entityClass);
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
@@ -143,8 +143,8 @@ public class FindProvider <T extends JpaEntity>{
 		//remove ';'
 		String idsValues = keyValue.substring(1).replace(";", "");
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((parameterEntityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(parameterEntityClass);
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass);
 		
 		SQL sql = TableMetadata.buildSelect(parameterEntityClass);
 		

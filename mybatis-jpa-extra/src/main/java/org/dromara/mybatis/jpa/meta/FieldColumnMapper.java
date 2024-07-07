@@ -17,7 +17,10 @@
 
 package org.dromara.mybatis.jpa.meta;
 
+import java.lang.reflect.Field;
+
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.Encrypted;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.annotations.SoftDelete;
 
@@ -26,6 +29,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Temporal;
 
 public class FieldColumnMapper {
+	
+	private Field 			field;
 	/**
 	 * class field name
 	 */
@@ -47,6 +52,8 @@ public class FieldColumnMapper {
 	
 	private boolean 		logicDelete	=	false;
 	
+	private boolean         encrypted	=	false;
+	
 	private GeneratedValue 	generatedValue;
 	
 	private	Column 			columnAnnotation;
@@ -57,17 +64,28 @@ public class FieldColumnMapper {
 	
 	private PartitionKey    partitionKey;
 	
-	private SoftDelete     softDelete;
+	private SoftDelete     	softDelete;
+	
+	private Encrypted     	encryptedAnnotation;
 	
 	public FieldColumnMapper() {
 		
 	}
 	
-	public FieldColumnMapper(String fieldName, String fieldType, String columnName) {
+	public FieldColumnMapper(Field field,String fieldName, String fieldType, String columnName) {
 		super();
+		this.field = field;
 		this.fieldName = fieldName;
 		this.fieldType = fieldType;
 		this.columnName = columnName;
+	}
+	
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
 	}
 
 	public String getFieldName() {
@@ -166,6 +184,22 @@ public class FieldColumnMapper {
 		this.softDelete = softDelete;
 	}
 
+	public boolean isEncrypted() {
+		return encrypted;
+	}
+
+	public void setEncrypted(boolean encrypted) {
+		this.encrypted = encrypted;
+	}
+
+	public Encrypted getEncryptedAnnotation() {
+		return encryptedAnnotation;
+	}
+
+	public void setEncryptedAnnotation(Encrypted encryptedAnnotation) {
+		this.encryptedAnnotation = encryptedAnnotation;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -177,12 +211,26 @@ public class FieldColumnMapper {
 		builder.append(columnName);
 		builder.append(", idColumn=");
 		builder.append(idColumn);
+		builder.append(", generated=");
+		builder.append(generated);
+		builder.append(", logicDelete=");
+		builder.append(logicDelete);
+		builder.append(", encrypted=");
+		builder.append(encrypted);
 		builder.append(", generatedValue=");
 		builder.append(generatedValue);
 		builder.append(", columnAnnotation=");
 		builder.append(columnAnnotation);
 		builder.append(", temporalAnnotation=");
 		builder.append(temporalAnnotation);
+		builder.append(", columnDefault=");
+		builder.append(columnDefault);
+		builder.append(", partitionKey=");
+		builder.append(partitionKey);
+		builder.append(", softDelete=");
+		builder.append(softDelete);
+		builder.append(", encryptedAnnotation=");
+		builder.append(encryptedAnnotation);
 		builder.append("]");
 		return builder.toString();
 	}

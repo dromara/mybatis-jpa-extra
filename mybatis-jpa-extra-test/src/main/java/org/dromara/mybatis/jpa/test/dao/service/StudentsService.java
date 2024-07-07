@@ -148,4 +148,9 @@ public class StudentsService extends JpaService<Students> {
 	public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass) {
 		return getMapper().findByStdMajorAndStdClass(stdMajor,stdClass);
 	}
+	
+	
+	public int updatePassword(Students std) {
+		return getMapper().updatePassword(std);
+	}
 }

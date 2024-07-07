@@ -22,6 +22,7 @@ package org.dromara.mybatis.jpa.test.dao.persistence;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.test.entity.Students;
 
@@ -113,4 +114,8 @@ public interface StudentsMapper extends IJpaMapper<Students> {
 	
 	@Select({})
 	public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass);
+	
+	
+	@Update({"update Students set password = #{password} where stdNo = #{stdNo}"})
+	public int updatePassword(Students std);
 }

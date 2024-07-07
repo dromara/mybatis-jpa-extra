@@ -47,7 +47,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	 */
 	public String update(T entity) {
 		FieldMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap().get(entity.getClass().getSimpleName());
+		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entity.getClass());
 		
 		SQL sql = new SQL()
 			.UPDATE(TableMetadata.getTableName(entity.getClass()));

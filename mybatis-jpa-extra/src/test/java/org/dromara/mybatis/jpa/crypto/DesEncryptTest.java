@@ -15,26 +15,23 @@
  */
  
 
-package org.dromara.mybatis.jpa.annotations;
+package org.dromara.mybatis.jpa.crypto;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.sql.SQLException;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.dromara.mybatis.jpa.crypto.impl.DesEncrypt;
+import org.junit.jupiter.api.Test;
 
-@Target( {FIELD, METHOD} )
-@Retention( RUNTIME )
-public @interface Encrypted {
-	/**
-	 * @return Encrypt algorithm , SM4 , AES , DES , DESede
-	 */
-	String algorithm() default "AES" ;
-	
-	/**
-	 * When true try to use DB encryption rather than local java encryption.
-	 */
-	boolean dbEncrypt() default false;
-	
+public class DesEncryptTest {
+
+	@Test
+	void encrypt() throws SQLException{
+		SymmetricEncrypt se = new DesEncrypt();
+		String simple = "shimingxy";
+		String ciphers = se.encrypt(simple);
+		
+		System.out.println(ciphers);
+		
+		System.out.println(se.decrypt(ciphers));
+	}
 }

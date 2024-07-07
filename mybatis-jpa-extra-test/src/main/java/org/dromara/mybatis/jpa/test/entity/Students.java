@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
+import org.dromara.mybatis.jpa.annotations.Encrypted;
 import org.dromara.mybatis.jpa.annotations.SoftDelete;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 
@@ -62,6 +63,9 @@ public class Students extends JpaEntity implements Serializable {
 	@Column
 	private String stdNo;
 	@Column
+	@Encrypted
+	private String password;
+	@Column
 	private String stdName;
 	@Column
 	@ColumnDefault("'M'")
@@ -97,6 +101,14 @@ public class Students extends JpaEntity implements Serializable {
 
 	public void setStdNo(String stdNo) {
 		this.stdNo = stdNo;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getStdName() {

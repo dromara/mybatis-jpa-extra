@@ -47,8 +47,8 @@ public class GetProvider <T extends JpaEntity>{
 			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.GET_SQL);
 		}
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey((entityClass).getSimpleName());
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass.getSimpleName());
+		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
+		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
@@ -64,7 +64,7 @@ public class GetProvider <T extends JpaEntity>{
 					partitionKeyValue));
 		}
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn((entityClass).getSimpleName());
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
