@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.id;
 
+import org.dromara.mybatis.jpa.id.impl.UUIDGenerator;
 import org.junit.jupiter.api.Test;
 
 public class UUIDGeneratorTest {

@@ -20,11 +20,29 @@ package org.dromara.mybatis.jpa.meta.findby;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FindByMetadata {
+	private static final Logger logger 	= 	LoggerFactory.getLogger(FindByMetadata.class);
+	
 	static ConcurrentMap<String, FindByMapper>findByMapperMap 	= 	new ConcurrentHashMap<>();
 
-	public static ConcurrentMap<String, FindByMapper> getFindByMapperMap() {
+	public static ConcurrentMap<String, FindByMapper> getFindByMapperMap1() {
 		return findByMapperMap;
+	}
+	
+	public static FindByMapper getFindByMapper(String mappedStatementId) {
+		return findByMapperMap.get(mappedStatementId);
+	}
+	
+	public static boolean containsKey(String mappedStatementId) {
+		return findByMapperMap.containsKey(mappedStatementId);
+	}
+	
+	public static FindByMapper put(String mappedStatementId,FindByMapper findByMapper) {
+		logger.trace("mappedStatementId {}  ==> findByMapper {}" , mappedStatementId,findByMapper);
+		return findByMapperMap.put(mappedStatementId,findByMapper);
 	}
 	
 }

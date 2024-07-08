@@ -15,9 +15,11 @@
  */
  
 
-package org.dromara.mybatis.jpa.id;
+package org.dromara.mybatis.jpa.id.impl;
 
 import java.util.UUID;
+
+import org.dromara.mybatis.jpa.id.IdentifierGenerator;
 
 public class UUIDGenerator implements IdentifierGenerator{
 

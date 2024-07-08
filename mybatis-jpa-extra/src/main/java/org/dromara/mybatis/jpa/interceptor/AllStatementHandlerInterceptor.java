@@ -71,7 +71,6 @@ public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInte
 	public void setProperties(Properties properties) {
 	}
 	
-
 	private Object prepare(Invocation invocation) throws Throwable {
 		StatementHandler statement = getStatementHandler(invocation);
 		if (statement instanceof SimpleStatementHandler 

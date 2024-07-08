@@ -25,7 +25,6 @@ public class JpaPageSqlCache {
 	
 	BoundSql boundSql;
 	
-	
 	public JpaPageSqlCache(String sql, BoundSql boundSql) {
 		super();
 		this.sql = sql;

@@ -45,6 +45,4 @@ public interface IJpaFindMapper<T> {
 							@Param (MapperMetadata.QUERY_ARGS) 		Object[] 	args, 
 							@Param (MapperMetadata.QUERY_ARGTYPES) 	int[] 		argTypes);
 	
-	
-	
 }

@@ -42,9 +42,7 @@ public class FieldDecryptInterceptor  implements Interceptor {
 	@SuppressWarnings("unchecked")
 	@Override
     public Object intercept(Invocation invocation) throws Throwable {
-
         Object dataSet = invocation.proceed();
-
         if (dataSet instanceof List) {
             return intercept((List<Object>) dataSet);
         }
@@ -70,7 +68,6 @@ public class FieldDecryptInterceptor  implements Interceptor {
 	            encryptField.getField().set(entity, plainValue);
         	}
         }
-
     }
 
     private String decrypt(String cipherValue,String algorithm) throws SQLException {

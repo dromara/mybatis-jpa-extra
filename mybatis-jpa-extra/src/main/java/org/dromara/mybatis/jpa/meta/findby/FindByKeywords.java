@@ -25,6 +25,9 @@ import java.util.List;
  */
 public class FindByKeywords {
 
+	/**
+	 * keyword list
+	 */
 	static List<String> keywords;
 	/**
 	 * findBy
@@ -229,8 +232,6 @@ public class FindByKeywords {
 		
 		keywords.add(KEY.Equals);
 		
-		
-
 	}
 	
 	public static String startKeyword(String key) {

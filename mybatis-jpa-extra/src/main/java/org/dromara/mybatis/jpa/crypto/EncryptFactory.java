@@ -28,6 +28,9 @@ import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @Encrypted just SM4 , AES , DES , DESede
+ */
 public class EncryptFactory {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(EncryptFactory.class);
 	
@@ -58,6 +61,6 @@ public class EncryptFactory {
 	}
 	
 	public SymmetricEncrypt getEncryptor(String algorithm) {
-		return encryptor.get(algorithm);
+		return encryptor.get(algorithm.toLowerCase());
 	}
 }

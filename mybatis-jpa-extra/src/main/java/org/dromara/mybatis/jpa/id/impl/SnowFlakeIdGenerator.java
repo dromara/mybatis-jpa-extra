@@ -15,12 +15,14 @@
  */
  
 
-package org.dromara.mybatis.jpa.id;
+package org.dromara.mybatis.jpa.id.impl;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.dromara.mybatis.jpa.id.IdentifierGenerator;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.ISOChronology;
 import org.slf4j.Logger;

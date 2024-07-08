@@ -38,12 +38,12 @@ public class FindBySqlBuilder {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(FindBySqlBuilder.class);
 
 	public static void parse(String mappedStatementId){
-		if(!FindByMetadata.getFindByMapperMap().containsKey(mappedStatementId)){
+		if(!FindByMetadata.containsKey(mappedStatementId)){
 			FindByMapper findByMapper = new FindByMapper(mappedStatementId);
 			findByMapper.parseFindBy();
 			if(findByMapper.isFindBy()) {
-				logger.trace("mappedStatementId {}  ==> findByMapper {}" , mappedStatementId,findByMapper);
-				FindByMetadata.getFindByMapperMap().put(mappedStatementId, findByMapper);
+				
+				FindByMetadata.put(mappedStatementId, findByMapper);
 			}
 		}
 	}

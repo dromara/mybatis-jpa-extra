@@ -20,6 +20,8 @@ package org.dromara.mybatis.jpa.id;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.dromara.mybatis.jpa.id.impl.SnowFlakeIdGenerator;
+import org.dromara.mybatis.jpa.id.impl.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
