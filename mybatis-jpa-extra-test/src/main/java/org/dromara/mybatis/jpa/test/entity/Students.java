@@ -57,11 +57,10 @@ public class Students extends JpaEntity implements Serializable {
 	@Id
 	@Column
 	@GeneratedValue
-	// @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	// @GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
 	private String id;
 	@Column
 	private String stdNo;
+	//Encrypted default is AES , support SM4 , AES , DES , DESede
 	@Column
 	@Encrypted
 	private String password;
@@ -82,7 +81,6 @@ public class Students extends JpaEntity implements Serializable {
 	@GeneratedValue
 	@Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
-	
 	@SoftDelete
 	@Column(name ="deleted")
 	private char deleted;

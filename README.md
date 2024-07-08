@@ -5,9 +5,13 @@
     
 2.增强**SELECT分页**查询;
     
-3.**链式**Query查询条件构造器;
+3.**链式**Query查询条件构造器；支持Lambda 形式调用，方便编写各类查询条件
 
-4.数据库支持
+4.@Encrypted注解轻松实现字段数据加密和解密;
+
+5.字段数据自动填充功能;
+
+6.数据库支持
 
 |  数据库        |  支持 |
 | ---           | ---   |
@@ -25,12 +29,13 @@
  * @Entity
  * @Table
  * @Column
+ * @ColumnDefault
  * @Id
  * @GeneratedValue
+ * @Encrypted
  * @Transient 
  * @Temporal
  * @PartitionKey
- * @ColumnDefault
  * @SoftDelete
 
 
@@ -56,6 +61,9 @@ public class Students extends JpaEntity implements Serializable{
     private String id;
     @Column
     private String stdNo;
+    @Column
+    @Encrypted
+	private String password;
     @Column
     private String stdName;
     @Column
@@ -218,6 +226,144 @@ public class Students extends JpaEntity implements Serializable{
     }
 ```
 
+
+## 2.6、 Lambda查询
+```java
+
+    //根据Lambda链式条件构造器查询
+    //WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
+    service.query(
+				new LambdaQuery<Students>().eq(Students::getStdMajor, "政治")
+                                     .and().gt(Students::getStdAge, Integer.valueOf(30))
+                                     .and().in(Students::getStdMajor, new Object[]{"政治","化学"})
+				                     .or(
+                                            new LambdaQuery<Students>().eq(Students::getStdName, "周瑜")
+                                                                  .or().eq(Students::getStdName, "吕蒙")
+                                        )
+                );
+
+    //根据Lambda链式条件构造器分页查询
+    //where stdMajor = '政治' and stdAge > 30
+	JpaPage page = new JpaPage();
+	page.setPageSize(20);
+    page.setPageable(true);
+	LambdaQuery<Students> lambdaQuery =new LambdaQuery<>();
+	lambdaQuery.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30));
+	JpaPageResults<Students>  results = service.fetch(page,lambdaQuery);
+
+    ...
+
+```
+
+## 2.7、FindBy查询
+
+实现spring data jpa的findBy功能
+
+```java
+    //Mapper接口定义
+    //where x.stdNo = ?1
+    @Select({})
+	public List<Students> findByStdNo(String stdNo);
+	//where x.stdNo = ?1
+	@Select({})
+	public List<Students> findByStdNoIs(String stdNo);
+	//where x.stdNo = ?1
+	@Select({})
+	public List<Students> findByStdNoEquals(String stdNo);
+	//where x.stdAge between ?1 and ?2
+	@Select({})
+	public List<Students> findByStdAgeBetween(int ageStart,int ageEnd);
+	//where x.stdAge < ?1
+	@Select({})
+	public List<Students> findByStdAgeLessThan(int ageLessThan);
+	//where x.stdAge <= ?1
+	@Select({})
+	public List<Students> findByStdAgeLessThanEqual(int ageLessThanEqual);
+	//where x.stdAge > ?1
+	@Select({})
+	public List<Students> findByStdAgeAfter(int ageAfter);
+	//where x.stdAge < ?1
+	@Select({})
+	public List<Students> findByStdAgeBefore(int ageBefore);
+	//where x.images is null
+	@Select({})
+	public List<Students> findByImagesNull();
+	//where x.images is null
+	@Select({})
+	public List<Students> findByImagesIsNull();
+	//where x.images is not null
+	@Select({})
+	public List<Students> findByImagesIsNotNull();
+	//where x.images is not null
+	@Select({})
+	public List<Students> findByImagesNotNull();
+	//where x.stdName like ?1
+	@Select({})
+	public List<Students> findByStdNameLike(String stdName);
+	//where x.stdName not like ?1
+	@Select({})
+	public List<Students> findByStdNameNotLike(String stdName);
+	//where x.stdName like ?1 (parameter bound with appended %)
+	@Select({})
+	public List<Students> findByStdNameStartingWith(String stdName);
+	//where x.stdName like ?1 (parameter bound with prepended %)
+	@Select({})
+	public List<Students> findByStdNameEndingWith(String stdName);
+	//where x.stdName like ?1 (parameter bound wrapped in %)
+	@Select({})
+	public List<Students> findByStdNameContaining(String stdName);
+	//where x.stdGender = ?1 order by x.stdAge desc
+	@Select({})
+	public List<Students> findByStdGenderOrderByStdAge(String stdGender);
+	//where x.stdGender = ?1 order by x.stdAge desc
+	@Select({})
+	public List<Students> findByStdGenderIsOrderByStdAge(String stdGender);
+	//where x.stdMajors in ?1
+	@Select({})
+	public List<Students> findByStdMajorIn(String... stdMajors) ;
+	//where x.stdMajors not in ?1
+	@Select({})
+	public List<Students> findByStdMajorNotIn(List<String> stdMajors);
+	//where x.deleted = true
+	@Select({})
+	public List<Students> findByDeletedTrue();
+	//where x.deleted = false
+	@Select({})
+	public List<Students> findByDeletedFalse();
+	//where UPPER(x.stdGender) = UPPER(?1)
+	@Select({})
+	public List<Students> findByStdGenderIgnoreCase(String stdGender);
+	//where x.stdNo <> ?1
+	@Select({})
+	public List<Students> findByStdNoNot(String stdNo);
+	//where x.lastname = ?1 and x.firstname = ?2
+	@Select({})
+	public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass);
+```
+
+## 2.8、默认数据自动填充
+
+继承FieldAutoFillHandler，实现insertFill和updateFill函数，可以完成租户字段，创建人、创建时间、修改人、修改时间等默认字段的填充
+
+```java
+
+import org.apache.ibatis.reflection.MetaObject;
+import org.dromara.mybatis.jpa.handler.FieldAutoFillHandler;
+
+public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
+
+	@Override
+	public void insertFill(MetaObject metaObject) {
+		this.setFieldValue(metaObject , "stdNo", "AutoFill_Insert");
+	}
+
+	@Override
+	public void updateFill(MetaObject metaObject) {
+		this.setFieldValue(metaObject , "stdNo", "AutoFill_Update");
+	}
+}
+
+```
 ## 3、mapper配置
 
 ```xml
@@ -258,10 +404,7 @@ public class Students extends JpaEntity implements Serializable{
         FROM ROLES 
         <include refid="sql_condition"/>
     </select>
-  
-    <delete id="delete" parameterType="Students" >
-        DELETE FROM STUDENTS WHERE ID=#{id}
-    </delete>
+
 ```
 
 ##  4、SpringBoot配置

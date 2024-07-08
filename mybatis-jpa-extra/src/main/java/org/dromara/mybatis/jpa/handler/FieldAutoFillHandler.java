@@ -29,7 +29,7 @@ public abstract class FieldAutoFillHandler {
 	public abstract void updateFill(MetaObject metaObject) ;
 	
 	
-	protected FieldAutoFillHandler setFieldValue(String field, Object value, MetaObject metaObject) {
+	protected FieldAutoFillHandler setFieldValue(MetaObject metaObject , String field, Object value) {
         if (Objects.nonNull(value) && metaObject.hasSetter(field)) {
             metaObject.setValue(field, value);
         }

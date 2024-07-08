@@ -23,13 +23,12 @@ public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
-		// TODO Auto-generated method stub
-		this.setFieldValue("stdNo", "AutoFill_1", metaObject);
+		this.setFieldValue(metaObject , "stdNo", "AutoFill_Insert");
 	}
 
 	@Override
 	public void updateFill(MetaObject metaObject) {
-		// TODO Auto-generated method stub
+		this.setFieldValue(metaObject , "stdNo", "AutoFill_Update");
 		
 	}
 
