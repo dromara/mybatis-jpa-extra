@@ -70,22 +70,25 @@ public class SelectPageSqlBuilder {
 	
 	protected static JpaPage getJpaPageParameter(Object parameterObject) {
 		JpaPage page = null;
-		if((parameterObject instanceof JpaPage parameterObjectPage)) {
-			page = parameterObjectPage;
-		}else if((parameterObject instanceof ParamMap)
-				&& ((ParamMap<?>)parameterObject).containsKey(MapperMetadata.PAGE)) {
-			page = (JpaPage)((ParamMap<?>)parameterObject).get(MapperMetadata.PAGE);
-		}else {
-			try {
-				for (Map.Entry<String,?> entry : ((ParamMap<?>)parameterObject).entrySet()){
-					if(entry.getValue() instanceof JpaPage jpaPage) {
-						page = jpaPage;
-						break;
+		if((parameterObject instanceof JpaPage jpaPage)) {
+			page = jpaPage;
+		}else if(parameterObject instanceof ParamMap<?> paramMap) {
+			if(paramMap.containsKey(MapperMetadata.PAGE)) {
+				page = (JpaPage)paramMap.get(MapperMetadata.PAGE);
+			}else {
+				try {
+					for (Map.Entry<String,?> entry : paramMap.entrySet()){
+						if(entry.getValue() instanceof JpaPage jpaPage) {
+							page = jpaPage;
+							break;
+						}
 					}
+				}catch(Exception e) {
+					logger.error("Exception",e);
 				}
-			}catch(Exception e) {
-				logger.error("Exception",e);
 			}
+		}else {
+			//is object not have JpaPage , do nothing
 		}
 		return page;
 	}

@@ -44,8 +44,13 @@ public class FieldAutoFillInterceptor  implements Interceptor {
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		if(!isAutoFill) {
-			fieldAutoFillHandler = MybatisJpaContext.getBean(FieldAutoFillHandler.class);
-			logger.debug("get bean by fieldAutoFillHandler class");
+			try {
+				isAutoFill = true;
+				fieldAutoFillHandler = MybatisJpaContext.getBean(FieldAutoFillHandler.class);
+				logger.debug("get bean by fieldAutoFillHandler class");
+			}catch(Exception e){
+				logger.debug("get bean by fieldAutoFillHandler Exception",e);
+			}
 		}
 		if(fieldAutoFillHandler != null) {
 			MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];

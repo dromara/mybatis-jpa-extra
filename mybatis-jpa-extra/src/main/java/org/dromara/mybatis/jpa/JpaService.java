@@ -264,6 +264,8 @@ public  class  JpaService <T extends JpaEntity> {
 		return Collections.emptyList();
 	}
 	
+
+	
 	/**
 	 *  query list entity by Query 
 	 * @param entity
@@ -277,6 +279,8 @@ public  class  JpaService <T extends JpaEntity> {
 		}
 		return Collections.emptyList();
 	}
+	
+
 	
 	/**
 	 *  query list entity by LambdaQuery 
@@ -404,7 +408,7 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 * query one entity by entity id
+	 * get one entity by entity id
 	 * @param id
 	 * @return
 	 */
@@ -419,7 +423,7 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 * query one entity by entity id
+	 * get one entity by entity id
 	 * @param id
 	 * @param partitionKey
 	 * @return T
@@ -430,6 +434,51 @@ public  class  JpaService <T extends JpaEntity> {
 			return  getMapper().get(this.entityClass,id,partitionKey);
 		} catch(Exception e) {
 			logger.error("get Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 *  get one entity by entity 
+	 * @param entity
+	 * @return
+	 */
+	public T get(T entity) {
+		try {
+			List<T> queryList = query(entity);
+			return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);
+		} catch(Exception e) {
+			logger.error("get by entity Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 *  get entity by Query 
+	 * @param entity
+	 * @return
+	 */
+	public T get(Query query) {
+		try {
+			List<T> queryList = query(query);
+			return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);
+		} catch(Exception e) {
+			logger.error("get by Query Exception " , e);
+		}
+		return null;
+	}
+	
+	/**
+	 *  get  entity by LambdaQuery 
+	 * @param entity
+	 * @return
+	 */
+	public T get(LambdaQuery<T> lambdaQuery) {
+		try {
+			List<T> queryList = query(lambdaQuery);
+			return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);
+		} catch(Exception e) {
+			logger.error("get by LambdaQuery Exception " , e);
 		}
 		return null;
 	}

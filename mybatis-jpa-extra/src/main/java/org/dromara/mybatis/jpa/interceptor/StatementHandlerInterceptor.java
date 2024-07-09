@@ -78,7 +78,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			}
 			
 			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("mappedStatement");
-			FindBySqlBuilder.parse(mappedStatement.getId());
+			FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
 			FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
 			if(findByMapper != null && findByMapper.isFindBy()) {
 				metaObject.setValue("boundSql.sql", FindBySqlBuilder.translate(findByMapper,parameterObject));

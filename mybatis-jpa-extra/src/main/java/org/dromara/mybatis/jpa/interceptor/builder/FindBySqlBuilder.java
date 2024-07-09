@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.mapping.BoundSql;
 import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
 import org.dromara.mybatis.jpa.meta.FieldMetadata;
 import org.dromara.mybatis.jpa.meta.TableMetadata;
@@ -37,12 +38,11 @@ import org.slf4j.LoggerFactory;
 public class FindBySqlBuilder {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(FindBySqlBuilder.class);
 
-	public static void parse(String mappedStatementId){
-		if(!FindByMetadata.containsKey(mappedStatementId)){
+	public static void parse(String mappedStatementId,BoundSql boundSql){
+		if(StringUtils.isNotBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId)){
 			FindByMapper findByMapper = new FindByMapper(mappedStatementId);
 			findByMapper.parseFindBy();
 			if(findByMapper.isFindBy()) {
-				
 				FindByMetadata.put(mappedStatementId, findByMapper);
 			}
 		}
