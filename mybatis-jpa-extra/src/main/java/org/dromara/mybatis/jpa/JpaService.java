@@ -208,107 +208,7 @@ public  class  JpaService <T extends JpaEntity> {
 		}
 		return null;
 	}
-	
-	protected void beforePageResults(JpaPage page) {
-		page.setPageSelectId(page.generateId());
-		page.setStartRow(calculateStartRow(page.getPageNumber() ,page.getPageSize()));
-		page.setPageable(true);
-	}
-	
-	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
-		page.setPageable(false);
-		Integer total = resultslist.size();
-		
-		Integer totalCount = 0;
-		if(page.getPageNumber() == 1 && total < page.getPageSize()) {
-			totalCount = total;
-		}else {
-			totalCount = parseCount(getMapper().fetchCount(page));
-		}
-		
-		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),total,totalCount,resultslist);
-	}
-	
-	/**
-	 * query Count by entity 
-	 * @param entity
-	 * @return
-	 */
-	public Integer fetchCount(JpaPage page) {
-		Integer count = 0;
-		try {
-			count = getMapper().fetchCount(page);
-			logger.debug("fetchCount count : {}" , count);
-		} catch(Exception e) {
-			logger.error("fetchCount Exception " , e);
-		}
-		return count;
-	}
-	
-	//follow function for query
-	/**
-	 *  query list entity by entity 
-	 * @param entity
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public List<T> query(T entity) {
-		try {
-			if(entity == null) {
-				entity = (T) entityClass.getDeclaredConstructor().newInstance();
-			}
-			return getMapper().query(entity);
-		} catch(Exception e) {
-			logger.error("query by entity Exception " , e);
-		}
-		return Collections.emptyList();
-	}
-	
 
-	
-	/**
-	 *  query list entity by Query 
-	 * @param entity
-	 * @return
-	 */
-	public List<T> query(Query query) {
-		try {
-			return getMapper().queryByQuery(entityClass,query);
-		} catch(Exception e) {
-			logger.error("query by Query Exception " , e);
-		}
-		return Collections.emptyList();
-	}
-	
-
-	
-	/**
-	 *  query list entity by LambdaQuery 
-	 * @param entity
-	 * @return
-	 */
-	public List<T> query(LambdaQuery<T> lambdaQuery) {
-		try {
-			return getMapper().queryByLambdaQuery(entityClass,lambdaQuery);
-		} catch(Exception e) {
-			logger.error("query by LambdaQuery Exception " , e);
-		}
-		return Collections.emptyList();
-	}
-	
-	/**
-	 * findAll from table
-	 * @return
-	 */
-	public List<T> findAll() {
-		try {
-			return getMapper().findAll(this.entityClass);
-		} catch(Exception e) {
-			logger.error("findAll Exception" , e);
-		}
-		return Collections.emptyList();
-	}
-	
 	
 	/**
 	 * select with filter and args
@@ -408,6 +308,19 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
+	 * findAll from table
+	 * @return
+	 */
+	public List<T> findAll() {
+		try {
+			return getMapper().findAll(this.entityClass);
+		} catch(Exception e) {
+			logger.error("findAll Exception" , e);
+		}
+		return Collections.emptyList();
+	}
+	
+	/**
 	 * get one entity by entity id
 	 * @param id
 	 * @return
@@ -482,6 +395,58 @@ public  class  JpaService <T extends JpaEntity> {
 		}
 		return null;
 	}
+	
+	//follow function for query
+	/**
+	 *  query list entity by entity 
+	 * @param entity
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<T> query(T entity) {
+		try {
+			if(entity == null) {
+				entity = (T) entityClass.getDeclaredConstructor().newInstance();
+			}
+			return getMapper().query(entity);
+		} catch(Exception e) {
+			logger.error("query by entity Exception " , e);
+		}
+		return Collections.emptyList();
+	}
+	
+
+	
+	/**
+	 *  query list entity by Query 
+	 * @param entity
+	 * @return
+	 */
+	public List<T> query(Query query) {
+		try {
+			return getMapper().queryByQuery(entityClass,query);
+		} catch(Exception e) {
+			logger.error("query by Query Exception " , e);
+		}
+		return Collections.emptyList();
+	}
+	
+
+	
+	/**
+	 *  query list entity by LambdaQuery 
+	 * @param entity
+	 * @return
+	 */
+	public List<T> query(LambdaQuery<T> lambdaQuery) {
+		try {
+			return getMapper().queryByLambdaQuery(entityClass,lambdaQuery);
+		} catch(Exception e) {
+			logger.error("query by LambdaQuery Exception " , e);
+		}
+		return Collections.emptyList();
+	}
+
 	
 	//follow function for insert update and delete
 	/**
@@ -778,6 +743,22 @@ public  class  JpaService <T extends JpaEntity> {
 	
 	//follow is  for query paging
 	/**
+	 * query Count by entity 
+	 * @param entity
+	 * @return
+	 */
+	protected Integer fetchCount(JpaPage page) {
+		Integer count = 0;
+		try {
+			count = getMapper().fetchCount(page);
+			logger.debug("fetchCount count : {}" , count);
+		} catch(Exception e) {
+			logger.error("fetchCount Exception " , e);
+		}
+		return count;
+	}
+	
+	/**
 	 * parse Object Count to Integer
 	 * @param totalCount
 	 * @return
@@ -811,4 +792,26 @@ public  class  JpaService <T extends JpaEntity> {
 	protected Integer calculateStartRow(Integer page,Integer pageSize){
 		return (page - 1) * pageSize;
 	}
+	
+	protected void beforePageResults(JpaPage page) {
+		page.setPageSelectId(page.generateId());
+		page.setStartRow(calculateStartRow(page.getPageNumber() ,page.getPageSize()));
+		page.setPageable(true);
+	}
+	
+	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
+		page.setPageable(false);
+		Integer total = resultslist.size();
+		
+		Integer totalCount = 0;
+		if(page.getPageNumber() == 1 && total < page.getPageSize()) {
+			totalCount = total;
+		}else {
+			totalCount = parseCount(getMapper().fetchCount(page));
+		}
+		
+		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),total,totalCount,resultslist);
+	}
+	
+
 }
