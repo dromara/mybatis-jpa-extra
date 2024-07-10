@@ -22,11 +22,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -70,11 +68,6 @@ public class BeanUtil {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public static boolean isNotNull(Collection collection) {
-		return  CollectionUtils.isNotEmpty(collection);
 	}
 	
 	@SuppressWarnings("rawtypes")

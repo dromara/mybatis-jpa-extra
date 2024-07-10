@@ -41,7 +41,7 @@ public class StringGenerator {
 
     public static final char[] DEFAULT_CODE_NUMBER_LETTERS = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    private static final String uuidRegex =  "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$";
+    private static final String UUID_REGEX =  "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$";
 
     private Random random = new SecureRandom();
 
@@ -147,7 +147,7 @@ public class StringGenerator {
     }
 
     public static boolean uuidMatches(String uuidString) {
-        return uuidString.matches(uuidRegex);
+        return uuidString.matches(UUID_REGEX);
     }
 
 }

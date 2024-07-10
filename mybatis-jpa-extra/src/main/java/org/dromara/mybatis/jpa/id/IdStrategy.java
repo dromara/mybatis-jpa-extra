@@ -16,13 +16,22 @@
  
 
 package org.dromara.mybatis.jpa.id;
-
+/*
+ * snowflakeid(default) and uuid
+ */
 public class IdStrategy {
 
+	/**
+	 * uuid
+	 */
 	public static final  String UUID			= "uuid";
-	
+	/**
+	 * snowflakeid
+	 */
 	public static final  String SNOWFLAKEID		= "snowflakeid";
-	
+	/**
+	 * as snowflakeid
+	 */
 	public static final  String DEFAULT			= "default";
 	
 }

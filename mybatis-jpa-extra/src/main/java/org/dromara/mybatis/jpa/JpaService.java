@@ -30,7 +30,6 @@ import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
-import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
@@ -73,8 +72,8 @@ public  class  JpaService <T extends JpaEntity> {
 	 * Load mapperClass by class type
 	 * @param cls
 	 */
-	@SuppressWarnings("unchecked")
-	public JpaService(@SuppressWarnings("rawtypes") Class cls) {
+	@SuppressWarnings({ "unchecked" })
+	public JpaService(Class<?> cls) {
 		logger.trace("class name : {}" , cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
@@ -209,7 +208,6 @@ public  class  JpaService <T extends JpaEntity> {
 		return null;
 	}
 
-	
 	/**
 	 * select with filter and args
 	 * 
@@ -415,7 +413,6 @@ public  class  JpaService <T extends JpaEntity> {
 		return Collections.emptyList();
 	}
 	
-
 	
 	/**
 	 *  query list entity by Query 
@@ -431,8 +428,6 @@ public  class  JpaService <T extends JpaEntity> {
 		return Collections.emptyList();
 	}
 	
-
-	
 	/**
 	 *  query list entity by LambdaQuery 
 	 * @param entity
@@ -447,7 +442,6 @@ public  class  JpaService <T extends JpaEntity> {
 		return Collections.emptyList();
 	}
 
-	
 	//follow function for insert update and delete
 	/**
 	 * insert new entity
@@ -472,7 +466,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean insertBatch(List<T> listEntity){
 		try {
-			if(BeanUtil.isNotNull(listEntity)) {
+			if(CollectionUtils.isNotEmpty(listEntity)) {
 				Integer count = 0;
 				for(T entity  : listEntity) {
 					if(getMapper().insert(entity)>0) {
@@ -504,7 +498,7 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	public boolean merge(T entity) {
 		List<T> resultList = query(entity);
-		if(resultList == null || resultList.isEmpty()) {
+		if(CollectionUtils.isEmpty(resultList)) {
 			return insert(entity);
 		}else {
 			return update(entity);
