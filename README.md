@@ -138,8 +138,8 @@ public class Students extends JpaEntity implements Serializable{
     }
     //根据ID删除
     @Test
-    void remove() throws Exception{
-        service.remove("921d3377-937a-4578-b1e2-92fb23b5e512");
+    void delete() throws Exception{
+        service.delete("921d3377-937a-4578-b1e2-92fb23b5e512");
     }
     //根据ID集合批量删除
     @Test
