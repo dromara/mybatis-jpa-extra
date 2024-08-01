@@ -23,7 +23,7 @@
 
 代码托管  
 
-|  <a href="https://gitcode.com/dromara/mybatis-jpa-extra/overview target="_blank"><b>GitCode</b></a>        |  <a href="https://gitee.com/dromara/mybatis-jpa-extra" target="_blank"><b>Gitee</b></a>  |<a href="https://github.com/dromara/mybatis-jpa-extra" target="_blank"><b>GitHub</b></a>  |
+|  <a href="https://gitcode.com/dromara/mybatis-jpa-extra/overview" target="_blank"><b>GitCode</b></a>        |  <a href="https://gitee.com/dromara/mybatis-jpa-extra" target="_blank"><b>Gitee</b></a>  |<a href="https://github.com/dromara/mybatis-jpa-extra" target="_blank"><b>GitHub</b></a>  |
 
 ## 1、JPA 3注释
 
