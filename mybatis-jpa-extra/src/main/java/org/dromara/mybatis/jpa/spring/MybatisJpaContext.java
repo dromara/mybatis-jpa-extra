@@ -104,7 +104,7 @@ public final class MybatisJpaContext {
         }else {
             return jpaContext.getBean(name,requiredType);
         }
-    };
+    }
 	
 	//below method is common HttpServlet method
 	/**
