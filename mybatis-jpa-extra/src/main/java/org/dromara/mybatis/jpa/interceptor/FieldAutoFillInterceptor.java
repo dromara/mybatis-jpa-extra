@@ -17,7 +17,6 @@
 package org.dromara.mybatis.jpa.interceptor;
 
 import java.util.Objects;
-import java.util.Properties;
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -71,8 +70,4 @@ public class FieldAutoFillInterceptor  implements Interceptor {
         return Plugin.wrap(target, this);
     }
 
-    @Override
-    public void setProperties(Properties properties) {
-    	//super.setProperties(properties);
-    }
 }

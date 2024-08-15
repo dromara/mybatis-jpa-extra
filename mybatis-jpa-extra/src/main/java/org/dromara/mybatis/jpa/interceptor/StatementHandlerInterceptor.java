@@ -19,7 +19,6 @@ package org.dromara.mybatis.jpa.interceptor;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.Properties;
 import org.apache.ibatis.executor.statement.PreparedStatementHandler;
 import org.apache.ibatis.executor.statement.SimpleStatementHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
@@ -32,6 +31,7 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.dromara.mybatis.jpa.interceptor.builder.FindBySqlBuilder;
 import org.dromara.mybatis.jpa.interceptor.builder.SelectPageSql;
 import org.dromara.mybatis.jpa.interceptor.builder.SelectPageSqlBuilder;
@@ -57,14 +57,11 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 		return Plugin.wrap(target, this);
 	}
 
-	public void setProperties(Properties properties) {
-	}
-	
 	private Object prepare(Invocation invocation) throws Throwable {
 		StatementHandler statement = getStatementHandler(invocation);
 		if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			Object parameterObject = metaObject.getValue("parameterHandler.parameterObject");
+			Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
 			BoundSql boundSql = statement.getBoundSql();
 			SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
 			logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
@@ -72,16 +69,16 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			if (selectPageSql.isSelectTrack()) {
 				if(selectPageSql.isPageable()) {
 					String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,selectPageSql);
-					metaObject.setValue("boundSql.sql", selectSql);
+					metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, selectSql);
 				}
 				return invocation.proceed();
 			}
 			
-			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("mappedStatement");
+			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
 			FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
 			FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
 			if(findByMapper != null && findByMapper.isFindBy()) {
-				metaObject.setValue("boundSql.sql", FindBySqlBuilder.translate(findByMapper,parameterObject));
+				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, FindBySqlBuilder.translate(findByMapper,parameterObject));
 				return invocation.proceed();
 			}
 		}

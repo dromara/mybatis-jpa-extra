@@ -59,8 +59,9 @@ public class FindBySqlBuilder {
 			String fieldName = fcm.getFieldName();
 			String columnName = fcm.getColumnName();
 			String findByKeyword = "";
-			if(fieldNameStart.startsWith(StringUtils.capitalize(fieldName))) {
-				logger.trace("FieldName : {} , capitalize {}" , fieldName,StringUtils.capitalize(fieldName));
+			String capitalizeFieldName = StringUtils.capitalize(fieldName);
+			if(fieldNameStart.startsWith(capitalizeFieldName)) {
+				logger.trace("FieldName : {} , capitalize {}" , fieldName,capitalizeFieldName);
 				if(fieldNameStart.length() >= fieldName.length()) {
 					fieldNameStart = fieldNameStart.substring(fieldName.length());
 					findByKeyword = FindByKeywords.startKeyword(fieldNameStart);
@@ -123,7 +124,7 @@ public class FindBySqlBuilder {
 		if (q.getOrderBy() != null) {
 			selectSql.ORDER_BY(QueryBuilder.buildOrderBy(q));
 		}
-		logger.trace("selectSql : {}" , selectSql);
+		logger.trace("selectSql : \n{}" , selectSql);
 		return selectSql.toString();
 	}
 	

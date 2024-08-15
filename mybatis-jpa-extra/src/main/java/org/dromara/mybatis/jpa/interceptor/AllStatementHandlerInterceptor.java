@@ -37,6 +37,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
+import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.meta.SqlSyntaxConstants;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInte
 		if (statement instanceof SimpleStatementHandler 
 				|| statement instanceof PreparedStatementHandler) {
 			MetaObject metaObject=SystemMetaObject.forObject(statement);
-			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
+			Object parameterObject=metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
 			BoundSql boundSql = statement.getBoundSql();
 			String sql = boundSql.getSql();
 			logger.debug("startsWith select : {} , prepare  boundSql : {}" , isSelectSql(sql),sql);
@@ -88,7 +89,7 @@ public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInte
 					sql = dialect.getPreparedStatementLimitString(sql, jpaEntity);
 				}
 			}
-			metaObject.setValue("boundSql.sql", sql);
+			metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, sql);
 		}
 		return invocation.proceed();
 	}
@@ -100,7 +101,7 @@ public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInte
 			RowBounds rowBounds = getRowBounds(statementHandler);
 			logger.debug("rowBounds {}", rowBounds);
 			MetaObject metaObject=SystemMetaObject.forObject(statementHandler);
-			Object parameterObject=metaObject.getValue("parameterHandler.parameterObject");
+			Object parameterObject=metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
 			BoundSql boundSql = statementHandler.getBoundSql();
 			
 			if (isSelectSql(boundSql.getSql()) && (parameterObject instanceof JpaEntity jpaEntity)) {

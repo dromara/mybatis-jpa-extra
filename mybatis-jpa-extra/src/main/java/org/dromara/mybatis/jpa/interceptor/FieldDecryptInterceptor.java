@@ -19,7 +19,6 @@ package org.dromara.mybatis.jpa.interceptor;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
@@ -77,11 +76,6 @@ public class FieldDecryptInterceptor  implements Interceptor {
     @Override
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
-    }
-
-    @Override
-    public void setProperties(Properties properties) {
-
     }
 
 }

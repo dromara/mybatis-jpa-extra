@@ -27,6 +27,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
@@ -44,7 +45,6 @@ import java.util.regex.Matcher;
 })
 public class TraceSqlIntercept  implements Interceptor {
 	private static Logger logger = LoggerFactory.getLogger(TraceSqlIntercept.class);
-	static final String SQL_PLACEHOLDER = "\\?";
 	
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
@@ -63,6 +63,8 @@ public class TraceSqlIntercept  implements Interceptor {
 			// 拼接日志打印过程
 			if(StringUtils.isNotBlank(printSql)) {
 				logger.trace("Execute SQL Cost Time {}ms , SQL :\n {}", (executeFinishTime - executeStartTime), printSql);
+			}else {
+				logger.trace("Execute SQL Cost Time {}ms ", (executeFinishTime - executeStartTime));
 			}
 		}
 		return proceed;
@@ -88,8 +90,10 @@ public class TraceSqlIntercept  implements Interceptor {
 		// 获取参数映射
 		List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
 		// 获取到执行的SQL
-		String sql = boundSql.getSql();
-		if(StringUtils.isNotBlank(sql)) {
+		String originalSql = boundSql.getSql();
+		String sql = "";
+		if(StringUtils.isNotBlank(originalSql) && originalSql.indexOf(ConstMetaObject.SQL_PLACEHOLDER) > -1) {
+			sql = originalSql;
 			// SQL中多个空格使用一个空格代替
 			sql = sql.replaceAll("[\\s]+", " ");
 			logger.trace("Args {}",args);
@@ -100,7 +104,7 @@ public class TraceSqlIntercept  implements Interceptor {
 				TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
 				// 如果参数对象的类型有对应的 TypeHandler，则使用 TypeHandler 进行处理
 				if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
-					sql = sql.replaceFirst(SQL_PLACEHOLDER, Matcher.quoteReplacement(getParameterValue(parameterObject)));
+					sql = sql.replaceFirst(ConstMetaObject.SQL_PLACEHOLDER_REGEX, Matcher.quoteReplacement(getParameterValue(parameterObject)));
 				} else {
 					// 否则，逐个处理参数映射
 					for (ParameterMapping parameterMapping : parameterMappings) {
@@ -110,14 +114,14 @@ public class TraceSqlIntercept  implements Interceptor {
 						// 检查对象中是否存在该属性的 getter 方法，如果存在就取出来进行替换
 						if (metaObject.hasGetter(propertyName)) {
 							Object obj = metaObject.getValue(propertyName);
-							sql = sql.replaceFirst(SQL_PLACEHOLDER, Matcher.quoteReplacement(getParameterValue(obj)));
+							sql = sql.replaceFirst(ConstMetaObject.SQL_PLACEHOLDER_REGEX, Matcher.quoteReplacement(getParameterValue(obj)));
 							// 检查 BoundSql 对象中是否存在附加参数。附加参数可能是在动态 SQL 处理中生成的，有的话就进行替换
 						} else if (boundSql.hasAdditionalParameter(propertyName)) {
 							Object obj = boundSql.getAdditionalParameter(propertyName);
-							sql = sql.replaceFirst(SQL_PLACEHOLDER, Matcher.quoteReplacement(getParameterValue(obj)));
+							sql = sql.replaceFirst(ConstMetaObject.SQL_PLACEHOLDER_REGEX, Matcher.quoteReplacement(getParameterValue(obj)));
 						} else {
 							// 如果都没有，说明SQL匹配不上，带上“缺失”方便找问题
-							sql = sql.replaceFirst(SQL_PLACEHOLDER, "Missing Parameter");
+							sql = sql.replaceFirst(ConstMetaObject.SQL_PLACEHOLDER_REGEX, "Missing Parameter");
 						}
 					}
 				}

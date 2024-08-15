@@ -24,6 +24,7 @@ import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
+import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 		StatementHandler statement = (StatementHandler) invocation.getTarget();
 		if (statement instanceof RoutingStatementHandler) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			return (StatementHandler)metaObject.getValue("delegate");
+			return (StatementHandler)metaObject.getValue(ConstMetaObject.DELEGATE);
 		
 		}
 		return statement;
@@ -69,7 +70,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	
 	protected RowBounds getRowBounds(StatementHandler statement) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			return (RowBounds)metaObject.getValue("rowBounds");
+			return (RowBounds)metaObject.getValue(ConstMetaObject.ROWBOUNDS);
 	}
 	
 	protected boolean hasBounds(RowBounds rowBounds) {
