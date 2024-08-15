@@ -39,7 +39,7 @@ public class FindBySqlBuilder {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(FindBySqlBuilder.class);
 
 	public static void parse(String mappedStatementId,BoundSql boundSql){
-		if(StringUtils.isNotBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId)){
+		if(StringUtils.isBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId)){
 			FindByMapper findByMapper = new FindByMapper(mappedStatementId);
 			findByMapper.parseFindBy();
 			if(findByMapper.isFindBy()) {

@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 })
 public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {
 	private static Logger logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
+	
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		Method m = invocation.getMethod();

@@ -28,6 +28,7 @@ import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.dromara.mybatis.jpa.interceptor.FieldAutoFillInterceptor;
 import org.dromara.mybatis.jpa.interceptor.FieldEncryptInterceptor;
 import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
+import org.dromara.mybatis.jpa.interceptor.TraceSqlIntercept;
 import org.dromara.mybatis.jpa.meta.MapperMetadata;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
@@ -83,6 +84,7 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 		config.addInterceptor(statementHandlerInterceptor);
 		config.addInterceptor(new FieldEncryptInterceptor());
 		config.addInterceptor(new FieldAutoFillInterceptor());
+		config.addInterceptor(new TraceSqlIntercept());
 		
 		if(config.getDefaultStatementTimeout() == null 
 				|| config.getDefaultStatementTimeout() == 0) {
