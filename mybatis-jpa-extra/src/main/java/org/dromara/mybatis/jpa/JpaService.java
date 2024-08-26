@@ -74,7 +74,6 @@ public  class  JpaService <T extends JpaEntity> {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	public JpaService(Class<?> cls) {
-		logger.trace("class name : {}" , cls.getSimpleName());
 		mapperClass = cls.getSimpleName();
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 		if (pType != null && pType.length >= 1) {
@@ -82,7 +81,7 @@ public  class  JpaService <T extends JpaEntity> {
 		} else {
 			logger.error("invalide initail, need generic type parameter! ");
 		}
-		logger.trace("class : {}" , entityClass.getSimpleName());
+		logger.trace("Mapper {} , Entity Class : {}" , cls.getSimpleName(),entityClass.getSimpleName());
 	}
 
 	/**
