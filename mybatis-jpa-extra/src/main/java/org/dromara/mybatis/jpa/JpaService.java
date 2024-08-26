@@ -82,7 +82,7 @@ public  class  JpaService <T extends JpaEntity> {
 			logger.error("invalide initail, need generic type parameter! ");
 		}
 		if(logger.isTraceEnabled()) {
-			logger.trace("Mapper {} , Entity : {}" , String.format("%-30s", cls.getSimpleName()),entityClass.getSimpleName());
+			logger.trace("Mapper {} , Entity {}" , String.format("%-30s", cls.getSimpleName()),entityClass.getSimpleName());
 		}
 	}
 

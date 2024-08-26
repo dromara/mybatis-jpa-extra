@@ -109,11 +109,10 @@ public class FieldMetadata {
 	 */
 	public static void buildColumnList(Class<?> entityClass) {
 		String entityClassName = entityClass.getName();
-		logger.trace("entityClass {}" , entityClass);
-		//run one time
 		if (fieldsMap.containsKey(entityClassName)) {
 			return;
 		}
+		logger.trace("entityClass {}" , entityClass);
 		Field[] fields = entityClass.getDeclaredFields();
 		List<FieldColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
 
