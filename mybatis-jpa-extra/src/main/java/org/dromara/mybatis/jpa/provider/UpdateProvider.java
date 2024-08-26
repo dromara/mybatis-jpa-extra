@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
 public class UpdateProvider <T extends JpaEntity>{
 	static final Logger logger 	= 	LoggerFactory.getLogger(UpdateProvider.class);
 
+	static final String FORMAT = "%-15s";
+	
 	/**
 	 * @param entity
 	 * @return update sql String
@@ -55,8 +57,12 @@ public class UpdateProvider <T extends JpaEntity>{
 		FieldColumnMapper partitionKey = null;
 		FieldColumnMapper idFieldColumnMapper = null;
 		for(FieldColumnMapper fieldColumnMapper : listFields) {
-			logger.trace("Field {} , Type {}",
-							fieldColumnMapper.getFieldName(), fieldColumnMapper.getFieldType());
+			String columnName = fieldColumnMapper.getColumnName();
+			String fieldName = fieldColumnMapper.getFieldName();
+			String fieldType = fieldColumnMapper.getFieldType();
+			Object fieldValue = BeanUtil.getValue(entity, fieldName);
+			boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
+			
 			if (fieldColumnMapper.isIdColumn() ) {
 				idFieldColumnMapper = fieldColumnMapper;
 				continue;
@@ -69,20 +75,23 @@ public class UpdateProvider <T extends JpaEntity>{
 				continue;
 			}
 			if(
-				(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
-						||fieldColumnMapper.getFieldType().startsWith("byte")
-						||BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
-				)
-				&& BeanUtil.getValue(entity, fieldColumnMapper.getFieldName())== null
-				&& !fieldColumnMapper.isGenerated()) {
+				(fieldType.equalsIgnoreCase("String") || fieldType.startsWith("byte") || isFieldValueNull)
+					&& !fieldColumnMapper.isGenerated()) {
 				//skip null field value
-				logger.trace("skip {}({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
+				if(logger.isTraceEnabled()) {
+					logger.trace("Field {} , Type {} , Value is null , Skiped ",
+						String.format(FORMAT, fieldName), String.format(FORMAT, fieldType));
+				}
 			}else {
+				if(logger.isTraceEnabled()) {
+					logger.trace("Field {} , Type {} , Value {}",
+						String.format(FORMAT, fieldName), String.format(FORMAT, fieldType),fieldValue);
+				}
 				if(fieldColumnMapper.getColumnAnnotation().updatable()) {
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
-						sql.SET(" %s =  '%s' ".formatted(fieldColumnMapper.getColumnName(),DateConverter.convert(entity, fieldColumnMapper,true)));
+						sql.SET(" %s =  '%s' ".formatted(columnName,DateConverter.convert(entity, fieldColumnMapper,true)));
 					}else {
-						sql.SET(" %s = #{%s} ".formatted(fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName()));
+						sql.SET(" %s = #{%s} ".formatted(columnName,fieldName));
 					}
 				}
 			}

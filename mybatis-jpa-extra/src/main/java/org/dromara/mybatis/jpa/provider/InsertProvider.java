@@ -22,7 +22,6 @@ package org.dromara.mybatis.jpa.provider;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdStrategy;
@@ -43,7 +42,7 @@ import jakarta.persistence.GenerationType;
  */
 public class InsertProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
-	
+	static final String FORMAT = "%-15s";
 	/**
 	 * @param entity
 	 * @return insert sql String
@@ -53,36 +52,42 @@ public class InsertProvider <T extends JpaEntity>{
 		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entity.getClass());
 		
 		SQL sql = new SQL().INSERT_INTO(TableMetadata.getTableName(entity.getClass()));
-		
-		for (int i = 0; i < listFields.size(); i++) {
-			FieldColumnMapper fieldColumnMapper = listFields.get(i);
-			logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
+		if(logger.isTraceEnabled()) {
+			for (FieldColumnMapper fieldColumnMapper : listFields) {
+				logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
+			}
+		}
+		for (FieldColumnMapper fieldColumnMapper : listFields) {
+			String columnName = fieldColumnMapper.getColumnName();
+			String fieldName = fieldColumnMapper.getFieldName();
+			String fieldType = fieldColumnMapper.getFieldType();
+			Object fieldValue = BeanUtil.getValue(entity, fieldName);
+			boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
+			
 			if(fieldColumnMapper.getColumnAnnotation().insertable()) {
 				if(fieldColumnMapper.getColumnDefault() != null) {
-					sql.VALUES(fieldColumnMapper.getColumnName(),"" + fieldColumnMapper.getColumnDefault().value() + "");
+					sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
 				}else if(fieldColumnMapper.isLogicDelete()) {
-					sql.VALUES(fieldColumnMapper.getColumnName(),"'" + fieldColumnMapper.getSoftDelete().value() + "'");
+					sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
 				}else if(
-					(
-						fieldColumnMapper.getFieldType().equalsIgnoreCase("String")
-						||fieldColumnMapper.getFieldType().startsWith("byte")
-						||BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
-					)
-					&& StringUtils.isBlank((String)BeanUtil.getValue(entity, fieldColumnMapper.getFieldName()))
+					(fieldType.equalsIgnoreCase("String") || fieldType.startsWith("byte") || isFieldValueNull)
 					&& !fieldColumnMapper.isGenerated()) {
 					//skip null field value
-					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
+					if(logger.isTraceEnabled()) {
+						logger.trace("Field {} , Type {} , Value is null , Skiped ",
+							String.format(FORMAT, fieldName), String.format(FORMAT, fieldType));
+					}
 				}else {
+					if(logger.isTraceEnabled()) {
+						logger.trace("Field {} , Type {} , Value {}",
+							String.format(FORMAT, fieldName), String.format(FORMAT, fieldType),fieldValue);
+					}
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
-						sql.VALUES(fieldColumnMapper.getColumnName(),"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
-					}else if((fieldColumnMapper.isGenerated())
-							&& (
-									BeanUtil.get(entity, fieldColumnMapper.getFieldName()) == null
-									|| StringUtils.isBlank(BeanUtil.get(entity, fieldColumnMapper.getFieldName()).toString())
-							)) {
+						sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
+					}else if((fieldColumnMapper.isGenerated()) && isFieldValueNull) {
 						generatedValue(sql , entity , fieldColumnMapper);
 					}else {
-						sql.VALUES(fieldColumnMapper.getColumnName(),"#{%s}".formatted(fieldColumnMapper.getFieldName()));
+						sql.VALUES(columnName,"#{%s}".formatted(fieldName));
 					}
 				}
 			}

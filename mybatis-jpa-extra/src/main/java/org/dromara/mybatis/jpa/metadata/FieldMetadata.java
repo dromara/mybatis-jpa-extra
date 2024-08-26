@@ -95,8 +95,10 @@ public class FieldMetadata {
 							.append(" ")
 							.append(fieldColumnMapper.getFieldName());
 			}
-			logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-					columnCount,fieldColumnMapper.getColumnName(),fieldColumnMapper.getFieldName());
+			if(logger.isTraceEnabled()) {
+				logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
+					String.format("%-2s", columnCount),String.format("%-20s", fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
+			}
 		}
 		return selectColumn.toString();
 	}

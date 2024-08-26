@@ -23,7 +23,6 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
@@ -47,6 +46,7 @@ import org.slf4j.LoggerFactory;
 public class FetchProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(FetchProvider.class);
 
+	static final String FORMAT = "%-15s";
 	/**
 	 * @param entity
 	 * @return fetch sql String
@@ -56,46 +56,50 @@ public class FetchProvider <T extends JpaEntity>{
 		FieldMetadata.buildColumnList(entity.getClass());
 		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entity.getClass());
 		String[] column = new String[listFields.size()] ;
-		for(int i = 0 ; i< listFields.size() ; i++) {
-			column[i] = listFields.get(i).getColumnName();
-		}
-		SQL sql = new SQL()
-			.SELECT(column).FROM(TableMetadata.getTableName(entity.getClass()));
 		StringBuffer conditions = new StringBuffer();
-		
+		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper : listFields) {
-			Object fieldValue = BeanUtil.getValue(entity, fieldColumnMapper.getFieldName());
+			String columnName = fieldColumnMapper.getColumnName();
+			String fieldName = fieldColumnMapper.getFieldName();
 			String fieldType = fieldColumnMapper.getFieldType();
-			logger.trace("Field {} , Type {} , Value {}",
-							fieldColumnMapper.getFieldName(), 
-							fieldColumnMapper.getFieldType(),
-							fieldValue);
-			if(fieldValue == null ||fieldValue.toString().equalsIgnoreCase("null")|| fieldType.startsWith("byte")) {
+			Object fieldValue = BeanUtil.getValue(entity, fieldName);
+			column[columnCount++] = columnName;
+			boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
+			
+			if(isFieldValueNull || fieldType.startsWith("byte")) {
 				//skip null field value
-				logger.trace("skip {}({}) is null ",fieldColumnMapper.getFieldName(),fieldType);
-			}else if(fieldType.equalsIgnoreCase("String")&&StringUtils.isBlank((String)fieldValue)){
-				logger.trace("skip {}({}) is Blank ",fieldColumnMapper.getFieldName(),fieldType);
+				if(logger.isTraceEnabled()) {
+					logger.trace("Field {} , Type {} , Value is null , Skiped ",
+						String.format(FORMAT, fieldName),String.format(FORMAT, fieldType));
+				}
 			}else {
+				if(logger.isTraceEnabled()) {
+					logger.trace("Field {} , Type {} , Value {}",
+						String.format(FORMAT, fieldName), String.format(FORMAT, fieldType),fieldValue);
+				}
 				if(!conditions.isEmpty()) {
 					conditions.append(" and ");
 				}
 				if(fieldColumnMapper.isLogicDelete()) {
 					conditions.append(
 							" %s = '%s' ".formatted(
-									fieldColumnMapper.getColumnName(),
+									columnName,
 									fieldColumnMapper.getSoftDelete().value()));
 				}else {
 					conditions.append(
 							" %s = #{%s.%s} ".formatted(
-									fieldColumnMapper.getColumnName(),
+									columnName,
 									MapperMetadata.ENTITY,
-									fieldColumnMapper.getFieldName()));
+									fieldName));
 				}
 			}
 		}
 		
-		sql.WHERE(conditions.toString());
-			
+		SQL sql = new SQL()
+				.SELECT(column)
+				.FROM(TableMetadata.getTableName(entity.getClass()))
+				.WHERE(conditions.toString());
+		
 		logger.trace("Query Page SQL : \n{}" , sql);
 		return sql.toString();
 	}

@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -63,7 +65,7 @@ public class BeanUtil {
 		try {
 			return PropertyAccessorFactory
 						.forBeanPropertyAccess(bean)
-						.getPropertyValue(field)+"";
+						.getPropertyValue(field);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -428,4 +430,8 @@ public class BeanUtil {
 		LogFactory.getLog(BeanUtils.class).debug("mapToBean() *******************************************");
 		return bean;
 	}
+	
+	public static boolean isFieldBlank(Object value) {
+    	return (value == null || StringUtils.isBlank(value.toString()) || "null".equalsIgnoreCase(value.toString()));
+    }
 }
