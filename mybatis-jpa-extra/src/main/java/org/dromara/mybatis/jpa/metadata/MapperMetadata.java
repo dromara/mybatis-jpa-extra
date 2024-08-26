@@ -43,6 +43,10 @@ public class MapperMetadata{
 		public static final String 	LOGICDELETE_SQL					= "_LOGICDELETE_SQL";
 	}
 	
+	public static final String LOG_FORMAT = "%-30s";
+	
+	public static final String LOG_FORMAT_COUNT = "%-3s";
+	
 	public static 	final		String ENTITY_CLASS				= "entityClass";
 	
 	public static 	final		String ENTITY					= "entity";

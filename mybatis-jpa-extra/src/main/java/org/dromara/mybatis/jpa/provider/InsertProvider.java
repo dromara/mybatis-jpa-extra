@@ -28,6 +28,7 @@ import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ import jakarta.persistence.GenerationType;
  */
 public class InsertProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(InsertProvider.class);
-	static final String FORMAT = "%-15s";
+	
 	/**
 	 * @param entity
 	 * @return insert sql String
@@ -75,12 +76,12 @@ public class InsertProvider <T extends JpaEntity>{
 					//skip null field value
 					if(logger.isTraceEnabled()) {
 						logger.trace("Field {} , Type {} , Value is null , Skiped ",
-							String.format(FORMAT, fieldName), String.format(FORMAT, fieldType));
+							String.format(MapperMetadata.LOG_FORMAT, fieldName), String.format(MapperMetadata.LOG_FORMAT, fieldType));
 					}
 				}else {
 					if(logger.isTraceEnabled()) {
 						logger.trace("Field {} , Type {} , Value {}",
-							String.format(FORMAT, fieldName), String.format(FORMAT, fieldType),fieldValue);
+							String.format(MapperMetadata.LOG_FORMAT, fieldName), String.format(MapperMetadata.LOG_FORMAT, fieldType),fieldValue);
 					}
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
 						sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");

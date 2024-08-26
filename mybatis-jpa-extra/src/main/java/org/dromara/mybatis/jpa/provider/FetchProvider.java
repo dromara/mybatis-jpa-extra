@@ -45,8 +45,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("unchecked")
 public class FetchProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(FetchProvider.class);
-
-	static final String FORMAT = "%-15s";
+	
 	/**
 	 * @param entity
 	 * @return fetch sql String
@@ -70,12 +69,12 @@ public class FetchProvider <T extends JpaEntity>{
 				//skip null field value
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value is null , Skiped ",
-						String.format(FORMAT, fieldName),String.format(FORMAT, fieldType));
+						String.format(MapperMetadata.LOG_FORMAT, fieldName),String.format(MapperMetadata.LOG_FORMAT, fieldType));
 				}
 			}else {
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value {}",
-						String.format(FORMAT, fieldName), String.format(FORMAT, fieldType),fieldValue);
+						String.format(MapperMetadata.LOG_FORMAT, fieldName), String.format(MapperMetadata.LOG_FORMAT, fieldType),fieldValue);
 				}
 				if(!conditions.isEmpty()) {
 					conditions.append(" and ");

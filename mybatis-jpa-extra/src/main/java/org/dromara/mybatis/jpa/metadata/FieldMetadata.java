@@ -97,7 +97,7 @@ public class FieldMetadata {
 			}
 			if(logger.isTraceEnabled()) {
 				logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-					String.format("%-3s", columnCount),String.format("%-20s", fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
+					String.format(MapperMetadata.LOG_FORMAT_COUNT, columnCount),String.format(MapperMetadata.LOG_FORMAT, fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
 			}
 		}
 		return selectColumn.toString();

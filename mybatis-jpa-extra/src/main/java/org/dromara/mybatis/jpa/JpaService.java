@@ -27,6 +27,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
@@ -82,7 +83,7 @@ public  class  JpaService <T extends JpaEntity> {
 			logger.error("invalide initail, need generic type parameter! ");
 		}
 		if(logger.isTraceEnabled()) {
-			logger.trace("Mapper {} , Entity {}" , String.format("%-30s", cls.getSimpleName()),entityClass.getSimpleName());
+			logger.trace("Mapper {} , Entity {}" , String.format(MapperMetadata.LOG_FORMAT, cls.getSimpleName()),entityClass.getSimpleName());
 		}
 	}
 
