@@ -24,7 +24,7 @@ import java.util.UUID;
 
 import org.dromara.mybatis.jpa.id.IdStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
-import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.meta;
+package org.dromara.mybatis.jpa.metadata;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -32,7 +32,7 @@ public class TableMetadata {
 	
 	static ConcurrentMap<String, String> tableNameMap 	= 	new ConcurrentHashMap<>();
 	
-	public static final String SELECT_TMP_TABLE = " sel_tmp_table ";
+	public static final String SELECT_TMP_TABLE = " select_temp_table ";
 	/**
 	 * build select from entity Class
 	 * @param entityClass

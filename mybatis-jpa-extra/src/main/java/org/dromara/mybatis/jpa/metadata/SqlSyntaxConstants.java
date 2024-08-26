@@ -1,4 +1,4 @@
-package org.dromara.mybatis.jpa.meta;
+package org.dromara.mybatis.jpa.metadata;
 
 public class SqlSyntaxConstants {
 	

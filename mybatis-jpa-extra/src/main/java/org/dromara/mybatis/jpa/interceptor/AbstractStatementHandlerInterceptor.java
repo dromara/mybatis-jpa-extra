@@ -25,6 +25,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
 import org.dromara.mybatis.jpa.constants.ConstMetaObject;
+import org.dromara.mybatis.jpa.dialect.AbstractDialect;
 import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 	/**
 	 * @param dialect the dialect to set
 	 */
-	public void setDialect(Dialect dialect) {
+	public void setDialect(AbstractDialect dialect) {
 		logger.debug("dialect from bean : {}" , dialect);
 		this.dialect = dialect;
 	}
@@ -52,7 +53,7 @@ public abstract class AbstractStatementHandlerInterceptor  implements Intercepto
 		this.dialectString = dialectString;
 		try {
 			logger.debug("dialect from String : {}" , dialectString);
-			this.dialect =(Dialect)Class.forName(dialectString).getDeclaredConstructor().newInstance();
+			this.dialect =(AbstractDialect)Class.forName(dialectString).getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			logger.error("Dialect new error : " , e);
 		} 

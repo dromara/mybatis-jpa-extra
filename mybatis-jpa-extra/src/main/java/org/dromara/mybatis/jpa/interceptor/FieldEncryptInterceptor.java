@@ -26,9 +26,9 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
-import org.dromara.mybatis.jpa.meta.FieldColumnMapper;
-import org.dromara.mybatis.jpa.meta.FieldMetadata;
-import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
+import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

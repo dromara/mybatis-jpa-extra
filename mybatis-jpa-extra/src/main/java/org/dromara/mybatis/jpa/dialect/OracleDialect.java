@@ -22,7 +22,7 @@ import java.sql.SQLException;
 
 import org.dromara.mybatis.jpa.entity.JpaPage;
 
-public class OracleDialect extends Dialect {
+public class OracleDialect extends AbstractDialect {
 
 	public OracleDialect() {
 		super();

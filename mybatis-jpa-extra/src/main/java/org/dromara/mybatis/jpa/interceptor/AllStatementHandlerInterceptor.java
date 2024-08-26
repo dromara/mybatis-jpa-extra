@@ -39,7 +39,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
 import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.meta.SqlSyntaxConstants;
+import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -24,12 +24,12 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.dromara.mybatis.jpa.crypto.EncryptFactory;
 import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
-import org.dromara.mybatis.jpa.dialect.Dialect;
+import org.dromara.mybatis.jpa.dialect.DialectMapper;
 import org.dromara.mybatis.jpa.interceptor.FieldAutoFillInterceptor;
 import org.dromara.mybatis.jpa.interceptor.FieldEncryptInterceptor;
 import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
 import org.dromara.mybatis.jpa.interceptor.TraceSqlIntercept;
-import org.dromara.mybatis.jpa.meta.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 	
 	private int timeout = 30 ;
 	
-	private String dialect = Dialect.DEFAULT_DIALECT;
+	private String dialect = DialectMapper.DEFAULT_DIALECT;
 	
 	private String cryptKey = ReciprocalUtils.defaultKey;
 	
@@ -80,7 +80,7 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 		
 		//设置
 		StatementHandlerInterceptor statementHandlerInterceptor =new StatementHandlerInterceptor();
-		statementHandlerInterceptor.setDialectString(Dialect.getDialect(dialect));
+		statementHandlerInterceptor.setDialectString(DialectMapper.getDialect(dialect));
 		config.addInterceptor(statementHandlerInterceptor);
 		config.addInterceptor(new FieldEncryptInterceptor());
 		config.addInterceptor(new FieldAutoFillInterceptor());
