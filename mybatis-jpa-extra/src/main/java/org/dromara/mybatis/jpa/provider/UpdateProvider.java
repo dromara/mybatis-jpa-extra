@@ -73,9 +73,7 @@ public class UpdateProvider <T extends JpaEntity>{
 			if(fieldColumnMapper.isLogicDelete()) {
 				continue;
 			}
-			if(
-				(fieldType.equalsIgnoreCase("String") || fieldType.startsWith("byte") || isFieldValueNull)
-					&& !fieldColumnMapper.isGenerated()) {
+			if(isFieldValueNull && !fieldColumnMapper.isGenerated()) {
 				//skip null field value
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value is null , Skiped ",

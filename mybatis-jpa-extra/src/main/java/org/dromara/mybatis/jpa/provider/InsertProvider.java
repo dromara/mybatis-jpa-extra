@@ -70,9 +70,7 @@ public class InsertProvider <T extends JpaEntity>{
 					sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
 				}else if(fieldColumnMapper.isLogicDelete()) {
 					sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
-				}else if(
-					(fieldType.equalsIgnoreCase("String") || fieldType.startsWith("byte") || isFieldValueNull)
-					&& !fieldColumnMapper.isGenerated()) {
+				}else if(isFieldValueNull && !fieldColumnMapper.isGenerated()) {
 					//skip null field value
 					if(logger.isTraceEnabled()) {
 						logger.trace("Field {} , Type {} , Value is null , Skiped ",
