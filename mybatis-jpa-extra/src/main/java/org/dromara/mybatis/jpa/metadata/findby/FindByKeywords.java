@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.meta.findby;
+package org.dromara.mybatis.jpa.metadata.findby;
 
 import java.util.ArrayList;
 import java.util.List;

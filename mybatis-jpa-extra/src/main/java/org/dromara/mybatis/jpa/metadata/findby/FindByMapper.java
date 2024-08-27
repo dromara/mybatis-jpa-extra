@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.meta.findby;
+package org.dromara.mybatis.jpa.metadata.findby;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

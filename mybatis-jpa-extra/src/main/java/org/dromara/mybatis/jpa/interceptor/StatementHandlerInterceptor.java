@@ -35,8 +35,8 @@ import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.dromara.mybatis.jpa.interceptor.builder.FindBySqlBuilder;
 import org.dromara.mybatis.jpa.interceptor.builder.SelectPageSql;
 import org.dromara.mybatis.jpa.interceptor.builder.SelectPageSqlBuilder;
-import org.dromara.mybatis.jpa.meta.findby.FindByMapper;
-import org.dromara.mybatis.jpa.meta.findby.FindByMetadata;
+import org.dromara.mybatis.jpa.metadata.findby.FindByMapper;
+import org.dromara.mybatis.jpa.metadata.findby.FindByMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
