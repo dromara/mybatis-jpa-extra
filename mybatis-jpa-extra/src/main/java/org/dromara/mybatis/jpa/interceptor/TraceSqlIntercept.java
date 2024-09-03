@@ -49,14 +49,18 @@ public class TraceSqlIntercept  implements Interceptor {
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		// 计算这一次SQL执行钱后的时间，统计一下执行耗时
+		//执行开始时间
 		long executeStartTime 	= System.currentTimeMillis();
 		Object proceed 	= invocation.proceed();
+		//执行结束时间
 		long executeFinishTime 	= System.currentTimeMillis();
-
+		//替换完成，打印的SQL语句
 		String printSql = null;
 		try {
-			// 通过buildPrintSql方法拿到最终生成的SQL
-			printSql = buildPrintSql(invocation);
+			// Trace级别 ， 通过buildPrintSql方法拿到最终生成的SQL
+			if(logger.isTraceEnabled()) {
+				printSql = buildPrintSql(invocation);
+			}
 		} catch (Exception exception) {
 			logger.error("Get SQL Exception", exception);
 		} finally {
