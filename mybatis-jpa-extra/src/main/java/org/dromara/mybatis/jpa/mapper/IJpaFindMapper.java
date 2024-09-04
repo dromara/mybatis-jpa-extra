@@ -30,15 +30,35 @@ import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
  */
 public interface IJpaFindMapper<T> {
 	
+	/**
+	 * 查询所有数据
+	 * @param entityClass
+	 * @return
+	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
 
+	/**
+	 * 根据ids列表查询
+	 * @param entityClass
+	 * @param idList
+	 * @param partitionKey
+	 * @return
+	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "findByIds")
 	public List<T> findByIds(	
 							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
 							@Param (MapperMetadata.PARAMETER_ID_LIST) 		List<String> idList,
 							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
 
+	/**
+	 * 根据给定的过滤条件，参数，参数类型查询
+	 * @param entityClass
+	 * @param filter
+	 * @param args
+	 * @param argTypes
+	 * @return
+	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "find")
 	public List<T> find(	@Param (MapperMetadata.ENTITY_CLASS)	Class<?> 	entityClass,
 							@Param (MapperMetadata.QUERY_FILTER)	String 		filter,

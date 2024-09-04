@@ -56,8 +56,8 @@ public class Query {
 	public void joint() {
 		if(CollectionUtils.isNotEmpty(conditions)) {
 			Operator lastJoint = conditions.get(conditions.size() -1).getExpression();
-			if(lastJoint.equals(Operator.and)
-					||lastJoint.equals(Operator.or)){
+			if(lastJoint.equals(Operator.and)||lastJoint.equals(Operator.or)){
+				//
 			}else {
 				and();
 			}

@@ -17,6 +17,9 @@
 
 package org.dromara.mybatis.jpa.query;
 
+/**
+ * 操作符
+ */
 public enum Operator {
 	/**
 	 * and

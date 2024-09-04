@@ -24,6 +24,9 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * 默认值注解，默认值-value
+ */
 @Target( {FIELD, METHOD} )
 @Retention( RUNTIME )
 public @interface ColumnDefault {

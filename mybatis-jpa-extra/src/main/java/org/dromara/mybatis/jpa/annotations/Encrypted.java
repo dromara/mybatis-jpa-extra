@@ -24,6 +24,11 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * 加密注解 <br>
+ * 支持SM4 , AES , DES , DESede<br>
+ * algorithm-加密算法，默认加密算法AES
+ */
 @Target( {FIELD, METHOD} )
 @Retention( RUNTIME )
 public @interface Encrypted {

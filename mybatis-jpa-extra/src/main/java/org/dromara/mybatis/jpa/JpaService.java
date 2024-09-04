@@ -100,7 +100,6 @@ public  class  JpaService <T extends JpaEntity> {
 		this.mapper = mapper;
 	}
 	
-	//get or set mapper
 	/**
 	 * Load Mapper from spring container by mapperClass as bean id
 	 * @return IBaseMapper
@@ -120,7 +119,12 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 
 	//follow function for fetch page
-	
+	/**
+	 * 分页查询，JpaPage 和 entity
+	 * @param page
+	 * @param entity
+	 * @return
+	 */
 	public JpaPageResults<T> fetch(JpaPage page , T entity) {
 		try {
 			beforePageResults(page);
@@ -132,6 +136,12 @@ public  class  JpaService <T extends JpaEntity> {
 		return null;
 	}
 	
+	/**
+	 * 分页查询，支持Query
+	 * @param page
+	 * @param query
+	 * @return
+	 */
 	public JpaPageResults<T> fetch(JpaPage page ,Query query) {
 		try {
 			beforePageResults(page);
@@ -143,6 +153,12 @@ public  class  JpaService <T extends JpaEntity> {
 		return null;
 	}
 	
+	/**
+	 * 分页查询，支持Lambda Query
+	 * @param page
+	 * @param lambdaQuery
+	 * @return
+	 */
 	public JpaPageResults<T> fetch(JpaPage page ,LambdaQuery<T> lambdaQuery) {
 		try {
 			beforePageResults(page);
@@ -308,7 +324,7 @@ public  class  JpaService <T extends JpaEntity> {
 	}
 	
 	/**
-	 * findAll from table
+	 * findAll data
 	 * @return
 	 */
 	public List<T> findAll() {

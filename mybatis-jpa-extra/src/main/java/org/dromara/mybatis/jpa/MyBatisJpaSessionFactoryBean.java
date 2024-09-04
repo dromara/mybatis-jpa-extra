@@ -41,13 +41,13 @@ import org.slf4j.LoggerFactory;
 public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 	protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
 	
-	private List<Interceptor> interceptors = Collections.emptyList();
+	private int timeout 					= 30 ;
 	
-	private int timeout = 30 ;
+	private String dialect 					= DialectMapper.DEFAULT_DIALECT;
 	
-	private String dialect = DialectMapper.DEFAULT_DIALECT;
+	private String cryptKey 				= ReciprocalUtils.defaultKey;
 	
-	private String cryptKey = ReciprocalUtils.defaultKey;
+	private List<Interceptor> interceptors 	= Collections.emptyList();
 	
 	public void setInterceptors(List<Interceptor> interceptors) {
 		this.interceptors = interceptors;
@@ -81,17 +81,21 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 		//设置
 		StatementHandlerInterceptor statementHandlerInterceptor =new StatementHandlerInterceptor();
 		statementHandlerInterceptor.setDialectString(DialectMapper.getDialect(dialect));
+		//select for page and findBy
 		config.addInterceptor(statementHandlerInterceptor);
+		//Encrypt
 		config.addInterceptor(new FieldEncryptInterceptor());
+		//data AutoFill , insert and update
 		config.addInterceptor(new FieldAutoFillInterceptor());
+		//Trace SQL and Execute Cost Time
 		config.addInterceptor(new TraceSqlIntercept());
-		
-		if(config.getDefaultStatementTimeout() == null 
-				|| config.getDefaultStatementTimeout() == 0) {
-			logger.debug("set StatementTimeout as default");
+		//set Default Statement Timeout
+		if(config.getDefaultStatementTimeout() == null || config.getDefaultStatementTimeout() == 0) {
 			config.setDefaultStatementTimeout(timeout);
 		}
+		
 		logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
+		
 		if(logger.isTraceEnabled()) {
 			for(String mappedStatementName : config.getMappedStatementNames()) {
 				logger.trace("MappedStatementName {} " ,mappedStatementName);

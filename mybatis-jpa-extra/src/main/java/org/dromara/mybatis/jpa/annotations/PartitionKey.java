@@ -25,7 +25,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Identifies a field of an entity that holds the partition key of a table.
+ * 多租户分割注解.
  *
  */
 @Target({METHOD, FIELD})

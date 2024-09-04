@@ -24,7 +24,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
- * @see org.dromara.mybatis.jpa.annotations.SoftDelete
+ * 软删除注解<br>
+ * 正常-n，删除-y
  */
 @Target( {FIELD, METHOD} )
 @Retention( RUNTIME )

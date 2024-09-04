@@ -20,7 +20,9 @@ package org.dromara.mybatis.jpa.id.impl;
 import java.util.UUID;
 
 import org.dromara.mybatis.jpa.id.IdentifierGenerator;
-
+/**
+ * UUID生成器，UUID生成后转小写
+ */
 public class UUIDGenerator implements IdentifierGenerator{
 
 	@Override
