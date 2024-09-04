@@ -31,8 +31,11 @@ public class TableMetadata {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(TableMetadata.class);
 	
 	static ConcurrentMap<String, String> tableNameMap 	= 	new ConcurrentHashMap<>();
+	/**
+	 * 查询的中间表别名
+	 */
+	public static final String SELECT_TMP_TABLE = " sl_tmp_t ";
 	
-	public static final String SELECT_TMP_TABLE = " select_temp_table ";
 	/**
 	 * build select from entity Class
 	 * @param entityClass
