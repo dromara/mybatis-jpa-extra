@@ -34,7 +34,7 @@ public class TableMetadata {
 	/**
 	 * 查询的中间表别名
 	 */
-	public static final String SELECT_TMP_TABLE = " sl_t ";
+	public static final String SELECT_TMP_TABLE = " s_t";
 	
 	/**
 	 * build select from entity Class
