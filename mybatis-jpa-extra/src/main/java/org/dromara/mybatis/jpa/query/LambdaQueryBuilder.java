@@ -17,10 +17,16 @@
 
 package org.dromara.mybatis.jpa.query;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class LambdaQueryBuilder {
+	private static final Logger _logger = LoggerFactory.getLogger(LambdaQueryBuilder.class);
+			
 	public static String build(LambdaQuery lambdaQuery) {
 		StringBuffer conditionString = new StringBuffer("");
 		List<Condition> conditions = lambdaQuery.getConditions();
@@ -86,12 +92,27 @@ public class LambdaQueryBuilder {
 
 			} else if (condition.getExpression().equals(Operator.in)
 					|| condition.getExpression().equals(Operator.notIn)) {
+				_logger.trace("value class CanonicalName {}",condition.getValue().getClass().getCanonicalName());
 				if (condition.getValue().getClass().isArray()) {
 					conditionString.append(condition.getColumn()).append(" ")
 							.append(condition.getExpression().getOperator());
 					conditionString.append(" ( ");
 					StringBuffer conditionArray = new StringBuffer();
 					Object[] objects = (Object[]) condition.getValue();
+					for (Object object : objects) {
+						if (conditionArray.length() > 0) {
+							conditionArray.append(" , ");
+						}
+						conditionArray.append(ConditionValue.valueOf(object));
+					}
+					conditionString.append(conditionArray);
+					conditionString.append(" ) ");
+				}else if(condition.getValue().getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
+					conditionString.append(condition.getColumn()).append(" ")
+					.append(condition.getExpression().getOperator());
+					conditionString.append(" ( ");
+					StringBuffer conditionArray = new StringBuffer();
+					ArrayList objects = (ArrayList) condition.getValue();
 					for (Object object : objects) {
 						if (conditionArray.length() > 0) {
 							conditionArray.append(" , ");

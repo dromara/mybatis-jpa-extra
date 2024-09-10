@@ -17,6 +17,10 @@
 
 package org.dromara.mybatis.jpa.test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.test.entity.Students;
@@ -45,9 +49,13 @@ public class QueryTestRunner  extends BaseTestRunner{
 	@Test
 	void queryByLambdaQuery(){
 		_logger.info("query by LambdaQuery ...");
+		List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
 		service.query(
-				new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, new Object[]{"政治","化学"})
+				new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, majorList)
 				.or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
+		//service.query(
+		//		new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, new Object[]{"政治","化学"})
+		//		.or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
 	}
 
 }

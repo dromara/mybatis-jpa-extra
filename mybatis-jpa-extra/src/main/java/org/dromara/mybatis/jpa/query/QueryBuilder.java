@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 public class QueryBuilder {
 	private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
 	
+	@SuppressWarnings("rawtypes")
 	public static String build(Query query) {
 		StringBuffer conditionString = new StringBuffer("");
 		for (Condition condition : query.getConditions()) {
@@ -96,8 +98,7 @@ public class QueryBuilder {
 					|| condition.getExpression().equals(Operator.notIn)) {
 				
 				if (condition.getValue().getClass().isArray()) {
-					conditionString.append(condition.getColumn()).append(" ")
-							.append(condition.getExpression().getOperator());
+					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
 					conditionString.append(" ( ");
 					Object[] objects = (Object[]) condition.getValue();
 					if(objects[0] instanceof Collection<?> cObjects) {
@@ -111,6 +112,19 @@ public class QueryBuilder {
 						logger.debug("not  isArray {}" , objects);
 						conditionString.append(buildArray(objects));
 					}
+					conditionString.append(" ) ");
+				}else if(condition.getValue().getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
+					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
+					conditionString.append(" ( ");
+					StringBuffer conditionArray = new StringBuffer();
+					ArrayList objects = (ArrayList) condition.getValue();
+					for (Object object : objects) {
+						if (conditionArray.length() > 0) {
+							conditionArray.append(" , ");
+						}
+						conditionArray.append(ConditionValue.valueOf(object));
+					}
+					conditionString.append(conditionArray);
 					conditionString.append(" ) ");
 				}
 			} else if (condition.getExpression().equals(Operator.condition)) {
