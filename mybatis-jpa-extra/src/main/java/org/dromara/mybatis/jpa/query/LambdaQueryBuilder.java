@@ -18,6 +18,7 @@
 package org.dromara.mybatis.jpa.query;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -113,6 +114,19 @@ public class LambdaQueryBuilder {
 					conditionString.append(" ( ");
 					StringBuffer conditionArray = new StringBuffer();
 					ArrayList objects = (ArrayList) condition.getValue();
+					for (Object object : objects) {
+						if (conditionArray.length() > 0) {
+							conditionArray.append(" , ");
+						}
+						conditionArray.append(ConditionValue.valueOf(object));
+					}
+					conditionString.append(conditionArray);
+					conditionString.append(" ) ");
+				}else if(condition.getValue().getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
+					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
+					conditionString.append(" ( ");
+					StringBuffer conditionArray = new StringBuffer();
+					LinkedList objects = (LinkedList) condition.getValue();
 					for (Object object : objects) {
 						if (conditionArray.length() > 0) {
 							conditionArray.append(" , ");
