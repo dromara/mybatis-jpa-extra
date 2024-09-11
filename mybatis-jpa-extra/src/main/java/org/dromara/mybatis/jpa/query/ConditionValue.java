@@ -17,6 +17,9 @@
 
 package org.dromara.mybatis.jpa.query;
 
+import java.util.Collection;
+import java.util.List;
+
 public class ConditionValue {
 
 	public static String valueOf(Object value) {
@@ -35,6 +38,39 @@ public class ConditionValue {
 			conditionString.append("'").append(String.valueOf(value).replace("'", "")).append("'");
 		}
 		return conditionString.toString();
+	}
+	
+	public static String valueOfList(List<?> listValue) {
+		StringBuffer conditionArray = new StringBuffer();
+		for (Object value : listValue) {
+			if (conditionArray.length() > 0) {
+				conditionArray.append(" , ");
+			}
+			conditionArray.append(ConditionValue.valueOf(value));
+		}
+		return conditionArray.toString();
+	}
+	
+	public static String valueOfArray(Object[] objects) {
+		StringBuffer conditionArray = new StringBuffer();
+		for (int i = 0 ; i< objects.length ; i++) {
+			if (conditionArray.length() > 0) {
+				conditionArray.append(" , ");
+			}
+			conditionArray.append(ConditionValue.valueOf(objects[i]));
+		}
+		return conditionArray.toString();
+	}
+	
+	public static String valueOfCollection(Collection<?> cObjects) {
+		StringBuffer conditionArray = new StringBuffer();
+        for (Object element : cObjects) {//for循环读取集合
+        	if (conditionArray.length() > 0) {
+				conditionArray.append(" , ");
+			}
+        	conditionArray.append(ConditionValue.valueOf(element));
+        }
+		return conditionArray.toString();
 	}
 	
 }

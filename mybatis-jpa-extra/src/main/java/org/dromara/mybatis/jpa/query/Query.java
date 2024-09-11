@@ -406,7 +406,15 @@ public class Query {
 
 	@Override
 	public String toString() {
-		return "Query [conditions=" + conditions + ", orderBy=" + orderBy + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Query [conditions=");
+		builder.append(conditions);
+		builder.append(", groupBy=");
+		builder.append(groupBy);
+		builder.append(", orderBy=");
+		builder.append(orderBy);
+		builder.append("]");
+		return builder.toString();
 	}
 	
 	

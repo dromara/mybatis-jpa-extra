@@ -31,144 +31,84 @@ public class QueryBuilder {
 	public static String build(Query query) {
 		StringBuffer conditionString = new StringBuffer("");
 		for (Condition condition : query.getConditions()) {
-			condition.setColumn(condition.getColumn().replace("'", "").replace(" ", "").replace(";", ""));
-			if (condition.getExpression().equals(Operator.and) 
-					|| condition.getExpression().equals(Operator.or)) {
+			Operator expression = condition.getExpression();
+			Object value = condition.getValue();
+			String column = condition.getColumn().replace("'", "").replace(" ", "").replace(";", "");
+			//Column去除 ',空格,分号
+			condition.setColumn(column);
+			if (expression.equals(Operator.and) || expression.equals(Operator.or)) {
 
-				conditionString.append(" ").append(condition.getExpression().getOperator()).append(" ");
-
-				if (condition.getValue() instanceof Query subQuery) {
+				conditionString.append(" ").append(expression.getOperator()).append(" ");
+				if (value instanceof Query subQuery) {
 					conditionString.append(" ( ").append(build(subQuery)).append(" ) ");
 				}
 
-			} else if (condition.getExpression().equals(Operator.like)
-					|| condition.getExpression().equals(Operator.notLike)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append("'%").append(condition.getValue().toString()).append("%'");
-
-			}else if (condition.getExpression().equals(Operator.ignoreCase)) {
-				conditionString.append("UPPER(").append(condition.getColumn()).append(") ")
-							   .append(Operator.eq.getOperator()).append(" ");
-				conditionString.append("UPPER(").append(ConditionValue.valueOf(condition.getValue())).append(")");
-
-			} else if (condition.getExpression().equals(Operator.likeLeft)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append("'%").append(condition.getValue().toString()).append("'");
-
-			} else if (condition.getExpression().equals(Operator.likeRight)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append("'").append(condition.getValue().toString()).append("%'");
-
-			} else if (condition.getExpression().equals(Operator.eq) 
-					|| condition.getExpression().equals(Operator.notEq)
-
-					|| condition.getExpression().equals(Operator.gt) 
-					|| condition.getExpression().equals(Operator.ge)
-
-					|| condition.getExpression().equals(Operator.lt) 
-					|| condition.getExpression().equals(Operator.le)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append(ConditionValue.valueOf(condition.getValue()));
-
-			} else if (condition.getExpression().equals(Operator.between)
-					|| condition.getExpression().equals(Operator.notBetween)) {
-
-				conditionString
-						.append(" ( ").append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator()).append(" ");
-				conditionString.append(ConditionValue.valueOf(condition.getValue()));
-				conditionString.append(" and ");
-				conditionString.append(ConditionValue.valueOf(condition.getValue2()))
-								.append(" ) ");
-
-			} else if (condition.getExpression().equals(Operator.isNull)
-					|| condition.getExpression().equals(Operator.isNotNull)) {
-
-				conditionString.append(condition.getColumn()).append(" ")
-						.append(condition.getExpression().getOperator());
-
-			} else if (condition.getExpression().equals(Operator.in)
-					|| condition.getExpression().equals(Operator.notIn)) {
-				
-				if (condition.getValue().getClass().isArray()) {
-					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
-					conditionString.append(" ( ");
-					Object[] objects = (Object[]) condition.getValue();
-					if(objects[0] instanceof Collection<?> cObjects) {
-						logger.debug("objects[0] is Collection {}" , cObjects);
-						conditionString.append(buildCollection(cObjects));
-					}else if(objects[0].getClass().isArray()) {
-						objects = (Object[])objects[0];
-						logger.debug("objects[0] is isArray {}" , objects);
-						conditionString.append(buildArray(objects));
-					}else {
-						logger.debug("not  isArray {}" , objects);
-						conditionString.append(buildArray(objects));
-					}
-					conditionString.append(" ) ");
-				}else if(condition.getValue().getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
-					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
-					conditionString.append(" ( ");
-					StringBuffer conditionArray = new StringBuffer();
-					ArrayList objects = (ArrayList) condition.getValue();
-					for (Object object : objects) {
-						if (conditionArray.length() > 0) {
-							conditionArray.append(" , ");
-						}
-						conditionArray.append(ConditionValue.valueOf(object));
-					}
-					conditionString.append(conditionArray);
-					conditionString.append(" ) ");
-				}else if(condition.getValue().getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
-					conditionString.append(condition.getColumn()).append(" ").append(condition.getExpression().getOperator());
-					conditionString.append(" ( ");
-					StringBuffer conditionArray = new StringBuffer();
-					LinkedList objects = (LinkedList) condition.getValue();
-					for (Object object : objects) {
-						if (conditionArray.length() > 0) {
-							conditionArray.append(" , ");
-						}
-						conditionArray.append(ConditionValue.valueOf(object));
-					}
-					conditionString.append(conditionArray);
-					conditionString.append(" ) ");
-				}
-			} else if (condition.getExpression().equals(Operator.condition)) {
-				conditionString.append(condition.getColumn().replace(";", ""));
-			}
-		}
-		return conditionString.toString();
-	}
-
-	private static String buildArray(Object[] objects) {
-		StringBuffer conditionArray = new StringBuffer();
-		for (int i = 0 ; i< objects.length ; i++) {
-			if (conditionArray.length() > 0) {
-				conditionArray.append(" , ");
-			}
-			conditionArray.append(ConditionValue.valueOf(objects[i]));
-		}
-		return conditionArray.toString();
-	}
+			}else if (expression.equals(Operator.condition)) {
+				conditionString.append(column.replace(";", ""));
+			} else {
+				logger.trace("column {} value class {}",column,value == null ? "" : value.getClass().getCanonicalName());
+				if (expression.equals(Operator.like) || expression.equals(Operator.notLike)) {
+					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
+					conditionString.append("'%").append(value).append("%'");
 	
-	private static String buildCollection(Collection<?> cObjects) {
-		StringBuffer conditionArray = new StringBuffer();
-        for (Object element : cObjects) {//for循环读取集合
-        	if (conditionArray.length() > 0) {
-				conditionArray.append(" , ");
+				}else if (expression.equals(Operator.ignoreCase)) {
+					conditionString.append("UPPER(").append(column).append(") ").append(Operator.eq.getOperator()).append(" ");
+					conditionString.append("UPPER(").append(ConditionValue.valueOf(value)).append(")");
+	
+				} else if (expression.equals(Operator.likeLeft)) {
+	
+					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
+					conditionString.append("'%").append(value).append("'");
+	
+				} else if (expression.equals(Operator.likeRight)) {
+	
+					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
+					conditionString.append("'").append(value).append("%'");
+	
+				} else if (expression.equals(Operator.eq) || expression.equals(Operator.notEq)
+						|| expression.equals(Operator.gt) || expression.equals(Operator.ge)
+						|| expression.equals(Operator.lt) || expression.equals(Operator.le)) {
+	
+					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
+					conditionString.append(ConditionValue.valueOf(value));
+	
+				} else if (expression.equals(Operator.between) || expression.equals(Operator.notBetween)) {
+	
+					conditionString.append(" ( ").append(column).append(" ").append(expression.getOperator()).append(" ");
+					conditionString.append(ConditionValue.valueOf(value));
+					conditionString.append(" and ");
+					conditionString.append(ConditionValue.valueOf(condition.getValue2())).append(" ) ");
+	
+				} else if (expression.equals(Operator.isNull) || expression.equals(Operator.isNotNull)) {
+	
+					conditionString.append(column).append(" ").append(expression.getOperator());
+	
+				} else if (expression.equals(Operator.in) || expression.equals(Operator.notIn)) {
+					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ( ");
+					if (value.getClass().isArray()) {
+						Object[] objects = (Object[]) value;
+						if(objects[0] instanceof Collection<?> cObjects) {
+							logger.trace("objects[0] is Collection {}" , cObjects);
+							conditionString.append(ConditionValue.valueOfCollection(cObjects));
+						}else if(objects[0].getClass().isArray()) {
+							objects = (Object[])objects[0];
+							logger.trace("objects[0] is isArray {}" , objects);
+							conditionString.append(ConditionValue.valueOfArray(objects));
+						}else {
+							logger.trace("not  isArray {}" , objects);
+							conditionString.append(ConditionValue.valueOfArray(objects));
+						}
+					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
+						conditionString.append(ConditionValue.valueOfList((ArrayList) value));
+					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
+						conditionString.append(ConditionValue.valueOfList((LinkedList) value));
+					}
+					conditionString.append(" ) ");
+				} 
 			}
-        	conditionArray.append(ConditionValue.valueOf(element));
-        	logger.debug("{}",element);
-        }
-		return conditionArray.toString();
+		}
+		logger.trace("conditionString {}" , conditionString);
+		return conditionString.toString();
 	}
 	
 	public static String buildGroupBy(Query query) {

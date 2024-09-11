@@ -81,8 +81,17 @@ public class Condition {
 
 	@Override
 	public String toString() {
-		return "Condition [expression=" + expression + ", column=" + column + ", value=" + value + ", value2=" + value2
-				+ "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Condition [expression=");
+		builder.append(expression);
+		builder.append(", column=");
+		builder.append(column);
+		builder.append(", value=");
+		builder.append(value);
+		builder.append(", value2=");
+		builder.append(value2);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }
