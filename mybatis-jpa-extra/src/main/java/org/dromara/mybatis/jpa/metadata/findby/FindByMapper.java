@@ -54,7 +54,6 @@ public class FindByMapper {
 	
 	boolean isDistinct = false;
 	
-	boolean isFindBy = false;
 
 	public FindByMapper(String mappedStatementId) {
 		this.mappedStatementId = mappedStatementId;
@@ -67,10 +66,8 @@ public class FindByMapper {
 		logger.trace("methodName {}" , mappedStatementMethodName);
 
 		if(mappedStatementMethodName.startsWith(FindByKeywords.FINDBY)) {
-			isFindBy = true;
 			removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDBY.length());
 		}else if(mappedStatementMethodName.startsWith(FindByKeywords.FINDDISTINCTBY)){
-			isFindBy = true;
 			isDistinct = true;
 			removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDDISTINCTBY.length());
 		}
@@ -115,10 +112,6 @@ public class FindByMapper {
 
 	public boolean isDistinct() {
 		return isDistinct;
-	}
-
-	public boolean isFindBy() {
-		return isFindBy;
 	}
 
 }

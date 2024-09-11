@@ -90,7 +90,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		for(String value : idValues) {
 			if(value.trim().length() > 0) {
 				keyValue.append(",'").append(value).append("'");
-				logger.trace("logic delete by id {}" , value);
+				logger.trace("delete by id {}" , value);
 			}
 		}
 		//remove ;

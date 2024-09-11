@@ -39,7 +39,19 @@ public class QueryProvider<T extends JpaEntity> {
 
 	public String queryByQuery(Class<?> entityClass, Query query) {
 		logger.trace("Query \n{}" , query);
-		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(QueryBuilder.build(query));
+		SQL sql = TableMetadata.buildSelect(entityClass);
+		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE("( %s ) and %s = '%s'"
+					.formatted(
+							QueryBuilder.build(query),
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}else {
+			sql.WHERE(QueryBuilder.build(query));
+		}
 		
 		if (query.getGroupBy() != null) {
 			sql.GROUP_BY(QueryBuilder.buildGroupBy(query));
@@ -53,7 +65,21 @@ public class QueryProvider<T extends JpaEntity> {
 	
 	public String queryByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
 		logger.trace("LambdaQuery \n{}" , lambdaQuery);
-		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		
+		
+		SQL sql = TableMetadata.buildSelect(entityClass);
+		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE("( %s ) and %s = '%s'"
+					.formatted(
+							LambdaQueryBuilder.build(lambdaQuery),
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}else {
+			sql.WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		}
 		
 		if (CollectionUtils.isNotEmpty(lambdaQuery.getGroupBy())) {
 			sql.GROUP_BY(LambdaQueryBuilder.buildGroupBy(lambdaQuery));
@@ -87,7 +113,11 @@ public class QueryProvider<T extends JpaEntity> {
 					|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
 				// skip default field value
 			}else {
-				sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
+				if(fieldColumnMapper.isLogicDelete()) {
+					sql.WHERE(fieldColumnMapper.getColumnName() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
+				}else {
+					sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
+				}
 			}
 		}
 		logger.trace("filter By Entity SQL \n{}" , sql);

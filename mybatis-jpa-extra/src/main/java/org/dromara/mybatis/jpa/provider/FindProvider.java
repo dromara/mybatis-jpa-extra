@@ -118,8 +118,16 @@ public class FindProvider <T extends JpaEntity>{
 			filterSql = StrUtils.lineBreak2Blank(sqlBuffer.toString());
 		}
 		
-		SQL sql = TableMetadata.buildSelect(entityClass).WHERE(filterSql);
+		SQL sql = TableMetadata.buildSelect(entityClass).WHERE("( " + filterSql +" )");
 		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE(" %s = '%s'"
+					.formatted(
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}
         String findSql = sql.toString(); 
         logger.trace("Find SQL \n{}" , findSql);
 
@@ -158,6 +166,15 @@ public class FindProvider <T extends JpaEntity>{
         			);  
 		}else {
 			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),idsValues));  
+		}
+		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(parameterEntityClass);
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			sql.WHERE(" %s = '%s'"
+					.formatted(
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
 		}
 		
         String findByIdsSql = sql.toString(); 

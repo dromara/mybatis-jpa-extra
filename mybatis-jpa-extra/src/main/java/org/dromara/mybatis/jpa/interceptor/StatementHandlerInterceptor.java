@@ -61,25 +61,22 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 		StatementHandler statement = getStatementHandler(invocation);
 		if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
 			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
 			BoundSql boundSql = statement.getBoundSql();
-			SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
-			logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
-			//判断是否select语句及需要分页支持
-			if (selectPageSql.isSelectTrack()) {
-				if(selectPageSql.isPageable()) {
+			Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
+			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
+			
+			if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
+				FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
+				FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
+				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, FindBySqlBuilder.translate(findByMapper,parameterObject));
+			}else {
+				SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
+				logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
+				//判断是否select语句及需要分页支持
+				if (selectPageSql.isSelectTrack() && selectPageSql.isPageable()) {
 					String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,selectPageSql);
 					metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, selectSql);
 				}
-				return invocation.proceed();
-			}
-			
-			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
-			FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
-			FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
-			if(findByMapper != null && findByMapper.isFindBy()) {
-				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, FindBySqlBuilder.translate(findByMapper,parameterObject));
-				return invocation.proceed();
 			}
 		}
 		return invocation.proceed();

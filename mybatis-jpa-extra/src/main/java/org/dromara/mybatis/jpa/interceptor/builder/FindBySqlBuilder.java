@@ -38,13 +38,15 @@ import org.slf4j.LoggerFactory;
 public class FindBySqlBuilder {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(FindBySqlBuilder.class);
 
+	public static boolean isFindBy(String mappedStatementId,BoundSql boundSql) {
+		return StringUtils.isBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId);
+	}
+	
 	public static void parse(String mappedStatementId,BoundSql boundSql){
-		if(StringUtils.isBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId)){
+		if(isFindBy(mappedStatementId , boundSql)){
 			FindByMapper findByMapper = new FindByMapper(mappedStatementId);
 			findByMapper.parseFindBy();
-			if(findByMapper.isFindBy()) {
-				FindByMetadata.put(mappedStatementId, findByMapper);
-			}
+			FindByMetadata.put(mappedStatementId, findByMapper);
 		}
 	}
 	
@@ -120,7 +122,18 @@ public class FindBySqlBuilder {
 			}
 		}
 		logger.trace("Query : {}" , q);
-		SQL selectSql = TableMetadata.buildSelect(findByMapper.getEntityClass(),findByMapper.isDistinct()).WHERE(QueryBuilder.build(q));
+		SQL selectSql = TableMetadata.buildSelect(findByMapper.getEntityClass(),findByMapper.isDistinct());
+		selectSql.WHERE("( " + QueryBuilder.build(q) + " )");
+
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(findByMapper.getEntityClass());
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+			selectSql.WHERE(" %s = '%s'"
+					.formatted(
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}
+		
 		if (q.getOrderBy() != null) {
 			selectSql.ORDER_BY(QueryBuilder.buildOrderBy(q));
 		}
