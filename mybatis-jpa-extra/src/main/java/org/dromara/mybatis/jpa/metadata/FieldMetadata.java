@@ -41,43 +41,25 @@ public class FieldMetadata {
 	
 	static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
 	
+	static ConcurrentMap<String, FieldColumnMapper> logicColumnMap 		= 	new ConcurrentHashMap<>();
+	
+	static ConcurrentMap<String, FieldColumnMapper> idColumnMap 		= 	new ConcurrentHashMap<>();
+	
+	static ConcurrentMap<String, FieldColumnMapper> partitionKeyMap 		= 	new ConcurrentHashMap<>();
+	
+	
 	public static  FieldColumnMapper getIdColumn(Class<?> entityClass) {
-		List<FieldColumnMapper> listFields = fieldsMap.get(entityClass.getName());
-		FieldColumnMapper idFieldColumnMapper = null;
-		for (int i = 0; i < listFields.size(); i++) {
-			if (listFields.get(i).isIdColumn()) {
-				idFieldColumnMapper = listFields.get(i);
-				break;
-			}
-		}
-		return idFieldColumnMapper;
+		return idColumnMap.get(entityClass.getName());
 	}
 	
 	public static  FieldColumnMapper getLogicColumn(Class<?> entityClass) {
-		List<FieldColumnMapper> listFields = fieldsMap.get(entityClass.getName());
-		FieldColumnMapper logicColumnMapper = null;
-		for (int i = 0; i < listFields.size(); i++) {
-			if (listFields.get(i).isLogicDelete()) {
-				logicColumnMapper = listFields.get(i);
-				break;
-			}
-		}
-		return logicColumnMapper;
+		return logicColumnMap.get(entityClass.getName());
 	}
 	
 	public static  FieldColumnMapper getPartitionKey(Class<?> entityClass) {
-		List<FieldColumnMapper> listFields = fieldsMap.get(entityClass.getName());
-		FieldColumnMapper partitionKeyColumnMapper = null;
-		for (FieldColumnMapper column : listFields) {
-			if (column.getPartitionKey() != null) {
-				partitionKeyColumnMapper = column;
-				break;
-			}
-		}
-		return partitionKeyColumnMapper;
+		return partitionKeyMap.get(entityClass.getName());
 	}
 	
-
 	/**
 	 * get select table Column from entityClass, data cache in fieldsMap
 	 * @param entityClass
@@ -133,12 +115,13 @@ public class FieldMetadata {
 				columnName = MapperMetadata.tableColumnCaseConverter(columnName);
 				columnName = MapperMetadata.tableColumnEscape(columnName);
 				
-				FieldColumnMapper fieldColumnMapper = new FieldColumnMapper(
-									field,field.getName(),field.getType().getSimpleName(),columnName);
+				FieldColumnMapper fieldColumnMapper = 
+						new FieldColumnMapper(field,field.getName(),field.getType().getSimpleName(),columnName);
 				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
 				
 				if(field.isAnnotationPresent(Id.class)) {
 					fieldColumnMapper.setIdColumn(true);
+					idColumnMap.put(entityClassName, fieldColumnMapper);
 				}
 				
 				if(field.isAnnotationPresent(GeneratedValue.class)) {
@@ -157,11 +140,13 @@ public class FieldMetadata {
 				if (field.isAnnotationPresent(PartitionKey.class)) {
 					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
 					fieldColumnMapper.setPartitionKey(partitionKey);
+					partitionKeyMap.put(entityClassName, fieldColumnMapper);
 				}
 				if (field.isAnnotationPresent(SoftDelete.class)) {
 					SoftDelete columnLogic = field.getAnnotation(SoftDelete.class);
 					fieldColumnMapper.setSoftDelete(columnLogic);
 					fieldColumnMapper.setLogicDelete(true);
+					logicColumnMap.put(entityClassName, fieldColumnMapper);
 				}
 				
 				if (field.isAnnotationPresent(Encrypted.class)) {
