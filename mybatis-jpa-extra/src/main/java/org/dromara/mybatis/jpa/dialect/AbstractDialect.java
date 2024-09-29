@@ -20,8 +20,6 @@ package org.dromara.mybatis.jpa.dialect;
 
 import java.sql.PreparedStatement;
 import org.dromara.mybatis.jpa.entity.JpaPage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * DB Access Dialect,inspiration from hibernate
@@ -31,7 +29,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public abstract class AbstractDialect implements Dialect{
-	private static final Logger logger 			= 	LoggerFactory.getLogger(AbstractDialect.class);
 
 	protected AbstractDialect() {
 
