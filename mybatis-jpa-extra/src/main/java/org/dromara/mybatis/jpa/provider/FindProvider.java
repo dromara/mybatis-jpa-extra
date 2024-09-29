@@ -140,16 +140,16 @@ public class FindProvider <T extends JpaEntity>{
 		FieldMetadata.buildColumnList(parameterEntityClass);
 		List <String> parameterIds = (List<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
-		StringBuffer keyValue = new StringBuffer();
+		StringBuffer keyValues = new StringBuffer();
 		for(String value : parameterIds) {
 			if(value.trim().length() > 0) {
-				keyValue.append(",'").append(value).append("'");
-				logger.trace("find by id {}" , value);
+				keyValues.append(",'").append(value).append("'");
 			}
 		}
+		logger.trace("find by id {}" , keyValues);
 		
 		//remove ';'
-		String idsValues = keyValue.substring(1).replace(";", "");
+		String idsValues = keyValues.substring(1).replace(";", "");
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(parameterEntityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass);
