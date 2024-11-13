@@ -30,11 +30,10 @@ import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
-import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,14 +44,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @param <T>
  */
-public  class  JpaService <T extends JpaEntity> {
+public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
 	private static final  Logger logger = LoggerFactory.getLogger(JpaService.class);
-	
-	/**
-	 * mapper class
-	 */
-	@JsonIgnore
-	private String mapperClass = "";
 	
 	/**
 	 * entity Class
@@ -61,62 +54,26 @@ public  class  JpaService <T extends JpaEntity> {
 	@SuppressWarnings("rawtypes")
 	private Class entityClass;
 	
-	/**
-	 * mapper 
-	 */
-	@JsonIgnore
-	private IJpaMapper<T> mapper = null;
+	@Autowired
+	private M mapper;
+
+	public M getMapper() {
+		return mapper;
+	}
 	
-	public JpaService() {}
-	
-	/**
-	 * Load mapperClass by class type
-	 * @param cls
-	 */
-	@SuppressWarnings({ "unchecked" })
-	public JpaService(Class<?> cls) {
-		mapperClass = cls.getSimpleName();
+	@SuppressWarnings({"unchecked","rawtypes"})
+	public JpaService() {
+		Class mapperClass = null;
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
-		if (pType != null && pType.length >= 1) {
-			this.entityClass = (Class<T>) pType[0];
+		if (pType != null && pType.length >= 2) {
+			mapperClass=(Class<T>) pType[0];
+			this.entityClass = (Class<T>) pType[1];
+			logger.trace("Mapper {} , Entity {}" , String.format(MapperMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
 		} else {
 			logger.error("invalide initail, need generic type parameter! ");
 		}
-		if(logger.isTraceEnabled()) {
-			logger.trace("Mapper {} , Entity {}" , String.format(MapperMetadata.LOG_FORMAT, cls.getSimpleName()),entityClass.getSimpleName());
-		}
-	}
-
-	/**
-	 *  Load mapperClass by class name
-	 * @param mapperClass
-	 */
-	public JpaService(String mapperClass) {
-		logger.trace("class : {}" , mapperClass);
-		this.mapperClass = mapperClass;
-	}
-
-	public void setMapper(IJpaMapper<T> mapper) {
-		this.mapper = mapper;
 	}
 	
-	/**
-	 * Load Mapper from spring container by mapperClass as bean id
-	 * @return IBaseMapper
-	 */
-	@SuppressWarnings( { "unchecked" })
-	public IJpaMapper<T> getMapper() {
-		try {
-			if(mapper == null) {
-				String mapperClassBean = StrUtils.firstToLowerCase(mapperClass);
-				logger.info("mapperClass Bean is {}" , mapperClassBean);
-				mapper = MybatisJpaContext.getBean(mapperClassBean,IJpaMapper.class);
-			}
-		} catch(Exception e) {
-			logger.error("getMapper Exception " , e);
-		} 
-		return mapper;
-	}
 
 	//follow function for fetch page
 	/**

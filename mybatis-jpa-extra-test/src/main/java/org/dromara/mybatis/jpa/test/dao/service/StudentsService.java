@@ -25,24 +25,11 @@ import org.dromara.mybatis.jpa.test.entity.Students;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentsService extends JpaService<Students> {
+public class StudentsService extends JpaService<StudentsMapper,Students> {
 
 	public StudentsService() {
-		super(StudentsMapper.class);
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public StudentsMapper getMapper() {
-		return (StudentsMapper) super.getMapper();
-	}
-	
-	
 	public List<Students> findByStdNo(String stdNo) {
 		return getMapper().findByStdNo(stdNo);
 	}
