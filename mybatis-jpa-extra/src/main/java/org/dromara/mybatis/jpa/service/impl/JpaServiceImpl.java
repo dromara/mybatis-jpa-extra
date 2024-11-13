@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa;
+package org.dromara.mybatis.jpa.service.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.dromara.mybatis.jpa.IJpaMapper;
+import org.dromara.mybatis.jpa.IJpaService;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
@@ -44,8 +46,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @param <T>
  */
-public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
-	private static final  Logger logger = LoggerFactory.getLogger(JpaService.class);
+public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> implements IJpaService<T>{
+	private static final  Logger logger = LoggerFactory.getLogger(JpaServiceImpl.class);
 	
 	/**
 	 * entity Class
@@ -62,7 +64,7 @@ public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
 	}
 	
 	@SuppressWarnings({"unchecked","rawtypes"})
-	public JpaService() {
+	public JpaServiceImpl() {
 		Class mapperClass = null;
 		Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
 		if (pType != null && pType.length >= 2) {
@@ -82,6 +84,7 @@ public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
 	 * @param entity
 	 * @return
 	 */
+	@Override
 	public JpaPageResults<T> fetch(JpaPage page , T entity) {
 		try {
 			beforePageResults(page);
@@ -99,6 +102,7 @@ public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
 	 * @param query
 	 * @return
 	 */
+	@Override
 	public JpaPageResults<T> fetch(JpaPage page ,Query query) {
 		try {
 			beforePageResults(page);
@@ -116,6 +120,7 @@ public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
 	 * @param lambdaQuery
 	 * @return
 	 */
+	@Override
 	public JpaPageResults<T> fetch(JpaPage page ,LambdaQuery<T> lambdaQuery) {
 		try {
 			beforePageResults(page);
@@ -781,6 +786,4 @@ public  class  JpaService <M extends IJpaMapper<T>, T extends JpaEntity> {
 		
 		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),total,totalCount,resultslist);
 	}
-	
-
 }

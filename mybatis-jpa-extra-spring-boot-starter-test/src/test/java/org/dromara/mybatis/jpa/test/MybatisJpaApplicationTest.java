@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
+import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.test;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
+import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
