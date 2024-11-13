@@ -150,7 +150,7 @@ public class FindByTestRunner extends BaseTestRunner{
 	@Test
 	void findByIsOrderBy(){
 		_logger.info("find by OrderBy");
-		service.findByStdNameIsOrderByStdName("F");
+		service.findByStdGenderIsOrderByStdAge("F");
 	}
 	
 	@Test

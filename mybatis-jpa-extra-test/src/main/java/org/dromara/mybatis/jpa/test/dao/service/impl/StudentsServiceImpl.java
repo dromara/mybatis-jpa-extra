@@ -105,7 +105,7 @@ public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students>
 		return getMapper().findByStdGenderOrderByStdAge(stdGender);
 	}
 	
-	public List<Students> findByStdNameIsOrderByStdName(String stdGender) {
+	public List<Students> findByStdGenderIsOrderByStdAge(String stdGender) {
 		return getMapper().findByStdGenderIsOrderByStdAge(stdGender);
 	}
 	
@@ -141,4 +141,5 @@ public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students>
 	public int updatePassword(Students std) {
 		return getMapper().updatePassword(std);
 	}
+
 }

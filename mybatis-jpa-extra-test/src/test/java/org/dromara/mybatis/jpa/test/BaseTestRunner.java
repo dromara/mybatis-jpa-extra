@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
-import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
+import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +31,10 @@ public class BaseTestRunner {
 	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 	public static ApplicationContext context;
 	
-	public static StudentsServiceImpl service;
+	public static StudentsService service;
 	
 	//Initialization ApplicationContext for Project
-	public StudentsServiceImpl init(){
+	public StudentsService init(){
 		_logger.info("Init Spring Context...");
 		SimpleDateFormat sdf_ymdhms =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startTime  = sdf_ymdhms.format(new Date());
@@ -43,7 +43,7 @@ public class BaseTestRunner {
 		context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
 
 		MybatisJpaContext.init(context);
-		service =(StudentsServiceImpl)MybatisJpaContext.getBean("studentsService");
+		service = (StudentsService)MybatisJpaContext.getBean(StudentsService.class);
 		return service;
 	}
 	
