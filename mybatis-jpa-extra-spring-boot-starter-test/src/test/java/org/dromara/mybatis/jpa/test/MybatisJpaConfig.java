@@ -21,7 +21,7 @@ import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 
 import javax.sql.DataSource;
 
-import org.dromara.mybatis.jpa.test.handler.MxkFieldAutoFillHandler;
+import org.dromara.mybatis.jpa.test.handler.PersistFieldAutoFillHandler;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ public class MybatisJpaConfig {
 	}
 
     @Bean
-    MxkFieldAutoFillHandler mxkFieldAutoFillHandler() {
-    	return new MxkFieldAutoFillHandler();
+    PersistFieldAutoFillHandler mxkFieldAutoFillHandler() {
+    	return new PersistFieldAutoFillHandler();
     }
 }

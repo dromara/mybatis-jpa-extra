@@ -19,7 +19,7 @@ package org.dromara.mybatis.jpa.test.handler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.dromara.mybatis.jpa.handler.FieldAutoFillHandler;
 
-public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
+public class PersistFieldAutoFillHandler  extends FieldAutoFillHandler{
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
