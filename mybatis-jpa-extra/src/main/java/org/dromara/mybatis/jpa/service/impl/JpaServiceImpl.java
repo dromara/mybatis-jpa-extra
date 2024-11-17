@@ -774,11 +774,11 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	}
 	
 	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
-		return new JpaPageResults<>(page.getPageNumber(),
-									page.getPageSize(),
-									parseRecords(resultslist),
-									fetchCount(page, resultslist),
-									resultslist);
+		//当前页记录数
+		Integer records = parseRecords(resultslist);
+		//总页数
+		Integer totalCount =fetchCount(page, resultslist);
+		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),records,totalCount,resultslist);
 	}
 	
 	/**
