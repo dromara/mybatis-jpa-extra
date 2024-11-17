@@ -774,16 +774,37 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	}
 	
 	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
-		page.setPageable(false);
-		Integer total = resultslist.size();
-		
+		return new JpaPageResults<>(page.getPageNumber(),
+									page.getPageSize(),
+									parseRecords(resultslist),
+									fetchCount(page, resultslist),
+									resultslist);
+	}
+	
+	/**
+	 * 当前页记录数
+	 * @param resultslist
+	 * @return
+	 */
+	protected Integer parseRecords( List<?> resultslist){
+		return CollectionUtils.isEmpty(resultslist) ? 0 : resultslist.size();
+	}
+	
+	/**
+	 * 获取总页数
+	 * @param page
+	 * @param records
+	 * @return
+	 */
+	protected Integer fetchCount(JpaPage page ,List<?> resultslist) {
 		Integer totalCount = 0;
-		if(page.getPageNumber() == 1 && total < page.getPageSize()) {
-			totalCount = total;
+		page.setPageable(false);
+		Integer records = parseRecords(resultslist);
+		if(page.getPageNumber() == 1 && records < page.getPageSize()) {
+			totalCount = records;
 		}else {
 			totalCount = parseCount(getMapper().fetchCount(page));
 		}
-		
-		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),total,totalCount,resultslist);
+		return totalCount;
 	}
 }
