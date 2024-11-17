@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,25 +32,25 @@ public class LambdaQueryBuilder {
 	public static String build(LambdaQuery lambdaQuery) {
 		StringBuffer conditionString = new StringBuffer("");
 		List<Condition> conditions = lambdaQuery.getConditions();
+		Operator lastExpression = Operator.and;
 		for (Condition condition : conditions) {
 			Operator expression = condition.getExpression();
 			Object value = condition.getValue();
-			String column = condition.getColumn().replace("'", "").replace(" ", "").replace(";", "");
 			//Column去除 ',空格,分号
+			String column = condition.getColumn().replace("'", "").replace(" ", "").replace(";", "");
 			condition.setColumn(column);
-			
 			if (expression.equals(Operator.and) || expression.equals(Operator.or)) {
-
-				conditionString.append(" ").append(expression.getOperator()).append(" ");
-
+				lastExpression = condition.getExpression();
 				if (value instanceof LambdaQuery lambdaQueryValue) {
+					conditionString.append(appendExpression(conditionString.toString(),lastExpression));
 					conditionString.append(" ( ").append(build(lambdaQueryValue)).append(" ) ");
 				}
-
 			}else if (expression.equals(Operator.condition)) {
-				conditionString.append(column.replace(";", ""));
+				conditionString.append(column);
 			} else {
-				logger.trace("column {} value class {}",column,value == null ? "" : value.getClass().getCanonicalName());
+				logger.trace("Expression {} column {} value class {}",lastExpression,column,value == null ? "" : value.getClass().getCanonicalName());
+		
+				conditionString.append(appendExpression(conditionString.toString(),lastExpression));
 				
 				if (expression.equals(Operator.like) || expression.equals(Operator.notLike)) {
 
@@ -99,6 +100,10 @@ public class LambdaQueryBuilder {
 		}
 		logger.trace("conditionString {}" , conditionString);
 		return conditionString.toString();
+	}
+	
+	public static String appendExpression(String conditionString , Operator lastExpression) {
+		return StringUtils.isBlank(conditionString) ? "" : " " + lastExpression + " ";
 	}
 
 	public static String buildGroupBy(LambdaQuery lambdaQuery) {
