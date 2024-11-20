@@ -140,6 +140,4 @@ public class DeleteProvider <T extends JpaEntity>{
 		return sql.toString();
 	}
 	
-	
-	
 }

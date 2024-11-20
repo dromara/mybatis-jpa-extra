@@ -122,7 +122,7 @@ public class FetchProvider <T extends JpaEntity>{
 			.WHERE("( " + QueryBuilder.build(condition) +" ) ");
 		
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
-		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
 							logicColumnMapper.getColumnName(),
@@ -151,7 +151,7 @@ public class FetchProvider <T extends JpaEntity>{
 			.WHERE("( " + LambdaQueryBuilder.build(condition) +" ) ");
 		
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
-		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
 							logicColumnMapper.getColumnName(),

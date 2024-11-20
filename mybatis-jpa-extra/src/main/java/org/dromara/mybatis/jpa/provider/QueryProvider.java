@@ -42,7 +42,7 @@ public class QueryProvider<T extends JpaEntity> {
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
-		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
 			sql.WHERE("( %s ) and %s = '%s'"
 					.formatted(
 							QueryBuilder.build(query),
@@ -70,7 +70,7 @@ public class QueryProvider<T extends JpaEntity> {
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
-		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
 			sql.WHERE("( %s ) and %s = '%s'"
 					.formatted(
 							LambdaQueryBuilder.build(lambdaQuery),

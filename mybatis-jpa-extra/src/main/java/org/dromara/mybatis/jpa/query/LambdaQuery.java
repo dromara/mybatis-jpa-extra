@@ -33,6 +33,8 @@ public class LambdaQuery <T> {
 	
 	List<Condition> orderBy ;
 	
+	boolean softDelete = true;
+	
 	public LambdaQuery() {
 		super();
 	}
@@ -616,6 +618,14 @@ public class LambdaQuery <T> {
 		return orderBy;
 	}
 	
+	public boolean isSoftDelete() {
+		return softDelete;
+	}
+
+	public void setSoftDelete(boolean softDelete) {
+		this.softDelete = softDelete;
+	}
+
 	/**
 	 * 通过IGetter获取对应的ColumnName名称
 	 * @param getter

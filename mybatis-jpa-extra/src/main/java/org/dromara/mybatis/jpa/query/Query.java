@@ -37,6 +37,8 @@ public class Query {
 	
 	ArrayList<Condition> orderBy ;
 	
+	boolean softDelete = true;
+	
 	public Query() {
 		super();
 	}
@@ -402,6 +404,14 @@ public class Query {
 
 	public List<Condition> getGroupBy() {
 		return groupBy;
+	}
+
+	public boolean isSoftDelete() {
+		return softDelete;
+	}
+
+	public void setSoftDelete(boolean softDelete) {
+		this.softDelete = softDelete;
 	}
 
 	@Override
