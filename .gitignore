@@ -21,4 +21,5 @@ jdk/*
 .vscode/launch.json
 */bin/*
 *\bin\*
+target
 target/mybatis-jpa-extra-parent-3.2.pom
