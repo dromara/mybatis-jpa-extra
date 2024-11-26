@@ -77,13 +77,20 @@
 			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
+	
+	<scm>
+        <connection>scm:git:git://gitee.com/dromara/mybatis-jpa-extra.git</connection>
+        <developerConnection>scm:git:ssh://gitee.com/dromara/mybatis-jpa-extra.git</developerConnection>
+        <url>https://gitee.com/dromara/mybatis-jpa-extra</url>
+    </scm>
+    
     <!--
 	<scm>
 		<connection>scm:git@github.com:dromara/mybatis-jpa-extra.git</connection>
 		<developerConnection>scm:git@github.com:dromara/mybatis-jpa-extra.git</developerConnection>
 		<url>git@github.com:dromara/mybatis-jpa-extra.git</url>
 	</scm>
--->
+	-->
 	<developers>
 		<developer>
 			<name>MaxKeyTop</name>
@@ -488,22 +495,30 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Gpg Signature 本地打包要注释
+			<!-- GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>ossrh</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			 -->
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.5.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>    	        
 </project>

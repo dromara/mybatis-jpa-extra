@@ -12,7 +12,7 @@
 	<artifactId>mybatis-jpa-extra-test</artifactId>
 	<name>mybatis-jpa-extra-test</name>
 	<description>mybatis-jpa-extra-test</description>
-	<url>https://github.com/shimingxy/mybatis-jpa-extra</url>
+	<url>https://github.com/dromara/mybatis-jpa-extra</url>
 
 	<dependencies>
 		<dependency>

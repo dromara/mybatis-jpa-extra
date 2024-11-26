@@ -14,7 +14,7 @@
 	<artifactId>mybatis-jpa-extra-spring-boot-starter-test</artifactId>
 	<name>mybatis-jpa-extra-spring-boot-starter-test</name>
 	<description>mybatis-jpa-extra-spring-boot-starter-test</description>
-	<url>https://github.com/MaxKeyTop/mybatis-jpa-extra</url>
+	<url>https://github.com/dromara/mybatis-jpa-extra</url>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
