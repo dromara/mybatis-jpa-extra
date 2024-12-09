@@ -68,7 +68,8 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
 				FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
 				FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
-				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, FindBySqlBuilder.translate(findByMapper,parameterObject));
+				String findBySql = FindBySqlBuilder.translate(findByMapper,parameterObject);
+				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, findBySql);
 			}else {
 				SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
 				logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
