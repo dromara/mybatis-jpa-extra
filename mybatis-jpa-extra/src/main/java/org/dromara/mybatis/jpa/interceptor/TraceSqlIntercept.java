@@ -66,9 +66,9 @@ public class TraceSqlIntercept  implements Interceptor {
 		} finally {
 			// 拼接日志打印过程
 			if(StringUtils.isNotBlank(printSql)) {
-				logger.trace("Execute SQL Cost Time {}ms , SQL :\n {}", (executeFinishTime - executeStartTime), printSql);
+				logger.debug("Execute SQL Cost Time {}ms , SQL :\n {}", (executeFinishTime - executeStartTime), printSql);
 			}else {
-				logger.trace("Execute SQL Cost Time {}ms ", (executeFinishTime - executeStartTime));
+				logger.debug("Execute SQL Cost Time {}ms ", (executeFinishTime - executeStartTime));
 			}
 		}
 		return proceed;
