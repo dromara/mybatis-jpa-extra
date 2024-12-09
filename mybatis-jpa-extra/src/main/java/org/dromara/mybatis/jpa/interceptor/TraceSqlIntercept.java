@@ -131,7 +131,7 @@ public class TraceSqlIntercept  implements Interceptor {
 				}
 			}
 		}
-		return sql;
+		return StringUtils.isNotBlank(sql) ? sql : originalSql;
 	}
 
 	private static String getParameterValue(Object object) {
