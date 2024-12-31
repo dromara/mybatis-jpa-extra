@@ -26,6 +26,7 @@ import org.dromara.mybatis.jpa.crypto.EncryptFactory;
 import org.dromara.mybatis.jpa.crypto.utils.ReciprocalUtils;
 import org.dromara.mybatis.jpa.dialect.DialectMapper;
 import org.dromara.mybatis.jpa.interceptor.FieldAutoFillInterceptor;
+import org.dromara.mybatis.jpa.interceptor.FieldDecryptInterceptor;
 import org.dromara.mybatis.jpa.interceptor.FieldEncryptInterceptor;
 import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
 import org.dromara.mybatis.jpa.interceptor.TraceSqlIntercept;
@@ -85,6 +86,8 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 		config.addInterceptor(statementHandlerInterceptor);
 		//Encrypt
 		config.addInterceptor(new FieldEncryptInterceptor());
+		//Decrypt
+		config.addInterceptor(new FieldDecryptInterceptor());
 		//data AutoFill , insert and update
 		config.addInterceptor(new FieldAutoFillInterceptor());
 		//Trace SQL and Execute Cost Time

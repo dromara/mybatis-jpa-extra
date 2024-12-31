@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,7 @@ public class LambdaQueryBuilder {
 		for (Condition condition : conditions) {
 			Operator expression = condition.getExpression();
 			Object value = condition.getValue();
-			//Column去除 ',空格,分号
-			String column = condition.getColumn().replace("'", "").replace(" ", "").replace(";", "");
+			String column = SafeValueHandler.safeColumn(condition.getColumn());
 			condition.setColumn(column);
 			if (expression.equals(Operator.and) || expression.equals(Operator.or)) {
 				lastExpression = condition.getExpression();
@@ -55,31 +55,31 @@ public class LambdaQueryBuilder {
 				if (expression.equals(Operator.like) || expression.equals(Operator.notLike)) {
 
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
-					conditionString.append("'%").append(value).append("%'");
+					conditionString.append("'%").append(SafeValueHandler.valueOf(value)).append("%'");
 	
 				} else if (expression.equals(Operator.likeLeft)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
-					conditionString.append("'%").append(value).append("'");
+					conditionString.append("'%").append(SafeValueHandler.valueOf(value)).append("'");
 	
 				} else if (expression.equals(Operator.likeRight)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
-					conditionString.append("'").append(value).append("%'");
+					conditionString.append("'").append(SafeValueHandler.valueOf(value)).append("%'");
 	
 				} else if (expression.equals(Operator.eq) || expression.equals(Operator.notEq)
 						|| expression.equals(Operator.gt) || expression.equals(Operator.ge)
 						|| expression.equals(Operator.lt) || expression.equals(Operator.le)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
-					conditionString.append(ConditionValue.valueOf(value));
+					conditionString.append(SafeValueHandler.valueOfType(value));
 	
 				} else if (expression.equals(Operator.between)|| expression.equals(Operator.notBetween)) {
 	
 					conditionString.append(" ( ").append(column).append(" ").append(expression.getOperator()).append(" ");
-					conditionString.append(ConditionValue.valueOf(value));
+					conditionString.append(SafeValueHandler.valueOfType(value));
 					conditionString.append(" and ");
-					conditionString.append(ConditionValue.valueOf(condition.getValue2())).append(" ) ");
+					conditionString.append(SafeValueHandler.valueOfType(condition.getValue2())).append(" ) ");
 	
 				} else if (expression.equals(Operator.isNull) || expression.equals(Operator.isNotNull)) {
 	
@@ -113,7 +113,7 @@ public class LambdaQueryBuilder {
 			if (groupBy.length() > 0) {
 				groupBy.append(" , ");
 			}
-			groupBy.append(condition.getColumn());
+			groupBy.append(SafeValueHandler.safeColumn(condition.getColumn()));
 		}
 		return groupBy.toString();
 	}
@@ -127,7 +127,9 @@ public class LambdaQueryBuilder {
 			if (orderBy.length() > 0) {
 				orderBy.append(" , ");
 			}
-			orderBy.append(condition.getColumn()).append(" ").append(condition.getValue());
+			orderBy.append(SafeValueHandler.safeColumn(condition.getColumn()));
+			orderBy.append(" ");
+			orderBy.append(SafeValueHandler.valueOf(condition.getValue()));
 		}
 		return orderBy.toString();
 	}

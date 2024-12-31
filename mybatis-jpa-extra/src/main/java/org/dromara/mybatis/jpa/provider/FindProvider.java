@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
@@ -102,7 +103,7 @@ public class FindProvider <T extends JpaEntity>{
 						sqlBuffer
 							.append(filterSqls[i])
 							.append("'")
-							.append(args[i].toString().replace("'", ""))
+							.append(SafeValueHandler.valueOf(args[i].toString()))
 							.append("'");
 					}else {
 						sqlBuffer
@@ -143,7 +144,7 @@ public class FindProvider <T extends JpaEntity>{
 		StringBuffer keyValues = new StringBuffer();
 		for(String value : parameterIds) {
 			if(value.trim().length() > 0) {
-				keyValues.append(",'").append(value).append("'");
+				keyValues.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
 			}
 		}
 		logger.trace("find by id {}" , keyValues);

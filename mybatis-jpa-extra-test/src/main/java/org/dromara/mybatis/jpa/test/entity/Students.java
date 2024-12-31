@@ -18,6 +18,7 @@ package org.dromara.mybatis.jpa.test.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.annotations.Encrypted;
@@ -183,8 +184,31 @@ public class Students extends JpaEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
-				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Students [id=");
+		builder.append(id);
+		builder.append(", stdNo=");
+		builder.append(stdNo);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", stdName=");
+		builder.append(stdName);
+		builder.append(", stdGender=");
+		builder.append(stdGender);
+		builder.append(", stdAge=");
+		builder.append(stdAge);
+		builder.append(", stdMajor=");
+		builder.append(stdMajor);
+		builder.append(", stdClass=");
+		builder.append(stdClass);
+		builder.append(", images=");
+		builder.append(Arrays.toString(images));
+		builder.append(", modifyDate=");
+		builder.append(modifyDate);
+		builder.append(", deleted=");
+		builder.append(deleted);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

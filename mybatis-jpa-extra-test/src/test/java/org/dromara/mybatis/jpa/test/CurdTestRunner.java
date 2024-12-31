@@ -35,6 +35,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 		Students student=new Students();
 		student.setStdNo("10024");
 		student.setStdGender("M");
+		student.setPassword("shimingxy");
 		student.setStdName("司马昭");
 		student.setStdAge(20);
 		student.setStdMajor("政治");
@@ -63,14 +64,14 @@ public class CurdTestRunner  extends BaseTestRunner{
 	@Test
 	void get(){
 		_logger.info("get...");
-		Students student=service.get("317d5eda-927c-4871-a916-472a8062df23");
+		Students student=service.get("1071439277251887104");
 		 _logger.info("Students {}",student);
 	}
 	
 	@Test
 	void update(){
 		_logger.info("get...");
-		Students student=service.get("1007058902925180928");
+		Students student=service.get("1071432244066779136");
 		 _logger.info("Students {}",student);
 		 
 		 _logger.info("update...");

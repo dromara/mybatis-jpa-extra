@@ -20,33 +20,17 @@ package org.dromara.mybatis.jpa.query;
 import java.util.Collection;
 import java.util.List;
 
+import org.dromara.mybatis.jpa.handler.SafeValueHandler;
+
 public class ConditionValue {
 
-	public static String valueOf(Object value) {
-		StringBuffer conditionString = new StringBuffer("");
-		String valueType = value.getClass().getSimpleName().toLowerCase();
-		if (valueType.equals("string") 
-				|| valueType.equals("char")) {
-			conditionString.append("'").append(String.valueOf(value).replace("'", "")).append("'");
-		} else if (valueType.equals("int") 
-				|| valueType.equals("long") 
-				|| valueType.equals("integer")
-				|| valueType.equals("float") 
-				|| valueType.equals("double")) {
-			conditionString.append("").append(value).append("");
-		} else {
-			conditionString.append("'").append(String.valueOf(value).replace("'", "")).append("'");
-		}
-		return conditionString.toString();
-	}
-	
 	public static String valueOfList(List<?> listValue) {
 		StringBuffer conditionArray = new StringBuffer();
 		for (Object value : listValue) {
 			if (conditionArray.length() > 0) {
 				conditionArray.append(" , ");
 			}
-			conditionArray.append(ConditionValue.valueOf(value));
+			conditionArray.append(SafeValueHandler.valueOfType(value));
 		}
 		return conditionArray.toString();
 	}
@@ -57,7 +41,7 @@ public class ConditionValue {
 			if (conditionArray.length() > 0) {
 				conditionArray.append(" , ");
 			}
-			conditionArray.append(ConditionValue.valueOf(objects[i]));
+			conditionArray.append(SafeValueHandler.valueOfType(objects[i]));
 		}
 		return conditionArray.toString();
 	}
@@ -68,7 +52,7 @@ public class ConditionValue {
         	if (conditionArray.length() > 0) {
 				conditionArray.append(" , ");
 			}
-        	conditionArray.append(ConditionValue.valueOf(element));
+        	conditionArray.append(SafeValueHandler.valueOfType(element));
         }
 		return conditionArray.toString();
 	}

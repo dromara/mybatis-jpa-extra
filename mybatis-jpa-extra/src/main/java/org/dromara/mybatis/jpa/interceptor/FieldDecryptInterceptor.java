@@ -34,7 +34,9 @@ import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),})
+@Intercepts({
+	@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+})
 public class FieldDecryptInterceptor  implements Interceptor {
 	private static Logger logger = LoggerFactory.getLogger(FieldDecryptInterceptor.class);
 	

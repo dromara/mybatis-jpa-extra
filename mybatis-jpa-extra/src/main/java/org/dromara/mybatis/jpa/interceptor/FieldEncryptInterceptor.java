@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa.interceptor;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
@@ -48,8 +49,12 @@ public class FieldEncryptInterceptor  implements Interceptor {
         		logger.debug("FieldName {} is need {} Encrypted ",encryptField.getFieldName(),encryptField.getEncryptedAnnotation().algorithm());
 	            encryptField.getField().setAccessible(true);
 	            String plainValue = (String) encryptField.getField().get(entity);
-	            String cipherValue = decrypt(plainValue,encryptField.getEncryptedAnnotation().algorithm());
-	            encryptField.getField().set(entity, cipherValue);
+	            if(StringUtils.isNotBlank(plainValue) 
+	            		&& plainValue.indexOf("{") == -1 
+	            		&& plainValue.indexOf("}") == -1) {
+		            String cipherValue = decrypt(plainValue,encryptField.getEncryptedAnnotation().algorithm());
+		            encryptField.getField().set(entity, cipherValue);
+	            }
         	}
         }
         return invocation.proceed();
