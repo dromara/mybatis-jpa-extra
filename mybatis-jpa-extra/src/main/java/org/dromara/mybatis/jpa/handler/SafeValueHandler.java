@@ -21,10 +21,19 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class SafeValueHandler {
 
+	public final class NUMBER_SIGN{
+    	public static final String SYMBOL 		= "#";
+    	public static final String REPLACE 		= "0x23";
+    }
+	
     public final class SingleQuote{
     	public static final String SYMBOL 		= "'";
     	public static final String REPLACE 		= "0x27";
-    	public static final String HTML 		= "&apos;";
+    }
+    
+    public final class DECREMENT{
+    	public static final String SYMBOL 		= "--";
+    	public static final String REPLACE 		= "0x2D0x2D";
     }
 
 	public static String valueOf(Object value) {
@@ -75,18 +84,29 @@ public class SafeValueHandler {
 		String replace = "";
 		if(value != null) {
 			replace = StringEscapeUtils.escapeHtml4(String.valueOf(value));
-			replace = replace.replace(SingleQuote.SYMBOL, SingleQuote.HTML);
+			if(replace.indexOf(SingleQuote.SYMBOL) > -1) {
+				replace = replace.replace(SingleQuote.SYMBOL, SingleQuote.REPLACE);
+			}
+			if(replace.indexOf(DECREMENT.SYMBOL) > -1) {
+				replace = replace.replace(DECREMENT.SYMBOL, DECREMENT.REPLACE);
+			}
+			if(replace.indexOf(NUMBER_SIGN.SYMBOL) > -1) {
+				replace = replace.replace(NUMBER_SIGN.SYMBOL, NUMBER_SIGN.REPLACE);
+			}
 		}
 		return replace;
 	}
 	
 	/**
-	 * Column去除 ' 空格 分号
+	 * Column去除 ' 空格 分号 --
 	 * @param column
 	 * @return
 	 */
 	public static String safeColumn(String column) {
-		return column.replace("'", "").replace(" ", "").replace(";", "");
+		return column.replace("'", "")
+				.replace(" ", "")
+				.replace(";", "")
+				.replace(DECREMENT.SYMBOL, DECREMENT.REPLACE);
 	}
 	
 }
