@@ -51,7 +51,7 @@ public class FetchTestRunner  extends BaseTestRunner{
 		 page.setPageSize(20);
 		 page.setPageable(true);
 		 
-		 Query condition = new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30);
+		 Query condition = new Query().isNotNull("stdMajor");//.eq("stdMajor", "政治").and().gt("STDAGE", 30);
 		 
 		 JpaPageResults<Students>  results = service.fetch(page,condition);
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",

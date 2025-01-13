@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.slf4j.Logger;
@@ -128,7 +129,7 @@ public class MapperSqlProvider <T extends JpaEntity>{
 	 * @param entity
 	 * @return insert sql String
 	 */
-	public String fetchCount(T entity) {
+	public String fetchCount(JpaPage entity) {
 		return new FetchCountProvider().executeCount(entity);
 	}
 	

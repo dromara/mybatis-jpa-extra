@@ -75,7 +75,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 			}
 			countSql.append(selectSql);
 		}
-		String countSqlLowerCase = countSql.toString().toLowerCase();
+		String countSqlLowerCase = countSql.toString().toLowerCase().replace("\n", " ");
 		logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
 		
 		/*
