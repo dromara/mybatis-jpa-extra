@@ -93,6 +93,7 @@ public class CurdTestRunner  extends BaseTestRunner{
 	@Test
 	void remove(){
 		_logger.info("remove...");
+		service.delete("b1e2-92fb23b5e512");
 		service.delete("921d3377-937a-4578-b1e2-92fb23b5e512");
 	}
 	

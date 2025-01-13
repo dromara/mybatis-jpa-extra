@@ -48,10 +48,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnList(entityClass);
 		String tableName = TableMetadata.getTableName(entityClass);
-		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.REMOVE_SQL)) {
-			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.REMOVE_SQL);
-		}
-		
+
 		String idValue = (String) parametersMap.get(MapperMetadata.PARAMETER_ID);
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
@@ -64,13 +61,13 @@ public class DeleteProvider <T extends JpaEntity>{
 							partitionKeyColumnMapper.getColumnName() ,
 							partitionKeyValue,
 							idFieldColumnMapper.getColumnName(),
-							idValue)
+							SafeValueHandler.valueOf(idValue))
         			);  
 		}else {
 			sql.WHERE("%s = '%s'"
 					.formatted(
 							idFieldColumnMapper.getColumnName(),
-							idValue) 
+							SafeValueHandler.valueOf(idValue)) 
 					);  
 		}
 		
