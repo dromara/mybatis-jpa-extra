@@ -29,7 +29,6 @@ import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
@@ -87,7 +86,6 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		}
 		
         String deleteSql = sql.toString(); 
-        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.LOGICDELETE_SQL,deleteSql);
         logger.trace("softDelete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
