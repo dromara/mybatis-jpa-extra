@@ -387,7 +387,7 @@ public class Query {
 	}
 	
 	public Query groupBy(String column) {
-		if(groupBy == null) {
+		if(CollectionUtils.isEmpty(groupBy)) {
 			this.groupBy = new ArrayList<>();
 		}
 		groupBy.add(new Condition(Operator.group,column,""));
@@ -395,7 +395,7 @@ public class Query {
 	}
 	
 	public Query orderBy(String column,String orderType) {
-		if(orderBy == null) {
+		if(CollectionUtils.isEmpty(orderBy)) {
 			this.orderBy = new ArrayList<>();
 		}
 		orderBy.add(new Condition(Operator.order,column,orderType));

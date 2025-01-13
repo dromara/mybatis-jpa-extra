@@ -591,7 +591,7 @@ public class LambdaQuery <T> {
 	}
 	
 	public LambdaQuery <T>groupBy(IGetter<T> getter) {
-		if(CollectionUtils.isNotEmpty(groupBy)) {
+		if(CollectionUtils.isEmpty(groupBy)) {
 			this.groupBy = new ArrayList<>();
 		}
 		groupBy.add(new Condition(Operator.group,getColumnName(getter),""));
@@ -599,7 +599,7 @@ public class LambdaQuery <T> {
 	}
 	
 	public LambdaQuery <T>orderBy(IGetter<T> getter,String orderType) {
-		if(CollectionUtils.isNotEmpty(orderBy)) {
+		if(CollectionUtils.isEmpty(orderBy)) {
 			this.orderBy = new ArrayList<>();
 		}
 		orderBy.add(new Condition(Operator.order,getColumnName(getter),orderType));
