@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
@@ -117,9 +118,12 @@ public class FetchProvider <T extends JpaEntity>{
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
 		}
-		SQL sql = new SQL()
-			.SELECT(column).FROM(TableMetadata.getTableName(entityClass))
-			.WHERE("( " + QueryBuilder.build(condition) +" ) ");
+		SQL sql = new SQL().SELECT(column).FROM(TableMetadata.getTableName(entityClass));
+		
+		String conditionString = QueryBuilder.build(condition);
+		if(StringUtils.isNotBlank(conditionString)) {
+			sql.WHERE("( " + conditionString +" ) ");
+		}
 		
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
@@ -146,9 +150,12 @@ public class FetchProvider <T extends JpaEntity>{
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
 		}
-		SQL sql = new SQL()
-			.SELECT(column).FROM(TableMetadata.getTableName(entityClass))
-			.WHERE("( " + LambdaQueryBuilder.build(condition) +" ) ");
+		SQL sql = new SQL().SELECT(column).FROM(TableMetadata.getTableName(entityClass));
+		
+		String conditionString = LambdaQueryBuilder.build(condition);
+		if(StringUtils.isNotBlank(conditionString)) {
+			sql.WHERE("( " + conditionString +" ) ");
+		}
 		
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
@@ -162,6 +169,4 @@ public class FetchProvider <T extends JpaEntity>{
 		return sql.toString();
 	}
 	
-	
-
 }

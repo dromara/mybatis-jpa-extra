@@ -65,7 +65,7 @@ public class FetchTestRunner  extends BaseTestRunner{
 		 page.setPageSize(20);
 		 page.setPageable(true);
 		 LambdaQuery<Students> lambdaQuery =new LambdaQuery<>();
-		 lambdaQuery.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30));
+		 //lambdaQuery.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30));
 		 JpaPageResults<Students>  results = service.fetch(page,lambdaQuery);
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
