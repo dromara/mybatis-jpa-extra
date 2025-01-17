@@ -21,14 +21,14 @@
 		<servlet-api.version>6.0.0</servlet-api.version>
 		<junit.version>5.9.2</junit.version>
 		
-		<spring.version>6.1.14</spring.version>
-		<springboot.version>3.3.3</springboot.version>
+		<spring.version>6.2.1</spring.version>
+		<springboot.version>3.4.1</springboot.version>
 		
 		<commons-collections.version>3.2.2</commons-collections.version>
 		<beanutils.version>1.9.4</beanutils.version>
 		<commons-lang.version>2.5</commons-lang.version>
 		<commons-dbcp2.version>2.12.0</commons-dbcp2.version>
-		<commons-pool2.version>2.4.2</commons-pool2.version>
+		<commons-pool2.version>2.12.0</commons-pool2.version>
 		<commons-io.version>2.4</commons-io.version>
         <commons-codec.version>1.9</commons-codec.version>
         <commons-lang3.version>3.17.0</commons-lang3.version>
@@ -36,8 +36,8 @@
         <commons-text.version>1.13.0</commons-text.version>
         <xmlbeans.version>5.0.2</xmlbeans.version>
         
-        <log4j.version>2.24.0</log4j.version>
-		<slf4j2.version>2.0.13</slf4j2.version>
+        <log4j.version>2.24.3</log4j.version>
+		<slf4j2.version>2.0.16</slf4j2.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<jackson.version2>2.14.0</jackson.version2>
 		
@@ -46,8 +46,8 @@
 		<highgo.version>6.0.3.jre8</highgo.version>
 		<postgresql.version>42.4.1</postgresql.version>
 		<persistence.version>3.1.0</persistence.version>
-		<mybatis.version>3.5.16</mybatis.version>
-		<mybatis-spring.version>3.0.3</mybatis-spring.version>
+		<mybatis.version>3.5.19</mybatis.version>
+		<mybatis-spring.version>3.0.4</mybatis-spring.version>
 		<druid.version>1.2.23</druid.version>
 
 		<caffeine.version>3.1.2</caffeine.version>
@@ -285,11 +285,6 @@
             <version>${persistence.version}</version>
         </dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-		<dependency>
-		    <groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-1.2-api</artifactId>
-		    <version>${log4j.version}</version>
-		</dependency> 
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-api</artifactId>
