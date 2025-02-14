@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa;
+package org.dromara.mybatis.jpa.spring;
 
 import java.util.Collections;
 import java.util.List;
