@@ -202,6 +202,20 @@ public  interface  IJpaRepository <T> {
 	 * @return
 	 */
 	public List<T> query(LambdaQuery<T> lambdaQuery) ;
+	
+	/**
+	 *  count by Query 
+	 * @param entity
+	 * @return
+	 */
+	public long count(Query query) ;
+	
+	/**
+	 *  count by LambdaQuery 
+	 * @param entity
+	 * @return
+	 */
+	public long count(LambdaQuery<T> lambdaQuery) ;
 
 	//follow function for insert update and delete
 	/**

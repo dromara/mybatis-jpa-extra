@@ -52,4 +52,10 @@ public interface IJpaQueryMapper<T> {
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "queryByLambdaQuery")
 	public List<T> queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "countByQuery")
+	public long countByQuery(Class<?> entityClass,Query query);
+	
+	@SelectProvider(type = MapperSqlProvider.class, method = "countByLambdaQuery")
+	public long countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
 }

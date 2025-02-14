@@ -48,6 +48,17 @@ public class TableMetadata {
 	}
 	
 	/**
+	 * build select count(1) from entity Class
+	 * @param entityClass
+	 * @return select columns  from table name sel_tmp_table
+	 */
+	public static SQL buildSelectCount(Class<?> entityClass) {
+		FieldMetadata.buildColumnList(entityClass);
+		return new SQL().SELECT(" count(1) as _select_count ")
+				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+	}
+	
+	/**
 	 * build select from entity Class
 	 * @param entityClass
 	 * @return select columns  from table name sel_tmp_table

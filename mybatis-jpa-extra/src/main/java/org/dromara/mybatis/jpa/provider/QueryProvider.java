@@ -123,5 +123,46 @@ public class QueryProvider<T extends JpaEntity> {
 		logger.trace("filter By Entity SQL \n{}" , sql);
 		return sql.toString();
 	}
+	
+	public String countByQuery(Class<?> entityClass, Query query) {
+		logger.trace("count Query \n{}" , query);
+		SQL sql = TableMetadata.buildSelectCount(entityClass);
+		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
+			sql.WHERE("( %s ) and %s = '%s'"
+					.formatted(
+							QueryBuilder.build(query),
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}else {
+			sql.WHERE(QueryBuilder.build(query));
+		}
+		
+		logger.trace("count By Query SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
+	public String countByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
+		logger.trace("count LambdaQuery \n{}" , lambdaQuery);
+		
+		SQL sql = TableMetadata.buildSelectCount(entityClass);
+		
+		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
+			sql.WHERE("( %s ) and %s = '%s'"
+					.formatted(
+							LambdaQueryBuilder.build(lambdaQuery),
+							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getSoftDelete().value())
+					);
+		}else {
+			sql.WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		}
 
+		logger.trace("count By Query SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
 }

@@ -374,6 +374,34 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 		return null;
 	}
 	
+	/**
+	 *  count by Query 
+	 * @param entity
+	 * @return
+	 */
+	public long count(Query query) {
+		try {
+			return getMapper().countByQuery(entityClass,query);
+		} catch(Exception e) {
+			logger.error("count by Query Exception " , e);
+		}
+		return 0;
+	}
+	
+	/**
+	 *  count by LambdaQuery 
+	 * @param entity
+	 * @return
+	 */
+	public long count(LambdaQuery<T> lambdaQuery) {
+		try {
+			return getMapper().countByLambdaQuery(entityClass,lambdaQuery);
+		} catch(Exception e) {
+			logger.error("count by LambdaQuery Exception " , e);
+		}
+		return 0;
+	}
+	
 	//follow function for query
 	/**
 	 *  query list entity by entity 

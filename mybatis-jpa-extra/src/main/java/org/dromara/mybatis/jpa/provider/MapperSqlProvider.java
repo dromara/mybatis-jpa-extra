@@ -146,5 +146,14 @@ public class MapperSqlProvider <T extends JpaEntity>{
 	public String queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) {
 		return new QueryProvider().queryByLambdaQuery(entityClass,lambdaQuery);
 	}
+	
+	
+	public String countByQuery(Class<?> entityClass,Query query) {
+		return new QueryProvider().countByQuery(entityClass,query);
+	}
+	
+	public String countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) {
+		return new QueryProvider().countByLambdaQuery(entityClass,lambdaQuery);
+	}
 
 }

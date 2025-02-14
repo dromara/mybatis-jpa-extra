@@ -46,7 +46,7 @@
   </bean>
 
 	<!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-	<bean id="sqlSessionFactory" class="org.dromara.mybatis.jpa.MyBatisJpaSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="org.dromara.mybatis.jpa.spring.MyBatisJpaSessionFactoryBean">
 		<property name="timeout" value="30" />
 		<property name="dialect" value="mysql" />
 		<property name="dataSource" ref="dataSource" />
