@@ -18,6 +18,7 @@
 package org.dromara.mybatis.jpa.query;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
@@ -49,6 +50,19 @@ public class ConditionValue {
 	public static String valueOfCollection(Collection<?> cObjects) {
 		StringBuffer conditionArray = new StringBuffer();
         for (Object element : cObjects) {//for循环读取集合
+        	if (conditionArray.length() > 0) {
+				conditionArray.append(" , ");
+			}
+        	conditionArray.append(SafeValueHandler.valueOfType(element));
+        }
+		return conditionArray.toString();
+	}
+	
+	public static String valueOfIterator(List<?> listValue) {
+		StringBuffer conditionArray = new StringBuffer();
+		Iterator<?> iterator = listValue.iterator();
+        while (iterator.hasNext()) {//while循环读取集合
+        	Object element = iterator.next();
         	if (conditionArray.length() > 0) {
 				conditionArray.append(" , ");
 			}

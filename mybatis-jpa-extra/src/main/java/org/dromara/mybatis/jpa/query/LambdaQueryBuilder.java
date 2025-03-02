@@ -41,9 +41,12 @@ public class LambdaQueryBuilder {
 			condition.setColumn(column);
 			if (expression.equals(Operator.and) || expression.equals(Operator.or)) {
 				lastExpression = condition.getExpression();
-				if (value instanceof LambdaQuery lambdaQueryValue) {
-					conditionString.append(appendExpression(conditionString.toString(),lastExpression));
-					conditionString.append(" ( ").append(build(lambdaQueryValue)).append(" ) ");
+				if (value instanceof LambdaQuery subLambdaQuery) {
+					String conditionSubString = build(subLambdaQuery);
+					if(StringUtils.isNotBlank(conditionSubString)) {
+						conditionString.append(appendExpression(conditionString.toString(),lastExpression));
+						conditionString.append(" ( ").append(conditionSubString).append(" ) ");
+					}
 				}
 			}else if (expression.equals(Operator.condition)) {
 				conditionString.append(column);
@@ -86,15 +89,24 @@ public class LambdaQueryBuilder {
 					conditionString.append(column).append(" ").append(expression.getOperator());
 	
 				} else if (expression.equals(Operator.in) || expression.equals(Operator.notIn)) {
-					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ( ");
+					logger.trace("expression Class() {} , getSimpleName {}",value.getClass().getCanonicalName(),value.getClass().getSimpleName());
+					
+					String inValues = "";
 					if (value.getClass().isArray()) {
-						conditionString.append(ConditionValue.valueOfArray((Object[]) value));
+						inValues = ConditionValue.valueOfArray((Object[]) value);
+					}else if(value.getClass().getCanonicalName().startsWith("java.util.ImmutableCollections")) {
+						inValues = ConditionValue.valueOfIterator((List<?>) value);
 					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
-						conditionString.append(ConditionValue.valueOfList((ArrayList) value));
+						inValues = ConditionValue.valueOfList((ArrayList) value);
 					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
-						conditionString.append(ConditionValue.valueOfList((LinkedList) value));
+						inValues = ConditionValue.valueOfList((LinkedList) value);
 					}
-					conditionString.append(" ) ");
+					
+					if(StringUtils.isNotBlank(inValues)) {
+						conditionString.append(column).append(" ").append(expression.getOperator());
+						conditionString.append(" ( ").append(inValues).append(" ) ");
+					}
+					
 				} 
 			}
 		}

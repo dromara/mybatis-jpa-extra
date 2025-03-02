@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
@@ -41,8 +42,11 @@ public class QueryBuilder {
 			if (expression.equals(Operator.and) || expression.equals(Operator.or)) {
 				lastExpression = condition.getExpression();
 				if (value instanceof Query subQuery) {
-					conditionString.append(appendExpression(conditionString.toString(),lastExpression));
-					conditionString.append(" ( ").append(build(subQuery)).append(" ) ");
+					String conditionSubString = build(subQuery);
+					if(StringUtils.isNotBlank(conditionSubString)) {
+						conditionString.append(appendExpression(conditionString.toString(),lastExpression));
+						conditionString.append(" ( ").append(conditionSubString).append(" ) ");
+					}
 				}
 
 			}else if (expression.equals(Operator.condition)) {
@@ -89,26 +93,32 @@ public class QueryBuilder {
 					conditionString.append(column).append(" ").append(expression.getOperator());
 	
 				} else if (expression.equals(Operator.in) || expression.equals(Operator.notIn)) {
-					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ( ");
+					
+					String inValues = "";
 					if (value.getClass().isArray()) {
 						Object[] objects = (Object[]) value;
 						if(objects[0] instanceof Collection<?> cObjects) {
 							logger.trace("objects[0] is Collection {}" , cObjects);
-							conditionString.append(ConditionValue.valueOfCollection(cObjects));
+							inValues = ConditionValue.valueOfCollection(cObjects);
 						}else if(objects[0].getClass().isArray()) {
 							objects = (Object[])objects[0];
 							logger.trace("objects[0] is isArray {}" , objects);
-							conditionString.append(ConditionValue.valueOfArray(objects));
+							inValues = ConditionValue.valueOfArray(objects);
 						}else {
 							logger.trace("not  isArray {}" , objects);
-							conditionString.append(ConditionValue.valueOfArray(objects));
+							inValues = ConditionValue.valueOfArray(objects);
 						}
+					}else if(value.getClass().getCanonicalName().startsWith("java.util.ImmutableCollections")) {
+						inValues = ConditionValue.valueOfIterator((List<?>) value);
 					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
-						conditionString.append(ConditionValue.valueOfList((ArrayList) value));
+						inValues = ConditionValue.valueOfList((ArrayList) value);
 					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
-						conditionString.append(ConditionValue.valueOfList((LinkedList) value));
+						inValues = ConditionValue.valueOfList((LinkedList) value);
 					}
-					conditionString.append(" ) ");
+					if(StringUtils.isNotBlank(inValues)) {
+						conditionString.append(column).append(" ").append(expression.getOperator());
+						conditionString.append(" ( ").append(inValues).append(" ) ");
+					}
 				} 
 			}
 		}
