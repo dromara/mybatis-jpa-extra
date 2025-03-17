@@ -631,7 +631,7 @@ public class LambdaQuery <T> {
 	 * @param getter
 	 * @return ColumnName
 	 */
-	String getColumnName(IGetter <T> getter ) {
+	public String getColumnName(IGetter <T> getter ) {
 		return LambdaUtil.getColumnName(getter);
 	}
 

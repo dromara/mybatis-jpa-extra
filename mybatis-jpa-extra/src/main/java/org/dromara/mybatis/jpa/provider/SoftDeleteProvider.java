@@ -22,6 +22,8 @@ package org.dromara.mybatis.jpa.provider;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
@@ -53,13 +55,13 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		
 		StringBuffer keyValue = new StringBuffer();
 		for(String value : idValues) {
-			if(value.trim().length() > 0) {
+			if(StringUtils.isNotBlank(value)) {
 				keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
 				logger.trace("softDelete by id {}" , value);
 			}
 		}
-		
-		String keyValues = keyValue.substring(1).replace(";", "");//remove ;
+		// remove ;
+		String keyValues = keyValue.substring(1).replace(";", "");
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);

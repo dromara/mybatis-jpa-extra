@@ -23,6 +23,8 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
+import org.dromara.mybatis.jpa.update.UpdateWrapper;
 
 
 /**
@@ -268,6 +270,10 @@ public  interface  IJpaService <T> {
 	 * @return
 	 */
 	public boolean update(String setSql , LambdaQuery <T> lambdaQuery) ;
+	
+	public boolean update(UpdateWrapper updateWrapper) ;
+	
+	public boolean update(LambdaUpdateWrapper <T> lambdaUpdateWrapper) ;
 	
 	/**
 	 * delete entity by Query

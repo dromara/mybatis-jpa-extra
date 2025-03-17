@@ -26,6 +26,8 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
+import org.dromara.mybatis.jpa.update.UpdateWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,6 +111,14 @@ public class MapperSqlProvider <T extends JpaEntity>{
 	
 	public String updateByLambdaQuery(Class<?> entityClass,String setSql,LambdaQuery<T> lambdaQuery) {
 		return new UpdateProvider().updateByLambdaQuery(entityClass,setSql,lambdaQuery);
+	}
+	
+	public String updateByUpdateWrapper(Class<?> entityClass,UpdateWrapper updateWrapper) {
+		return new UpdateProvider().updateByUpdateWrapper(entityClass,updateWrapper);
+	}
+	
+	public String updateByLambdaUpdateWrapper(Class<?> entityClass,LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
+		return new UpdateProvider().updateByLambdaUpdateWrapper(entityClass , lambdaUpdateWrapper);
 	}
 	
 	

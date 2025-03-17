@@ -31,6 +31,10 @@ import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.query.QueryBuilder;
+import org.dromara.mybatis.jpa.update.LambdaUpdateBuilder;
+import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
+import org.dromara.mybatis.jpa.update.UpdateBuilder;
+import org.dromara.mybatis.jpa.update.UpdateWrapper;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,6 +141,33 @@ public class UpdateProvider <T extends JpaEntity>{
 				.SET(setSql).WHERE(LambdaQueryBuilder.build(lambdaQuery));
 		
 		logger.trace("update By LambdaQuery  SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
+	
+	public String updateByUpdateWrapper(Class<?> entityClass, UpdateWrapper updateWrapper) {
+		logger.trace("update By UpdateWrapper \n{}" , updateWrapper);
+		FieldMetadata.buildColumnList(entityClass);
+		
+		SQL sql = new SQL()
+				.UPDATE(TableMetadata.getTableName(entityClass))
+				.SET(UpdateBuilder.buildSetSql(updateWrapper))
+				.WHERE(QueryBuilder.build(updateWrapper));
+		
+		logger.trace("update By UpdateWrapper  SQL \n{}" , sql);
+		return sql.toString();
+	}
+	
+	public String updateByLambdaUpdateWrapper(Class<?> entityClass, LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
+		logger.trace("update By LambdaUpdateWrapper \n{}" , lambdaUpdateWrapper);
+		FieldMetadata.buildColumnList(entityClass);
+		
+		SQL sql = new SQL()
+				.UPDATE(TableMetadata.getTableName(entityClass))
+				.SET(LambdaUpdateBuilder.buildSetSql(lambdaUpdateWrapper))
+				.WHERE(LambdaQueryBuilder.build(lambdaUpdateWrapper));
+		
+		logger.trace("update By LambdaUpdateWrapper  SQL \n{}" , sql);
 		return sql.toString();
 	}
 

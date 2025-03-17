@@ -32,6 +32,8 @@ import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
+import org.dromara.mybatis.jpa.update.UpdateWrapper;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -564,6 +566,38 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	}
 	
 	/**
+	 *  update by UpdateWrapper
+	 * @param UpdateWrapper
+	 */
+	@Override
+	public boolean update(UpdateWrapper updateWrapper) {
+		try {
+			Integer count =  getMapper().updateByUpdateWrapper(entityClass,updateWrapper);
+			logger.debug("update by UpdateWrapper : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("update by UpdateWrapper Exception " , e);
+		}
+		return false;
+	}
+
+	/**
+	 *  update by LambdaUpdateWrapper
+	 * @param LambdaUpdateWrapper
+	 */
+	@Override
+	public boolean update(LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
+		try {
+			Integer count =  getMapper().updateByLambdaUpdateWrapper(entityClass,lambdaUpdateWrapper);
+			logger.debug("update by LambdaUpdateWrapper : {}" , count);
+			return count > 0;
+		} catch(Exception e) {
+			logger.error("update by LambdaUpdateWrapper Exception " , e);
+		}
+		return false;
+	}
+	
+	/**
 	 * delete entity by Query
 	 * @param Query
 	 * @return
@@ -835,4 +869,6 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 		}
 		return totalCount;
 	}
+
+
 }

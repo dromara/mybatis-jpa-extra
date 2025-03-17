@@ -21,6 +21,8 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
+import org.dromara.mybatis.jpa.update.UpdateWrapper;
 
 /**
  * IJpa IJpaUpdateMapper
@@ -36,5 +38,12 @@ public interface IJpaUpdateMapper<T> {
 	public Integer updateByQuery(Class<?> entityClass , String setSql, Query query);	
 	
 	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByLambdaQuery")
-	public Integer updateByLambdaQuery(Class<?> entityClass , String setSql, LambdaQuery<T> lambdaQuery);			
+	public Integer updateByLambdaQuery(Class<?> entityClass , String setSql, LambdaQuery<T> lambdaQuery);		
+	
+	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByUpdateWrapper")
+	public Integer updateByUpdateWrapper(Class<?> entityClass , UpdateWrapper updateWrapper);	
+	
+	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByLambdaUpdateWrapper")
+	public Integer updateByLambdaUpdateWrapper(Class<?> entityClass ,LambdaUpdateWrapper<T> lambdaUpdateWrapper);	
+	
 }
