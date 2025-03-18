@@ -158,12 +158,12 @@ public class Students extends JpaEntity implements Serializable{
 ```java    
     //根据IDS批量逻辑删除
     @Test
-    void logicBatchDelete() throws Exception{
+    void softDelete() throws Exception{
         List<String> idList=new ArrayList<String>();
         idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
         idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
         //...
-        service.logicDelete(idList);
+        service.softDelete(idList);
     }
 ```
 
@@ -258,7 +258,27 @@ public class Students extends JpaEntity implements Serializable{
 
 ```
 
-## 2.7、FindBy查询
+## 2.6、 UpdateWrapper更新
+```java
+    //根据UpdateWrapper更新数据
+    UpdateWrapper updateWrapper = new UpdateWrapper();
+    updateWrapper.set("StdMajor", "历史").eq("StdName", "周瑜").or().eq("StdName", "吕蒙");   
+    service.update(updateWrapper);
+
+    //更新LambdaUpdateWrapper更新数据，带多重LambdaUpdateWrapper
+    List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
+    LambdaUpdateWrapper<Students> updateWrapper = new LambdaUpdateWrapper<>();
+    updateWrapper.set(Students::getStdMajor, "历史")
+                 .eq(Students::getStdMajor, "政治")
+                 .and().gt(Students::getStdAge, Integer.valueOf(30))
+                 .and().in(Students::getStdMajor, majorList)
+                 .or(new LambdaUpdateWrapper<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙"));
+        
+    service.update(updateWrapper);
+
+```
+
+## 2.8、FindBy查询
 
 实现spring data jpa的findBy功能
 
@@ -344,7 +364,7 @@ public class Students extends JpaEntity implements Serializable{
     public List<Students> findByStdMajorAndStdClass(String stdMajor,String stdClass);
 ```
 
-## 2.8、默认数据自动填充
+## 2.9、默认数据自动填充
 
 继承FieldAutoFillHandler，实现insertFill和updateFill函数，可以完成租户字段，创建人、创建时间、修改人、修改时间等默认字段的填充
 

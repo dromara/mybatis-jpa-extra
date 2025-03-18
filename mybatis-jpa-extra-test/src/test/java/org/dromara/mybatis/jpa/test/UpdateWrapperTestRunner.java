@@ -36,9 +36,11 @@ public class UpdateWrapperTestRunner  extends BaseTestRunner{
 		_logger.info("update by LambdaUpdateWrapper ...");
 		List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
 		LambdaUpdateWrapper<Students> updateWrapper = new LambdaUpdateWrapper<>();
-		updateWrapper.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, majorList)
-		.or(new LambdaUpdateWrapper<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙"));
-		updateWrapper.set(Students::getStdMajor, "历史");
+		updateWrapper.set(Students::getStdMajor, "历史")
+					 .eq(Students::getStdMajor, "政治")
+					 .and().gt(Students::getStdAge, Integer.valueOf(30))
+					 .and().in(Students::getStdMajor, majorList)
+					 .or(new LambdaUpdateWrapper<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙"));
 		
 		service.update(updateWrapper);
 		
@@ -48,8 +50,7 @@ public class UpdateWrapperTestRunner  extends BaseTestRunner{
 	void updateByUpdateWrapper(){
 		_logger.info("update by UpdateWrapper ...");
 		UpdateWrapper updateWrapper = new UpdateWrapper();
-		updateWrapper.eq("StdName", "周瑜").or().eq("StdName", "吕蒙");
-		updateWrapper.set("StdMajor", "历史");
+		updateWrapper.set("StdMajor", "历史").eq("StdName", "周瑜").or().eq("StdName", "吕蒙");
 		
 		service.update(updateWrapper);
 	}
