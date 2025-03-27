@@ -24,75 +24,75 @@ public enum Operator {
 	/**
 	 * and
 	 */
-	and("and"),
+	AND("and"),
 	/**
 	 * or
 	 */
-	or("or"),
+	OR("or"),
 	
 	/** 等于= */
-	eq("="),
+	EQ("="),
 	/** 不等于&lt;&gt; */
-	notEq("<>"),
+	NOT_EQ("<>"),
 	
 	/** 大于&gt; */
-	gt(">"),
+	GT(">"),
 	/** 大于等于&gt;= */
-	ge(">="),
+	GE(">="),
 	
 	/** 小于&lt; */
-	lt("<"),
+	LT("<"),
 	/** 小于等于&lt;= */
-	le("<="),
+	LE("<="),
 	
 	/** in()查询  */
-	in("in"),
+	IN("in"),
 	/** not in()查询 */
-	notIn("not in"),
+	NOT_IN("not in"),
 	
 	/** between查询 */
-	between("between"),
+	BETWEEN("between"),
 	/** not between查询 */
-	notBetween("not between"),
+	NOT_BETWEEN("not between"),
 	/** 模糊查询,两边模糊查询,like '%xx%' */
-	like("like"),
+	LIKE("like"),
 	
-	notLike("not like"),
+	NOT_LIKE("not like"),
 	/** 左模糊查询,like '%xx' */
-	likeLeft("like"),
+	LIKE_LEFT("like"),
 	/** 右模糊查询,like 'xx%' */
-	likeRight("like"),
+	LIKE_RIGHT("like"),
 	/**
 	 * 空
 	 */
-	isNull("is null"),
+	IS_NULL("is null"),
 	/**
 	 * 不为空
 	 */
-	isNotNull("is not null"),
+	IS_NOT_NULL("is not null"),
 	/**
 	 * 条件
 	 */
-	condition("condition"),
+	CONDITION("condition"),
 	/**
 	 * 分组
 	 */
-	group("group"),
+	GROUP("group"),
 	/**
 	 * 	排序
 	 */
-	order("order"),
+	ORDER("order"),
 	/**
 	 * 忽略大小写
 	 */
-	ignoreCase("ignoreCase"),
+	IGNORE_CASE("ignoreCase"),
 	;
 	
     
-	private String operator;
+	private String notation;
 
-	Operator(String operator) {
-		this.operator = operator;
+	Operator(String notation) {
+		this.notation = notation;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public enum Operator {
 	 * @return 返回操作符
 	 */
 	public String getOperator() {
-		return operator;
+		return notation;
 	}
 
 }

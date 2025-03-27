@@ -58,7 +58,7 @@ public class Query {
 	public void joint() {
 		if(CollectionUtils.isNotEmpty(conditions)) {
 			Operator lastJoint = conditions.get(conditions.size() -1).getExpression();
-			if(lastJoint.equals(Operator.and)||lastJoint.equals(Operator.or)){
+			if(lastJoint.equals(Operator.AND)||lastJoint.equals(Operator.OR)){
 				//
 			}else {
 				and();
@@ -67,22 +67,22 @@ public class Query {
 	}
 	
 	public Query and() {
-		conditions.add(new Condition(Operator.and,"",null));
+		conditions.add(new Condition(Operator.AND,"",null));
 		return this;
 	}
 	
 	public Query or() {
-		conditions.add(new Condition(Operator.or,"",null));
+		conditions.add(new Condition(Operator.OR,"",null));
 		return this;
 	}
 	
 	public Query and(Query subQuery) {
-		conditions.add(new Condition(Operator.and,"",subQuery));
+		conditions.add(new Condition(Operator.AND,"",subQuery));
 		return this;
 	}
 	
 	public Query or(Query subQuery) {
-		conditions.add(new Condition(Operator.or,"",subQuery));
+		conditions.add(new Condition(Operator.OR,"",subQuery));
 		return this;
 	}
 	
@@ -105,14 +105,14 @@ public class Query {
 	 */
 	public Query ignoreCase(String column, Object value) {
 		joint();
-		conditions.add(new Condition(Operator.ignoreCase,column,value));
+		conditions.add(new Condition(Operator.IGNORE_CASE,column,value));
 		return this;
 	}
 	
 	public Query eq(boolean expression , String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.eq,column,value));
+			conditions.add(new Condition(Operator.EQ,column,value));
 		}
 		return this;
 	}
@@ -131,7 +131,7 @@ public class Query {
 	public Query notEq(boolean expression ,String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.notEq,column,value));
+			conditions.add(new Condition(Operator.NOT_EQ,column,value));
 		}
 		return this;
 	}
@@ -150,7 +150,7 @@ public class Query {
 	public Query in(boolean expression ,String column, Object ... value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.in,column,value));
+			conditions.add(new Condition(Operator.IN,column,value));
 		}
 		return this;
 	}
@@ -169,7 +169,7 @@ public class Query {
 	public Query notIn(boolean expression ,String column, Object ... value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.notIn,column,value));
+			conditions.add(new Condition(Operator.NOT_IN,column,value));
 		}
 		return this;
 	}
@@ -188,7 +188,7 @@ public class Query {
 	public Query gt(boolean expression ,String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.gt,column,value));
+			conditions.add(new Condition(Operator.GT,column,value));
 		}
 		return this;
 	}
@@ -207,7 +207,7 @@ public class Query {
 	public Query ge(boolean expression ,String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.ge,column,value));
+			conditions.add(new Condition(Operator.GE,column,value));
 		}
 		return this;
 	}
@@ -226,7 +226,7 @@ public class Query {
 	public Query lt(boolean expression , String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.lt,column,value));
+			conditions.add(new Condition(Operator.LT,column,value));
 		}
 		return this;
 	}
@@ -245,7 +245,7 @@ public class Query {
 	public Query le(boolean expression ,String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.le,column,value));
+			conditions.add(new Condition(Operator.LE,column,value));
 		}
 		return this;
 	}
@@ -264,7 +264,7 @@ public class Query {
 	public Query like(boolean expression , String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.like,column,value));
+			conditions.add(new Condition(Operator.LIKE,column,value));
 		}
 		return this;
 	}
@@ -283,7 +283,7 @@ public class Query {
 	public Query notLike(boolean expression , String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.notLike,column,value));
+			conditions.add(new Condition(Operator.NOT_LIKE,column,value));
 		}
 		return this;
 	}
@@ -302,7 +302,7 @@ public class Query {
 	public Query likeLeft(boolean expression ,String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.likeLeft,column,value));
+			conditions.add(new Condition(Operator.LIKE_LEFT,column,value));
 		}
 		return this;
 	}
@@ -321,7 +321,7 @@ public class Query {
 	public Query likeRight(boolean expression ,String column, Object value) {
 		if(expression) {
 			joint();
-			conditions.add(new Condition(Operator.likeRight,column,value));
+			conditions.add(new Condition(Operator.LIKE_RIGHT,column,value));
 		}
 		return this;
 	}
@@ -334,7 +334,7 @@ public class Query {
 	 */
 	public Query isNull(String column) {
 		joint();
-		conditions.add(new Condition(Operator.isNull,column,null));
+		conditions.add(new Condition(Operator.IS_NULL,column,null));
 		return this;
 	}
 	
@@ -346,7 +346,7 @@ public class Query {
 	 */
 	public Query isNotNull(String column) {
 		joint();
-		conditions.add(new Condition(Operator.isNotNull,column,null));
+		conditions.add(new Condition(Operator.IS_NOT_NULL,column,null));
 		return this;
 	}
 	
@@ -359,7 +359,7 @@ public class Query {
 	 */
 	public Query between(String column, Object value1, Object value2) {
 		joint();
-		conditions.add(new Condition(Operator.between,column,value1,value2));
+		conditions.add(new Condition(Operator.BETWEEN,column,value1,value2));
 		return this;
 	}
 	
@@ -371,7 +371,7 @@ public class Query {
 	 */
 	public Query notBetween(String column, Object value1, Object value2) {
 		joint();
-		conditions.add(new Condition(Operator.notBetween,column,value1,value2));
+		conditions.add(new Condition(Operator.NOT_BETWEEN,column,value1,value2));
 		return this;
 	}
 	
@@ -382,7 +382,7 @@ public class Query {
 	 */
 	public Query condition(String conditionSql) {
 		joint();
-		conditions.add(new Condition(Operator.condition,conditionSql,null));
+		conditions.add(new Condition(Operator.CONDITION,conditionSql,null));
 		return this;
 	}
 	
@@ -390,7 +390,7 @@ public class Query {
 		if(CollectionUtils.isEmpty(groupBy)) {
 			this.groupBy = new ArrayList<>();
 		}
-		groupBy.add(new Condition(Operator.group,column,""));
+		groupBy.add(new Condition(Operator.GROUP,column,""));
 		return this;
 	}
 	
@@ -398,7 +398,7 @@ public class Query {
 		if(CollectionUtils.isEmpty(orderBy)) {
 			this.orderBy = new ArrayList<>();
 		}
-		orderBy.add(new Condition(Operator.order,column,orderType));
+		orderBy.add(new Condition(Operator.ORDER,column,orderType));
 		return this;
 	}
 

@@ -33,7 +33,7 @@ public class UpdateWrapper extends Query{
 		if(CollectionUtils.isEmpty(sets)) {
 			this.sets = new ArrayList<>();
 		}
-		sets.add(new Condition(Operator.eq,column,value));
+		sets.add(new Condition(Operator.EQ,column,value));
 		return  this;
 	}
 

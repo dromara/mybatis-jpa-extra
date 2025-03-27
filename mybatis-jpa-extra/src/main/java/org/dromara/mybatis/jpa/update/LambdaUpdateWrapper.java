@@ -42,7 +42,7 @@ public class LambdaUpdateWrapper  <T> extends LambdaQuery<T>{
 		if(CollectionUtils.isEmpty(sets)) {
 			this.sets = new ArrayList<>();
 		}
-		sets.add(new Condition(Operator.eq,getColumnName(getter),value));
+		sets.add(new Condition(Operator.EQ,getColumnName(getter),value));
 		return  this;
 	}
 	

@@ -33,13 +33,13 @@ public class LambdaQueryBuilder {
 	public static String build(LambdaQuery lambdaQuery) {
 		StringBuffer conditionString = new StringBuffer("");
 		List<Condition> conditions = lambdaQuery.getConditions();
-		Operator lastExpression = Operator.and;
+		Operator lastExpression = Operator.AND;
 		for (Condition condition : conditions) {
 			Operator expression = condition.getExpression();
 			Object value = condition.getValue();
 			String column = SafeValueHandler.safeColumn(condition.getColumn());
 			condition.setColumn(column);
-			if (expression.equals(Operator.and) || expression.equals(Operator.or)) {
+			if (expression.equals(Operator.AND) || expression.equals(Operator.OR)) {
 				lastExpression = condition.getExpression();
 				if (value instanceof LambdaQuery subLambdaQuery) {
 					String conditionSubString = build(subLambdaQuery);
@@ -48,47 +48,47 @@ public class LambdaQueryBuilder {
 						conditionString.append(" ( ").append(conditionSubString).append(" ) ");
 					}
 				}
-			}else if (expression.equals(Operator.condition)) {
+			}else if (expression.equals(Operator.CONDITION)) {
 				conditionString.append(column);
 			} else {
 				logger.trace("Expression {} column {} value class {}",lastExpression,column,value == null ? "" : value.getClass().getCanonicalName());
 		
 				conditionString.append(appendExpression(conditionString.toString(),lastExpression));
 				
-				if (expression.equals(Operator.like) || expression.equals(Operator.notLike)) {
+				if (expression.equals(Operator.LIKE) || expression.equals(Operator.NOT_LIKE)) {
 
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
 					conditionString.append("'%").append(SafeValueHandler.valueOf(value)).append("%'");
 	
-				} else if (expression.equals(Operator.likeLeft)) {
+				} else if (expression.equals(Operator.LIKE_LEFT)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
 					conditionString.append("'%").append(SafeValueHandler.valueOf(value)).append("'");
 	
-				} else if (expression.equals(Operator.likeRight)) {
+				} else if (expression.equals(Operator.LIKE_RIGHT)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
 					conditionString.append("'").append(SafeValueHandler.valueOf(value)).append("%'");
 	
-				} else if (expression.equals(Operator.eq) || expression.equals(Operator.notEq)
-						|| expression.equals(Operator.gt) || expression.equals(Operator.ge)
-						|| expression.equals(Operator.lt) || expression.equals(Operator.le)) {
+				} else if (expression.equals(Operator.EQ) || expression.equals(Operator.NOT_EQ)
+						|| expression.equals(Operator.GT) || expression.equals(Operator.GE)
+						|| expression.equals(Operator.LT) || expression.equals(Operator.LE)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
 					conditionString.append(SafeValueHandler.valueOfType(value));
 	
-				} else if (expression.equals(Operator.between)|| expression.equals(Operator.notBetween)) {
+				} else if (expression.equals(Operator.BETWEEN)|| expression.equals(Operator.NOT_BETWEEN)) {
 	
 					conditionString.append(" ( ").append(column).append(" ").append(expression.getOperator()).append(" ");
 					conditionString.append(SafeValueHandler.valueOfType(value));
 					conditionString.append(" and ");
 					conditionString.append(SafeValueHandler.valueOfType(condition.getValue2())).append(" ) ");
 	
-				} else if (expression.equals(Operator.isNull) || expression.equals(Operator.isNotNull)) {
+				} else if (expression.equals(Operator.IS_NULL) || expression.equals(Operator.IS_NOT_NULL)) {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator());
 	
-				} else if (expression.equals(Operator.in) || expression.equals(Operator.notIn)) {
+				} else if (expression.equals(Operator.IN) || expression.equals(Operator.NOT_IN)) {
 					logger.trace("expression Class() {} , getSimpleName {}",value.getClass().getCanonicalName(),value.getClass().getSimpleName());
 					
 					String inValues = "";

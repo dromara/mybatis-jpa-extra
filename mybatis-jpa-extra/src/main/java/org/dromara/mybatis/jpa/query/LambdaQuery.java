@@ -42,29 +42,29 @@ public class LambdaQuery <T> {
 	public void joint() {
 		if(CollectionUtils.isNotEmpty(conditions)) {
 			Operator lastJoint = conditions.get(conditions.size() -1).getExpression();
-			if(!lastJoint.equals(Operator.and) && !lastJoint.equals(Operator.or)){
+			if(!lastJoint.equals(Operator.AND) && !lastJoint.equals(Operator.OR)){
 				and();
 			}
 		}
 	}
 	
 	public LambdaQuery <T> and() {
-		conditions.add(new Condition(Operator.and,"",null));
+		conditions.add(new Condition(Operator.AND,"",null));
 		return this;
 	}
 	
 	public LambdaQuery <T> or() {
-		conditions.add(new Condition(Operator.or,"",null));
+		conditions.add(new Condition(Operator.OR,"",null));
 		return this;
 	}
 	
 	public LambdaQuery <T> and(LambdaQuery<T> subQuery) {
-		conditions.add(new Condition(Operator.and,"",subQuery));
+		conditions.add(new Condition(Operator.AND,"",subQuery));
 		return this;
 	}
 	
 	public LambdaQuery <T> or(LambdaQuery<T> subQuery) {
-		conditions.add(new Condition(Operator.or,"",subQuery));
+		conditions.add(new Condition(Operator.OR,"",subQuery));
 		return this;
 	}
 	
@@ -78,7 +78,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
 	public LambdaQuery <T>eq(IGetter<T> getter , Object value) {
-		conditions.add(new Condition(Operator.eq,getColumnName(getter ), value));
+		conditions.add(new Condition(Operator.EQ,getColumnName(getter ), value));
         return  this;
     }
 
@@ -113,7 +113,7 @@ public class LambdaQuery <T> {
      */
     
 	public LambdaQuery <T>notEq(IGetter<T> getter , Object value) {
-    	conditions.add(new Condition(Operator.notEq, getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.NOT_EQ, getColumnName(getter ), value));
         return  this;
     }
 
@@ -140,7 +140,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T> gt(IGetter<T> getter , Object value) {
-    	conditions.add(new Condition(Operator.gt,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.GT,getColumnName(getter ), value));
         return  this;
     }
 
@@ -167,7 +167,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>ge(IGetter<T> getter , Object value) {
-    	conditions.add(new Condition(Operator.ge,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.GE,getColumnName(getter ), value));
         return  this;
     }
 
@@ -194,7 +194,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>lt(IGetter<T> getter , Object value) {
-    	conditions.add(new Condition(Operator.lt,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.LT,getColumnName(getter ), value));
         return  this;
     }
 
@@ -221,7 +221,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>le(IGetter<T> getter , Object value) {
-    	conditions.add(new Condition(Operator.le,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.LE,getColumnName(getter ), value));
         return  this;
     }
 
@@ -250,7 +250,7 @@ public class LambdaQuery <T> {
      * @see #likeRight(getter , String) 右边模糊匹配
      */
     public LambdaQuery <T>like(IGetter<T> getter , String value) {
-    	conditions.add(new Condition(Operator.like,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.LIKE,getColumnName(getter ), value));
         return  this;
     }
 
@@ -279,7 +279,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>likeLeft(IGetter<T> getter , String value) {
-    	conditions.add(new Condition(Operator.likeLeft,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.LIKE_LEFT,getColumnName(getter ), value));
         return  this;
     }
 
@@ -306,7 +306,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>likeRight(IGetter<T> getter , String value) {
-    	conditions.add(new Condition(Operator.likeRight,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.LIKE_RIGHT,getColumnName(getter ), value));
         return  this;
     }
 
@@ -333,7 +333,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>in(IGetter<T> getter , Collection<?> value) {
-    	conditions.add(new Condition(Operator.in,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.IN,getColumnName(getter ), value));
         return  this;
     }
 
@@ -360,7 +360,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>in(IGetter<T> getter , Object[] value) {
-    	conditions.add(new Condition(Operator.in,getColumnName(getter), value));
+    	conditions.add(new Condition(Operator.IN,getColumnName(getter), value));
         return  this;
     }
 
@@ -387,7 +387,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>notIn(IGetter<T> getter , Collection<?> value) {
-    	conditions.add(new Condition(Operator.notIn,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.NOT_IN,getColumnName(getter ), value));
         return  this;
     }
 
@@ -415,7 +415,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>notIn(IGetter<T> getter , Object[] value) {
-    	conditions.add(new Condition(Operator.notIn,getColumnName(getter ), value));
+    	conditions.add(new Condition(Operator.NOT_IN,getColumnName(getter ), value));
         return  this;
     }
 
@@ -443,7 +443,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>between(IGetter<T> getter , Object startValue, Object endValue) {
-    	conditions.add(new Condition(Operator.between,getColumnName(getter ), startValue, endValue));
+    	conditions.add(new Condition(Operator.BETWEEN,getColumnName(getter ), startValue, endValue));
         return  this;
     }
 
@@ -476,7 +476,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>between(IGetter<T> getter , Object[] values) {
-    	conditions.add(new Condition(Operator.between,getColumnName(getter ), values[0],values[1]));
+    	conditions.add(new Condition(Operator.BETWEEN,getColumnName(getter ), values[0],values[1]));
         return  this;
     }
 
@@ -507,7 +507,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>between(IGetter<T> getter , List<?> values) {
-    	conditions.add(new Condition(Operator.between,getColumnName(getter ), values.get(0),values.get(1)));
+    	conditions.add(new Condition(Operator.BETWEEN,getColumnName(getter ), values.get(0),values.get(1)));
         return  this;
     }
 
@@ -536,7 +536,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>notNull(IGetter<T> getter ) {
-    	conditions.add(new Condition(Operator.isNotNull,getColumnName(getter )," IS NOT NULL"));
+    	conditions.add(new Condition(Operator.IS_NOT_NULL,getColumnName(getter )," IS NOT NULL"));
         return  this;
     }
 
@@ -561,7 +561,7 @@ public class LambdaQuery <T> {
      * @return 返回Query对象
      */
     public LambdaQuery <T>isNull(IGetter<T> getter ) {
-    	conditions.add(new Condition(Operator.isNull,getColumnName(getter ) , " IS NULL"));
+    	conditions.add(new Condition(Operator.IS_NULL,getColumnName(getter ) , " IS NULL"));
         return  this;
     }
 
@@ -586,7 +586,7 @@ public class LambdaQuery <T> {
 	 */
 	public LambdaQuery <T>condition(String conditionSql) {
 		joint();
-		conditions.add(new Condition(Operator.condition,conditionSql,null));
+		conditions.add(new Condition(Operator.CONDITION,conditionSql,null));
 		return  this;
 	}
 	
@@ -594,7 +594,7 @@ public class LambdaQuery <T> {
 		if(CollectionUtils.isEmpty(groupBy)) {
 			this.groupBy = new ArrayList<>();
 		}
-		groupBy.add(new Condition(Operator.group,getColumnName(getter),""));
+		groupBy.add(new Condition(Operator.GROUP,getColumnName(getter),""));
 		return  this;
 	}
 	
@@ -602,7 +602,7 @@ public class LambdaQuery <T> {
 		if(CollectionUtils.isEmpty(orderBy)) {
 			this.orderBy = new ArrayList<>();
 		}
-		orderBy.add(new Condition(Operator.order,getColumnName(getter),orderType));
+		orderBy.add(new Condition(Operator.ORDER,getColumnName(getter),orderType));
 		return  this;
 	}
 
