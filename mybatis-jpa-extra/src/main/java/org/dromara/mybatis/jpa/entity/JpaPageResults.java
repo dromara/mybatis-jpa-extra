@@ -18,6 +18,8 @@
 package org.dromara.mybatis.jpa.entity;
 
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,6 +154,30 @@ public  class JpaPageResults <T>{
 		//通过总记录数和每页显示记录数计算出当前页记录数
 		this.totalPage =((recordsCount%pageResults>0)?recordsCount/pageResults+1:recordsCount/pageResults);
 		this.records = Long.valueOf(recordsCount);
+	}
+	
+	/**
+	 * parse Object Count to Integer
+	 * @param totalCount
+	 * @return
+	 */
+	public static Integer parseCount(Object totalCount){
+		Integer retTotalCount=0;
+		if(totalCount == null) {
+			return retTotalCount;
+		}else{
+			retTotalCount = Integer.parseInt(totalCount.toString());
+		}
+		return retTotalCount;
+	}
+	
+	/**
+	 * 当前页记录数
+	 * @param resultslist
+	 * @return
+	 */
+	public static Integer parseRecords( List<?> resultslist){
+		return CollectionUtils.isEmpty(resultslist) ? 0 : resultslist.size();
 	}
 	
 	/**

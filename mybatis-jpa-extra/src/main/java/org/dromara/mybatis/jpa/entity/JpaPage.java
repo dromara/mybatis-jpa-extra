@@ -122,6 +122,23 @@ public class JpaPage {
 		}
 	}
 	
+	
+	/**
+	 * calculate StartRow
+	 * @param page
+	 * @param pageResults
+	 * @return
+	 */
+	protected Integer calculateStartRow(Integer page,Integer pageSize){
+		return (page - 1) * pageSize;
+	}
+	
+	public void build() {
+		this.pageSelectId= generateId();
+		this.startRow= calculateStartRow(this.pageNumber ,this.pageSize);
+		this.pageable = true;
+	}
+	
 	@JsonIgnore
 	public int getRows() {
 		return rows;

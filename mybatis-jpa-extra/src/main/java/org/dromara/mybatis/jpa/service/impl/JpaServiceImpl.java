@@ -89,7 +89,7 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	@Override
 	public JpaPageResults<T> fetch(JpaPage page , T entity) {
 		try {
-			beforePageResults(page);
+			page.build();
 			List<T> resultslist = getMapper().fetch(page, entity);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
@@ -107,7 +107,7 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	@Override
 	public JpaPageResults<T> fetch(JpaPage page ,Query query) {
 		try {
-			beforePageResults(page);
+			page.build();
 			List<T> resultslist = getMapper().fetchByQuery(page, query , this.entityClass);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
@@ -125,7 +125,7 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	@Override
 	public JpaPageResults<T> fetch(JpaPage page ,LambdaQuery<T> lambdaQuery) {
 		try {
-			beforePageResults(page);
+			page.build();
 			List<T> resultslist = getMapper().fetchByLambdaQuery(page, lambdaQuery , this.entityClass);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {
@@ -141,7 +141,7 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	 */
 	public JpaPageResults<T> fetchPageResults(T entity) {
 		try {
-			beforePageResults(entity);
+			entity.build();
 			List<T> resultslist = getMapper().fetchPageResults(entity);
 			return buildPageResults(entity , resultslist);
 		}catch (Exception e) {
@@ -152,7 +152,7 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	
 	public JpaPageResults<T> fetchPageResults(JpaPage page , T entity) {
 		try {
-			beforePageResults(entity);
+			entity.build();
 			List<T> resultslist = getMapper().fetchPageResults(page , entity);
 			return buildPageResults(entity , resultslist);
 		}catch (Exception e) {
@@ -178,7 +178,7 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	@SuppressWarnings("unchecked")
 	public JpaPageResults<T> fetchPageResults(String mapperId,JpaPage page ,T entity) {
 		try {
-			beforePageResults(entity);
+			entity.build();
 			List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, 
 					page == null ? new Object[]{entity} : new Object[]{page , entity});
 			return buildPageResults(entity , resultslist);
@@ -794,62 +794,12 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 		return count;
 	}
 	
-	/**
-	 * parse Object Count to Integer
-	 * @param totalCount
-	 * @return
-	 */
-	protected Integer parseCount(Object totalCount){
-		Integer retTotalCount=0;
-		if(totalCount == null) {
-			return retTotalCount;
-		}else{
-			retTotalCount = Integer.parseInt(totalCount.toString());
-		}
-		return retTotalCount;
-	}
-	
-	/**
-	 * calculate total Count
-	 * @param entity
-	 * @param totalCount
-	 * @return
-	 */
-	protected Integer calculateTotalPage(JpaEntity entity,Integer totalCount){
-		return (totalCount + entity.getPageSize() - 1) / entity.getPageSize();
-	}
-	
-	/**
-	 * calculate StartRow
-	 * @param page
-	 * @param pageResults
-	 * @return
-	 */
-	protected Integer calculateStartRow(Integer page,Integer pageSize){
-		return (page - 1) * pageSize;
-	}
-	
-	protected void beforePageResults(JpaPage page) {
-		page.setPageSelectId(page.generateId());
-		page.setStartRow(calculateStartRow(page.getPageNumber() ,page.getPageSize()));
-		page.setPageable(true);
-	}
-	
 	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
 		//当前页记录数
-		Integer records = parseRecords(resultslist);
+		Integer records = JpaPageResults.parseRecords(resultslist);
 		//总页数
 		Integer totalCount =fetchCount(page, resultslist);
 		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),records,totalCount,resultslist);
-	}
-	
-	/**
-	 * 当前页记录数
-	 * @param resultslist
-	 * @return
-	 */
-	protected Integer parseRecords( List<?> resultslist){
-		return CollectionUtils.isEmpty(resultslist) ? 0 : resultslist.size();
 	}
 	
 	/**
@@ -861,11 +811,11 @@ public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> imp
 	protected Integer fetchCount(JpaPage page ,List<?> resultslist) {
 		Integer totalCount = 0;
 		page.setPageable(false);
-		Integer records = parseRecords(resultslist);
+		Integer records = JpaPageResults.parseRecords(resultslist);
 		if(page.getPageNumber() == 1 && records < page.getPageSize()) {
 			totalCount = records;
 		}else {
-			totalCount = parseCount(getMapper().fetchCount(page));
+			totalCount = JpaPageResults.parseCount(getMapper().fetchCount(page));
 		}
 		return totalCount;
 	}
