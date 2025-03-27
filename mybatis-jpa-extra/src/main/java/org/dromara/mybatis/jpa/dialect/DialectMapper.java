@@ -25,19 +25,19 @@ import org.slf4j.LoggerFactory;
 public class DialectMapper {
 	private static final Logger logger 			= 	LoggerFactory.getLogger(DialectMapper.class);
 
-	public static final String DEFAULT_DIALECT 		= 	"mysql";
+	public static final String DEFAULT_DIALECT 		= 	DialectName.MYSQL;
 	
 	protected static HashMap<String,String> dialectMap;
 	
 	static {
 		dialectMap=new HashMap<>();
-		dialectMap.put("db2", 			"org.dromara.mybatis.jpa.dialect.DB2Dialect");
-		dialectMap.put("derby", 		"org.dromara.mybatis.jpa.dialect.DerbyDialect");
-		dialectMap.put(DEFAULT_DIALECT, "org.dromara.mybatis.jpa.dialect.MySQLDialect");
-		dialectMap.put("oracle", 		"org.dromara.mybatis.jpa.dialect.OracleDialect");
-		dialectMap.put("postgresql", 	"org.dromara.mybatis.jpa.dialect.PostgreSQLDialect");
-		dialectMap.put("highgo", 		"org.dromara.mybatis.jpa.dialect.HighgoDialect");
-		dialectMap.put("sqlserver", 	"org.dromara.mybatis.jpa.dialect.SQLServerDialect");
+		dialectMap.put(DialectName.DB2, 		DialectClass.DB2);
+		dialectMap.put(DialectName.DERBY, 		DialectClass.DERBY);
+		dialectMap.put(DialectName.MYSQL, 		DialectClass.MYSQL);
+		dialectMap.put(DialectName.ORACLE, 		DialectClass.ORACLE);
+		dialectMap.put(DialectName.POSTGRESQL, 	DialectClass.POSTGRESQL);
+		dialectMap.put(DialectName.HIGHGO, 		DialectClass.HIGHGO);
+		dialectMap.put(DialectName.SQLSERVER, 	DialectClass.SQLSERVER);
 		
 		logger.trace("Dialect Mapper : \n{}" ,dialectMap);
 	}
