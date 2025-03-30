@@ -67,35 +67,35 @@ public class FindBySqlBuilder {
 				if(fieldNameStart.length() >= fieldName.length()) {
 					fieldNameStart = fieldNameStart.substring(fieldName.length());
 					findByKeyword = FindByKeywords.startKeyword(fieldNameStart);
-					if(StringUtils.isNotBlank(findByKeyword) && !KEY.OrderBy.equals(findByKeyword)) {
+					if(StringUtils.isNotBlank(findByKeyword) && !KEY.ORDER_BY.equals(findByKeyword)) {
 						fieldNameStart = fieldNameStart.substring(findByKeyword.length());
 					}
 					logger.trace("FindBy fieldNameStart : {} " , fieldNameStart);
 					if(StringUtils.isBlank(findByKeyword)){
-						findByKeyword = KEY.Equals;
+						findByKeyword = KEY.EQUALS;
 					}
 					logger.trace("FindBy Keyword : {} " , findByKeyword);
 				}
 
-				if(KEY.Between.equals(findByKeyword)) {
+				if(KEY.BETWEEN.equals(findByKeyword)) {
 					appendParameter(q,findByKeyword,columnName,((ParamMap<?>)parameterObject).get("arg0"),((ParamMap<?>)parameterObject).get("arg1"));
 					break;
 				}else if(parameterObject instanceof ParamMap<?> paramMap) {
 					
 					Object parameterValue = paramMap.get("arg"+(argIndex++ ));
 					logger.trace("FindBy getCanonicalName : {} " , parameterValue.getClass().getCanonicalName());
-					if(KEY.And.equals(findByKeyword)) {
-						appendParameter(q,KEY.Equals,columnName,parameterValue,null);
-						appendParameter(q,KEY.And,columnName,parameterValue,null);
-					}else if(KEY.Or.equals(findByKeyword)) {
-						appendParameter(q,KEY.Equals,columnName,parameterValue,null);
-						appendParameter(q,KEY.Or,columnName,parameterValue,null);
+					if(KEY.AND.equals(findByKeyword)) {
+						appendParameter(q,KEY.EQUALS,columnName,parameterValue,null);
+						appendParameter(q,KEY.AND,columnName,parameterValue,null);
+					}else if(KEY.OR.equals(findByKeyword)) {
+						appendParameter(q,KEY.EQUALS,columnName,parameterValue,null);
+						appendParameter(q,KEY.OR,columnName,parameterValue,null);
 					}else {
 						appendParameter(q,findByKeyword,columnName,parameterValue,null);
 					}
 				}else {
-					if(KEY.OrderBy.equals(findByKeyword)) {
-						appendParameter(q,KEY.Equals,columnName,parameterObject,null);
+					if(KEY.ORDER_BY.equals(findByKeyword)) {
+						appendParameter(q,KEY.EQUALS,columnName,parameterObject,null);
 					}else {
 						appendParameter(q,findByKeyword,columnName,parameterObject,null);
 					}
@@ -107,7 +107,7 @@ public class FindBySqlBuilder {
 				}
 			}else {
 				findByKeyword = FindByKeywords.startKeyword(fieldNameStart);
-				if(StringUtils.isNotBlank(findByKeyword) && KEY.OrderBy.equals(findByKeyword)) {
+				if(StringUtils.isNotBlank(findByKeyword) && KEY.ORDER_BY.equals(findByKeyword)) {
 					logger.trace("FindBy Keyword : {} " , findByKeyword);
 					fieldNameStart = fieldNameStart.substring(findByKeyword.length());
 					logger.trace("FindBy order by columnName : {} " , fieldNameStart);
@@ -116,7 +116,7 @@ public class FindBySqlBuilder {
 						orderBy = "desc";
 					}
 					columnName = getColumnNameFromEntityFields(entityFields,fieldNameStart);
-					appendParameter(q,KEY.OrderBy,columnName,orderBy,null);
+					appendParameter(q,KEY.ORDER_BY,columnName,orderBy,null);
 					break;
 				}
 			}
@@ -154,49 +154,49 @@ public class FindBySqlBuilder {
 	}
 	
 	protected static void  appendParameter(Query q,String operator,String columnName, Object value, Object value1) {
-		if(KEY.And.equals(operator)) {
+		if(KEY.AND.equals(operator)) {
 			q.and();
-		}else if(KEY.Or.equals(operator)) {
+		}else if(KEY.OR.equals(operator)) {
 			q.or();
-		}else if(KEY.Is.equals(operator) || KEY.Equals.equals(operator)) {
+		}else if(KEY.IS.equals(operator) || KEY.EQUALS.equals(operator)) {
 			q.eq(columnName, value);
-		}else if(KEY.Between.equals(operator)) {
+		}else if(KEY.BETWEEN.equals(operator)) {
 			q.between(columnName, value, value1);
-		}else if(KEY.LessThan.equals(operator) || KEY.Before.equals(operator)) {
+		}else if(KEY.LESS_THAN.equals(operator) || KEY.BEFORE.equals(operator)) {
 			q.lt(columnName, value);
-		}else if(KEY.LessThanEqual.equals(operator)) {
+		}else if(KEY.LESS_THAN_EQUAL.equals(operator)) {
 			q.le(columnName, value);
-		}else if(KEY.GreaterThan.equals(operator) || KEY.After.equals(operator)) {
+		}else if(KEY.GREATER_THAN.equals(operator) || KEY.AFTER.equals(operator)) {
 			q.gt(columnName, value);
-		}else if(KEY.GreaterThanEqual.equals(operator)) {
+		}else if(KEY.GREATER_THAN_EQUAL.equals(operator)) {
 			q.ge(columnName, value);
-		}else if(KEY.IsNull.equals(operator) || KEY.Null.equals(operator)) {
+		}else if(KEY.IS_NULL.equals(operator) || KEY.NULL.equals(operator)) {
 			q.isNull(columnName);
-		}else if(KEY.IsNotNull.equals(operator) || KEY.NotNull.equals(operator)) {
+		}else if(KEY.IS_NOT_NULL.equals(operator) || KEY.NOT_NULL.equals(operator)) {
 			q.isNotNull(columnName);
-		}else if(KEY.Like.equals(operator)) {
+		}else if(KEY.LIKE.equals(operator)) {
 			q.like(columnName, value);
-		}else if(KEY.NotLike.equals(operator)) {
+		}else if(KEY.NOT_LIKE.equals(operator)) {
 			q.notLike(columnName, value);
-		}else if(KEY.StartingWith.equals(operator)) {
+		}else if(KEY.STARTING_WITH.equals(operator)) {
 			q.likeRight(columnName, value);
-		}else if(KEY.EndingWith.equals(operator)) {
+		}else if(KEY.ENDING_WITH.equals(operator)) {
 			q.likeLeft(columnName, value);
-		}else if(KEY.Containing.equals(operator)) {
+		}else if(KEY.CONTAINING.equals(operator)) {
 			q.like(columnName, value);
-		}else if(KEY.OrderBy.equals(operator)) {
+		}else if(KEY.ORDER_BY.equals(operator)) {
 			q.orderBy(columnName,value.toString());
-		}else if(KEY.Not.equals(operator)) {
+		}else if(KEY.NOT.equals(operator)) {
 			q.notEq(columnName, value);
-		}else if(KEY.In.equals(operator)) {
+		}else if(KEY.IN.equals(operator)) {
 			q.in(columnName, value);
-		}else if(KEY.NotIn.equals(operator)) {
+		}else if(KEY.NOT_IN.equals(operator)) {
 			q.notIn(columnName, value);
-		}else if(KEY.True.equals(operator)) {
+		}else if(KEY.TRUE.equals(operator)) {
 			q.eq(columnName, true);
-		}else if(KEY.False.equals(operator)) {
+		}else if(KEY.FALSE.equals(operator)) {
 			q.eq(columnName, false);
-		}else if(KEY.IgnoreCase.equals(operator)) {
+		}else if(KEY.IGNORE_CASE.equals(operator)) {
 			q.ignoreCase(columnName, value);
 		}
 	}

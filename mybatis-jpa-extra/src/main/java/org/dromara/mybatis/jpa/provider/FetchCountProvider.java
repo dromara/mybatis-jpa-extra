@@ -82,7 +82,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 		 * 判断 1,去重 2,分组 3,聚合函数
 		 */
 		if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")> -1 
-				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUPBY + " ")> -1 
+				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUP_BY + " ")> -1 
 				||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")> -1 
 				||(countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ") 
 						!= countSqlLowerCase.lastIndexOf(" " + SqlSyntaxConstants.FROM + " ")
@@ -92,7 +92,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 			sql.append(SqlSyntaxConstants.FROM).append(" (").append(countSql).append(" ) count_table_");
 		}else {
 			int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ");
-			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.ORDERBY + " ");
+			int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.ORDER_BY + " ");
 			logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
 			if(orderByIndex > -1) {
 				sql.append(countSql.substring(fromIndex,orderByIndex));

@@ -44,193 +44,193 @@ public class FindByKeywords {
 		 *  findDistinctByLastnameAndFirstname <br>
 		 *  select distinct …​ where x.lastname = ?1 and x.firstname = ?2
 		 */
-		public static final String And 				= "And";
+		public static final String AND 				= "And";
 		/**
 		 * findByLastnameAndFirstname <br>
 		 * where x.lastname = ?1 and x.firstname = ?2
 		 */
-		public static final String Or 				= "Or";
+		public static final String OR 				= "Or";
 		/**
 		 * findByLastnameOrFirstname <br>
 		 * where x.lastname = ?1 or x.firstname = ?2
 		 */
-		public static final String Is 				= "Is";
+		public static final String IS 				= "Is";
 		/**
 		 * findByFirstname,findByFirstnameIs,findByFirstnameEquals <br>
 		 * where x.firstname = ?1
 		 */
-		public static final String Equals 			= "Equals";
+		public static final String EQUALS 			= "Equals";
 		/**
 		 * findByStartDateBetween <br>
 		 * where x.startDate between ?1 and ?2
 		 */
-		public static final String Between 			= "Between";
+		public static final String BETWEEN 			= "Between";
 		/**
 		 * findByAgeLessThan <br>
 		 * where x.age < ?1
 		 */
-		public static final String LessThan 		= "LessThan";
+		public static final String LESS_THAN 		= "LessThan";
 		/**
 		 * findByAgeLessThanEqual <br>
 		 * where x.age <= ?1
 		 */
-		public static final String LessThanEqual 	= "LessThanEqual";
+		public static final String LESS_THAN_EQUAL 	= "LessThanEqual";
 		/**
 		 * findByAgeGreaterThan <br>
 		 * where x.age > ?1
 		 */
-		public static final String GreaterThan 		= "GreaterThan";
+		public static final String GREATER_THAN 		= "GreaterThan";
 		/**
 		 * findByAgeGreaterThanEqual <br>
 		 * where x.age >= ?1
 		 */
-		public static final String GreaterThanEqual = "GreaterThanEqual";
+		public static final String GREATER_THAN_EQUAL = "GreaterThanEqual";
 		/**
 		 * findByStartDateAfter <br>
 		 * where x.startDate > ?1
 		 */
-		public static final String After 			= "After";
+		public static final String AFTER 			= "After";
 		/**
 		 * findByStartDateBefore <br>
 		 * where x.startDate < ?1
 		 */
-		public static final String Before 			= "Before";
+		public static final String BEFORE 			= "Before";
 		/**
 		 * findByAge(Is)Null <br>
 		 * where x.age is null
 		 */
-		public static final String IsNull 			= "IsNull";
+		public static final String IS_NULL 			= "IsNull";
 		/**
 		 * same as IsNull
 		 */
-		public static final String Null 			= "Null";
+		public static final String NULL 			= "Null";
 		/**
 		 * findByAge(Is)NotNull <br>
 		 * where x.age is not null
 		 */
-		public static final String IsNotNull 		= "IsNotNull";
+		public static final String IS_NOT_NULL 		= "IsNotNull";
 		/**
 		 * findByAge(Is)NotNull <br>
 		 * where x.age is not null
 		 */
-		public static final String NotNull 			= "NotNull";
+		public static final String NOT_NULL 			= "NotNull";
 		/**
 		 * findByFirstnameLike <br>
 		 * where x.firstname like ?1
 		 */
-		public static final String Like 			= "Like";
+		public static final String LIKE 			= "Like";
 		/**
 		 * findByFirstnameNotLike <br>
 		 * where x.firstname not like ?1
 		 */
-		public static final String NotLike 			= "NotLike";
+		public static final String NOT_LIKE 			= "NotLike";
 		/**
 		 * findByFirstnameStartingWith <br>
 		 * where x.firstname like ?1 (parameter bound with appended %)
 		 */
-		public static final String StartingWith 	= "StartingWith";
+		public static final String STARTING_WITH 	= "StartingWith";
 		/**
 		 * findByFirstnameEndingWith <br>
 		 * where x.firstname like ?1 (parameter bound with prepended %)
 		 */
-		public static final String EndingWith 		= "EndingWith";
+		public static final String ENDING_WITH 		= "EndingWith";
 		/**
 		 * findByFirstnameContaining <br>
 		 * where x.firstname like ?1 (parameter bound wrapped in %)
 		 */
-		public static final String Containing 		= "Containing";
+		public static final String CONTAINING 		= "Containing";
 		/**
 		 * findByAgeOrderByLastnameDesc <br>
 		 * where x.age = ?1 order by x.lastname desc
 		 */
-		public static final String OrderBy 			= "OrderBy";
+		public static final String ORDER_BY 			= "OrderBy";
 		/**
 		 * findByLastnameNot <br>
 		 * where x.lastname <> ?1
 		 */
-		public static final String Not 				= "Not";
+		public static final String NOT 				= "Not";
 		/**
 		 * findByAgeIn(Collection<Age> ages) <br>
 		 * where x.age in ?1
 		 */
-		public static final String In 				= "In";
+		public static final String IN 				= "In";
 		/**
 		 * findByAgeNotIn(Collection<Age> ages) <br>
 		 * where x.age not in ?1
 		 */
-		public static final String NotIn 			= "NotIn";
+		public static final String NOT_IN 			= "NotIn";
 		/**
 		 * findByActiveTrue() <br>
 		 * where x.active = true
 		 */
-		public static final String True 			= "True";
+		public static final String TRUE 			= "True";
 		/**
 		 * findByActiveFalse() <br>
 		 * where x.active = false
 		 */
-		public static final String False 			= "False";
+		public static final String FALSE 			= "False";
 		/**
 		 * findByFirstnameIgnoreCase <br>
 		 * where UPPER(x.firstname) = UPPER(?1)
 		 */
-		public static final String IgnoreCase 		= "IgnoreCase";
+		public static final String IGNORE_CASE 		= "IgnoreCase";
 	}
 	static {
 		keywords = new ArrayList<>();
 
-		keywords.add(KEY.OrderBy);
+		keywords.add(KEY.ORDER_BY);
 	
-		keywords.add(KEY.And);
+		keywords.add(KEY.AND);
 
-		keywords.add(KEY.Or);
+		keywords.add(KEY.OR);
 		
-		keywords.add(KEY.Between);
+		keywords.add(KEY.BETWEEN);
 
-		keywords.add(KEY.LessThanEqual);
+		keywords.add(KEY.LESS_THAN_EQUAL);
 		
-		keywords.add(KEY.LessThan);
+		keywords.add(KEY.LESS_THAN);
 
-		keywords.add(KEY.GreaterThanEqual);
+		keywords.add(KEY.GREATER_THAN_EQUAL);
 		
-		keywords.add(KEY.GreaterThan);
+		keywords.add(KEY.GREATER_THAN);
 
-		keywords.add(KEY.After);
+		keywords.add(KEY.AFTER);
 
-		keywords.add(KEY.Before);
+		keywords.add(KEY.BEFORE);
 
-		keywords.add(KEY.IsNull);
+		keywords.add(KEY.IS_NULL);
 
-		keywords.add(KEY.Null);
+		keywords.add(KEY.NULL);
 
-		keywords.add(KEY.IsNotNull);
+		keywords.add(KEY.IS_NOT_NULL);
 
-		keywords.add(KEY.NotNull);
+		keywords.add(KEY.NOT_NULL);
 
-		keywords.add(KEY.Like);
+		keywords.add(KEY.LIKE);
 
-		keywords.add(KEY.NotLike);
+		keywords.add(KEY.NOT_LIKE);
 
-		keywords.add(KEY.StartingWith);
+		keywords.add(KEY.STARTING_WITH);
 	
-		keywords.add(KEY.EndingWith);
+		keywords.add(KEY.ENDING_WITH);
 
-		keywords.add(KEY.Containing);
+		keywords.add(KEY.CONTAINING);
 
-		keywords.add(KEY.NotIn);
+		keywords.add(KEY.NOT_IN);
 		
-		keywords.add(KEY.Not);
+		keywords.add(KEY.NOT);
 
-		keywords.add(KEY.In);
+		keywords.add(KEY.IN);
 	
-		keywords.add(KEY.True);
+		keywords.add(KEY.TRUE);
 
-		keywords.add(KEY.False);
+		keywords.add(KEY.FALSE);
 
-		keywords.add(KEY.IgnoreCase);
+		keywords.add(KEY.IGNORE_CASE);
 		
-		keywords.add(KEY.Is);
+		keywords.add(KEY.IS);
 		
-		keywords.add(KEY.Equals);
+		keywords.add(KEY.EQUALS);
 		
 	}
 	
