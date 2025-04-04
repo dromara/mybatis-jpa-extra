@@ -35,14 +35,6 @@ import org.slf4j.LoggerFactory;
 public class MapperMetadata{
 	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
-	public  static  class SQL_TYPE{
-		public static final String 	GET_SQL							= "_GET_SQL";
-		public static final String 	FINDALL_SQL						= "_FINDALL_SQL";
-		//public static final String 	REMOVE_SQL						= "_REMOVE_SQL";
-		//public static final String 	BATCHDELETE_SQL					= "_BATCHDELETE_SQL";
-		//public static final String 	LOGICDELETE_SQL					= "_LOGICDELETE_SQL";
-	}
-	
 	public static final String LOG_FORMAT = "%-30s";
 	
 	public static final String LOG_FORMAT_COUNT = "%-3s";

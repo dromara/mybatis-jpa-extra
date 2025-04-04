@@ -28,7 +28,6 @@ import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +41,7 @@ public class GetProvider <T extends JpaEntity>{
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
-		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.GET_SQL)) {
-			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.GET_SQL);
-		}
+
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
@@ -74,7 +70,6 @@ public class GetProvider <T extends JpaEntity>{
 		}
 		
         String getSql = sql.toString(); 
-        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.GET_SQL,getSql);
         logger.trace("Get SQL \n{}" , getSql);
         return getSql;  
     }

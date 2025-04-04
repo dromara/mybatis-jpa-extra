@@ -32,7 +32,6 @@ import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata.SQL_TYPE;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +46,6 @@ public class FindProvider <T extends JpaEntity>{
 	public String findAll(Map<String, Object>  parametersMap) {  
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
-		if (MapperMetadata.getSqlsMap().containsKey(tableName + SQL_TYPE.FINDALL_SQL)) {
-			return MapperMetadata.getSqlsMap().get(tableName + SQL_TYPE.FINDALL_SQL);
-		}
 		
 		SQL sql=  TableMetadata.buildSelect(entityClass);
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
@@ -63,7 +58,6 @@ public class FindProvider <T extends JpaEntity>{
 		}
         String findAllSql = sql.toString(); 
         logger.trace("Find All SQL \n{}" , findAllSql);
-        MapperMetadata.getSqlsMap().put(tableName + SQL_TYPE.FINDALL_SQL,findAllSql);
         return findAllSql;  
     }
 	
