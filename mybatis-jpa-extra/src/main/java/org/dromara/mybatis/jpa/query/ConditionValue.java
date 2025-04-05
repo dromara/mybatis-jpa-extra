@@ -17,14 +17,19 @@
 
 package org.dromara.mybatis.jpa.query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConditionValue {
-
+	private static final Logger logger = LoggerFactory.getLogger(ConditionValue.class);
+	
 	public static String valueOfList(List<?> listValue) {
 		StringBuffer conditionArray = new StringBuffer();
 		for (Object value : listValue) {
@@ -69,6 +74,33 @@ public class ConditionValue {
         	conditionArray.append(SafeValueHandler.valueOfType(element));
         }
 		return conditionArray.toString();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static String getCollectionValues(Object value) {
+		logger.trace("expression Class() {} , getSimpleName {}",value.getClass().getCanonicalName(),value.getClass().getSimpleName());
+		String collectionValues = "";
+		if (value.getClass().isArray()) {
+			Object[] objects = (Object[]) value;
+			if(objects[0] instanceof Collection<?> cObjects) {
+				logger.trace("objects[0] is Collection {}" , cObjects);
+				collectionValues = ConditionValue.valueOfCollection(cObjects);
+			}else if(objects[0].getClass().isArray()) {
+				objects = (Object[])objects[0];
+				logger.trace("objects[0] is isArray {}" , objects);
+				collectionValues = ConditionValue.valueOfArray(objects);
+			}else {
+				logger.trace("not  isArray {}" , objects);
+				collectionValues = ConditionValue.valueOfArray(objects);
+			}
+		}else if(value.getClass().getCanonicalName().startsWith("java.util.ImmutableCollections")) {
+			collectionValues = ConditionValue.valueOfIterator((List<?>) value);
+		}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
+			collectionValues = ConditionValue.valueOfList((ArrayList) value);
+		}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
+			collectionValues = ConditionValue.valueOfList((LinkedList) value);
+		}
+		return collectionValues;
 	}
 	
 }

@@ -17,11 +17,6 @@
 
 package org.dromara.mybatis.jpa.query;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.slf4j.Logger;
@@ -30,7 +25,6 @@ import org.slf4j.LoggerFactory;
 public class QueryBuilder {
 	private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
 	
-	@SuppressWarnings("rawtypes")
 	public static String build(Query query) {
 		StringBuffer conditionString = new StringBuffer("");
 		Operator lastExpression = Operator.AND;
@@ -93,28 +87,7 @@ public class QueryBuilder {
 					conditionString.append(column).append(" ").append(expression.getOperator());
 	
 				} else if (expression.equals(Operator.IN) || expression.equals(Operator.NOT_IN)) {
-					
-					String inValues = "";
-					if (value.getClass().isArray()) {
-						Object[] objects = (Object[]) value;
-						if(objects[0] instanceof Collection<?> cObjects) {
-							logger.trace("objects[0] is Collection {}" , cObjects);
-							inValues = ConditionValue.valueOfCollection(cObjects);
-						}else if(objects[0].getClass().isArray()) {
-							objects = (Object[])objects[0];
-							logger.trace("objects[0] is isArray {}" , objects);
-							inValues = ConditionValue.valueOfArray(objects);
-						}else {
-							logger.trace("not  isArray {}" , objects);
-							inValues = ConditionValue.valueOfArray(objects);
-						}
-					}else if(value.getClass().getCanonicalName().startsWith("java.util.ImmutableCollections")) {
-						inValues = ConditionValue.valueOfIterator((List<?>) value);
-					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
-						inValues = ConditionValue.valueOfList((ArrayList) value);
-					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
-						inValues = ConditionValue.valueOfList((LinkedList) value);
-					}
+					String inValues = ConditionValue.getCollectionValues(value);
 					if(StringUtils.isNotBlank(inValues)) {
 						conditionString.append(column).append(" ").append(expression.getOperator());
 						conditionString.append(" ( ").append(inValues).append(" ) ");

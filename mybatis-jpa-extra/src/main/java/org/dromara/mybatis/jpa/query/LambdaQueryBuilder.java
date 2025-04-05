@@ -17,8 +17,6 @@
 
 package org.dromara.mybatis.jpa.query;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -88,20 +86,8 @@ public class LambdaQueryBuilder {
 	
 					conditionString.append(column).append(" ").append(expression.getOperator());
 	
-				} else if (expression.equals(Operator.IN) || expression.equals(Operator.NOT_IN)) {
-					logger.trace("expression Class() {} , getSimpleName {}",value.getClass().getCanonicalName(),value.getClass().getSimpleName());
-					
-					String inValues = "";
-					if (value.getClass().isArray()) {
-						inValues = ConditionValue.valueOfArray((Object[]) value);
-					}else if(value.getClass().getCanonicalName().startsWith("java.util.ImmutableCollections")) {
-						inValues = ConditionValue.valueOfIterator((List<?>) value);
-					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
-						inValues = ConditionValue.valueOfList((ArrayList) value);
-					}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
-						inValues = ConditionValue.valueOfList((LinkedList) value);
-					}
-					
+				} else if (value != null &&(expression.equals(Operator.IN) || expression.equals(Operator.NOT_IN))) {
+					String inValues = ConditionValue.getCollectionValues(value);
 					if(StringUtils.isNotBlank(inValues)) {
 						conditionString.append(column).append(" ").append(expression.getOperator());
 						conditionString.append(" ( ").append(inValues).append(" ) ");
