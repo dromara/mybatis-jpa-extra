@@ -49,8 +49,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String softDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValue = new StringBuffer();
@@ -68,7 +67,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL()
-				.UPDATE(tableName)
+				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(" %s = '%s' ".formatted(
 						logicColumnMapper.getColumnName(),
 						logicColumnMapper.getSoftDelete().delete()
@@ -94,12 +93,11 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	
 	public String softDeleteByQuery(Class<?> entityClass, Query query) {
 		logger.trace("softDelete By Query \n{}" , query);
-		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		
 		SQL sql = new SQL()
-				.UPDATE(tableName)
+				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(" %s = '%s' ".formatted(
 						logicColumnMapper.getColumnName(),
 						logicColumnMapper.getSoftDelete().delete()
@@ -112,12 +110,11 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	
 	public String softDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
 		logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
-		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
 		
 		SQL sql = new SQL()
-				.UPDATE(tableName)
+				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(" %s = '%s' ".formatted(
 						logicColumnMapper.getColumnName(),
 						logicColumnMapper.getSoftDelete().delete()

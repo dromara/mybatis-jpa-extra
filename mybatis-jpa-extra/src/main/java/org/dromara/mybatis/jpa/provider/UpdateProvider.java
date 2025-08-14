@@ -51,8 +51,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	 * @return update sql String
 	 */
 	public String update(T entity) {
-		FieldMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entity.getClass());
+		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
 		
 		SQL sql = new SQL()
 			.UPDATE(TableMetadata.getTableName(entity.getClass()));
@@ -120,11 +119,9 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByQuery(Class<?> entityClass,String setSql, Query query) {
 		logger.trace("update By Query \n{}" , query);
-		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
-		
+		FieldMetadata.buildColumnMapper(entityClass);
 		SQL sql = new SQL()
-				.UPDATE(tableName)
+				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(setSql).WHERE(QueryBuilder.build(query));
 		
 		logger.trace("update By Query  SQL \n{}" , sql);
@@ -133,11 +130,10 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByLambdaQuery(Class<?> entityClass,String setSql, LambdaQuery<T> lambdaQuery) {
 		logger.trace("update By LambdaQuery \n{}" , lambdaQuery);
-		FieldMetadata.buildColumnList(entityClass);
-		String tableName = TableMetadata.getTableName(entityClass);
-		
+		FieldMetadata.buildColumnMapper(entityClass);
+
 		SQL sql = new SQL()
-				.UPDATE(tableName)
+				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(setSql).WHERE(LambdaQueryBuilder.build(lambdaQuery));
 		
 		logger.trace("update By LambdaQuery  SQL \n{}" , sql);
@@ -147,7 +143,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByUpdateWrapper(Class<?> entityClass, UpdateWrapper updateWrapper) {
 		logger.trace("update By UpdateWrapper \n{}" , updateWrapper);
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
@@ -160,7 +156,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByLambdaUpdateWrapper(Class<?> entityClass, LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
 		logger.trace("update By LambdaUpdateWrapper \n{}" , lambdaUpdateWrapper);
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))

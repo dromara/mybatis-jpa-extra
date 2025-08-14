@@ -41,8 +41,7 @@ public class FieldEncryptInterceptor  implements Interceptor {
 	public Object intercept(Invocation invocation) throws Throwable {
         //实体对象
         Object entity = invocation.getArgs()[1];
-        FieldMetadata.buildColumnList(entity.getClass());
-        List <FieldColumnMapper> listFieldColumn = FieldMetadata.getFieldsMap(entity.getClass());
+        List <FieldColumnMapper> listFieldColumn = FieldMetadata.buildColumnMapper(entity.getClass());
 
         for (FieldColumnMapper encryptField : listFieldColumn) {
         	if(encryptField.isEncrypted()) {

@@ -42,7 +42,7 @@ public class TableMetadata {
 	 * @return select columns  from table name sel_tmp_table
 	 */
 	public static SQL buildSelect(Class<?> entityClass) {
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
 				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
 	}
@@ -53,7 +53,7 @@ public class TableMetadata {
 	 * @return select columns  from table name sel_tmp_table
 	 */
 	public static SQL buildSelectCount(Class<?> entityClass) {
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(" count(1) as _select_count ")
 				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
 	}
@@ -64,7 +64,7 @@ public class TableMetadata {
 	 * @return select columns  from table name sel_tmp_table
 	 */
 	public static SQL buildSelect(Class<?> entityClass , boolean distinct) {
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		if(distinct) {
 			return new SQL().SELECT_DISTINCT(FieldMetadata.selectColumnMapper(entityClass))
 				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
@@ -82,57 +82,56 @@ public class TableMetadata {
 	 */
 	public static String getTableName(Class<?> entityClass) {
 		String entityClassName = entityClass.getName();
-		if(tableNameMap.containsKey(entityClassName)) {
-			return tableNameMap.get(entityClassName);
-		}
-		logger.debug("entity Class Name {}" , entityClassName);
-		String tableName = null;
-		String schema = null;
-		String catalog = null;
-		//must use @Entity to ORM class
-		Entity entity = entityClass.getAnnotation(Entity.class);
-		logger.trace("entity {}" , entity);
-		Table table = entityClass.getAnnotation(Table.class);
-		logger.trace("table {}" , table);
-		if(entity != null ) {
-			if(entity.name() != null && !entity.name().equals("")) {
-				tableName = entity.name();
-			}
-			if (table != null) {
-				if(table.name() != null && !table.name().equals("")) {
-					tableName = table.name();
+		if(!tableNameMap.containsKey(entityClassName)) {
+			logger.debug("entity Class Name {}" , entityClassName);
+			String tableName = null;
+			String schema = null;
+			String catalog = null;
+			//must use @Entity to ORM class
+			Entity entity = entityClass.getAnnotation(Entity.class);
+			logger.trace("entity {}" , entity);
+			Table table = entityClass.getAnnotation(Table.class);
+			logger.trace("table {}" , table);
+			if(entity != null ) {
+				if(entity.name() != null && !entity.name().equals("")) {
+					tableName = entity.name();
 				}
-				if(table.schema() != null && !table.schema().equals("")) {
-					schema = table.schema();
-					logger.trace("schema {}" , schema);
+				if (table != null) {
+					if(table.name() != null && !table.name().equals("")) {
+						tableName = table.name();
+					}
+					if(table.schema() != null && !table.schema().equals("")) {
+						schema = table.schema();
+						logger.trace("schema {}" , schema);
+					}
+					
+					if(table.catalog() != null && !table.catalog().equals("")) {
+						catalog = table.catalog();
+						logger.trace("catalog {}" , catalog);
+					}
 				}
 				
-				if(table.catalog() != null && !table.catalog().equals("")) {
-					catalog = table.catalog();
-					logger.trace("catalog {}" , catalog);
+				if(tableName == null) {
+					tableName = entityClass.getSimpleName();
+				}
+				
+				if(schema != null) {
+					tableName = schema+"."+tableName;
+				}
+				
+				if(catalog != null) {
+					tableName = catalog+"."+tableName;
 				}
 			}
 			
-			if(tableName == null) {
-				tableName = entityClass.getSimpleName();
-			}
+			tableName = MapperMetadata.columnCaseConverter(tableName);
 			
-			if(schema != null) {
-				tableName = schema+"."+tableName;
-			}
+			tableName = MapperMetadata.columnEscape(tableName);
 			
-			if(catalog != null) {
-				tableName = catalog+"."+tableName;
-			}
+			tableNameMap.put(entityClassName,tableName);
+			logger.trace("Table Name {}" , tableName);
 		}
-		
-		tableName = MapperMetadata.tableColumnCaseConverter(tableName);
-		
-		tableName = MapperMetadata.tableColumnEscape(tableName);
-		
-		tableNameMap.put(entityClassName,tableName);
-		logger.trace("Table Name {}" , tableName);
-		return tableName;
+		return tableNameMap.get(entityClassName);
 	}
 	
 

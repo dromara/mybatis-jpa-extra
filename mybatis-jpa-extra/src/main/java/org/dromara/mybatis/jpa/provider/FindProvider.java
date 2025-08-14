@@ -45,7 +45,7 @@ public class FindProvider <T extends JpaEntity>{
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql=  TableMetadata.buildSelect(entityClass);
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
@@ -67,7 +67,7 @@ public class FindProvider <T extends JpaEntity>{
 		int[] argTypes 	 = (int[]) parametersMap.get(MapperMetadata.QUERY_ARGTYPES);
 		String filterSql = parametersMap.get(MapperMetadata.QUERY_FILTER).toString().trim();
 		
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 		
 		if(filterSql.toLowerCase().startsWith("where")) {
 			filterSql = filterSql.substring(5);
@@ -132,7 +132,7 @@ public class FindProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String findByIds(Map<String, Object>  parametersMap) { 
 		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnList(parameterEntityClass);
+		FieldMetadata.buildColumnMapper(parameterEntityClass);
 		List <String> parameterIds = (List<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValues = new StringBuffer();

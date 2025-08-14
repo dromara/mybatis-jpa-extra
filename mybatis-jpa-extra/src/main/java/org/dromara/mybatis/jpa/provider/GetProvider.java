@@ -40,7 +40,7 @@ public class GetProvider <T extends JpaEntity>{
 	
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnList(entityClass);
+		FieldMetadata.buildColumnMapper(entityClass);
 
 		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);

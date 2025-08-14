@@ -58,8 +58,7 @@ public class FieldDecryptInterceptor  implements Interceptor {
     }
 
     private void intercept(Object entity) throws Throwable {
-    	FieldMetadata.buildColumnList(entity.getClass());
-        List <FieldColumnMapper> listFieldColumn = FieldMetadata.getFieldsMap(entity.getClass());
+        List <FieldColumnMapper> listFieldColumn = FieldMetadata.buildColumnMapper(entity.getClass());
         for (FieldColumnMapper encryptField : listFieldColumn) {
         	if(encryptField.isEncrypted()) {
         		logger.debug("FieldName {} is need Encrypted ",encryptField.getFieldName());

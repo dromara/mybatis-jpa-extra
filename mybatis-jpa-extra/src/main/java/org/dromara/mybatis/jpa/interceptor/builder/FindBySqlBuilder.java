@@ -52,8 +52,7 @@ public class FindBySqlBuilder {
 	
 	public static String translate(FindByMapper findByMapper,Object parameterObject) {
 		findByMapper.parseEntityClass();
-		FieldMetadata.buildColumnList(findByMapper.getEntityClass());
-		List<FieldColumnMapper> entityFields = FieldMetadata.getFieldsMap(findByMapper.getEntityClass());
+		List<FieldColumnMapper> entityFields = FieldMetadata.buildColumnMapper(findByMapper.getEntityClass());
 		Query q = Query.builder();
 		String fieldNameStart = findByMapper.getRemovedFindByName();
 		int argIndex = 0;

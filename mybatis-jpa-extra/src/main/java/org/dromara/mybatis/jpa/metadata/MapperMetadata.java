@@ -80,7 +80,7 @@ public class MapperMetadata{
 	 * @param name
 	 * @return case
 	 */
-	public static String tableColumnCaseConverter(String name) {
+	public static String columnCaseConverter(String name) {
 		if(TABLE_COLUMN_CASE  == CASE_TYPE.LOWERCASE) {
 			name = name.toLowerCase();
 		}else if(TABLE_COLUMN_CASE  == CASE_TYPE.UPPERCASE) {
@@ -94,7 +94,7 @@ public class MapperMetadata{
 	 * @param name
 	 * @return Escape name
 	 */
-	public static String tableColumnEscape(String name) {
+	public static String columnEscape(String name) {
 		return TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + name + TABLE_COLUMN_ESCAPE_CHAR : name;
 	}
 	

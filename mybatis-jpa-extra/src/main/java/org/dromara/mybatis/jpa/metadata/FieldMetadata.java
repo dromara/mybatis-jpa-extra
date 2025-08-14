@@ -89,84 +89,80 @@ public class FieldMetadata {
 	 * buildColumnList
 	 * @param entityClass
 	 */
-	public static void buildColumnList(Class<?> entityClass) {
+	public static List<FieldColumnMapper> buildColumnMapper(Class<?> entityClass) {
 		String entityClassName = entityClass.getName();
-		if (fieldsMap.containsKey(entityClassName)) {
-			return;
-		}
-		logger.trace("entityClass {}" , entityClass);
-		Field[] fields = entityClass.getDeclaredFields();
-		List<FieldColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
-
-		for (Field field : fields) {
-			//skip Transient field
-			if(field.isAnnotationPresent(Transient.class)) {
-				continue;
+		if (!fieldsMap.containsKey(entityClassName)) {	
+			logger.trace("entityClass {}" , entityClass);
+			Field[] fields = entityClass.getDeclaredFields();
+			List<FieldColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
+	
+			for (Field field : fields) {
+				//skip Transient field
+				if(field.isAnnotationPresent(Transient.class)) {
+					continue;
+				}
+				
+				if (field.isAnnotationPresent(Column.class)) {
+					String columnName = "";
+					Column columnAnnotation = field.getAnnotation(Column.class);
+					//if column name is null or '' , then set as field name
+					if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
+					    columnName = columnAnnotation.name();
+					} else {
+						columnName = field.getName();
+					}
+					columnName = MapperMetadata.columnCaseConverter(columnName);
+					columnName = MapperMetadata.columnEscape(columnName);
+					
+					FieldColumnMapper fieldColumnMapper = 
+							new FieldColumnMapper(field,field.getName(),field.getType().getSimpleName(),columnName);
+					fieldColumnMapper.setColumnAnnotation(columnAnnotation);
+					
+					if(field.isAnnotationPresent(Id.class)) {
+						fieldColumnMapper.setIdColumn(true);
+						idColumnMap.put(entityClassName, fieldColumnMapper);
+					}
+					
+					if(field.isAnnotationPresent(GeneratedValue.class)) {
+						GeneratedValue generatedValue=field.getAnnotation(GeneratedValue.class);
+						fieldColumnMapper.setGeneratedValue(generatedValue);
+						fieldColumnMapper.setGenerated(true);
+					}
+					if (field.isAnnotationPresent(Temporal.class)) {
+						Temporal temporalAnnotation = field.getAnnotation(Temporal.class);
+						fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
+					}
+					if (field.isAnnotationPresent(ColumnDefault.class)) {
+						ColumnDefault columnDefault = field.getAnnotation(ColumnDefault.class);
+						fieldColumnMapper.setColumnDefault(columnDefault);
+					}
+					if (field.isAnnotationPresent(PartitionKey.class)) {
+						PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
+						fieldColumnMapper.setPartitionKey(partitionKey);
+						partitionKeyMap.put(entityClassName, fieldColumnMapper);
+					}
+					if (field.isAnnotationPresent(SoftDelete.class)) {
+						SoftDelete columnLogic = field.getAnnotation(SoftDelete.class);
+						fieldColumnMapper.setSoftDelete(columnLogic);
+						fieldColumnMapper.setLogicDelete(true);
+						logicColumnMap.put(entityClassName, fieldColumnMapper);
+					}
+					
+					if (field.isAnnotationPresent(Encrypted.class)) {
+						Encrypted columnEncrypted = field.getAnnotation(Encrypted.class);
+						fieldColumnMapper.setEncrypted(true);
+						fieldColumnMapper.setEncryptedAnnotation(columnEncrypted);
+					}
+					
+					logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
+					fieldColumnMapperList.add(fieldColumnMapper);
+				}
 			}
 			
-			if (field.isAnnotationPresent(Column.class)) {
-				String columnName = "";
-				Column columnAnnotation = field.getAnnotation(Column.class);
-				if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
-				    columnName = columnAnnotation.name();
-				} else {
-					columnName = field.getName();
-				}
-				columnName = MapperMetadata.tableColumnCaseConverter(columnName);
-				columnName = MapperMetadata.tableColumnEscape(columnName);
-				
-				FieldColumnMapper fieldColumnMapper = 
-						new FieldColumnMapper(field,field.getName(),field.getType().getSimpleName(),columnName);
-				fieldColumnMapper.setColumnAnnotation(columnAnnotation);
-				
-				if(field.isAnnotationPresent(Id.class)) {
-					fieldColumnMapper.setIdColumn(true);
-					idColumnMap.put(entityClassName, fieldColumnMapper);
-				}
-				
-				if(field.isAnnotationPresent(GeneratedValue.class)) {
-					GeneratedValue generatedValue=field.getAnnotation(GeneratedValue.class);
-					fieldColumnMapper.setGeneratedValue(generatedValue);
-					fieldColumnMapper.setGenerated(true);
-				}
-				if (field.isAnnotationPresent(Temporal.class)) {
-					Temporal temporalAnnotation = field.getAnnotation(Temporal.class);
-					fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
-				}
-				if (field.isAnnotationPresent(ColumnDefault.class)) {
-					ColumnDefault columnDefault = field.getAnnotation(ColumnDefault.class);
-					fieldColumnMapper.setColumnDefault(columnDefault);
-				}
-				if (field.isAnnotationPresent(PartitionKey.class)) {
-					PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
-					fieldColumnMapper.setPartitionKey(partitionKey);
-					partitionKeyMap.put(entityClassName, fieldColumnMapper);
-				}
-				if (field.isAnnotationPresent(SoftDelete.class)) {
-					SoftDelete columnLogic = field.getAnnotation(SoftDelete.class);
-					fieldColumnMapper.setSoftDelete(columnLogic);
-					fieldColumnMapper.setLogicDelete(true);
-					logicColumnMap.put(entityClassName, fieldColumnMapper);
-				}
-				
-				if (field.isAnnotationPresent(Encrypted.class)) {
-					Encrypted columnEncrypted = field.getAnnotation(Encrypted.class);
-					fieldColumnMapper.setEncrypted(true);
-					fieldColumnMapper.setEncryptedAnnotation(columnEncrypted);
-				}
-				
-				logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
-				fieldColumnMapperList.add(fieldColumnMapper);
-			}
+			fieldsMap.put(entityClassName, fieldColumnMapperList);
+			logger.trace("fieldsMap : {}" , fieldsMap);
 		}
-		
-		fieldsMap.put(entityClassName, fieldColumnMapperList);
-		logger.trace("fieldsMap : {}" , fieldsMap);
-
-	}
-
-	public static List<FieldColumnMapper> getFieldsMap(Class<?> entityClass) {
-		return fieldsMap.get(entityClass.getName());
+		return fieldsMap.get(entityClassName);
 	}
 
 }

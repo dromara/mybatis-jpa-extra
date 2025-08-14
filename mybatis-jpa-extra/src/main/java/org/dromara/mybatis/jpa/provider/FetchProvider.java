@@ -53,8 +53,7 @@ public class FetchProvider <T extends JpaEntity>{
 	 */
 	public String fetch(Map<String, Object>  parametersMap) {
 		T entity = (T)parametersMap.get(MapperMetadata.ENTITY);
-		FieldMetadata.buildColumnList(entity.getClass());
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entity.getClass());
+		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
 		String[] column = new String[listFields.size()] ;
 		StringBuffer conditions = new StringBuffer();
 		int columnCount = 0;
@@ -112,8 +111,7 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetchByQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(MapperMetadata.CONDITION);
-		FieldMetadata.buildColumnList(entityClass);
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entityClass);
+		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
@@ -144,8 +142,7 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetchByLambdaQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
 		LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(MapperMetadata.CONDITION);
-		FieldMetadata.buildColumnList(entityClass);
-		List<FieldColumnMapper> listFields = FieldMetadata.getFieldsMap(entityClass);
+		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
 			column[i] = listFields.get(i).getColumnName();
