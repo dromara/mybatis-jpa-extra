@@ -124,9 +124,9 @@ public class TableMetadata {
 				}
 			}
 			
-			tableName = MapperMetadata.columnCaseConverter(tableName);
+			tableName = MapperMetadata.tableOrColumnCaseConverter(tableName);
 			
-			tableName = MapperMetadata.columnEscape(tableName);
+			tableName = MapperMetadata.tableOrColumnEscape(tableName);
 			
 			tableNameMap.put(entityClassName,tableName);
 			logger.trace("Table Name {}" , tableName);

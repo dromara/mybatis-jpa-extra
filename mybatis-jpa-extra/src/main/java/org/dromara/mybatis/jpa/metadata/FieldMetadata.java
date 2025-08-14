@@ -111,8 +111,8 @@ public class FieldMetadata {
 					} else {
 						columnName = field.getName();
 					}
-					columnName = MapperMetadata.columnCaseConverter(columnName);
-					columnName = MapperMetadata.columnEscape(columnName);
+					columnName = MapperMetadata.tableOrColumnCaseConverter(columnName);
+					columnName = MapperMetadata.tableOrColumnEscape(columnName);
 					
 					FieldColumnMapper fieldColumnMapper = 
 							new FieldColumnMapper(field,field.getName(),field.getType().getSimpleName(),columnName);
