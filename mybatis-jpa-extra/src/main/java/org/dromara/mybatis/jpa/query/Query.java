@@ -23,13 +23,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 
 public class Query {
-
-	public static final  class OrderType {
-
-		public static final String ASC 	= "asc";
-		
-		public static final String DESC = "desc";
-	}
 	
 	ArrayList<Condition> conditions = new ArrayList<>();
 	
