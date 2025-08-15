@@ -66,7 +66,7 @@ public class FieldMetadata {
 	 * @return selectColumn
 	 */
 	public static String selectColumnMapper(Class<?> entityClass) {
-		StringBuffer selectColumn = new StringBuffer(TableMetadata.SELECT_TMP_TABLE + ".* ");
+		StringBuffer selectColumn = new StringBuffer(MetadataConstants.SELECT_TMP_TABLE + ".* ");
 		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
 			columnCount ++;
@@ -79,7 +79,7 @@ public class FieldMetadata {
 			}
 			if(logger.isTraceEnabled()) {
 				logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-					String.format(MapperMetadata.LOG_FORMAT_COUNT, columnCount),String.format(MapperMetadata.LOG_FORMAT, fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
+					String.format(MetadataConstants.LOG_FORMAT_COUNT, columnCount),String.format(MetadataConstants.LOG_FORMAT, fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
 			}
 		}
 		return selectColumn.toString();

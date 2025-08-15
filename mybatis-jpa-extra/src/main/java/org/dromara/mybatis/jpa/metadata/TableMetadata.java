@@ -31,11 +31,7 @@ public class TableMetadata {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(TableMetadata.class);
 	
 	static ConcurrentMap<String, String> tableNameMap 	= 	new ConcurrentHashMap<>();
-	/**
-	 * 查询的中间表别名
-	 */
-	public static final String SELECT_TMP_TABLE = " tmp_t";
-	
+
 	/**
 	 * build select from entity Class
 	 * @param entityClass
@@ -44,7 +40,7 @@ public class TableMetadata {
 	public static SQL buildSelect(Class<?> entityClass) {
 		FieldMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
-				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+				.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
 	}
 	
 	/**
@@ -55,7 +51,7 @@ public class TableMetadata {
 	public static SQL buildSelectCount(Class<?> entityClass) {
 		FieldMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(" count(1) as _select_count ")
-				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+				.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
 	}
 	
 	/**
@@ -67,10 +63,10 @@ public class TableMetadata {
 		FieldMetadata.buildColumnMapper(entityClass);
 		if(distinct) {
 			return new SQL().SELECT_DISTINCT(FieldMetadata.selectColumnMapper(entityClass))
-				.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+				.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
 		}else {
 			return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
-					.FROM(TableMetadata.getTableName(entityClass) + SELECT_TMP_TABLE);
+					.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
 		}
 	}
 	

@@ -29,7 +29,7 @@ import org.dromara.mybatis.jpa.IJpaRepository;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
@@ -72,7 +72,7 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 		if (pType != null && pType.length >= 2) {
 			mapperClass=(Class<T>) pType[0];
 			this.entityClass = (Class<T>) pType[1];
-			logger.trace("Mapper {} , Entity {}" , String.format(MapperMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
+			logger.trace("Mapper {} , Entity {}" , String.format(MetadataConstants.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
 		} else {
 			logger.error("invalide initail, need generic type parameter! ");
 		}

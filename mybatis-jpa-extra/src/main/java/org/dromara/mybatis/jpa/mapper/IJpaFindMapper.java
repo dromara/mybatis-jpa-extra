@@ -20,7 +20,7 @@ package org.dromara.mybatis.jpa.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 
 /**
@@ -36,7 +36,7 @@ public interface IJpaFindMapper<T> {
 	 * @return
 	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
-	public List<T> findAll(@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass);
+	public List<T> findAll(@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass);
 
 	/**
 	 * 根据ids列表查询
@@ -47,9 +47,9 @@ public interface IJpaFindMapper<T> {
 	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "findByIds")
 	public List<T> findByIds(	
-							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
-							@Param (MapperMetadata.PARAMETER_ID_LIST) 		List<String> idList,
-							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+							@Param (MetadataConstants.ENTITY_CLASS)			Class<?> 	entityClass,
+							@Param (MetadataConstants.PARAMETER_ID_LIST) 		List<String> idList,
+							@Param (MetadataConstants.PARAMETER_PARTITION_KEY) String partitionKey);
 
 	/**
 	 * 根据给定的过滤条件，参数，参数类型查询
@@ -60,9 +60,9 @@ public interface IJpaFindMapper<T> {
 	 * @return
 	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "find")
-	public List<T> find(	@Param (MapperMetadata.ENTITY_CLASS)	Class<?> 	entityClass,
-							@Param (MapperMetadata.QUERY_FILTER)	String 		filter,
-							@Param (MapperMetadata.QUERY_ARGS) 		Object[] 	args, 
-							@Param (MapperMetadata.QUERY_ARGTYPES) 	int[] 		argTypes);
+	public List<T> find(	@Param (MetadataConstants.ENTITY_CLASS)	Class<?> 	entityClass,
+							@Param (MetadataConstants.QUERY_FILTER)	String 		filter,
+							@Param (MetadataConstants.QUERY_ARGS) 		Object[] 	args, 
+							@Param (MetadataConstants.QUERY_ARGTYPES) 	int[] 		argTypes);
 	
 }

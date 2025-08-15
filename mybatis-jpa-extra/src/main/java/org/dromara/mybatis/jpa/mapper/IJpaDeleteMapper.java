@@ -20,7 +20,7 @@ package org.dromara.mybatis.jpa.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Param;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -44,14 +44,14 @@ public interface IJpaDeleteMapper<T> {
 	 * @return
 	 */
 	@DeleteProvider(type = MapperSqlProvider.class, method = "deleteById")
-	public Integer deleteById(	@Param (MapperMetadata.ENTITY_CLASS)			Class<?> entityClass,
-							@Param (MapperMetadata.PARAMETER_ID) String id,
-							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+	public Integer deleteById(	@Param (MetadataConstants.ENTITY_CLASS)			Class<?> entityClass,
+							@Param (MetadataConstants.PARAMETER_ID) String id,
+							@Param (MetadataConstants.PARAMETER_PARTITION_KEY) String partitionKey);
 		
 	@DeleteProvider(type = MapperSqlProvider.class, method = "deleteBatch")
 	public Integer deleteBatch(	
-							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> entityClass,
-							@Param (MapperMetadata.PARAMETER_ID_LIST)	 	List<String> idList,
-							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);	
+							@Param (MetadataConstants.ENTITY_CLASS)			Class<?> entityClass,
+							@Param (MetadataConstants.PARAMETER_ID_LIST)	 	List<String> idList,
+							@Param (MetadataConstants.PARAMETER_PARTITION_KEY) String partitionKey);	
 		
 }

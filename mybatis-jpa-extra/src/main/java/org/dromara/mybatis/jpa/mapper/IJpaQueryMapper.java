@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -40,9 +40,9 @@ public interface IJpaQueryMapper<T> {
 	 */
 	@SelectProvider(type = MapperSqlProvider.class, method = "get")
 	public T get(
-					@Param (MapperMetadata.ENTITY_CLASS)Class<?> entityClass,
-					@Param (MapperMetadata.PARAMETER_ID) String id,
-					@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+					@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass,
+					@Param (MetadataConstants.PARAMETER_ID) String id,
+					@Param (MetadataConstants.PARAMETER_PARTITION_KEY) String partitionKey);
 	
 	@SelectProvider(type = MapperSqlProvider.class, method = "query")
 	public List<T> query(T entity);

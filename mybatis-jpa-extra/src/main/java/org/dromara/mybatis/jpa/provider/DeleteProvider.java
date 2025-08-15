@@ -27,7 +27,7 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
@@ -44,11 +44,11 @@ public class DeleteProvider <T extends JpaEntity>{
 	static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
 	
 	public String deleteById(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
+		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
 		FieldMetadata.buildColumnMapper(entityClass);
 
-		String idValue = (String) parametersMap.get(MapperMetadata.PARAMETER_ID);
-		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
+		String idValue = (String) parametersMap.get(MetadataConstants.PARAMETER_ID);
+		String partitionKeyValue = (String) parametersMap.get(MetadataConstants.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
@@ -76,9 +76,9 @@ public class DeleteProvider <T extends JpaEntity>{
 	
 	@SuppressWarnings("unchecked")
 	public String batchDelete(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(MapperMetadata.ENTITY_CLASS);
+		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
 		FieldMetadata.buildColumnMapper(entityClass);
-		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MapperMetadata.PARAMETER_ID_LIST);
+		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MetadataConstants.PARAMETER_ID_LIST);
 		
 		StringBuffer keyValue = new StringBuffer();
 		for(String value : idValues) {
@@ -90,7 +90,7 @@ public class DeleteProvider <T extends JpaEntity>{
 		//remove ;
 		String keyValues = keyValue.substring(1).replace(";", "");
 		
-		String partitionKeyValue = (String) parametersMap.get(MapperMetadata.PARAMETER_PARTITION_KEY);
+		String partitionKeyValue = (String) parametersMap.get(MetadataConstants.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		

@@ -34,7 +34,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata.CASE_TYPE;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants.CASE_TYPE;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.spring.MyBatisJpaSessionFactoryBean;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -163,25 +164,25 @@ public class MybatisAutoConfiguration implements InitializingBean {
     }
     
     if(this.properties.isTableColumnEscape()) {
-        MapperMetadata.TABLE_COLUMN_ESCAPE = true;
+    	MetadataConstants.TABLE_COLUMN_ESCAPE = true;
         if(StringUtils.hasLength(this.properties.getTableColumnEscapeChar())) {
-            MapperMetadata.TABLE_COLUMN_ESCAPE_CHAR = this.properties.getTableColumnEscapeChar();
+        	MetadataConstants.TABLE_COLUMN_ESCAPE_CHAR = this.properties.getTableColumnEscapeChar();
         }
     }
     
     if (StringUtils.hasLength(this.properties.getTableColumnCase())) {
 	    //default is lowercase
 	    if(this.properties.getTableColumnCase().equalsIgnoreCase("uppercase")) {
-	        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.UPPERCASE;
+	    	MetadataConstants.TABLE_COLUMN_CASE = CASE_TYPE.UPPERCASE;
 	    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("lowercase")) {
-	        MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
+	    	MetadataConstants.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
 	    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("normal")) {
-	    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.NORMAL;
+	    	MetadataConstants.TABLE_COLUMN_CASE = CASE_TYPE.NORMAL;
 	  	}else {
-	    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
+	  		MetadataConstants.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
 	    }
     }else {
-    	MapperMetadata.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
+    	MetadataConstants.TABLE_COLUMN_CASE = CASE_TYPE.LOWERCASE;
     }
     
     if(this.properties.getTableColumnSnowflakeDatacenterId()>0 && 

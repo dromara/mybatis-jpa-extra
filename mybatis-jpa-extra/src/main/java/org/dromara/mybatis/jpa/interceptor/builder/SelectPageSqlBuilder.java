@@ -29,7 +29,7 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,8 +73,8 @@ public class SelectPageSqlBuilder {
 		if((parameterObject instanceof JpaPage jpaPage)) {
 			page = jpaPage;
 		}else if(parameterObject instanceof ParamMap<?> paramMap) {
-			if(paramMap.containsKey(MapperMetadata.PAGE)) {
-				page = (JpaPage)paramMap.get(MapperMetadata.PAGE);
+			if(paramMap.containsKey(MetadataConstants.PAGE)) {
+				page = (JpaPage)paramMap.get(MetadataConstants.PAGE);
 			}else {
 				try {
 					for (Map.Entry<String,?> entry : paramMap.entrySet()){

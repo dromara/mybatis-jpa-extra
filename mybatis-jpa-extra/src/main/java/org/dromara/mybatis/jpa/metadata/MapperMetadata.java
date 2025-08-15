@@ -35,40 +35,6 @@ import org.slf4j.LoggerFactory;
 public class MapperMetadata{
 	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
-	public static final String LOG_FORMAT = "%-30s";
-	
-	public static final String LOG_FORMAT_COUNT = "%-3s";
-	
-	public static 	final		String ENTITY_CLASS				= "entityClass";
-	
-	public static 	final		String ENTITY					= "entity";
-	
-	public static 	final		String PAGE						= "page";
-	
-	public static 	final		String CONDITION				= "condition";
-	
-	public static 	final		String QUERY_FILTER				= "filter";
-	public static 	final		String QUERY_ARGS				= "args";
-	public static 	final		String QUERY_ARGTYPES			= "argTypes";
-	
-	public static 	final		String PARAMETER_PARTITION_KEY	= "partitionKey";
-	public static 	final		String PARAMETER_ID_LIST		= "idList";
-	public static 	final		String PARAMETER_ID				= "id";
-
-	/**
-	 * 表名和字段名
-	 */
-	public static int 		TABLE_COLUMN_CASE 					= CASE_TYPE.LOWERCASE;
-	public static boolean   TABLE_COLUMN_ESCAPE                 = false;
-	public static String    TABLE_COLUMN_ESCAPE_CHAR            =  "`";
-	public static String    PARTITION_COLUMN           			=  "inst_id";
-	
-	public static class CASE_TYPE{
-		public static final int 		NORMAL 							= 0;
-		public static final int 		LOWERCASE 						= 1;
-		public static final int 		UPPERCASE 						= 2;
-	}
-	
 	static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<>();
 
 	static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
@@ -81,9 +47,9 @@ public class MapperMetadata{
 	 * @return case
 	 */
 	public static String tableOrColumnCaseConverter(String name) {
-		if(TABLE_COLUMN_CASE  == CASE_TYPE.LOWERCASE) {
+		if(MetadataConstants.TABLE_COLUMN_CASE  == MetadataConstants.CASE_TYPE.LOWERCASE) {
 			name = name.toLowerCase();
-		}else if(TABLE_COLUMN_CASE  == CASE_TYPE.UPPERCASE) {
+		}else if(MetadataConstants.TABLE_COLUMN_CASE  == MetadataConstants.CASE_TYPE.UPPERCASE) {
 			name = name.toUpperCase();
 		}
 		return name;
@@ -95,7 +61,7 @@ public class MapperMetadata{
 	 * @return Escape name
 	 */
 	public static String tableOrColumnEscape(String name) {
-		return TABLE_COLUMN_ESCAPE ? TABLE_COLUMN_ESCAPE_CHAR + name + TABLE_COLUMN_ESCAPE_CHAR : name;
+		return MetadataConstants.TABLE_COLUMN_ESCAPE ? MetadataConstants.TABLE_COLUMN_ESCAPE_CHAR + name + MetadataConstants.TABLE_COLUMN_ESCAPE_CHAR : name;
 	}
 	
 	public static ConcurrentMap<String, String> getSqlsMap() {

@@ -20,7 +20,7 @@ package org.dromara.mybatis.jpa.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -34,9 +34,9 @@ public interface IJpaSoftDeleteMapper<T> {
 	
 	@UpdateProvider(type = MapperSqlProvider.class, method = "softDelete")
 	public Integer softDelete(	
-							@Param (MapperMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
-							@Param (MapperMetadata.PARAMETER_ID_LIST) 		List<String> idList,
-							@Param (MapperMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+							@Param (MetadataConstants.ENTITY_CLASS)			Class<?> 	entityClass,
+							@Param (MetadataConstants.PARAMETER_ID_LIST) 		List<String> idList,
+							@Param (MetadataConstants.PARAMETER_PARTITION_KEY) String partitionKey);
 	
 	@UpdateProvider(type = MapperSqlProvider.class, method = "softDeleteByQuery")
 	public Integer softDeleteByQuery(Class<?> entityClass , Query query);	
