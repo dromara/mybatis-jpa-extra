@@ -64,7 +64,9 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			BoundSql boundSql = statement.getBoundSql();
 			Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
 			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
-			
+			if(parameterObject != null) {
+				logger.trace("parameter {}({})" , parameterObject,parameterObject.getClass().getCanonicalName());
+			}
 			if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
 				FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
 				FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
@@ -72,7 +74,6 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, findBySql);
 			}else {
 				SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
-				logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
 				//判断是否select语句及需要分页支持
 				if (selectPageSql.isSelectTrack() && selectPageSql.isPageable()) {
 					String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,selectPageSql);
