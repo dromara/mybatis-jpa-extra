@@ -2,11 +2,13 @@ package org.dromara.mybatis.jpa.test.existing;
 
 import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
 import org.dromara.mybatis.jpa.datasource.DynamicRoutingDataSource;
+import org.dromara.mybatis.jpa.test.config.DataSourceConfig;
 import org.dromara.mybatis.jpa.test.dao.service.TestUserService;
 import org.dromara.mybatis.jpa.test.entity.TestUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 @SpringBootTest
-@ActiveProfiles("test")
+@Import(DataSourceConfig.class)
 public class DynamicDataSourceTest {
     @Autowired
     private TestUserService userService;
