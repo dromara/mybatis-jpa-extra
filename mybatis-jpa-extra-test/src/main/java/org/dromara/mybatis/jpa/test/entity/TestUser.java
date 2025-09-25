@@ -28,7 +28,7 @@ public class TestUser extends JpaEntity implements Serializable {
     /*
      * 标识来自哪个数据源
      */
-    @Column
+    @Column(name="data_source")
     private String dataSource;
 
     // 构造函数

@@ -106,7 +106,13 @@ public class InsertProvider <T extends JpaEntity>{
 			}else {
 				genValue = IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
 			}
-			BeanUtil.set(entity, fieldColumnMapper.getFieldName(),genValue);
+			if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
+				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),genValue);
+			}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
+				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),Integer.valueOf(genValue));
+			}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
+				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),Long.valueOf(genValue));
+			}
 			sql.VALUES(fieldColumnMapper.getColumnName(),"#{%s}".formatted(fieldColumnMapper.getFieldName()));
 		}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
 			sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
