@@ -42,7 +42,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             String insertSql = "INSERT INTO test_user (name, email, data_source) VALUES (?, ?, ?)";
             jdbcTemplate.update(insertSql, "User from " + dataSourceKey,
                     "user@" + dataSourceKey + ".com", dataSourceKey);
-
+            System.out.println("init dataSourceKey " +dataSourceKey);
         } finally {
             DataSourceSwitch.switchToDefault();
         }
