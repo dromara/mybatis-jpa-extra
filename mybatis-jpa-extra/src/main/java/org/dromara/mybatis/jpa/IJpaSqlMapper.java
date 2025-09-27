@@ -41,7 +41,7 @@ public interface IJpaSqlMapper {
     * @return List<Map < String, Object>>
     */
 	@SelectProvider(type = SqlMapperProvider.class, method = "selectList")
-   List<Map<String, Object>> selectList(Map<String, Object> parameters);
+	List<Map<String, Object>> selectList(Map<String, Object> parameters);
 
    /**
     * 插入数据
@@ -50,8 +50,8 @@ public interface IJpaSqlMapper {
     * @param entity 参数
     * @return int
     */
-   @InsertProvider(type = SqlMapperProvider.class, method = "insert")
-   int insert(Map<String, Object> entity);
+	@InsertProvider(type = SqlMapperProvider.class, method = "insert")
+	int insert(Map<String, Object> entity);
 
    /**
     * 更新数据
@@ -60,8 +60,8 @@ public interface IJpaSqlMapper {
     * @param entity 参数
     * @return int
     */
-   @UpdateProvider(type = SqlMapperProvider.class, method = "update")
-   int update(Map<String, Object> entity);
+	@UpdateProvider(type = SqlMapperProvider.class, method = "update")
+	int update(Map<String, Object> entity);
 
    /**
     * 删除数据
@@ -70,6 +70,6 @@ public interface IJpaSqlMapper {
     * @param parameters 参数
     * @return int
     */
-   @DeleteProvider(type = SqlMapperProvider.class, method = "delete")
-   int delete(Map<String, Object> parameters);			
+	@DeleteProvider(type = SqlMapperProvider.class, method = "delete")
+	int delete(Map<String, Object> parameters);			
 }
