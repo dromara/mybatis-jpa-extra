@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-
+import org.springframework.test.context.ActiveProfiles;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +36,9 @@ import java.util.Map;
  * @author: shimh
  * @time: 2025/9/24 9:51
  */
-
 @SpringBootTest
-@Import(DataSourceConfig.class)
+@ActiveProfiles("test")
+@Import({DataSourceConfig.class,})
 public class SqlRepositoryTest {
     static final Logger _logger = LoggerFactory.getLogger(SqlRepositoryTest.class);
 
@@ -50,9 +50,7 @@ public class SqlRepositoryTest {
 
     @Test
     public void testSqlRepository() throws Exception {
-    	DataSourceConfig config = new DataSourceConfig();
-    	config.dynamicRoutingDataSource();
-    	databaseInitializer.run(null);
+    	    databaseInitializer.run(null);
         DataSourceSwitch.change("test1");
         // 
         

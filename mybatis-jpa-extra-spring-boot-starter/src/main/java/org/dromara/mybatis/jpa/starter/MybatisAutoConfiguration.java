@@ -141,7 +141,8 @@ public class MybatisAutoConfiguration implements InitializingBean {
   @Bean
   @ConditionalOnMissingBean
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-    //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+	  logger.debug("init sqlSessionFactory .");
+	  //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
     //mybatis-jpa
     MyBatisJpaSessionFactoryBean factory = new MyBatisJpaSessionFactoryBean();
     factory.setDataSource(dataSource);

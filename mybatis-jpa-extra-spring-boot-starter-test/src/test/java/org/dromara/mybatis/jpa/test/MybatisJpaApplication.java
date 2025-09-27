@@ -20,7 +20,6 @@ package org.dromara.mybatis.jpa.test;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
-import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -48,7 +47,7 @@ public class MybatisJpaApplication implements ApplicationRunner{
     /**
      * @param args args
      */
-    public static void main(String[] args) {
+    public static void mainBackup(String[] args) {
     	new SpringApplicationBuilder(MybatisJpaApplication.class)
          .web(WebApplicationType.NONE) // .REACTIVE, .SERVLET
          .bannerMode(Banner.Mode.OFF).run(args) ;

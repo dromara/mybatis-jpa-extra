@@ -16,14 +16,14 @@
  
 package org.dromara.mybatis.jpa.test.dao.service.impl;
 
-import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.repository.impl.JpaSqlRepositoryImpl;
 import org.dromara.mybatis.jpa.test.dao.persistence.ISqlMapper;
+import org.dromara.mybatis.jpa.test.dao.service.ISqlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SqlRepositoryImpl extends JpaSqlRepositoryImpl implements IJpaSqlRepository {
+public class SqlRepositoryImpl extends JpaSqlRepositoryImpl implements ISqlRepository {
 
 	@Autowired
 	private ISqlMapper mapper;

@@ -25,9 +25,10 @@ import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
-@Service
+/**
+ * JpaSqlRepositoryImpl
+ */
 public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
 	private static final  Logger logger = LoggerFactory.getLogger(JpaSqlRepositoryImpl.class);
 
