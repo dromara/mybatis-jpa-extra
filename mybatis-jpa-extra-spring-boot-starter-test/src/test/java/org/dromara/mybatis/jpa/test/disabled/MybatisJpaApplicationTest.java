@@ -35,24 +35,11 @@ import org.springframework.context.ApplicationContext;
 
 @SpringBootTest(classes = MybatisJpaApplication.class)
 @Disabled("true")
-public class MybatisJpaApplicationTest{
+public class MybatisJpaApplicationTest extends MybatisJpaBasicApplication{
     private static final Logger _logger = LoggerFactory.getLogger(MybatisJpaApplicationTest.class);
 
     @Autowired
     StudentsService studentsService;
-
-    @Autowired
-    org.apache.ibatis.session.SqlSessionFactory SqlSessionFactory;
-
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    @BeforeEach
-    public void before() {
-    	_logger.info("---------------- before");
-    	MybatisJpaContext.init(applicationContext);
-
-    }
 
     @Test
 	void insert() throws Exception{

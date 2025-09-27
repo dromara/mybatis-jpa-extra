@@ -4,6 +4,7 @@ import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
 import org.dromara.mybatis.jpa.datasource.DynamicRoutingDataSource;
 import org.dromara.mybatis.jpa.test.dao.service.TestUserService;
 import org.dromara.mybatis.jpa.test.entity.TestUser;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

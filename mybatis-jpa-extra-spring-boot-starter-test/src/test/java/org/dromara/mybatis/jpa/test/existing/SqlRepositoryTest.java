@@ -20,6 +20,7 @@ import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
 import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.test.config.DataSourceConfig;
 import org.dromara.mybatis.jpa.test.config.DatabaseInitializer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
