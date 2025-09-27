@@ -32,11 +32,9 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
-import org.dromara.mybatis.jpa.SqlRepository;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants.CASE_TYPE;
-import org.dromara.mybatis.jpa.repository.impl.SqlRepositoryImpl;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.spring.MyBatisJpaSessionFactoryBean;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -233,18 +231,6 @@ public class MybatisAutoConfiguration implements InitializingBean {
     return factory.getObject();
   }
   
-  /**
-   * SqlRepository
-   * shimh 2025-09-25
-   * @param sqlSessionFactory
-   * @return
-   */
-  @Bean
-  @ConditionalOnMissingBean
-  public SqlRepository sqlRepository(SqlSessionFactory sqlSessionFactory) {
-	  return new SqlRepositoryImpl(sqlSessionFactory);
-  }
-
   private void applyConfiguration(SqlSessionFactoryBean factory) {
     MybatisProperties.CoreConfiguration coreConfiguration = this.properties.getConfiguration();
     Configuration configuration = null;

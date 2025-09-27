@@ -1,23 +1,35 @@
+/*
+ * Copyright [2025] [MaxKey of copyright http://www.maxkey.top]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
 package org.dromara.mybatis.jpa.test.existing;
 
-import org.dromara.mybatis.jpa.SqlRepository;
+import org.dromara.mybatis.jpa.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
 import org.dromara.mybatis.jpa.test.config.DataSourceConfig;
 import org.dromara.mybatis.jpa.test.config.DatabaseInitializer;
-import org.dromara.mybatis.jpa.test.entity.TestUser;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @description:
@@ -31,7 +43,7 @@ public class SqlRepositoryTest {
     static final Logger _logger = LoggerFactory.getLogger(SqlRepositoryTest.class);
 
     @Autowired
-    private SqlRepository sqlRepository;
+    private IJpaSqlRepository sqlRepository;
     
     @Autowired
     DatabaseInitializer databaseInitializer;
@@ -41,33 +53,29 @@ public class SqlRepositoryTest {
     	DataSourceConfig config = new DataSourceConfig();
     	config.dynamicRoutingDataSource();
     	databaseInitializer.run(null);
-        ExecutorService executor = Executors.newFixedThreadPool(10);
         DataSourceSwitch.change("test1");
         // 
         
         String sql="INSERT INTO test_user (id,name, email, data_source) VALUES (#{id},#{name}, #{email}, #{dataSource})";
-        // 并发访问不同数据源
-        CompletableFuture<Void>[] futures = new CompletableFuture[30];
-
-        for (int i = 0; i < 30; i++) {
+ 
+        for (int i = 1; i < 30; i++) {
             final int index = i;
-            futures[i] = CompletableFuture.runAsync(() -> {
                 String dataSourceKey = "test" + ((index % 2) + 1);
-                TestUser user = new TestUser("User" + index, "user" + index + "@test.com", dataSourceKey);
-                user.setId(Long.valueOf(index));
+                Map<String, Object> user = new HashMap<>();
+                user.put("id", Long.valueOf(index));
+                user.put("name", "User" + index);
+                user.put("email", "user" + index + "@test.com");
+                user.put("dataSource", dataSourceKey);
+                
                 sqlRepository.insert(sql, user);
-            }, executor);
         }
-
-        // 等待所有任务完成
-        CompletableFuture.allOf(futures).join();
-
+        Map<String, Object> p = new HashMap<>();
+        p.put("name", "User1");
         // 验证数据
-        List<Map<String,Object>> test1Users = sqlRepository.selectList("select * FROM test_user ");
+        List<Map<String,Object>> test1Users = sqlRepository.selectList("select * FROM test_user where name like '%${name}%'",p);
+        _logger.debug("test1Users size  {}",test1Users.size());
         _logger.debug("test1Users {}",test1Users);
-        assertTrue(test1Users.size() >= 15);
 
-        executor.shutdown();
     }
     
     

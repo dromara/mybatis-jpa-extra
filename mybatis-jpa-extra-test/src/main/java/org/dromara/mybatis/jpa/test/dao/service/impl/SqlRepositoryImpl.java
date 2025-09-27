@@ -14,22 +14,23 @@
  * limitations under the License.
  */
  
-package org.dromara.mybatis.jpa.test;
+package org.dromara.mybatis.jpa.test.dao.service.impl;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.dromara.mybatis.jpa.IJpaSqlRepository;
+import org.dromara.mybatis.jpa.repository.impl.JpaSqlRepositoryImpl;
+import org.dromara.mybatis.jpa.test.dao.persistence.ISqlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-/**
- * @description:
- * @author: orangeBabu
- * @time: 2025/9/24 9:48
- */
+@Service
+public class SqlRepositoryImpl extends JpaSqlRepositoryImpl implements IJpaSqlRepository {
 
-@SpringBootApplication
-@MapperScan("org.dromara.mybatis.jpa.test.dao.persistence")
-public class TestApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(TestApplication.class, args);
-    }
+	@Autowired
+	private ISqlMapper mapper;
+	
+	@Override
+	public ISqlMapper getMapper() {
+		return mapper;
+	}
+	
 }
