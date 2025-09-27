@@ -46,6 +46,7 @@ public class MetadataConstants{
 	public static 	final		String PARAMETER_ID_LIST		= "idList";
 	public static 	final		String PARAMETER_ID				= "id";
 	
+	public static 	final		String IJPA_SQL_PARAMETER_PAGE	= "ijpa_sql_parameter_page";
 	public static 	final		String IJPA_SQL_PARAMETER_SQL	= "ijpa_sql_parameter_sql";
 	/**
 	 * 查询的中间表别名

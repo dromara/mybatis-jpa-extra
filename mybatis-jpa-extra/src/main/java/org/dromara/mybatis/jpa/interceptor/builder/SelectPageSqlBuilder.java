@@ -18,6 +18,7 @@
 
 package org.dromara.mybatis.jpa.interceptor.builder;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -86,6 +87,11 @@ public class SelectPageSqlBuilder {
 				}catch(Exception e) {
 					logger.error("Exception",e);
 				}
+			}
+		}else if(parameterObject instanceof HashMap<?,?> parameterMap){
+			if(parameterMap.containsKey(MetadataConstants.IJPA_SQL_PARAMETER_PAGE)) {
+				page = (JpaPage)parameterMap.get(MetadataConstants.IJPA_SQL_PARAMETER_PAGE);
+				logger.trace("page : {} " , page);
 			}
 		}else {
 			//is object not have JpaPage , do nothing

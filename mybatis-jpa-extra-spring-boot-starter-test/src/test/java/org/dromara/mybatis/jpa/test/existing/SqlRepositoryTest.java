@@ -17,6 +17,8 @@
 package org.dromara.mybatis.jpa.test.existing;
 
 import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
+import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.test.config.DataSourceConfig;
 import org.dromara.mybatis.jpa.test.config.DatabaseInitializer;
@@ -50,8 +52,8 @@ public class SqlRepositoryTest {
     DatabaseInitializer databaseInitializer;
 
     @Test
-    public void testSqlRepository() throws Exception {
-    	    databaseInitializer.run(null);
+    public void testSelectList() throws Exception {
+    	databaseInitializer.run(null);
         DataSourceSwitch.change("test1");
         // 
         
@@ -70,11 +72,42 @@ public class SqlRepositoryTest {
         }
         Map<String, Object> p = new HashMap<>();
         p.put("name", "User1");
+        String selectSql = "select * FROM test_user where name like '%${name}%'";
+        
         // 验证数据
-        List<Map<String,Object>> test1Users = sqlRepository.selectList("select * FROM test_user where name like '%${name}%'",p);
+        List<Map<String,Object>> test1Users = sqlRepository.selectList(selectSql,p);
         _logger.debug("test1Users size  {}",test1Users.size());
         _logger.debug("test1Users {}",test1Users);
 
+    }
+    
+    @Test
+    public void testJpaPageResults() throws Exception {
+    	databaseInitializer.run(null);
+        DataSourceSwitch.change("test1");
+        // 
+        
+        String sql="INSERT INTO test_user (id,name, email, data_source) VALUES (#{id},#{name}, #{email}, #{dataSource})";
+ 
+        for (int i = 1; i < 30; i++) {
+            final int index = i;
+                String dataSourceKey = "test" + ((index % 2) + 1);
+                Map<String, Object> user = new HashMap<>();
+                user.put("id", Long.valueOf(index));
+                user.put("name", "User" + index);
+                user.put("email", "user" + index + "@test.com");
+                user.put("dataSource", dataSourceKey);
+                
+                sqlRepository.insert(sql, user);
+        }
+        
+        
+        Map<String, Object> p = new HashMap<>();
+        p.put("name", "User1");
+        JpaPage page = new JpaPage(2,5);
+        String selectSql = "select * FROM test_user where name like '%${name}%'";
+        JpaPageResults<Map<String, Object>> pageResults = sqlRepository.fetch(selectSql, page, p);
+        _logger.debug("pageResults {}",pageResults);
     }
     
     

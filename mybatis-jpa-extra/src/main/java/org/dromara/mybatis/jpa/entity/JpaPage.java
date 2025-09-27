@@ -37,7 +37,11 @@ import jakarta.persistence.Transient;
  */
 public class JpaPage {
 	
-	public static final int MAX_RESULTS = 10000;
+	public static final int MAX_RESULTS 	= 10000;
+	
+    public static final String PAGE_NUMBER 	= "pageNumber";
+    
+    public static final String PAGE_SIZE 	= "pageSize";
 
 	@JsonIgnore
 	@Transient

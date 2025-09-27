@@ -799,7 +799,7 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 		//当前页记录数
 		Integer records = JpaPageResults.parseRecords(resultslist);
 		//总页数
-		Integer totalCount =fetchCount(page, resultslist);
+		Integer totalCount = fetchCount(page, resultslist);
 		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),records,totalCount,resultslist);
 	}
 	

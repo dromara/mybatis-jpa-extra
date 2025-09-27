@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.IJpaSqlMapper;
+import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.dromara.mybatis.jpa.entity.JpaPageResults;
 
 /**
  * ISqlRepository
@@ -49,6 +51,15 @@ public interface IJpaSqlRepository {
      * @return List<Map < String, Object>>
      */
     List<Map<String, Object>> selectList(String sql, Map<String, Object> parameters);
+    
+    /**
+     * 
+     * @param sql
+     * @param page
+     * @param parameters
+     * @return
+     */
+    JpaPageResults<Map<String,Object>> fetch(String sql , JpaPage page , Map<String, Object> parameters);
     
     /**
      * 插入数据
