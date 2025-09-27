@@ -36,10 +36,10 @@ import org.slf4j.LoggerFactory;
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class MapperSqlProvider <T extends JpaEntity>{	
-	static final Logger logger 	= 	LoggerFactory.getLogger(MapperSqlProvider.class);
+public class MapperProvider <T extends JpaEntity>{	
+	static final Logger logger 	= 	LoggerFactory.getLogger(MapperProvider.class);
 	
-	public MapperSqlProvider() {
+	public MapperProvider() {
 		logger.debug("constructor init .");
 	}
 

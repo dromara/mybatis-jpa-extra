@@ -16,7 +16,7 @@
  
 package org.dromara.mybatis.jpa.test.dao.service.impl;
 
-import org.dromara.mybatis.jpa.IJpaSqlRepository;
+import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.repository.impl.JpaSqlRepositoryImpl;
 import org.dromara.mybatis.jpa.test.dao.persistence.ISqlMapper;
 import org.springframework.beans.factory.annotation.Autowired;

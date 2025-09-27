@@ -18,7 +18,7 @@
 package org.dromara.mybatis.jpa.mapper;
 
 import org.apache.ibatis.annotations.InsertProvider;
-import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
+import org.dromara.mybatis.jpa.provider.MapperProvider;
 
 /**
  * IJpa IJpaInsertMapper
@@ -28,7 +28,7 @@ import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
 public interface IJpaInsertMapper<T> {
 
 	//follow function for insert
-	@InsertProvider(type = MapperSqlProvider.class, method = "insert")
+	@InsertProvider(type = MapperProvider.class, method = "insert")
 	public Integer insert(T entity);
 			
 }

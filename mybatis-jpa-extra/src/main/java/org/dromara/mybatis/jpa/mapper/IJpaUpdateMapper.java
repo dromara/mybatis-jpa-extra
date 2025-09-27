@@ -18,7 +18,7 @@
 package org.dromara.mybatis.jpa.mapper;
 
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
+import org.dromara.mybatis.jpa.provider.MapperProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
@@ -31,19 +31,19 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
  */
 public interface IJpaUpdateMapper<T> {
 
-	@UpdateProvider(type = MapperSqlProvider.class, method = "update")
+	@UpdateProvider(type = MapperProvider.class, method = "update")
 	public Integer update(T entity);
 
-	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByQuery")
+	@UpdateProvider(type = MapperProvider.class, method = "updateByQuery")
 	public Integer updateByQuery(Class<?> entityClass , String setSql, Query query);	
 	
-	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByLambdaQuery")
+	@UpdateProvider(type = MapperProvider.class, method = "updateByLambdaQuery")
 	public Integer updateByLambdaQuery(Class<?> entityClass , String setSql, LambdaQuery<T> lambdaQuery);		
 	
-	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByUpdateWrapper")
+	@UpdateProvider(type = MapperProvider.class, method = "updateByUpdateWrapper")
 	public Integer updateByUpdateWrapper(Class<?> entityClass , UpdateWrapper updateWrapper);	
 	
-	@UpdateProvider(type = MapperSqlProvider.class, method = "updateByLambdaUpdateWrapper")
+	@UpdateProvider(type = MapperProvider.class, method = "updateByLambdaUpdateWrapper")
 	public Integer updateByLambdaUpdateWrapper(Class<?> entityClass ,LambdaUpdateWrapper<T> lambdaUpdateWrapper);	
 	
 }

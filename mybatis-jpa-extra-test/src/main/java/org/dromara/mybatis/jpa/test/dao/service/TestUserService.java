@@ -1,6 +1,6 @@
 package org.dromara.mybatis.jpa.test.dao.service;
 
-import org.dromara.mybatis.jpa.IJpaService;
+import org.dromara.mybatis.jpa.service.IJpaService;
 import org.dromara.mybatis.jpa.test.entity.TestUser;
 
 import java.util.List;

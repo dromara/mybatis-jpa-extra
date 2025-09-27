@@ -22,7 +22,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
-import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
+import org.dromara.mybatis.jpa.provider.MapperProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 
@@ -38,24 +38,24 @@ public interface IJpaQueryMapper<T> {
 	 * @param id
 	 * @return one 
 	 */
-	@SelectProvider(type = MapperSqlProvider.class, method = "get")
+	@SelectProvider(type = MapperProvider.class, method = "get")
 	public T get(
 					@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass,
 					@Param (MetadataConstants.PARAMETER_ID) String id,
 					@Param (MetadataConstants.PARAMETER_PARTITION_KEY) String partitionKey);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "query")
+	@SelectProvider(type = MapperProvider.class, method = "query")
 	public List<T> query(T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryByQuery")
+	@SelectProvider(type = MapperProvider.class, method = "queryByQuery")
 	public List<T> queryByQuery(Class<?> entityClass,Query query);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "queryByLambdaQuery")
+	@SelectProvider(type = MapperProvider.class, method = "queryByLambdaQuery")
 	public List<T> queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "countByQuery")
+	@SelectProvider(type = MapperProvider.class, method = "countByQuery")
 	public long countByQuery(Class<?> entityClass,Query query);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "countByLambdaQuery")
+	@SelectProvider(type = MapperProvider.class, method = "countByLambdaQuery")
 	public long countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
 }

@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
-import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
+import org.dromara.mybatis.jpa.provider.MapperProvider;
 
 /**
  * IJpa IJpaFindMapper
@@ -35,7 +35,7 @@ public interface IJpaFindMapper<T> {
 	 * @param entityClass
 	 * @return
 	 */
-	@SelectProvider(type = MapperSqlProvider.class, method = "findAll")
+	@SelectProvider(type = MapperProvider.class, method = "findAll")
 	public List<T> findAll(@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass);
 
 	/**
@@ -45,7 +45,7 @@ public interface IJpaFindMapper<T> {
 	 * @param partitionKey
 	 * @return
 	 */
-	@SelectProvider(type = MapperSqlProvider.class, method = "findByIds")
+	@SelectProvider(type = MapperProvider.class, method = "findByIds")
 	public List<T> findByIds(	
 							@Param (MetadataConstants.ENTITY_CLASS)			Class<?> 	entityClass,
 							@Param (MetadataConstants.PARAMETER_ID_LIST) 		List<String> idList,
@@ -59,7 +59,7 @@ public interface IJpaFindMapper<T> {
 	 * @param argTypes
 	 * @return
 	 */
-	@SelectProvider(type = MapperSqlProvider.class, method = "find")
+	@SelectProvider(type = MapperProvider.class, method = "find")
 	public List<T> find(	@Param (MetadataConstants.ENTITY_CLASS)	Class<?> 	entityClass,
 							@Param (MetadataConstants.QUERY_FILTER)	String 		filter,
 							@Param (MetadataConstants.QUERY_ARGS) 		Object[] 	args, 

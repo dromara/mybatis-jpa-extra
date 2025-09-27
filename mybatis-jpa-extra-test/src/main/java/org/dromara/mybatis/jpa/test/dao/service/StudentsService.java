@@ -2,7 +2,7 @@ package org.dromara.mybatis.jpa.test.dao.service;
 
 import java.util.List;
 
-import org.dromara.mybatis.jpa.IJpaService;
+import org.dromara.mybatis.jpa.service.IJpaService;
 import org.dromara.mybatis.jpa.test.entity.Students;
 
 public interface StudentsService extends IJpaService<Students>{

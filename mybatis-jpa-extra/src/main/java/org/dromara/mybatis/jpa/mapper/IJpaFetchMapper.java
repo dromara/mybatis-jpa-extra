@@ -22,7 +22,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
-import org.dromara.mybatis.jpa.provider.MapperSqlProvider;
+import org.dromara.mybatis.jpa.provider.MapperProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 
@@ -33,21 +33,21 @@ import org.dromara.mybatis.jpa.query.Query;
  */
 public interface IJpaFetchMapper<T>{
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "fetchCount")
+	@SelectProvider(type = MapperProvider.class, method = "fetchCount")
 	public Integer fetchCount(JpaPage page);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "fetch")
+	@SelectProvider(type = MapperProvider.class, method = "fetch")
 	public List<T> fetch(
 					@Param (MetadataConstants.PAGE)JpaPage page,
 					@Param (MetadataConstants.ENTITY) T entity);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "fetchByQuery")
+	@SelectProvider(type = MapperProvider.class, method = "fetchByQuery")
 	public List<T> fetchByQuery(
 					@Param (MetadataConstants.PAGE) JpaPage page,
 					@Param (MetadataConstants.CONDITION) Query query,
 					@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass);
 	
-	@SelectProvider(type = MapperSqlProvider.class, method = "fetchByLambdaQuery")
+	@SelectProvider(type = MapperProvider.class, method = "fetchByLambdaQuery")
 	public List<T> fetchByLambdaQuery(
 					@Param (MetadataConstants.PAGE) JpaPage page,
 					@Param (MetadataConstants.CONDITION) LambdaQuery<T> lambdaQuery,

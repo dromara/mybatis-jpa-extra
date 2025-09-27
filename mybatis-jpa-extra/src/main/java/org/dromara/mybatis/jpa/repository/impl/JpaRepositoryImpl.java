@@ -25,13 +25,13 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.IJpaMapper;
-import org.dromara.mybatis.jpa.IJpaRepository;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.repository.IJpaRepository;
 import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
 import org.dromara.mybatis.jpa.update.UpdateWrapper;
 import org.dromara.mybatis.jpa.util.InstanceUtil;

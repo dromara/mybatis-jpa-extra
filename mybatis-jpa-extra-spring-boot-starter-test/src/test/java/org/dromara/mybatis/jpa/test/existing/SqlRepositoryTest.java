@@ -16,8 +16,8 @@
  
 package org.dromara.mybatis.jpa.test.existing;
 
-import org.dromara.mybatis.jpa.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
+import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.test.config.DataSourceConfig;
 import org.dromara.mybatis.jpa.test.config.DatabaseInitializer;
 import org.junit.jupiter.api.Test;

@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.IJpaSqlMapper;
-import org.dromara.mybatis.jpa.IJpaSqlRepository;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
+import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
