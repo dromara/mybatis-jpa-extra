@@ -65,7 +65,7 @@ public class SqlRepositoryTest {
                 Map<String, Object> user = new HashMap<>();
                 user.put("id", Long.valueOf(index));
                 user.put("name", "User" + index);
-                user.put("email", "user" + index + "@test.com");
+                user.put("email", (index % 2) ==0 ? "user" + index + "@test.com":null);
                 user.put("dataSource", dataSourceKey);
                 
                 sqlRepository.insert(sql, user);
@@ -95,7 +95,7 @@ public class SqlRepositoryTest {
                 Map<String, Object> user = new HashMap<>();
                 user.put("id", Long.valueOf(index));
                 user.put("name", "User" + index);
-                user.put("email", "user" + index + "@test.com");
+                user.put("email", (index % 2) ==0 ? "user" + index + "@test.com":null);
                 user.put("dataSource", dataSourceKey);
                 
                 sqlRepository.insert(sql, user);
@@ -105,7 +105,7 @@ public class SqlRepositoryTest {
         Map<String, Object> p = new HashMap<>();
         p.put("name", "User1");
         JpaPage page = new JpaPage(2,5);
-        String selectSql = "select * FROM test_user where name like '%${name}%'";
+        String selectSql = "select id,name, email, data_source  FROM test_user where name like '%${name}%'";
         JpaPageResults<Map<String, Object>> pageResults = sqlRepository.fetch(selectSql, page, p);
         _logger.debug("pageResults {}",pageResults);
     }

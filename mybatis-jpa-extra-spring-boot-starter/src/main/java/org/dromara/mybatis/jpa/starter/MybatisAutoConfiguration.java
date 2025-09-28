@@ -35,6 +35,7 @@ import org.apache.ibatis.type.TypeHandler;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants.CASE_TYPE;
+import org.dromara.mybatis.jpa.result.MapWrapperFactory;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.spring.MyBatisJpaSessionFactoryBean;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -146,6 +147,8 @@ public class MybatisAutoConfiguration implements InitializingBean {
     //mybatis-jpa
     MyBatisJpaSessionFactoryBean factory = new MyBatisJpaSessionFactoryBean();
     factory.setDataSource(dataSource);
+    //mybatis-jpa for map MapWrapper
+    factory.setObjectWrapperFactory(new MapWrapperFactory());
     if (properties.getConfiguration() == null || properties.getConfiguration().getVfsImpl() == null) {
       factory.setVfs(SpringBootVFS.class);
     }
@@ -240,6 +243,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
     }
     if (configuration != null && coreConfiguration != null) {
       coreConfiguration.applyTo(configuration);
+      configuration.setCallSettersOnNulls(true);
     }
     if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomizers)) {
       for (ConfigurationCustomizer customizer : this.configurationCustomizers) {
