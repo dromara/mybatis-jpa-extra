@@ -15,14 +15,15 @@
  */
  
 
-package org.dromara.mybatis.jpa.update;
+package org.dromara.mybatis.jpa.update.builder;
 
-import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
+import org.dromara.mybatis.jpa.query.builder.QueryBuilder;
+import org.dromara.mybatis.jpa.update.UpdateWrapper;
 
-@SuppressWarnings({"unchecked","rawtypes"})
-public class LambdaUpdateBuilder extends LambdaQueryBuilder{
+public class UpdateBuilder extends QueryBuilder{
 
-	public static String buildSetSql(LambdaUpdateWrapper updateWrapper) {
+	public static String buildSetSql(UpdateWrapper updateWrapper) {
 		return UpdateSetsBuilder.buildSetSql(updateWrapper.getSets());
 	}
+
 }

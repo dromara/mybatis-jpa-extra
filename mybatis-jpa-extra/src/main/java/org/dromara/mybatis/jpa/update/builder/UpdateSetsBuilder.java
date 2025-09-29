@@ -15,7 +15,7 @@
  */
  
 
-package org.dromara.mybatis.jpa.update;
+package org.dromara.mybatis.jpa.update.builder;
 
 import java.util.List;
 

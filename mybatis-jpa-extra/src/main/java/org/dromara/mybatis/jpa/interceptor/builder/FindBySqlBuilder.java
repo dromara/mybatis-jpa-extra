@@ -31,7 +31,7 @@ import org.dromara.mybatis.jpa.metadata.findby.FindByMapper;
 import org.dromara.mybatis.jpa.metadata.findby.FindByMetadata;
 import org.dromara.mybatis.jpa.metadata.findby.FindByKeywords.KEY;
 import org.dromara.mybatis.jpa.query.Query;
-import org.dromara.mybatis.jpa.query.QueryBuilder;
+import org.dromara.mybatis.jpa.query.builder.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

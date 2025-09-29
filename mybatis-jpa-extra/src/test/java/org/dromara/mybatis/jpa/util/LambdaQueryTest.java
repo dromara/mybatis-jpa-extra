@@ -18,7 +18,7 @@
 package org.dromara.mybatis.jpa.util;
 
 import org.dromara.mybatis.jpa.query.LambdaQuery;
-import org.dromara.mybatis.jpa.query.LambdaQueryBuilder;
+import org.dromara.mybatis.jpa.query.builder.LambdaQueryBuilder;
 
 public class LambdaQueryTest {
 
