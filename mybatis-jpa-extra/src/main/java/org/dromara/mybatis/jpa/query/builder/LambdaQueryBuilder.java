@@ -33,7 +33,7 @@ public class LambdaQueryBuilder {
 	private static final Logger logger = LoggerFactory.getLogger(LambdaQueryBuilder.class);
 			
 	public static String build(LambdaQuery lambdaQuery) {
-		StringBuffer conditionString = new StringBuffer("");
+		StringBuilder conditionString = new StringBuilder("");
 		List<Condition> conditions = lambdaQuery.getConditions();
 		Operator lastExpression = Operator.AND;
 		for (Condition condition : conditions) {
@@ -109,10 +109,10 @@ public class LambdaQueryBuilder {
 	}
 
 	public static String buildGroupBy(LambdaQuery lambdaQuery) {
-		StringBuffer groupBy = new StringBuffer();
+		StringBuilder groupBy = new StringBuilder();
 		List<Condition> conditions = lambdaQuery.getGroupBy();
 		for (Condition condition : conditions) {
-			if (groupBy.length() > 0) {
+			if (!groupBy.isEmpty()) {
 				groupBy.append(" , ");
 			}
 			groupBy.append(SafeValueHandler.safeColumn(condition.getColumn()));
@@ -122,11 +122,11 @@ public class LambdaQueryBuilder {
 
 	
 	public static String buildOrderBy(LambdaQuery lambdaQuery) {
-		StringBuffer orderBy = new StringBuffer();
+		StringBuilder orderBy = new StringBuilder();
 		
 		List<Condition> conditions = lambdaQuery.getGroupBy();
 		for (Condition condition : conditions) {
-			if (orderBy.length() > 0) {
+			if (!orderBy.isEmpty()) {
 				orderBy.append(" , ");
 			}
 			orderBy.append(SafeValueHandler.safeColumn(condition.getColumn()));

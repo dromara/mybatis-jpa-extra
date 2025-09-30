@@ -18,9 +18,9 @@ package org.dromara.mybatis.jpa.provider;
 
 import java.util.Map;
 
-import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
+import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @SuppressWarnings({"rawtypes" })
-public class SqlMapperProvider <T extends JpaEntity>{	
+public class SqlMapperProvider{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(SqlMapperProvider.class);
 	
 	public SqlMapperProvider() {

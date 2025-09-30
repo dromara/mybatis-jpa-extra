@@ -31,9 +31,9 @@ public class ConditionValue {
 	private static final Logger logger = LoggerFactory.getLogger(ConditionValue.class);
 	
 	public static String valueOfList(List<?> listValue) {
-		StringBuffer conditionArray = new StringBuffer();
+		StringBuilder conditionArray = new StringBuilder();
 		for (Object value : listValue) {
-			if (conditionArray.length() > 0) {
+			if (conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
 			conditionArray.append(SafeValueHandler.valueOfType(value));
@@ -42,9 +42,9 @@ public class ConditionValue {
 	}
 	
 	public static String valueOfArray(Object[] objects) {
-		StringBuffer conditionArray = new StringBuffer();
+		StringBuilder conditionArray = new StringBuilder();
 		for (int i = 0 ; i< objects.length ; i++) {
-			if (conditionArray.length() > 0) {
+			if (conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
 			conditionArray.append(SafeValueHandler.valueOfType(objects[i]));
@@ -53,9 +53,9 @@ public class ConditionValue {
 	}
 	
 	public static String valueOfCollection(Collection<?> cObjects) {
-		StringBuffer conditionArray = new StringBuffer();
+		StringBuilder conditionArray = new StringBuilder();
         for (Object element : cObjects) {//for循环读取集合
-        	if (conditionArray.length() > 0) {
+        	if (conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
         	conditionArray.append(SafeValueHandler.valueOfType(element));
@@ -64,11 +64,11 @@ public class ConditionValue {
 	}
 	
 	public static String valueOfIterator(List<?> listValue) {
-		StringBuffer conditionArray = new StringBuffer();
+		StringBuilder conditionArray = new StringBuilder();
 		Iterator<?> iterator = listValue.iterator();
         while (iterator.hasNext()) {//while循环读取集合
         	Object element = iterator.next();
-        	if (conditionArray.length() > 0) {
+        	if (conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
         	conditionArray.append(SafeValueHandler.valueOfType(element));

@@ -30,7 +30,7 @@ public class QueryBuilder {
 	private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
 	
 	public static String build(Query query) {
-		StringBuffer conditionString = new StringBuffer("");
+		StringBuilder conditionString = new StringBuilder("");
 		Operator lastExpression = Operator.AND;
 		for (Condition condition : query.getConditions()) {
 			Operator expression = condition.getExpression();
@@ -108,9 +108,9 @@ public class QueryBuilder {
 	}
 	
 	public static String buildGroupBy(Query query) {
-		StringBuffer groupBy = new StringBuffer();
+		StringBuilder groupBy = new StringBuilder();
 		for (Condition condition : query.getGroupBy()) {
-			if (groupBy.length() > 0) {
+			if (!groupBy.isEmpty()) {
 				groupBy.append(" , ");
 			}
 			groupBy.append(SafeValueHandler.safeColumn(condition.getColumn()));
@@ -119,9 +119,9 @@ public class QueryBuilder {
 	}
 
 	public static String buildOrderBy(Query query) {
-		StringBuffer orderBy = new StringBuffer();
+		StringBuilder orderBy = new StringBuilder();
 		for (Condition condition : query.getOrderBy()) {
-			if (orderBy.length() > 0) {
+			if (!orderBy.isEmpty()) {
 				orderBy.append(" , ");
 			}
 			orderBy.append(SafeValueHandler.safeColumn(condition.getColumn()));

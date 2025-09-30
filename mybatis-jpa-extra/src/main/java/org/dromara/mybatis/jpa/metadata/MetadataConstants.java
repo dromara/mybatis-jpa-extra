@@ -52,16 +52,9 @@ public class MetadataConstants{
 	 * 查询的中间表别名
 	 */
 	public static final String SELECT_TMP_TABLE 				= " tmp_t";
+
 	
-	/**
-	 * 表名和字段名
-	 */
-	public static int 		TABLE_COLUMN_CASE 					= CASE_TYPE.LOWERCASE;
-	public static boolean   TABLE_COLUMN_ESCAPE                 = false;
-	public static String    TABLE_COLUMN_ESCAPE_CHAR            =  "`";
-	public static String    PARTITION_COLUMN           			=  "inst_id";
-	
-	public static class CASE_TYPE{
+	public static class CaseType{
 		public static final int 		NORMAL 							= 0;
 		public static final int 		LOWERCASE 						= 1;
 		public static final int 		UPPERCASE 						= 2;

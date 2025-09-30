@@ -18,10 +18,12 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
@@ -80,9 +82,9 @@ public class DeleteProvider <T extends JpaEntity>{
 		FieldMetadata.buildColumnMapper(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MetadataConstants.PARAMETER_ID_LIST);
 		
-		StringBuffer keyValue = new StringBuffer();
+		StringBuilder keyValue = new StringBuilder();
 		for(String value : idValues) {
-			if(value.trim().length() > 0) {
+			if(StringUtils.isNotBlank(value)) {
 				keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
 				logger.trace("delete by id {}" , value);
 			}

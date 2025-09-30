@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,7 +52,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		FieldMetadata.buildColumnMapper(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MetadataConstants.PARAMETER_ID_LIST);
 		
-		StringBuffer keyValue = new StringBuffer();
+		StringBuilder keyValue = new StringBuilder();
 		for(String value : idValues) {
 			if(StringUtils.isNotBlank(value)) {
 				keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");

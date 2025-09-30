@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.jdbc.SQL;

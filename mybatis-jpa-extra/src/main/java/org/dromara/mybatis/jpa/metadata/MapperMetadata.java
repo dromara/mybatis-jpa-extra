@@ -22,9 +22,9 @@ package org.dromara.mybatis.jpa.metadata;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
 import org.dromara.mybatis.jpa.crypto.EncryptFactory;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
+import org.dromara.mybatis.jpa.metadata.MetadataConstants.CaseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,15 +41,27 @@ public class MapperMetadata{
 	
 	static EncryptFactory encryptFactory;
 	
+	
+	/**
+	  * 表名和字段名
+	  */
+	 static int         tableColumnCase                          = CaseType.LOWERCASE;
+	 
+	 static boolean     tableColumnEscape                        = false;
+	 
+	 static String      tableColumnEscapeChar                    =  "`";
+	 
+	 static String      partitionColumn                          =  "inst_id";
+	
 	/**
 	 * Case Converter
 	 * @param name
 	 * @return case
 	 */
 	public static String tableOrColumnCaseConverter(String name) {
-		if(MetadataConstants.TABLE_COLUMN_CASE  == MetadataConstants.CASE_TYPE.LOWERCASE) {
+		if(MapperMetadata.tableColumnCase  == MetadataConstants.CaseType.LOWERCASE) {
 			name = name.toLowerCase();
-		}else if(MetadataConstants.TABLE_COLUMN_CASE  == MetadataConstants.CASE_TYPE.UPPERCASE) {
+		}else if(MapperMetadata.tableColumnCase  == MetadataConstants.CaseType.UPPERCASE) {
 			name = name.toUpperCase();
 		}
 		return name;
@@ -61,7 +73,7 @@ public class MapperMetadata{
 	 * @return Escape name
 	 */
 	public static String tableOrColumnEscape(String name) {
-		return MetadataConstants.TABLE_COLUMN_ESCAPE ? MetadataConstants.TABLE_COLUMN_ESCAPE_CHAR + name + MetadataConstants.TABLE_COLUMN_ESCAPE_CHAR : name;
+		return MapperMetadata.tableColumnEscape ? MapperMetadata.tableColumnEscapeChar + name + MapperMetadata.tableColumnEscapeChar : name;
 	}
 	
 	public static ConcurrentMap<String, String> getSqlsMap() {
@@ -87,6 +99,38 @@ public class MapperMetadata{
 
 	public static void setEncryptFactory(EncryptFactory encryptFactory) {
 		MapperMetadata.encryptFactory = encryptFactory;
+	}
+
+	public static int getTableColumnCase() {
+		return tableColumnCase;
+	}
+
+	public static void setTableColumnCase(int tableColumnCase) {
+		MapperMetadata.tableColumnCase = tableColumnCase;
+	}
+
+	public static boolean isTableColumnEscape() {
+		return tableColumnEscape;
+	}
+
+	public static void setTableColumnEscape(boolean tableColumnEscape) {
+		MapperMetadata.tableColumnEscape = tableColumnEscape;
+	}
+
+	public static String getTableColumnEscapeChar() {
+		return tableColumnEscapeChar;
+	}
+
+	public static void setTableColumnEscapeChar(String tableColumnEscapeChar) {
+		MapperMetadata.tableColumnEscapeChar = tableColumnEscapeChar;
+	}
+
+	public static String getPartitionColumn() {
+		return partitionColumn;
+	}
+
+	public static void setPartitionColumn(String partitionColumn) {
+		MapperMetadata.partitionColumn = partitionColumn;
 	}
 	
 }

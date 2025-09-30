@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class FetchProvider <T extends JpaEntity>{
 		T entity = (T)parametersMap.get(MetadataConstants.ENTITY);
 		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
 		String[] column = new String[listFields.size()] ;
-		StringBuffer conditions = new StringBuffer();
+		StringBuilder conditions = new StringBuilder();
 		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper : listFields) {
 			String columnName = fieldColumnMapper.getColumnName();

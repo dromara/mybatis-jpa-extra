@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.Map;
 

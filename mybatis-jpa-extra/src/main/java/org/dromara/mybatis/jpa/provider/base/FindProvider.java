@@ -18,7 +18,7 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import java.sql.Types;
 import java.util.List;
@@ -83,7 +83,7 @@ public class FindProvider <T extends JpaEntity>{
 			}
 			
 			String[] filterSqls  = filterSql.split("\\?");
-			StringBuffer sqlBuffer = new StringBuffer("");
+			StringBuilder sqlBuffer = new StringBuilder("");
 			for(int i = 0 ;i < filterSqls.length ; i++){
 				logger.trace("Find filterSqls[{}] = {}" , i , filterSqls[i]);
 				if(i < args.length) {
@@ -135,9 +135,9 @@ public class FindProvider <T extends JpaEntity>{
 		FieldMetadata.buildColumnMapper(parameterEntityClass);
 		List <String> parameterIds = (List<String>)parametersMap.get(MetadataConstants.PARAMETER_ID_LIST);
 		
-		StringBuffer keyValues = new StringBuffer();
+		StringBuilder keyValues = new StringBuilder();
 		for(String value : parameterIds) {
-			if(value.trim().length() > 0) {
+			if(StringUtils.isNotBlank(value)) {
 				keyValues.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
 			}
 		}

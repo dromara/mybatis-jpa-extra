@@ -24,6 +24,15 @@ import java.util.Map;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.dromara.mybatis.jpa.provider.base.DeleteProvider;
+import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
+import org.dromara.mybatis.jpa.provider.base.FetchProvider;
+import org.dromara.mybatis.jpa.provider.base.FindProvider;
+import org.dromara.mybatis.jpa.provider.base.GetProvider;
+import org.dromara.mybatis.jpa.provider.base.InsertProvider;
+import org.dromara.mybatis.jpa.provider.base.QueryProvider;
+import org.dromara.mybatis.jpa.provider.base.SoftDeleteProvider;
+import org.dromara.mybatis.jpa.provider.base.UpdateProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;

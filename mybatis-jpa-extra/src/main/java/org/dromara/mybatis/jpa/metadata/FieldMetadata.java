@@ -66,7 +66,7 @@ public class FieldMetadata {
 	 * @return selectColumn
 	 */
 	public static String selectColumnMapper(Class<?> entityClass) {
-		StringBuffer selectColumn = new StringBuffer(MetadataConstants.SELECT_TMP_TABLE + ".* ");
+		StringBuilder  selectColumn = new StringBuilder (MetadataConstants.SELECT_TMP_TABLE + ".* ");
 		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
 			columnCount ++;

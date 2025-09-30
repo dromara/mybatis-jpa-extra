@@ -31,7 +31,7 @@ import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.metadata.MetadataConstants;
-import org.dromara.mybatis.jpa.provider.FetchCountProvider;
+import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

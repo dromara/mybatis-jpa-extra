@@ -69,7 +69,7 @@ public class MacAddress {
 	public static String getMac(InetAddress ia) throws SocketException {
 		//获取网卡，获取地址
 		byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder  sb = new StringBuilder ("");
 		for(int i=0; i<mac.length; i++) {
 			if(i!=0) {
 				if(OS_NAME.startsWith("win") || OS_NAME.startsWith("Win") ){

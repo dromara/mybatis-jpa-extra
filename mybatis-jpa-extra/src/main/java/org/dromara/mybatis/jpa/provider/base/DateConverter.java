@@ -1,4 +1,4 @@
-package org.dromara.mybatis.jpa.provider;
+package org.dromara.mybatis.jpa.provider.base;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
