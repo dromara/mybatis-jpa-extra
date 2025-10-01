@@ -60,10 +60,6 @@ public class StrUtils {
 		return num;
 	}
 	
-	public static String firstToLowerCase(String str) {
-		return str.toLowerCase().charAt(0) + str.substring(1);
-	}
-
 	public static List<String> string2List(String string, String split) {
 		String[] strs = {};
 		if (string != null && !string.equals("")) {

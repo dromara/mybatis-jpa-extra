@@ -52,7 +52,7 @@ public class LambdaUtil {
         } else if (methodName.startsWith(PREFIX_IS)) {
             methodName = methodName.substring(2);
         }
-        String fieldName = StrUtils.firstToLowerCase(methodName);
+        String fieldName = StringUtils.uncapitalize(methodName);
         String implClass = lambda.getImplClass();
         Class<?> clazz = forName(implClass);
         Field field = findField(clazz, fieldName);
