@@ -19,7 +19,7 @@ package org.dromara.mybatis.jpa.id;
 /*
  * snowflakeid(default) and uuid
  */
-public class IdStrategy {
+public class IdentifierStrategy {
 
 	/**
 	 * uuid

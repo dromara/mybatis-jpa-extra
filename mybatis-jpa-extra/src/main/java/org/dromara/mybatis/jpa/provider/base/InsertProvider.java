@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.id.IdStrategy;
+import org.dromara.mybatis.jpa.id.IdentifierStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
@@ -100,11 +100,11 @@ public class InsertProvider <T extends JpaEntity>{
 		if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
 			String genValue = "";
 			if(generatedValue == null ) {
-				genValue = IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+				genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
 			}else if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
 				genValue = IdentifierGeneratorFactory.generate(generatedValue.generator());
 			}else {
-				genValue = IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+				genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
 			}
 			if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
 				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),genValue);

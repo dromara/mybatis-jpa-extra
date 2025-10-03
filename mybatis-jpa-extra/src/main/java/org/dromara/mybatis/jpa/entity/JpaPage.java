@@ -22,7 +22,7 @@ package org.dromara.mybatis.jpa.entity;
 
 import java.util.UUID;
 
-import org.dromara.mybatis.jpa.id.IdStrategy;
+import org.dromara.mybatis.jpa.id.IdentifierStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 
@@ -120,7 +120,7 @@ public class JpaPage {
 	
 	public String generateId() {
 		if(MapperMetadata.getIdentifierGeneratorFactory() != null) {
-			return IdentifierGeneratorFactory.generate(IdStrategy.DEFAULT);
+			return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
 		}else {
 			return UUID.randomUUID().toString().toLowerCase();
 		}

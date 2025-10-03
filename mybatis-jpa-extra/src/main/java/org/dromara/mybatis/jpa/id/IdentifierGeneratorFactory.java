@@ -32,14 +32,14 @@ public class IdentifierGeneratorFactory {
 	static ConcurrentMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
 	
 	public IdentifierGeneratorFactory() {
-		register(IdStrategy.UUID		, new UUIDGenerator());
-		register(IdStrategy.SNOWFLAKEID	, new SnowFlakeIdGenerator());
-		register(IdStrategy.DEFAULT		, new SnowFlakeIdGenerator(null));
+		register(IdentifierStrategy.UUID		, new UUIDGenerator());
+		register(IdentifierStrategy.SNOWFLAKEID	, new SnowFlakeIdGenerator());
+		register(IdentifierStrategy.DEFAULT		, new SnowFlakeIdGenerator(null));
 	}
 	
 	public IdentifierGeneratorFactory(long datacenterId, long machineId) {
-		register(IdStrategy.UUID, new UUIDGenerator());
-		register(IdStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
+		register(IdentifierStrategy.UUID, new UUIDGenerator());
+		register(IdentifierStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
 	}
 
 	public static ConcurrentMap<String, IdentifierGenerator> getIdentifierGeneratorMap() {
