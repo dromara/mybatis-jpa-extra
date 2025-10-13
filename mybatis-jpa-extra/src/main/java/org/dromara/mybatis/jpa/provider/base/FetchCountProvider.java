@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
+import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
-import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 			BoundSql boundSql = pageSqlCache.getBoundSql();
 			logger.trace("Count original SQL  :\n{}" , selectSql);
 			
-			sql.append(SqlSyntaxConstants.SELECT +" "+ SqlSyntaxConstants.Functions.COUNT_ONE +" countrows_ ");
+			sql.append(ConstSqlSyntax.SELECT +" "+ ConstSqlSyntax.Functions.COUNT_ONE +" countrows_ ");
 			StringBuilder countSql = new StringBuilder();
 	
 			if(boundSql.getParameterMappings() == null ||boundSql.getParameterMappings().isEmpty()) {
@@ -83,18 +83,18 @@ public class FetchCountProvider <T extends JpaEntity>{
 			/*
 			 * 判断 1,去重 2,分组 3,聚合函数
 			 */
-			if(countSqlLowerCase.indexOf(SqlSyntaxConstants.DISTINCT + " ")> -1 
-					||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.GROUP_BY + " ")> -1 
-					||countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.HAVING + " ")> -1 
-					||(countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ") 
-							!= countSqlLowerCase.lastIndexOf(" " + SqlSyntaxConstants.FROM + " ")
+			if(countSqlLowerCase.indexOf(ConstSqlSyntax.DISTINCT + " ")> -1 
+					||countSqlLowerCase.indexOf(" " + ConstSqlSyntax.GROUP_BY + " ")> -1 
+					||countSqlLowerCase.indexOf(" " + ConstSqlSyntax.HAVING + " ")> -1 
+					||(countSqlLowerCase.indexOf(" " + ConstSqlSyntax.FROM + " ") 
+							!= countSqlLowerCase.lastIndexOf(" " + ConstSqlSyntax.FROM + " ")
 					) //嵌套
 					) {
 				logger.trace("Count SQL Complex ");
-				sql.append(SqlSyntaxConstants.FROM).append(" (").append(countSql).append(" ) count_table_");
+				sql.append(ConstSqlSyntax.FROM).append(" (").append(countSql).append(" ) count_table_");
 			}else {
-				int fromIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.FROM + " ");
-				int orderByIndex = countSqlLowerCase.indexOf(" " + SqlSyntaxConstants.ORDER_BY + " ");
+				int fromIndex = countSqlLowerCase.indexOf(" " + ConstSqlSyntax.FROM + " ");
+				int orderByIndex = countSqlLowerCase.indexOf(" " + ConstSqlSyntax.ORDER_BY + " ");
 				logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
 				if(orderByIndex > -1) {
 					sql.append(countSql.substring(fromIndex,orderByIndex));

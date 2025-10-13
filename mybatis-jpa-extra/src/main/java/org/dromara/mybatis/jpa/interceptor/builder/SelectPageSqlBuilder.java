@@ -27,10 +27,10 @@ import org.apache.ibatis.executor.statement.PreparedStatementHandler;
 import org.apache.ibatis.executor.statement.SimpleStatementHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +74,8 @@ public class SelectPageSqlBuilder {
 		if((parameterObject instanceof JpaPage jpaPage)) {
 			page = jpaPage;
 		}else if(parameterObject instanceof ParamMap<?> paramMap) {
-			if(paramMap.containsKey(MetadataConstants.PAGE)) {
-				page = (JpaPage)paramMap.get(MetadataConstants.PAGE);
+			if(paramMap.containsKey(ConstMetadata.PAGE)) {
+				page = (JpaPage)paramMap.get(ConstMetadata.PAGE);
 			}else {
 				try {
 					for (Map.Entry<String,?> entry : paramMap.entrySet()){
@@ -89,8 +89,8 @@ public class SelectPageSqlBuilder {
 				}
 			}
 		}else if(parameterObject instanceof HashMap<?,?> parameterMap){
-			if(parameterMap.containsKey(MetadataConstants.IJPA_SQL_PARAMETER_PAGE)) {
-				page = (JpaPage)parameterMap.get(MetadataConstants.IJPA_SQL_PARAMETER_PAGE);
+			if(parameterMap.containsKey(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE)) {
+				page = (JpaPage)parameterMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE);
 				logger.trace("page : {} " , page);
 			}
 		}else {

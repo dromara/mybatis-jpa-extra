@@ -22,10 +22,10 @@ package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.List;
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -80,12 +80,12 @@ public class UpdateProvider <T extends JpaEntity>{
 				//skip null field value
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value is null , Skiped ",
-						String.format(MetadataConstants.LOG_FORMAT, fieldName), String.format(MetadataConstants.LOG_FORMAT, fieldType));
+						String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
 				}
 			}else {
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value {}",
-						String.format(MetadataConstants.LOG_FORMAT, fieldName), String.format(MetadataConstants.LOG_FORMAT, fieldType),fieldValue);
+						String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
 				}
 				if(fieldColumnMapper.getColumnAnnotation().updatable()) {
 					if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {

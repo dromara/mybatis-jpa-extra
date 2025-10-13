@@ -32,9 +32,9 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandler;
+import org.dromara.mybatis.jpa.constants.ConstCaseType;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants.CaseType;
 import org.dromara.mybatis.jpa.result.MapWrapperFactory;
 import org.dromara.mybatis.jpa.spring.MyBatisJpaSessionFactoryBean;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -173,20 +173,12 @@ public class MybatisAutoConfiguration implements InitializingBean {
         }
     }
     
+    //default is lowercase
+    int caseType = ConstCaseType.LOWERCASE;
     if (StringUtils.hasLength(this.properties.getTableColumnCase())) {
-	    //default is lowercase
-	    if(this.properties.getTableColumnCase().equalsIgnoreCase("uppercase")) {
-	    	MapperMetadata.setTableColumnCase(CaseType.UPPERCASE);
-	    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("lowercase")) {
-	    	MapperMetadata.setTableColumnCase(CaseType.LOWERCASE);
-	    }else if(this.properties.getTableColumnCase().equalsIgnoreCase("normal")) {
-	    	MapperMetadata.setTableColumnCase(CaseType.NORMAL);
-	  	}else {
-	  		MapperMetadata.setTableColumnCase(CaseType.LOWERCASE);
-	    }
-    }else {
-    	MapperMetadata.setTableColumnCase(CaseType.LOWERCASE);
+    	caseType = ConstCaseType.getCaseType(this.properties.getTableColumnCase());
     }
+    MapperMetadata.setTableColumnCase(caseType);
     
     if(this.properties.getTableColumnSnowflakeDatacenterId()>0 && 
     		this.properties.getTableColumnSnowflakeMachineId()>0) {

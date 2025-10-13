@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class TableMetadata {
 	public static SQL buildSelect(Class<?> entityClass) {
 		FieldMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
-				.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
+				.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 	}
 	
 	/**
@@ -51,7 +52,7 @@ public class TableMetadata {
 	public static SQL buildSelectCount(Class<?> entityClass) {
 		FieldMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(" count(1) as _select_count ")
-				.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
+				.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 	}
 	
 	/**
@@ -63,10 +64,10 @@ public class TableMetadata {
 		FieldMetadata.buildColumnMapper(entityClass);
 		if(distinct) {
 			return new SQL().SELECT_DISTINCT(FieldMetadata.selectColumnMapper(entityClass))
-				.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
+				.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 		}else {
 			return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
-					.FROM(TableMetadata.getTableName(entityClass) + MetadataConstants.SELECT_TMP_TABLE);
+					.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 		}
 	}
 	

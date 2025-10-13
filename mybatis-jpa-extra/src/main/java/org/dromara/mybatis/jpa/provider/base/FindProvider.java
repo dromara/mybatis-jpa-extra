@@ -26,11 +26,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class FindProvider <T extends JpaEntity>{
 	static final Logger logger 	= 	LoggerFactory.getLogger(FindProvider.class);
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
-		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
+		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql=  TableMetadata.buildSelect(entityClass);
@@ -62,10 +62,10 @@ public class FindProvider <T extends JpaEntity>{
     }
 	
 	public String find(Map<String, Object>  parametersMap) throws Exception {  
-		Class<?> entityClass = (Class<?>) parametersMap.get(MetadataConstants.ENTITY_CLASS);
-		Object[] args 	 = (Object[]) parametersMap.get(MetadataConstants.QUERY_ARGS);
-		int[] argTypes 	 = (int[]) parametersMap.get(MetadataConstants.QUERY_ARGTYPES);
-		String filterSql = parametersMap.get(MetadataConstants.QUERY_FILTER).toString().trim();
+		Class<?> entityClass = (Class<?>) parametersMap.get(ConstMetadata.ENTITY_CLASS);
+		Object[] args 	 = (Object[]) parametersMap.get(ConstMetadata.QUERY_ARGS);
+		int[] argTypes 	 = (int[]) parametersMap.get(ConstMetadata.QUERY_ARGTYPES);
+		String filterSql = parametersMap.get(ConstMetadata.QUERY_FILTER).toString().trim();
 		
 		FieldMetadata.buildColumnMapper(entityClass);
 		
@@ -131,9 +131,9 @@ public class FindProvider <T extends JpaEntity>{
 	
 	@SuppressWarnings("unchecked")
 	public String findByIds(Map<String, Object>  parametersMap) { 
-		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
+		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnMapper(parameterEntityClass);
-		List <String> parameterIds = (List<String>)parametersMap.get(MetadataConstants.PARAMETER_ID_LIST);
+		List <String> parameterIds = (List<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
 		
 		StringBuilder keyValues = new StringBuilder();
 		for(String value : parameterIds) {
@@ -145,7 +145,7 @@ public class FindProvider <T extends JpaEntity>{
 		
 		//remove ';'
 		String idsValues = keyValues.substring(1).replace(";", "");
-		String partitionKeyValue = (String) parametersMap.get(MetadataConstants.PARAMETER_PARTITION_KEY);
+		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(parameterEntityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass);
 		

@@ -22,9 +22,10 @@ package org.dromara.mybatis.jpa.metadata;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import org.dromara.mybatis.jpa.constants.ConstCaseType;
 import org.dromara.mybatis.jpa.crypto.EncryptFactory;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants.CaseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class MapperMetadata{
 	/**
 	  * 表名和字段名
 	  */
-	 static int         tableColumnCase                          = CaseType.LOWERCASE;
+	 static int         tableColumnCase                          = ConstCaseType.LOWERCASE;
 	 
 	 static boolean     tableColumnEscape                        = false;
 	 
@@ -59,9 +60,9 @@ public class MapperMetadata{
 	 * @return case
 	 */
 	public static String tableOrColumnCaseConverter(String name) {
-		if(MapperMetadata.tableColumnCase  == MetadataConstants.CaseType.LOWERCASE) {
+		if(MapperMetadata.tableColumnCase  == ConstCaseType.LOWERCASE) {
 			name = name.toLowerCase();
-		}else if(MapperMetadata.tableColumnCase  == MetadataConstants.CaseType.UPPERCASE) {
+		}else if(MapperMetadata.tableColumnCase  == ConstCaseType.UPPERCASE) {
 			name = name.toUpperCase();
 		}
 		return name;

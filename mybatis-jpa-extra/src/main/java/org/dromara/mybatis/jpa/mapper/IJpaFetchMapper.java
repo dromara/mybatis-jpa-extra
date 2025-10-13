@@ -20,8 +20,8 @@ package org.dromara.mybatis.jpa.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaPage;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.MapperProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -38,25 +38,25 @@ public interface IJpaFetchMapper<T>{
 	
 	@SelectProvider(type = MapperProvider.class, method = "fetch")
 	public List<T> fetch(
-					@Param (MetadataConstants.PAGE)JpaPage page,
-					@Param (MetadataConstants.ENTITY) T entity);
+					@Param (ConstMetadata.PAGE)JpaPage page,
+					@Param (ConstMetadata.ENTITY) T entity);
 	
 	@SelectProvider(type = MapperProvider.class, method = "fetchByQuery")
 	public List<T> fetchByQuery(
-					@Param (MetadataConstants.PAGE) JpaPage page,
-					@Param (MetadataConstants.CONDITION) Query query,
-					@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass);
+					@Param (ConstMetadata.PAGE) JpaPage page,
+					@Param (ConstMetadata.CONDITION) Query query,
+					@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
 	
 	@SelectProvider(type = MapperProvider.class, method = "fetchByLambdaQuery")
 	public List<T> fetchByLambdaQuery(
-					@Param (MetadataConstants.PAGE) JpaPage page,
-					@Param (MetadataConstants.CONDITION) LambdaQuery<T> lambdaQuery,
-					@Param (MetadataConstants.ENTITY_CLASS)Class<?> entityClass);
+					@Param (ConstMetadata.PAGE) JpaPage page,
+					@Param (ConstMetadata.CONDITION) LambdaQuery<T> lambdaQuery,
+					@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
 	
 
 	//
 	public List<T> fetchPageResults(T entity);
 	
-	public List<T> fetchPageResults(@Param (MetadataConstants.PAGE) JpaPage page ,@Param (MetadataConstants.ENTITY) T entity);
+	public List<T> fetchPageResults(@Param (ConstMetadata.PAGE) JpaPage page ,@Param (ConstMetadata.ENTITY) T entity);
 		
 }

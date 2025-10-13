@@ -18,8 +18,8 @@ package org.dromara.mybatis.jpa.provider;
 
 import java.util.Map;
 
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaPage;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class SqlMapperProvider{
 	}
 
 	public String selectList(Map<String, Object>  parametersMap) {
-		return parametersMap.get(MetadataConstants.IJPA_SQL_PARAMETER_SQL).toString();
+		return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
     }
 	
 	/**
@@ -45,7 +45,7 @@ public class SqlMapperProvider{
 	 * @return insert sql String
 	 */
 	public String insert(Map<String ,Object> entityMap) {
-		return entityMap.get(MetadataConstants.IJPA_SQL_PARAMETER_SQL).toString();
+		return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
 	}
 
 	//update
@@ -54,12 +54,12 @@ public class SqlMapperProvider{
 	 * @return update sql String
 	 */
 	public String update(Map<String ,Object> entityMap) {
-		return entityMap.get(MetadataConstants.IJPA_SQL_PARAMETER_SQL).toString();
+		return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
 	}
 
 	
 	public String delete(Map<String ,Object> parametersMap) {
-		return parametersMap.get(MetadataConstants.IJPA_SQL_PARAMETER_SQL).toString();
+		return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
 	}
 	
 	/**

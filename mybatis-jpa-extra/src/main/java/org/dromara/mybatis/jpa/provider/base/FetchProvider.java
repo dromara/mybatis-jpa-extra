@@ -25,10 +25,10 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -52,7 +52,7 @@ public class FetchProvider <T extends JpaEntity>{
 	 * @return fetch sql String
 	 */
 	public String fetch(Map<String, Object>  parametersMap) {
-		T entity = (T)parametersMap.get(MetadataConstants.ENTITY);
+		T entity = (T)parametersMap.get(ConstMetadata.ENTITY);
 		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
 		String[] column = new String[listFields.size()] ;
 		StringBuilder conditions = new StringBuilder();
@@ -69,12 +69,12 @@ public class FetchProvider <T extends JpaEntity>{
 				//skip null field value
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value is null , Skiped ",
-						String.format(MetadataConstants.LOG_FORMAT, fieldName),String.format(MetadataConstants.LOG_FORMAT, fieldType));
+						String.format(ConstMetadata.LOG_FORMAT, fieldName),String.format(ConstMetadata.LOG_FORMAT, fieldType));
 				}
 			}else {
 				if(logger.isTraceEnabled()) {
 					logger.trace("Field {} , Type {} , Value {}",
-						String.format(MetadataConstants.LOG_FORMAT, fieldName), String.format(MetadataConstants.LOG_FORMAT, fieldType),fieldValue);
+						String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
 				}
 				if(!conditions.isEmpty()) {
 					conditions.append(" and ");
@@ -88,7 +88,7 @@ public class FetchProvider <T extends JpaEntity>{
 					conditions.append(
 							" %s = #{%s.%s} ".formatted(
 									columnName,
-									MetadataConstants.ENTITY,
+									ConstMetadata.ENTITY,
 									fieldName));
 				}
 			}
@@ -109,8 +109,8 @@ public class FetchProvider <T extends JpaEntity>{
 	 * @return fetch sql String
 	 */
 	public String fetchByQuery(Map<String, Object>  parametersMap) {
-		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
-		Query condition = (Query)parametersMap.get(MetadataConstants.CONDITION);
+		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+		Query condition = (Query)parametersMap.get(ConstMetadata.CONDITION);
 		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
@@ -140,8 +140,8 @@ public class FetchProvider <T extends JpaEntity>{
 	 * @return fetch sql String
 	 */
 	public String fetchByLambdaQuery(Map<String, Object>  parametersMap) {
-		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
-		LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(MetadataConstants.CONDITION);
+		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+		LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(ConstMetadata.CONDITION);
 		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {

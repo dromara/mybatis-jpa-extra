@@ -38,8 +38,8 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.RowBounds;
 import org.dromara.mybatis.jpa.constants.ConstMetaObject;
+import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.metadata.SqlSyntaxConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +126,7 @@ public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInte
 	}
 	
 	private boolean isSelectSql(String sql) {
-		return sql.toLowerCase().trim().startsWith(SqlSyntaxConstants.SELECT.toLowerCase());
+		return sql.toLowerCase().trim().startsWith(ConstSqlSyntax.SELECT.toLowerCase());
 	}
 
 	

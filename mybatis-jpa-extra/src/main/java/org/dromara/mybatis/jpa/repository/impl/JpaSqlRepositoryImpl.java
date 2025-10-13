@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.IJpaSqlMapper;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,7 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
 		}
 		logger.trace("sql {}",sql);
 		logger.trace("parameters {}",parameters);
-		parameters.put(MetadataConstants.IJPA_SQL_PARAMETER_SQL, sql);
+		parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_SQL, sql);
 		return parameters;
 	}
 	
@@ -101,7 +101,7 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
 	public JpaPageResults<Map<String,Object>> fetch(String sql , JpaPage page , Map<String, Object> parameters) {
 		try {
 			page.build();
-			parameters.put(MetadataConstants.IJPA_SQL_PARAMETER_PAGE, page);
+			parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE, page);
 			List<Map<String,Object>> resultslist = this.selectList(sql, parameters);
 			return buildPageResults(page , resultslist);
 		}catch (Exception e) {

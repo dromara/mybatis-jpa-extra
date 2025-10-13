@@ -27,6 +27,7 @@ import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.annotations.Encrypted;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.annotations.SoftDelete;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,7 @@ public class FieldMetadata {
 	 * @return selectColumn
 	 */
 	public static String selectColumnMapper(Class<?> entityClass) {
-		StringBuilder  selectColumn = new StringBuilder (MetadataConstants.SELECT_TMP_TABLE + ".* ");
+		StringBuilder  selectColumn = new StringBuilder (ConstMetadata.SELECT_TMP_TABLE + ".* ");
 		int columnCount = 0;
 		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
 			columnCount ++;
@@ -79,7 +80,7 @@ public class FieldMetadata {
 			}
 			if(logger.isTraceEnabled()) {
 				logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-					String.format(MetadataConstants.LOG_FORMAT_COUNT, columnCount),String.format(MetadataConstants.LOG_FORMAT, fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
+					String.format(ConstMetadata.LOG_FORMAT_COUNT, columnCount),String.format(ConstMetadata.LOG_FORMAT, fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
 			}
 		}
 		return selectColumn.toString();

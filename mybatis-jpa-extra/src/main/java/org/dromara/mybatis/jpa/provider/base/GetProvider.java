@@ -23,10 +23,10 @@ package org.dromara.mybatis.jpa.provider.base;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +39,10 @@ public class GetProvider <T extends JpaEntity>{
 	static final Logger logger 	= 	LoggerFactory.getLogger(GetProvider.class);
 	
 	public String get(Map<String, Object>  parametersMap) {
-		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
+		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnMapper(entityClass);
 
-		String partitionKeyValue = (String) parametersMap.get(MetadataConstants.PARAMETER_PARTITION_KEY);
+		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		

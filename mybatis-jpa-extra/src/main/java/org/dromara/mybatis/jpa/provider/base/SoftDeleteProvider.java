@@ -25,11 +25,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
 import org.dromara.mybatis.jpa.metadata.FieldMetadata;
-import org.dromara.mybatis.jpa.metadata.MetadataConstants;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -48,9 +48,9 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	
 	@SuppressWarnings("unchecked")
 	public String softDelete(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(MetadataConstants.ENTITY_CLASS);
+		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		FieldMetadata.buildColumnMapper(entityClass);
-		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(MetadataConstants.PARAMETER_ID_LIST);
+		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
 		
 		StringBuilder keyValue = new StringBuilder();
 		for(String value : idValues) {
@@ -62,7 +62,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		// remove ;
 		String keyValues = keyValue.substring(1).replace(";", "");
 		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
-		String partitionKeyValue = (String) parametersMap.get(MetadataConstants.PARAMETER_PARTITION_KEY);
+		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
 		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
 		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
 		
