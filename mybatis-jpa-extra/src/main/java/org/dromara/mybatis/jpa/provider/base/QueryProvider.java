@@ -100,21 +100,20 @@ public class QueryProvider<T extends JpaEntity> {
 
 			logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumnName(), fieldType,
 					fieldValue);
-
-			if(fieldValue == null ) {
-				logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
-				// skip null field value
-			} else if(("string".equals(fieldType) && "".equals(fieldValue))
-					|| ("byte".startsWith(fieldType))
-					|| ("Int".equals(fieldType) && "0".equals(fieldValue))
-					|| ("Long".equals(fieldType)&& "0".equals(fieldValue))
-					|| ("Integer".equals(fieldType)&& "0".equals(fieldValue))
-					|| ("Float".equals(fieldType)&& "0.0".equals(fieldValue))
-					|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
-				// skip default field value
+			if(fieldColumnMapper.isLogicDelete()) {
+				sql.WHERE(fieldColumnMapper.getColumnName() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
 			}else {
-				if(fieldColumnMapper.isLogicDelete()) {
-					sql.WHERE(fieldColumnMapper.getColumnName() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
+				if(fieldValue == null ) {
+					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
+					// skip null field value
+				} else if(("string".equals(fieldType) && "".equals(fieldValue))
+						|| ("byte".startsWith(fieldType))
+						|| ("Int".equals(fieldType) && "0".equals(fieldValue))
+						|| ("Long".equals(fieldType)&& "0".equals(fieldValue))
+						|| ("Integer".equals(fieldType)&& "0".equals(fieldValue))
+						|| ("Float".equals(fieldType)&& "0.0".equals(fieldValue))
+						|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
+					// skip default field value
 				}else {
 					sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
 				}
