@@ -28,8 +28,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -47,26 +47,26 @@ public class DeleteProvider <T extends JpaEntity>{
 	
 	public String deleteById(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 
 		String idValue = (String) parametersMap.get(ConstMetadata.PARAMETER_ID);
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
+		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE(" %s = #{%s} and %s = '%s' "
 					.formatted(
-							partitionKeyColumnMapper.getColumnName() ,
+							partitionKeyColumnMapper.getColumn() ,
 							partitionKeyValue,
-							idFieldColumnMapper.getColumnName(),
+							idFieldColumnMapper.getColumn(),
 							SafeValueHandler.valueOf(idValue))
         			);  
 		}else {
 			sql.WHERE("%s = '%s'"
 					.formatted(
-							idFieldColumnMapper.getColumnName(),
+							idFieldColumnMapper.getColumn(),
 							SafeValueHandler.valueOf(idValue)) 
 					);  
 		}
@@ -79,7 +79,7 @@ public class DeleteProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String batchDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
 		
 		StringBuilder keyValue = new StringBuilder();
@@ -93,21 +93,21 @@ public class DeleteProvider <T extends JpaEntity>{
 		String keyValues = keyValue.substring(1).replace(";", "");
 		
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
+		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
 		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE("%s = #{%s} and %s  in ( %s )"
 					.formatted(
-							partitionKeyColumnMapper.getColumnName() ,
+							partitionKeyColumnMapper.getColumn() ,
 							partitionKeyValue,
-							idFieldColumnMapper.getColumnName(),
-							idFieldColumnMapper.getFieldName())
+							idFieldColumnMapper.getColumn(),
+							idFieldColumnMapper.getField())
         			);  
 		}else {
-			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),keyValues));  
+			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
 		}
 		
         String deleteSql=sql.toString(); 
@@ -117,7 +117,7 @@ public class DeleteProvider <T extends JpaEntity>{
 	
 	public String deleteByQuery(Class<?> entityClass, Query query) {
 		logger.trace("delete By Query \n{}" , query);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		SQL sql = new SQL()
 					.DELETE_FROM(TableMetadata.getTableName(entityClass))
 					.WHERE(QueryBuilder.build(query));
@@ -128,7 +128,7 @@ public class DeleteProvider <T extends JpaEntity>{
 	
 	public String deleteByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
 		logger.trace("delete By LambdaQuery \n{}" , lambdaQuery);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		SQL sql = new SQL()
 					.DELETE_FROM(TableMetadata.getTableName(entityClass))
 					.WHERE(LambdaQueryBuilder.build(lambdaQuery));

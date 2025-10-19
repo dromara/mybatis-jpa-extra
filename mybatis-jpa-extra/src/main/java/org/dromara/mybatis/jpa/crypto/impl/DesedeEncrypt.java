@@ -41,7 +41,7 @@ public class DesedeEncrypt implements SymmetricEncrypt{
 	}
 	
 	public DesedeEncrypt(String cryptKey) {
-		this.salt = ReciprocalUtils.cutSecretKey(cryptKey, ReciprocalUtils.Algorithm.DESede);
+		this.salt = ReciprocalUtils.cutSecretKey(cryptKey, ReciprocalUtils.Algorithm.TRIPLE_DES);
 	}
 	
     public static DesedeEncrypt getInstance() {
@@ -60,7 +60,7 @@ public class DesedeEncrypt implements SymmetricEncrypt{
     	String encodedPasswordString  = ciphers;
     	if(encodedPasswordString.startsWith(PREFIX)) {
     		try {
-    			return ReciprocalUtils.decoderHex(encodedPasswordString.substring(PREFFIX_LENGTH), salt,ReciprocalUtils.Algorithm.DESede);
+    			return ReciprocalUtils.decoderHex(encodedPasswordString.substring(PREFFIX_LENGTH), salt,ReciprocalUtils.Algorithm.TRIPLE_DES);
 			} catch (Exception e) {
 				logger.error("decryptHex_DESede Exception", e);
 			}
@@ -90,7 +90,7 @@ public class DesedeEncrypt implements SymmetricEncrypt{
 		}
 		
 		try {
-			return PREFIX + ReciprocalUtils.encode2Hex(plain.toString(), salt,ReciprocalUtils.Algorithm.DESede);
+			return PREFIX + ReciprocalUtils.encode2Hex(plain.toString(), salt,ReciprocalUtils.Algorithm.TRIPLE_DES);
 		} catch (Exception e) {
 			logger.error("encryptHex_DESede Exception", e);
 		}

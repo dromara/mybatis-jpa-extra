@@ -42,14 +42,14 @@ import org.slf4j.LoggerFactory;
 public final class ReciprocalUtils {
 	private static final  Logger logger = LoggerFactory.getLogger(ReciprocalUtils.class);
 	
-    public static final String defaultKey = "l0JqT7NvIzP9oRaG4kFc1QmD_bWu3x8E5yS2h6"; //
+    public static final String DEFAULT_KEY      = "l0JqT7NvIzP9oRaG4kFc1QmD_bWu3x8E5yS2h6"; //
 
     public final class Algorithm {
-        public static final String DES 		= "DES";
-        public static final String DESede 	= "DESede";
-        public static final String Blowfish = "Blowfish";
-        public static final String AES 		= "AES";
-        public static final String SM4 		= "SM4";
+        public static final String DES          = "DES";
+        public static final String TRIPLE_DES   = "DESede";
+        public static final String BLOWFISH     = "Blowfish";
+        public static final String AES 		   = "AES";
+        public static final String SM4 		   = "SM4";
     }
 
 /*
@@ -88,7 +88,7 @@ public final class ReciprocalUtils {
      * @throws Exception
      */
     public static byte[] encode(String simple, String secretKey, String algorithm) {
-        if (keyLengthCheck(secretKey, algorithm)) {
+        if (StringUtils.isNotBlank(simple) && keyLengthCheck(secretKey, algorithm)) {
             SecretKey key = generatorKey(secretKey, algorithm);
             return encode(simple.getBytes(StandardCharsets.UTF_8), key, algorithm);
         }
@@ -121,12 +121,12 @@ public final class ReciprocalUtils {
 
     public static String generatorDefaultKey(String secretKey,String algorithm) {
         try {
-            secretKey = secretKey + defaultKey;
+            secretKey = secretKey + DEFAULT_KEY;
             if (algorithm.equals(Algorithm.DES)) {
                 secretKey = secretKey.substring(0, 8);
-            } else if (algorithm.equals(Algorithm.AES) || algorithm.equals(Algorithm.Blowfish)) {
+            } else if (algorithm.equals(Algorithm.AES) || algorithm.equals(Algorithm.BLOWFISH)) {
                 secretKey = secretKey.substring(0, 16);
-            } else if (algorithm.equals(Algorithm.DESede)) {
+            } else if (algorithm.equals(Algorithm.TRIPLE_DES)) {
                 secretKey = secretKey.substring(0, 24);
             }
            return secretKey;
@@ -166,13 +166,13 @@ public final class ReciprocalUtils {
     }
     
     public static String encode2Hex(String simple, String secretKey) {
-    	String key = generatorDefaultKey(secretKey + defaultKey,Algorithm.DESede);
-    	return encode2Hex(simple,key, Algorithm.DESede);
+    	String key = generatorDefaultKey(secretKey + DEFAULT_KEY,Algorithm.TRIPLE_DES);
+    	return encode2Hex(simple,key, Algorithm.TRIPLE_DES);
     }
 
     public static String decoderHex(String ciphers, String secretKey) {
-    	String key = generatorDefaultKey(secretKey + defaultKey,Algorithm.DESede);
-    	return decoderHex(ciphers,key,Algorithm.DESede);
+    	String key = generatorDefaultKey(secretKey + DEFAULT_KEY,Algorithm.TRIPLE_DES);
+    	return decoderHex(ciphers,key,Algorithm.TRIPLE_DES);
     }
     
     private static boolean keyLengthCheck(String secretKey, String algorithm) {
@@ -183,7 +183,7 @@ public final class ReciprocalUtils {
             } else {
             	logger.error("DES key length is  {} ,must lequal 8",secretKey.getBytes().length);
             }
-        } else if (algorithm.equals(Algorithm.DESede)) {
+        } else if (algorithm.equals(Algorithm.TRIPLE_DES)) {
             if (secretKey.length() == 24) {
                 lengthCheck = true;
             } else {
@@ -195,7 +195,7 @@ public final class ReciprocalUtils {
             } else {
             	logger.error("AES key length is  {} ,must equal 16",secretKey.getBytes().length);
             }
-        } else if (algorithm.equals(Algorithm.Blowfish)) {
+        } else if (algorithm.equals(Algorithm.BLOWFISH)) {
             if (secretKey.length() <= 16) {
                 lengthCheck = true;
             } else {
@@ -209,11 +209,11 @@ public final class ReciprocalUtils {
     public static String cutSecretKey(String secretKey, String algorithm) {
         if (algorithm.equals(Algorithm.DES)) {
         	return secretKey.substring(0, 8);
-        } else if (algorithm.equals(Algorithm.DESede)) {
+        } else if (algorithm.equals(Algorithm.TRIPLE_DES)) {
         	return secretKey.substring(0, 24);
         } else if (algorithm.equals(Algorithm.AES)) {
         	return secretKey.substring(0, 16);
-        } else if (algorithm.equals(Algorithm.Blowfish)) {
+        } else if (algorithm.equals(Algorithm.BLOWFISH)) {
         	return secretKey.substring(0, 16);
         } else if (algorithm.equals(Algorithm.SM4)) {
         	return secretKey.substring(0, 32);
@@ -240,9 +240,9 @@ public final class ReciprocalUtils {
             return (new StringGenerator(8)).randomGenerate();
         } else if (algorithm.equals(Algorithm.AES)) {
             return (new StringGenerator(16)).randomGenerate();
-        } else if (algorithm.equals(Algorithm.Blowfish)) {
+        } else if (algorithm.equals(Algorithm.BLOWFISH)) {
             return (new StringGenerator(16)).randomGenerate();
-        } else if (algorithm.equals(Algorithm.DESede)) {
+        } else if (algorithm.equals(Algorithm.TRIPLE_DES)) {
             return (new StringGenerator(24)).randomGenerate();
         } else {
             return (new StringGenerator()).uniqueGenerate();

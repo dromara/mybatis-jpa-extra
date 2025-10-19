@@ -91,7 +91,7 @@ public class StrUtils {
 		return string;
 	}
 
-	public static String lineBreak2Blank(String sql) {
+	public static String lineBreakToBlank(String sql) {
 		return 	sql.replaceAll("\r\n+", " \n")
 				   .replaceAll("\n+", " \n")
 				   .replaceAll("\t", " ")

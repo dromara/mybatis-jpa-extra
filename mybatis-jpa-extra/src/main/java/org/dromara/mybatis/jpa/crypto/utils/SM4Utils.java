@@ -41,8 +41,8 @@ public class SM4Utils {
 
     private static final int DEFAULT_KEY_SIZE = 128;
     private static final String ALGORITHM = "SM4";
-    private static final String SM4_ECB_ = "SM4/ECB/";
-    private static final String SM4_CBC_ = "SM4/CBC/";
+    private static final String SM4_ECB = "SM4/ECB/";
+    private static final String SM4_CBC = "SM4/CBC/";
     private static final Base64.Encoder BASE64_ENCODER = Base64.getEncoder();
     private static final Base64.Decoder BASE64_DECODER = Base64.getDecoder();
     private static final BouncyCastleProvider PROVIDER = new BouncyCastleProvider();
@@ -99,7 +99,7 @@ public class SM4Utils {
     // region ECB mode
 
     public static Cipher getCipher_ECB(Padding padding)  throws Exception {
-        return Cipher.getInstance(SM4_ECB_ + padding.name, BouncyCastleProvider.PROVIDER_NAME);
+        return Cipher.getInstance(SM4_ECB + padding.name, BouncyCastleProvider.PROVIDER_NAME);
     }
 
     /**
@@ -167,7 +167,7 @@ public class SM4Utils {
     // region CBC mode
 
     public static Cipher getCipher_CBC(Padding padding) throws Exception {
-        return Cipher.getInstance(SM4_CBC_ + padding.name, BouncyCastleProvider.PROVIDER_NAME);
+        return Cipher.getInstance(SM4_CBC + padding.name, BouncyCastleProvider.PROVIDER_NAME);
     }
 
     /**

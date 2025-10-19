@@ -25,8 +25,8 @@ import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,31 +40,31 @@ public class GetProvider <T extends JpaEntity>{
 	
 	public String get(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
+		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
 		
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
 		sql.WHERE(" %s = #{%s}"
 				.formatted(
-						idFieldColumnMapper.getColumnName(),
-						idFieldColumnMapper.getFieldName())
+						idFieldColumnMapper.getColumn(),
+						idFieldColumnMapper.getField())
 				);
 		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE(" %s = #{%s} ".formatted(
-					partitionKeyColumnMapper.getColumnName() ,
+					partitionKeyColumnMapper.getColumn() ,
 					partitionKeyValue));
 		}
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}

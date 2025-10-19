@@ -19,8 +19,8 @@ package org.dromara.mybatis.jpa.provider.base;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -41,12 +41,12 @@ public class QueryProvider<T extends JpaEntity> {
 		logger.trace("Query \n{}" , query);
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
 			sql.WHERE("( %s ) and %s = '%s'"
 					.formatted(
 							QueryBuilder.build(query),
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}else {
@@ -69,12 +69,12 @@ public class QueryProvider<T extends JpaEntity> {
 		
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
 			sql.WHERE("( %s ) and %s = '%s'"
 					.formatted(
 							LambdaQueryBuilder.build(lambdaQuery),
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}else {
@@ -94,17 +94,17 @@ public class QueryProvider<T extends JpaEntity> {
 	public String query(T entity) {
 		SQL sql = TableMetadata.buildSelect(entity.getClass());
 
-		for (FieldColumnMapper fieldColumnMapper : FieldMetadata.buildColumnMapper(entity.getClass())) {
-			Object fieldValue = BeanUtil.get(entity, fieldColumnMapper.getFieldName());
+		for (ColumnMapper fieldColumnMapper : ColumnMetadata.buildColumnMapper(entity.getClass())) {
+			Object fieldValue = BeanUtil.get(entity, fieldColumnMapper.getField());
 			String fieldType = fieldColumnMapper.getFieldType().toLowerCase();
 
-			logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumnName(), fieldType,
+			logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumn(), fieldType,
 					fieldValue);
 			if(fieldColumnMapper.isLogicDelete()) {
-				sql.WHERE(fieldColumnMapper.getColumnName() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
+				sql.WHERE(fieldColumnMapper.getColumn() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
 			}else {
 				if(fieldValue == null ) {
-					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getFieldName(),fieldColumnMapper.getColumnName());
+					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getField(),fieldColumnMapper.getColumn());
 					// skip null field value
 				} else if(("string".equals(fieldType) && "".equals(fieldValue))
 						|| ("byte".startsWith(fieldType))
@@ -115,7 +115,7 @@ public class QueryProvider<T extends JpaEntity> {
 						|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
 					// skip default field value
 				}else {
-					sql.WHERE(fieldColumnMapper.getColumnName() + " = #{" + fieldColumnMapper.getFieldName() + "}");
+					sql.WHERE(fieldColumnMapper.getColumn() + " = #{" + fieldColumnMapper.getField() + "}");
 				}
 			}
 		}
@@ -127,12 +127,12 @@ public class QueryProvider<T extends JpaEntity> {
 		logger.trace("count Query \n{}" , query);
 		SQL sql = TableMetadata.buildSelectCount(entityClass);
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
 			sql.WHERE("( %s ) and %s = '%s'"
 					.formatted(
 							QueryBuilder.build(query),
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}else {
@@ -148,12 +148,12 @@ public class QueryProvider<T extends JpaEntity> {
 		
 		SQL sql = TableMetadata.buildSelectCount(entityClass);
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
 			sql.WHERE("( %s ) and %s = '%s'"
 					.formatted(
 							LambdaQueryBuilder.build(lambdaQuery),
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}else {

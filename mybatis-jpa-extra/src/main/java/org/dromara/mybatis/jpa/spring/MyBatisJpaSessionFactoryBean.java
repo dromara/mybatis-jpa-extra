@@ -46,7 +46,7 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
 	
 	private String dialect 					= DialectMapper.DEFAULT_DIALECT;
 	
-	private String cryptKey 				= ReciprocalUtils.defaultKey;
+	private String cryptKey 				= ReciprocalUtils.DEFAULT_KEY;
 	
 	private List<Interceptor> interceptors 	= Collections.emptyList();
 	

@@ -27,8 +27,8 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,18 +41,18 @@ public class FieldEncryptInterceptor  implements Interceptor {
 	public Object intercept(Invocation invocation) throws Throwable {
         //实体对象
         Object entity = invocation.getArgs()[1];
-        List <FieldColumnMapper> listFieldColumn = FieldMetadata.buildColumnMapper(entity.getClass());
+        List <ColumnMapper> listFieldColumn = ColumnMetadata.buildColumnMapper(entity.getClass());
 
-        for (FieldColumnMapper encryptField : listFieldColumn) {
+        for (ColumnMapper encryptField : listFieldColumn) {
         	if(encryptField.isEncrypted()) {
-        		logger.debug("FieldName {} is need {} Encrypted ",encryptField.getFieldName(),encryptField.getEncryptedAnnotation().algorithm());
-	            encryptField.getField().setAccessible(true);
-	            String plainValue = (String) encryptField.getField().get(entity);
+        		logger.debug("FieldName {} is need {} Encrypted ",encryptField.getField(),encryptField.getEncryptedAnnotation().algorithm());
+	            encryptField.getEntityField().setAccessible(true);
+	            String plainValue = (String) encryptField.getEntityField().get(entity);
 	            if(StringUtils.isNotBlank(plainValue) 
 	            		&& plainValue.indexOf("{") == -1 
 	            		&& plainValue.indexOf("}") == -1) {
 		            String cipherValue = decrypt(plainValue,encryptField.getEncryptedAnnotation().algorithm());
-		            encryptField.getField().set(entity, cipherValue);
+		            encryptField.getEntityField().set(entity, cipherValue);
 	            }
         	}
         }

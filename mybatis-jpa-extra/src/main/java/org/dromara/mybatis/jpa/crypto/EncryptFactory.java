@@ -39,7 +39,7 @@ public class EncryptFactory {
 	public EncryptFactory(){
 		encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt());
 		encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt());
-		encryptor.put(ReciprocalUtils.Algorithm.DESede.toLowerCase(), new DesedeEncrypt());
+		encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt());
 		encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt());
 		logger.debug("Encryptor {}",encryptor);
 	}
@@ -49,12 +49,12 @@ public class EncryptFactory {
 		if(StringUtils.isBlank(cryptKey)) {
 			encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt());
 			encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt());
-			encryptor.put(ReciprocalUtils.Algorithm.DESede.toLowerCase(), new DesedeEncrypt());
+			encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt());
 			encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt());
 		}else {
 			encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt(cryptKey));
 			encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt(cryptKey));
-			encryptor.put(ReciprocalUtils.Algorithm.DESede.toLowerCase(), new DesedeEncrypt(cryptKey));
+			encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt(cryptKey));
 			encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt(cryptKey));
 		}
 		logger.debug("Encryptor {}",encryptor);

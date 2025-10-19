@@ -28,8 +28,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -49,7 +49,7 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String softDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
 		
 		StringBuilder keyValue = new StringBuilder();
@@ -61,15 +61,15 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		}
 		// remove ;
 		String keyValues = keyValue.substring(1).replace(";", "");
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(entityClass);
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(entityClass);
+		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
 		
 		SQL sql=new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(" %s = '%s' ".formatted(
-						logicColumnMapper.getColumnName(),
+						logicColumnMapper.getColumn(),
 						logicColumnMapper.getSoftDelete().delete()
 					)
 				);
@@ -77,13 +77,13 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE("%s = #{%s} and %s  in ( %s )"
 					.formatted(
-							partitionKeyColumnMapper.getColumnName() ,
+							partitionKeyColumnMapper.getColumn() ,
 							partitionKeyValue,
-							idFieldColumnMapper.getColumnName(),
-							idFieldColumnMapper.getFieldName())
+							idFieldColumnMapper.getColumn(),
+							idFieldColumnMapper.getField())
         			);  
 		}else {
-			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),keyValues));  
+			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
 		}
 		
         String deleteSql = sql.toString(); 
@@ -93,13 +93,13 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	
 	public String softDeleteByQuery(Class<?> entityClass, Query query) {
 		logger.trace("softDelete By Query \n{}" , query);
-		FieldMetadata.buildColumnMapper(entityClass);
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(" %s = '%s' ".formatted(
-						logicColumnMapper.getColumnName(),
+						logicColumnMapper.getColumn(),
 						logicColumnMapper.getSoftDelete().delete()
 					)
 				).WHERE(QueryBuilder.build(query));
@@ -110,13 +110,13 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 	
 	public String softDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
 		logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
-		FieldMetadata.buildColumnMapper(entityClass);
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(" %s = '%s' ".formatted(
-						logicColumnMapper.getColumnName(),
+						logicColumnMapper.getColumn(),
 						logicColumnMapper.getSoftDelete().delete()
 					)
 				).WHERE(LambdaQueryBuilder.build(lambdaQuery));

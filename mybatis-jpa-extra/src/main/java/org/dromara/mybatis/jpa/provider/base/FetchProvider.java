@@ -27,8 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -53,13 +53,13 @@ public class FetchProvider <T extends JpaEntity>{
 	 */
 	public String fetch(Map<String, Object>  parametersMap) {
 		T entity = (T)parametersMap.get(ConstMetadata.ENTITY);
-		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
+		List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entity.getClass());
 		String[] column = new String[listFields.size()] ;
 		StringBuilder conditions = new StringBuilder();
 		int columnCount = 0;
-		for(FieldColumnMapper fieldColumnMapper : listFields) {
-			String columnName = fieldColumnMapper.getColumnName();
-			String fieldName = fieldColumnMapper.getFieldName();
+		for(ColumnMapper fieldColumnMapper : listFields) {
+			String columnName = fieldColumnMapper.getColumn();
+			String fieldName = fieldColumnMapper.getField();
 			String fieldType = fieldColumnMapper.getFieldType();
 			Object fieldValue = BeanUtil.getValue(entity, fieldName);
 			column[columnCount++] = columnName;
@@ -111,10 +111,10 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetchByQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(ConstMetadata.CONDITION);
-		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entityClass);
+		List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
-			column[i] = listFields.get(i).getColumnName();
+			column[i] = listFields.get(i).getColumn();
 		}
 		SQL sql = new SQL().SELECT(column).FROM(TableMetadata.getTableName(entityClass));
 		
@@ -123,11 +123,11 @@ public class FetchProvider <T extends JpaEntity>{
 			sql.WHERE("( " + conditionString +" ) ");
 		}
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}
@@ -142,10 +142,10 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetchByLambdaQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(ConstMetadata.CONDITION);
-		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entityClass);
+		List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
-			column[i] = listFields.get(i).getColumnName();
+			column[i] = listFields.get(i).getColumn();
 		}
 		SQL sql = new SQL().SELECT(column).FROM(TableMetadata.getTableName(entityClass));
 		
@@ -154,11 +154,11 @@ public class FetchProvider <T extends JpaEntity>{
 			sql.WHERE("( " + conditionString +" ) ");
 		}
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
 			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}

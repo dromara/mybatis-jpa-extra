@@ -59,7 +59,7 @@ public class FetchCountProvider <T extends JpaEntity>{
 		JpaPageSqlCache pageSqlCache = getPageSqlCache(page.getPageSelectId());
 		if(pageSqlCache != null) {
 			//多个空格 tab 替换成1个空格
-			String selectSql = StrUtils.lineBreak2Blank(pageSqlCache.getSql());
+			String selectSql = StrUtils.lineBreakToBlank(pageSqlCache.getSql());
 			
 			BoundSql boundSql = pageSqlCache.getBoundSql();
 			logger.trace("Count original SQL  :\n{}" , selectSql);

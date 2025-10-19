@@ -28,13 +28,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Temporal;
 
-public class FieldColumnMapper {
-	
-	private Field 			field;
+public class ColumnMapper {
+
+    private Field           entityField;
 	/**
 	 * class field name
 	 */
-	private String 			fieldName;
+	private String 			field;
 	
 	/**
 	 * class field type
@@ -44,7 +44,7 @@ public class FieldColumnMapper {
 	/**
 	 * table column name
 	 */
-	private String 			columnName;
+	private String 			column;
 	
 	private boolean 		idColumn	=	false;
 	
@@ -68,35 +68,35 @@ public class FieldColumnMapper {
 	
 	private Encrypted     	encryptedAnnotation;
 	
-	public FieldColumnMapper() {
+	public ColumnMapper() {
 		
 	}
 	
-	public FieldColumnMapper(Field field,String fieldName, String fieldType, String columnName) {
+	public ColumnMapper(Field entityField,String field, String fieldType, String columnName) {
 		super();
+		this.entityField = entityField; 
 		this.field = field;
-		this.fieldName = fieldName;
 		this.fieldType = fieldType;
-		this.columnName = columnName;
-	}
-	
-	public Field getField() {
-		return field;
+		this.column = columnName;
 	}
 
-	public void setField(Field field) {
-		this.field = field;
-	}
+	public Field getEntityField() {
+        return entityField;
+    }
 
-	public String getFieldName() {
-		return fieldName;
-	}
+    public void setEntityField(Field entityField) {
+        this.entityField = entityField;
+    }
 
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
-	}
+    public String getField() {
+        return field;
+    }
 
-	public String getFieldType() {
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getFieldType() {
 		return fieldType;
 	}
 
@@ -104,12 +104,12 @@ public class FieldColumnMapper {
 		this.fieldType = fieldType;
 	}
 
-	public String getColumnName() {
-		return columnName;
+	public String getColumn() {
+		return column;
 	}
 
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
+	public void setColumn(String columnName) {
+		this.column = columnName;
 	}
 
 	public boolean isIdColumn() {
@@ -201,38 +201,38 @@ public class FieldColumnMapper {
 	}
 
 	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("FieldColumnMapper [fieldName=");
-		builder.append(fieldName);
-		builder.append(", fieldType=");
-		builder.append(fieldType);
-		builder.append(", columnName=");
-		builder.append(columnName);
-		builder.append(", idColumn=");
-		builder.append(idColumn);
-		builder.append(", generated=");
-		builder.append(generated);
-		builder.append(", logicDelete=");
-		builder.append(logicDelete);
-		builder.append(", encrypted=");
-		builder.append(encrypted);
-		builder.append(", generatedValue=");
-		builder.append(generatedValue);
-		builder.append(", columnAnnotation=");
-		builder.append(columnAnnotation);
-		builder.append(", temporalAnnotation=");
-		builder.append(temporalAnnotation);
-		builder.append(", columnDefault=");
-		builder.append(columnDefault);
-		builder.append(", partitionKey=");
-		builder.append(partitionKey);
-		builder.append(", softDelete=");
-		builder.append(softDelete);
-		builder.append(", encryptedAnnotation=");
-		builder.append(encryptedAnnotation);
-		builder.append("]");
-		return builder.toString();
-	}
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ColumnMapper [field=");
+        builder.append(field);
+        builder.append(", fieldType=");
+        builder.append(fieldType);
+        builder.append(", column=");
+        builder.append(column);
+        builder.append(", idColumn=");
+        builder.append(idColumn);
+        builder.append(", generated=");
+        builder.append(generated);
+        builder.append(", logicDelete=");
+        builder.append(logicDelete);
+        builder.append(", encrypted=");
+        builder.append(encrypted);
+        builder.append(", generatedValue=");
+        builder.append(generatedValue);
+        builder.append(", columnAnnotation=");
+        builder.append(columnAnnotation);
+        builder.append(", temporalAnnotation=");
+        builder.append(temporalAnnotation);
+        builder.append(", columnDefault=");
+        builder.append(columnDefault);
+        builder.append(", partitionKey=");
+        builder.append(partitionKey);
+        builder.append(", softDelete=");
+        builder.append(softDelete);
+        builder.append(", encryptedAnnotation=");
+        builder.append(encryptedAnnotation);
+        builder.append("]");
+        return builder.toString();
+    }
 
 }

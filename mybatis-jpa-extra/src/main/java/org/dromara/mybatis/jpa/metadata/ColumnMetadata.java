@@ -37,27 +37,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.Transient;
 
-public class FieldMetadata {
-	private static final Logger logger 	= 	LoggerFactory.getLogger(FieldMetadata.class);
+public class ColumnMetadata {
+	private static final Logger logger 	= 	LoggerFactory.getLogger(ColumnMetadata.class);
 	
-	static ConcurrentMap<String, List<FieldColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, List<ColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
 	
-	static ConcurrentMap<String, FieldColumnMapper> logicColumnMap 		= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, ColumnMapper> logicColumnMap 		= 	new ConcurrentHashMap<>();
 	
-	static ConcurrentMap<String, FieldColumnMapper> idColumnMap 		= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, ColumnMapper> idColumnMap 		= 	new ConcurrentHashMap<>();
 	
-	static ConcurrentMap<String, FieldColumnMapper> partitionKeyMap 		= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, ColumnMapper> partitionKeyMap 		= 	new ConcurrentHashMap<>();
 	
 	
-	public static  FieldColumnMapper getIdColumn(Class<?> entityClass) {
+	public static  ColumnMapper getIdColumn(Class<?> entityClass) {
 		return idColumnMap.get(entityClass.getName());
 	}
 	
-	public static  FieldColumnMapper getLogicColumn(Class<?> entityClass) {
+	public static  ColumnMapper getLogicColumn(Class<?> entityClass) {
 		return logicColumnMap.get(entityClass.getName());
 	}
 	
-	public static  FieldColumnMapper getPartitionKey(Class<?> entityClass) {
+	public static  ColumnMapper getPartitionKey(Class<?> entityClass) {
 		return partitionKeyMap.get(entityClass.getName());
 	}
 	
@@ -69,18 +69,18 @@ public class FieldMetadata {
 	public static String selectColumnMapper(Class<?> entityClass) {
 		StringBuilder  selectColumn = new StringBuilder (ConstMetadata.SELECT_TMP_TABLE + ".* ");
 		int columnCount = 0;
-		for(FieldColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
+		for(ColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
 			columnCount ++;
 			//不同的属性和数据库字段不一致的需要进行映射
-			if(!fieldColumnMapper.getColumnName().equalsIgnoreCase(fieldColumnMapper.getFieldName())) {
+			if(!fieldColumnMapper.getColumn().equalsIgnoreCase(fieldColumnMapper.getField())) {
 				selectColumn.append(",")
-							.append(fieldColumnMapper.getColumnName())
+							.append(fieldColumnMapper.getColumn())
 							.append(" ")
-							.append(fieldColumnMapper.getFieldName());
+							.append(fieldColumnMapper.getField());
 			}
 			if(logger.isTraceEnabled()) {
 				logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-					String.format(ConstMetadata.LOG_FORMAT_COUNT, columnCount),String.format(ConstMetadata.LOG_FORMAT, fieldColumnMapper.getColumnName()),fieldColumnMapper.getFieldName());
+					String.format(ConstMetadata.LOG_FORMAT_COUNT, columnCount),String.format(ConstMetadata.LOG_FORMAT, fieldColumnMapper.getColumn()),fieldColumnMapper.getField());
 			}
 		}
 		return selectColumn.toString();
@@ -90,12 +90,12 @@ public class FieldMetadata {
 	 * buildColumnList
 	 * @param entityClass
 	 */
-	public static List<FieldColumnMapper> buildColumnMapper(Class<?> entityClass) {
+	public static List<ColumnMapper> buildColumnMapper(Class<?> entityClass) {
 		String entityClassName = entityClass.getName();
 		if (!fieldsMap.containsKey(entityClassName)) {	
 			logger.trace("entityClass {}" , entityClass);
 			Field[] fields = entityClass.getDeclaredFields();
-			List<FieldColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
+			List<ColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
 	
 			for (Field field : fields) {
 				//skip Transient field
@@ -115,8 +115,8 @@ public class FieldMetadata {
 					columnName = MapperMetadata.tableOrColumnCaseConverter(columnName);
 					columnName = MapperMetadata.tableOrColumnEscape(columnName);
 					
-					FieldColumnMapper fieldColumnMapper = 
-							new FieldColumnMapper(field,field.getName(),field.getType().getSimpleName(),columnName);
+					ColumnMapper fieldColumnMapper = 
+							new ColumnMapper(field,field.getName(),field.getType().getSimpleName(),columnName);
 					fieldColumnMapper.setColumnAnnotation(columnAnnotation);
 					
 					if(field.isAnnotationPresent(Id.class)) {

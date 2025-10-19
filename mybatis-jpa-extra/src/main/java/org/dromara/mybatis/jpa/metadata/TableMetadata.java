@@ -39,8 +39,8 @@ public class TableMetadata {
 	 * @return select columns  from table name sel_tmp_table
 	 */
 	public static SQL buildSelect(Class<?> entityClass) {
-		FieldMetadata.buildColumnMapper(entityClass);
-		return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
+		ColumnMetadata.buildColumnMapper(entityClass);
+		return new SQL().SELECT(ColumnMetadata.selectColumnMapper(entityClass))
 				.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 	}
 	
@@ -50,7 +50,7 @@ public class TableMetadata {
 	 * @return select columns  from table name sel_tmp_table
 	 */
 	public static SQL buildSelectCount(Class<?> entityClass) {
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		return new SQL().SELECT(" count(1) as _select_count ")
 				.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 	}
@@ -61,12 +61,12 @@ public class TableMetadata {
 	 * @return select columns  from table name sel_tmp_table
 	 */
 	public static SQL buildSelect(Class<?> entityClass , boolean distinct) {
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		if(distinct) {
-			return new SQL().SELECT_DISTINCT(FieldMetadata.selectColumnMapper(entityClass))
+			return new SQL().SELECT_DISTINCT(ColumnMetadata.selectColumnMapper(entityClass))
 				.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 		}else {
-			return new SQL().SELECT(FieldMetadata.selectColumnMapper(entityClass))
+			return new SQL().SELECT(ColumnMetadata.selectColumnMapper(entityClass))
 					.FROM(TableMetadata.getTableName(entityClass) + ConstMetadata.SELECT_TMP_TABLE);
 		}
 	}

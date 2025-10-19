@@ -24,8 +24,8 @@ import java.util.List;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -51,16 +51,16 @@ public class UpdateProvider <T extends JpaEntity>{
 	 * @return update sql String
 	 */
 	public String update(T entity) {
-		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
+		List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entity.getClass());
 		
 		SQL sql = new SQL()
 			.UPDATE(TableMetadata.getTableName(entity.getClass()));
 		
-		FieldColumnMapper partitionKey = null;
-		FieldColumnMapper idFieldColumnMapper = null;
-		for(FieldColumnMapper fieldColumnMapper : listFields) {
-			String columnName = fieldColumnMapper.getColumnName();
-			String fieldName = fieldColumnMapper.getFieldName();
+		ColumnMapper partitionKey = null;
+		ColumnMapper idFieldColumnMapper = null;
+		for(ColumnMapper fieldColumnMapper : listFields) {
+			String columnName = fieldColumnMapper.getColumn();
+			String fieldName = fieldColumnMapper.getField();
 			String fieldType = fieldColumnMapper.getFieldType();
 			Object fieldValue = BeanUtil.getValue(entity, fieldName);
 			boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
@@ -102,13 +102,13 @@ public class UpdateProvider <T extends JpaEntity>{
 						%s = #{%s}
 						and %s = #{%s}
 						""".formatted(
-								partitionKey.getColumnName(),
-								partitionKey.getFieldName(),
-								idFieldColumnMapper.getColumnName(),
-								idFieldColumnMapper.getFieldName())
+								partitionKey.getColumn(),
+								partitionKey.getField(),
+								idFieldColumnMapper.getColumn(),
+								idFieldColumnMapper.getField())
 						);
 			}else {
-				sql.WHERE("%s = #{%s}" .formatted(idFieldColumnMapper.getColumnName(),idFieldColumnMapper.getFieldName()));
+				sql.WHERE("%s = #{%s}" .formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));
 			}
 			logger.trace("Update SQL : \n{}" , sql);
 			return sql.toString();
@@ -119,7 +119,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByQuery(Class<?> entityClass,String setSql, Query query) {
 		logger.trace("update By Query \n{}" , query);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(setSql).WHERE(QueryBuilder.build(query));
@@ -130,7 +130,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByLambdaQuery(Class<?> entityClass,String setSql, LambdaQuery<T> lambdaQuery) {
 		logger.trace("update By LambdaQuery \n{}" , lambdaQuery);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
@@ -143,7 +143,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByUpdateWrapper(Class<?> entityClass, UpdateWrapper updateWrapper) {
 		logger.trace("update By UpdateWrapper \n{}" , updateWrapper);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
@@ -156,7 +156,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	
 	public String updateByLambdaUpdateWrapper(Class<?> entityClass, LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
 		logger.trace("update By LambdaUpdateWrapper \n{}" , lambdaUpdateWrapper);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))

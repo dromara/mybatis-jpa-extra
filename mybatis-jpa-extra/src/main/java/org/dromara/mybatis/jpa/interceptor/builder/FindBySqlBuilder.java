@@ -23,8 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.metadata.findby.FindByKeywords;
 import org.dromara.mybatis.jpa.metadata.findby.FindByMapper;
@@ -52,13 +52,13 @@ public class FindBySqlBuilder {
 	
 	public static String translate(FindByMapper findByMapper,Object parameterObject) {
 		findByMapper.parseEntityClass();
-		List<FieldColumnMapper> entityFields = FieldMetadata.buildColumnMapper(findByMapper.getEntityClass());
+		List<ColumnMapper> entityFields = ColumnMetadata.buildColumnMapper(findByMapper.getEntityClass());
 		Query q = Query.builder();
 		String fieldNameStart = findByMapper.getRemovedFindByName();
 		int argIndex = 0;
-		for(FieldColumnMapper fcm: entityFields) {
-			String fieldName = fcm.getFieldName();
-			String columnName = fcm.getColumnName();
+		for(ColumnMapper fcm: entityFields) {
+			String fieldName = fcm.getField();
+			String columnName = fcm.getColumn();
 			String findByKeyword = "";
 			String capitalizeFieldName = StringUtils.capitalize(fieldName);
 			if(fieldNameStart.startsWith(capitalizeFieldName)) {
@@ -124,11 +124,11 @@ public class FindBySqlBuilder {
 		SQL selectSql = TableMetadata.buildSelect(findByMapper.getEntityClass(),findByMapper.isDistinct());
 		selectSql.WHERE("( " + QueryBuilder.build(q) + " )");
 
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(findByMapper.getEntityClass());
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(findByMapper.getEntityClass());
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			selectSql.WHERE(" %s = '%s'"
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}
@@ -140,12 +140,12 @@ public class FindBySqlBuilder {
 		return selectSql.toString();
 	}
 	
-	public static String getColumnNameFromEntityFields(List<FieldColumnMapper> entityFields , String fieldNameStart) {
+	public static String getColumnNameFromEntityFields(List<ColumnMapper> entityFields , String fieldNameStart) {
 		String columnName = "";
-		for(FieldColumnMapper fcm: entityFields) {
-			String fieldName = fcm.getFieldName();
+		for(ColumnMapper fcm: entityFields) {
+			String fieldName = fcm.getField();
 			if(fieldNameStart.startsWith(StringUtils.capitalize(fieldName))) {
-				columnName = fcm.getColumnName();
+				columnName = fcm.getColumn();
 				break;
 			}
 		}

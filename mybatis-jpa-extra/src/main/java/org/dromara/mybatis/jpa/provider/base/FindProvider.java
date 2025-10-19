@@ -29,8 +29,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
@@ -45,14 +45,14 @@ public class FindProvider <T extends JpaEntity>{
 	
 	public String findAll(Map<String, Object>  parametersMap) {  
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		
 		SQL sql=  TableMetadata.buildSelect(entityClass);
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}
@@ -67,14 +67,14 @@ public class FindProvider <T extends JpaEntity>{
 		int[] argTypes 	 = (int[]) parametersMap.get(ConstMetadata.QUERY_ARGTYPES);
 		String filterSql = parametersMap.get(ConstMetadata.QUERY_FILTER).toString().trim();
 		
-		FieldMetadata.buildColumnMapper(entityClass);
+		ColumnMetadata.buildColumnMapper(entityClass);
 		
 		if(filterSql.toLowerCase().startsWith("where")) {
 			filterSql = filterSql.substring(5);
 		}
 		
 		if(args == null || args.length == 0) {
-			filterSql = StrUtils.lineBreak2Blank(filterSql);
+			filterSql = StrUtils.lineBreakToBlank(filterSql);
 		}else {
 			int countMatches = StringUtils.countMatches(filterSql, "?");
 			if(args.length < countMatches) {
@@ -110,16 +110,16 @@ public class FindProvider <T extends JpaEntity>{
 				}
 				logger.trace("Find append {} time SQL [{}]" ,i + 1, sqlBuffer);
 			}
-			filterSql = StrUtils.lineBreak2Blank(sqlBuffer.toString());
+			filterSql = StrUtils.lineBreakToBlank(sqlBuffer.toString());
 		}
 		
 		SQL sql = TableMetadata.buildSelect(entityClass).WHERE("( " + filterSql +" )");
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(entityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}
@@ -132,7 +132,7 @@ public class FindProvider <T extends JpaEntity>{
 	@SuppressWarnings("unchecked")
 	public String findByIds(Map<String, Object>  parametersMap) { 
 		Class<?> parameterEntityClass = (Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		FieldMetadata.buildColumnMapper(parameterEntityClass);
+		ColumnMetadata.buildColumnMapper(parameterEntityClass);
 		List <String> parameterIds = (List<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
 		
 		StringBuilder keyValues = new StringBuilder();
@@ -146,28 +146,28 @@ public class FindProvider <T extends JpaEntity>{
 		//remove ';'
 		String idsValues = keyValues.substring(1).replace(";", "");
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		FieldColumnMapper partitionKeyColumnMapper = FieldMetadata.getPartitionKey(parameterEntityClass);
-		FieldColumnMapper idFieldColumnMapper = FieldMetadata.getIdColumn(parameterEntityClass);
+		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(parameterEntityClass);
+		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(parameterEntityClass);
 		
 		SQL sql = TableMetadata.buildSelect(parameterEntityClass);
 		
 		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
 			sql.WHERE("%s = #{%s} and %s  in ( %s )"
 					.formatted(
-							partitionKeyColumnMapper.getColumnName() ,
+							partitionKeyColumnMapper.getColumn() ,
 							partitionKeyValue,
-							idFieldColumnMapper.getColumnName(),
+							idFieldColumnMapper.getColumn(),
 							idsValues)
         			);  
 		}else {
-			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumnName(),idsValues));  
+			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),idsValues));  
 		}
 		
-		FieldColumnMapper logicColumnMapper = FieldMetadata.getLogicColumn(parameterEntityClass);
+		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(parameterEntityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
 			sql.WHERE(" %s = '%s'"
 					.formatted(
-							logicColumnMapper.getColumnName(),
+							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
 		}

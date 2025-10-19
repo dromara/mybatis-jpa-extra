@@ -27,8 +27,8 @@ import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.id.IdentifierStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
-import org.dromara.mybatis.jpa.metadata.FieldColumnMapper;
-import org.dromara.mybatis.jpa.metadata.FieldMetadata;
+import org.dromara.mybatis.jpa.metadata.ColumnMapper;
+import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.util.BeanUtil;
 import org.slf4j.Logger;
@@ -49,17 +49,17 @@ public class InsertProvider <T extends JpaEntity>{
 	 * @return insert sql String
 	 */
 	public String insert(T entity) {
-		List<FieldColumnMapper> listFields = FieldMetadata.buildColumnMapper(entity.getClass());
+		List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entity.getClass());
 		
 		SQL sql = new SQL().INSERT_INTO(TableMetadata.getTableName(entity.getClass()));
 		if(logger.isTraceEnabled()) {
-			for (FieldColumnMapper fieldColumnMapper : listFields) {
+			for (ColumnMapper fieldColumnMapper : listFields) {
 				logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
 			}
 		}
-		for (FieldColumnMapper fieldColumnMapper : listFields) {
-			String columnName = fieldColumnMapper.getColumnName();
-			String fieldName = fieldColumnMapper.getFieldName();
+		for (ColumnMapper fieldColumnMapper : listFields) {
+			String columnName = fieldColumnMapper.getColumn();
+			String fieldName = fieldColumnMapper.getField();
 			String fieldType = fieldColumnMapper.getFieldType();
 			Object fieldValue = BeanUtil.getValue(entity, fieldName);
 			boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
@@ -94,7 +94,7 @@ public class InsertProvider <T extends JpaEntity>{
 		return sql.toString();
 	}
 	
-	private void  generatedValue(SQL sql , T entity , FieldColumnMapper fieldColumnMapper) {
+	private void  generatedValue(SQL sql , T entity , ColumnMapper fieldColumnMapper) {
 		//have @GeneratedValue and (value is null or eq "")
 		GeneratedValue generatedValue = fieldColumnMapper.getGeneratedValue();
 		if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
@@ -107,15 +107,15 @@ public class InsertProvider <T extends JpaEntity>{
 				genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
 			}
 			if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
-				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),genValue);
+				BeanUtil.set(entity, fieldColumnMapper.getField(),genValue);
 			}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
-				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),Integer.valueOf(genValue));
+				BeanUtil.set(entity, fieldColumnMapper.getField(),Integer.valueOf(genValue));
 			}else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
-				BeanUtil.set(entity, fieldColumnMapper.getFieldName(),Long.valueOf(genValue));
+				BeanUtil.set(entity, fieldColumnMapper.getField(),Long.valueOf(genValue));
 			}
-			sql.VALUES(fieldColumnMapper.getColumnName(),"#{%s}".formatted(fieldColumnMapper.getFieldName()));
+			sql.VALUES(fieldColumnMapper.getColumn(),"#{%s}".formatted(fieldColumnMapper.getField()));
 		}else if(generatedValue.strategy()==GenerationType.SEQUENCE){
-			sql.VALUES(fieldColumnMapper.getColumnName(),generatedValue.generator()+".nextval");
+			sql.VALUES(fieldColumnMapper.getColumn(),generatedValue.generator()+".nextval");
 		}else if(generatedValue.strategy()==GenerationType.IDENTITY){
 			//skip
 		}else if(generatedValue.strategy()==GenerationType.TABLE){
