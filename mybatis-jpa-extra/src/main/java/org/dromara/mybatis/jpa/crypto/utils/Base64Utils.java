@@ -39,13 +39,11 @@ public class Base64Utils {
 
     }
     public static String encodeBase64(byte[] simple) {
-        String cipher = BytesUtils.bytes2String(Base64.encodeBase64(simple));
-        return cipher;
+        return BytesUtils.bytes2String(Base64.encodeBase64(simple));
     }
 
     public static byte[] decoderBase64(String cipher) {
-        byte[] simple = Base64.decodeBase64(cipher);
-        return simple;
+        return Base64.decodeBase64(cipher);
     }
 
     public static String encode(String simple) {
@@ -94,9 +92,7 @@ public class Base64Utils {
     public static String fileToBase64(String fileName) throws IOException {
         File file = new File(fileName);
         try (FileInputStream inputFile = new FileInputStream(file)){
-            byte[] buffer = new byte[(int) file.length()];
-            inputFile.read(buffer);
-            inputFile.close();
+            byte[] buffer = inputFile.readAllBytes();
             return encodeBase64(buffer);
         } catch (FileNotFoundException e) {
         	logger.error("error",e);
@@ -114,7 +110,7 @@ public class Base64Utils {
      */
 
     public static void decodeBase64ToFile(String base64Code, String targetPath) {
-    	logger.trace("decodeBase64ToFile",base64Code,targetPath);
+    	logger.trace("decodeBase64ToFile {} , {}",base64Code,targetPath);
     }
 
     /**
@@ -129,7 +125,6 @@ public class Base64Utils {
         byte[] buffer = base64Code.getBytes();
         try (FileOutputStream out = new FileOutputStream(targetPath)) {
             out.write(buffer);
-            out.close();
         }catch (FileNotFoundException e){
         	logger.info("error",e);
         }

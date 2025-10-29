@@ -38,12 +38,11 @@ public interface IJpaUpdateMapper<T> {
 	public Integer updateByQuery(Class<?> entityClass , String setSql, Query query);	
 	
 	@UpdateProvider(type = MapperProvider.class, method = "updateByLambdaQuery")
-	public Integer updateByLambdaQuery(Class<?> entityClass , String setSql, LambdaQuery<T> lambdaQuery);		
+	public Integer updateByLambdaQuery(Class<?> entityClass , String setSql, LambdaQuery<T> lambdaQuery);			
 	
 	@UpdateProvider(type = MapperProvider.class, method = "updateByUpdateWrapper")
 	public Integer updateByUpdateWrapper(Class<?> entityClass , UpdateWrapper updateWrapper);	
 	
 	@UpdateProvider(type = MapperProvider.class, method = "updateByLambdaUpdateWrapper")
 	public Integer updateByLambdaUpdateWrapper(Class<?> entityClass ,LambdaUpdateWrapper<T> lambdaUpdateWrapper);	
-	
 }

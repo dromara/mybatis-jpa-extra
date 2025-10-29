@@ -18,19 +18,9 @@
 package org.dromara.mybatis.jpa.query;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
 
-public class Query {
-	
-	ArrayList<Condition> conditions = new ArrayList<>();
-	
-	ArrayList<Condition> groupBy ;
-	
-	ArrayList<Condition> orderBy ;
-	
-	boolean softDelete = true;
+public class Query extends BaseQuery {
 	
 	public Query() {
 		super();
@@ -38,14 +28,6 @@ public class Query {
 
 	public static Query builder(){
 		return new Query();
-	}
-	
-	public List<Condition> getConditions() {
-		return conditions;
-	}
-
-	public List<Condition> getOrderBy() {
-		return orderBy;
 	}
 
 	public void joint() {
@@ -393,18 +375,6 @@ public class Query {
 		}
 		orderBy.add(new Condition(Operator.ORDER,column,orderType));
 		return this;
-	}
-
-	public List<Condition> getGroupBy() {
-		return groupBy;
-	}
-
-	public boolean isSoftDelete() {
-		return softDelete;
-	}
-
-	public void setSoftDelete(boolean softDelete) {
-		this.softDelete = softDelete;
 	}
 
 	@Override

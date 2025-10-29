@@ -20,12 +20,20 @@ package org.dromara.mybatis.jpa.interceptor.builder;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class SelectPageSql {
-	
+	/**
+	 * select 语句标记
+	 */
 	boolean selectTrack;
 	
+	/**
+     * 是否分页标识
+     */
+    boolean pageable;
+    
+    /**
+     * 数据分页对象
+     */
 	JpaPage page;
-	
-	boolean pageable;
 
 	public SelectPageSql() {
 	}
@@ -59,5 +67,18 @@ public class SelectPageSql {
 	public void setPageable(boolean pageable) {
 		this.pageable = pageable;
 	}
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("SelectPageSql [selectTrack=");
+        builder.append(selectTrack);
+        builder.append(", pageable=");
+        builder.append(pageable);
+        builder.append(", page=");
+        builder.append(page);
+        builder.append("]");
+        return builder.toString();
+    }
 	
 }

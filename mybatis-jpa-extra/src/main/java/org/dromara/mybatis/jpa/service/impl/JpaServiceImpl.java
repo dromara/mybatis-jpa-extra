@@ -20,8 +20,6 @@ package org.dromara.mybatis.jpa.service.impl;
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.repository.impl.JpaRepositoryImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,7 +28,6 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T>
  */
-public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> extends JpaRepositoryImpl< M , T >{
-	private static final  Logger logger = LoggerFactory.getLogger(JpaServiceImpl.class);
+public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> extends JpaRepositoryImpl<M , T> {
 
 }

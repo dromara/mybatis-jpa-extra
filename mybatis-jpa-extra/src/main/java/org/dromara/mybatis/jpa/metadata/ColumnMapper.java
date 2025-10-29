@@ -29,8 +29,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Temporal;
 
 public class ColumnMapper {
-
-    private Field           entityField;
+	
+	private Field 			entityField;
 	/**
 	 * class field name
 	 */
@@ -72,23 +72,23 @@ public class ColumnMapper {
 		
 	}
 	
-	public ColumnMapper(Field entityField,String field, String fieldType, String columnName) {
+	public ColumnMapper(Field entityField,String field, String fieldType, String column) {
 		super();
-		this.entityField = entityField; 
+		this.entityField = entityField;
 		this.field = field;
 		this.fieldType = fieldType;
-		this.column = columnName;
+		this.column = column;
+	}
+	
+	public Field getEntityField() {
+		return entityField;
 	}
 
-	public Field getEntityField() {
-        return entityField;
-    }
+	public void setEntityField(Field entityField) {
+		this.entityField = entityField;
+	}
 
-    public void setEntityField(Field entityField) {
-        this.entityField = entityField;
-    }
-
-    public String getField() {
+	public String getField() {
         return field;
     }
 
@@ -104,12 +104,16 @@ public class ColumnMapper {
 		this.fieldType = fieldType;
 	}
 
+	/**
+	 * get table column name
+	 * @return string
+	 */
 	public String getColumn() {
 		return column;
 	}
 
-	public void setColumn(String columnName) {
-		this.column = columnName;
+	public void setColumn(String column) {
+		this.column = column;
 	}
 
 	public boolean isIdColumn() {
@@ -201,38 +205,38 @@ public class ColumnMapper {
 	}
 
 	@Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ColumnMapper [field=");
-        builder.append(field);
-        builder.append(", fieldType=");
-        builder.append(fieldType);
-        builder.append(", column=");
-        builder.append(column);
-        builder.append(", idColumn=");
-        builder.append(idColumn);
-        builder.append(", generated=");
-        builder.append(generated);
-        builder.append(", logicDelete=");
-        builder.append(logicDelete);
-        builder.append(", encrypted=");
-        builder.append(encrypted);
-        builder.append(", generatedValue=");
-        builder.append(generatedValue);
-        builder.append(", columnAnnotation=");
-        builder.append(columnAnnotation);
-        builder.append(", temporalAnnotation=");
-        builder.append(temporalAnnotation);
-        builder.append(", columnDefault=");
-        builder.append(columnDefault);
-        builder.append(", partitionKey=");
-        builder.append(partitionKey);
-        builder.append(", softDelete=");
-        builder.append(softDelete);
-        builder.append(", encryptedAnnotation=");
-        builder.append(encryptedAnnotation);
-        builder.append("]");
-        return builder.toString();
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("FieldColumnMapper [fieldName=");
+		builder.append(field);
+		builder.append(", fieldType=");
+		builder.append(fieldType);
+		builder.append(", columnName=");
+		builder.append(column);
+		builder.append(", idColumn=");
+		builder.append(idColumn);
+		builder.append(", generated=");
+		builder.append(generated);
+		builder.append(", logicDelete=");
+		builder.append(logicDelete);
+		builder.append(", encrypted=");
+		builder.append(encrypted);
+		builder.append(", generatedValue=");
+		builder.append(generatedValue);
+		builder.append(", columnAnnotation=");
+		builder.append(columnAnnotation);
+		builder.append(", temporalAnnotation=");
+		builder.append(temporalAnnotation);
+		builder.append(", columnDefault=");
+		builder.append(columnDefault);
+		builder.append(", partitionKey=");
+		builder.append(partitionKey);
+		builder.append(", softDelete=");
+		builder.append(softDelete);
+		builder.append(", encryptedAnnotation=");
+		builder.append(encryptedAnnotation);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }

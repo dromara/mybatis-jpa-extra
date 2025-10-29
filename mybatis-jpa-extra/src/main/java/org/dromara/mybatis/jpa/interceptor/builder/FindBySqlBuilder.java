@@ -31,6 +31,7 @@ import org.dromara.mybatis.jpa.metadata.findby.FindByMapper;
 import org.dromara.mybatis.jpa.metadata.findby.FindByMetadata;
 import org.dromara.mybatis.jpa.metadata.findby.FindByKeywords.KEY;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.query.builder.ConditionBuilder;
 import org.dromara.mybatis.jpa.query.builder.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +135,7 @@ public class FindBySqlBuilder {
 		}
 		
 		if (q.getOrderBy() != null) {
-			selectSql.ORDER_BY(QueryBuilder.buildOrderBy(q));
+			selectSql.ORDER_BY(ConditionBuilder.buildOrderBy(q.getOrderBy()));
 		}
 		logger.trace("selectSql : \n{}" , selectSql);
 		return selectSql.toString();

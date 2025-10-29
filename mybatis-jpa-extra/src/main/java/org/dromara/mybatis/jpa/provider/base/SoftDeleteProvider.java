@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 public class SoftDeleteProvider <T extends JpaEntity>{	
 	static final Logger logger 	= 	LoggerFactory.getLogger(SoftDeleteProvider.class);
 
-	
 	@SuppressWarnings("unchecked")
 	public String softDelete(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
@@ -59,7 +58,9 @@ public class SoftDeleteProvider <T extends JpaEntity>{
 				logger.trace("softDelete by id {}" , value);
 			}
 		}
-		// remove ;
+		/**
+		 *  remove ;
+		 */
 		String keyValues = keyValue.substring(1).replace(";", "");
 		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);

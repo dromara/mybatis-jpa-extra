@@ -35,9 +35,9 @@ import org.dromara.mybatis.jpa.provider.SqlMapperProvider;
  */
 public interface IJpaSqlMapper {
 
-	@SelectProvider(type = MapperProvider.class, method = "fetchCount")
-	public Integer fetchCount(JpaPage page);
-	
+   @SelectProvider(type = MapperProvider.class, method = "fetchCount")
+   public Integer fetchCount(JpaPage page);
+    
    /**
     * 查询数据返回
     *

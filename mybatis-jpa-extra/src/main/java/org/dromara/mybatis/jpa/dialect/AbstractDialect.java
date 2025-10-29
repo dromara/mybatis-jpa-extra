@@ -53,11 +53,11 @@ public abstract class AbstractDialect implements Dialect{
 	}
 	
 	public String getPreparedStatementLimitString(String query, JpaPage page) {
-		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
+		throw new UnsupportedOperationException( "PreparedStatement Paged queries not supported by " + getClass().getName());
 	}
 	
 	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage pagination) {
-		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
+		throw new UnsupportedOperationException( "Limit Paramter Paged queries not supported by " + getClass().getName());
 	}
 	
 	public boolean supportsLimit() {

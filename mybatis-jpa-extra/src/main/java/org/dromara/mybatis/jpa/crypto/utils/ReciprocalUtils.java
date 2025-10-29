@@ -23,7 +23,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.StringUtils;
-import org.dromara.mybatis.jpa.util.StringGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,14 +41,14 @@ import org.slf4j.LoggerFactory;
 public final class ReciprocalUtils {
 	private static final  Logger logger = LoggerFactory.getLogger(ReciprocalUtils.class);
 	
-    public static final String DEFAULT_KEY      = "l0JqT7NvIzP9oRaG4kFc1QmD_bWu3x8E5yS2h6"; //
+    public static final String DEFAULT_KEY 		= "l0JqT7NvIzP9oRaG4kFc1QmD_bWu3x8E5yS2h6"; //
 
     public final class Algorithm {
-        public static final String DES          = "DES";
-        public static final String TRIPLE_DES   = "DESede";
-        public static final String BLOWFISH     = "Blowfish";
-        public static final String AES 		   = "AES";
-        public static final String SM4 		   = "SM4";
+        public static final String DES 			= "DES";
+        public static final String TRIPLE_DES 	= "DESede";
+        public static final String BLOWFISH 	= "Blowfish";
+        public static final String AES 			= "AES";
+        public static final String SM4 			= "SM4";
     }
 
 /*
@@ -78,7 +77,7 @@ public final class ReciprocalUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return byteFinal;
     }
 
     /**
@@ -88,7 +87,7 @@ public final class ReciprocalUtils {
      * @throws Exception
      */
     public static byte[] encode(String simple, String secretKey, String algorithm) {
-        if (StringUtils.isNotBlank(simple) && keyLengthCheck(secretKey, algorithm)) {
+        if (StringUtils.isNotBlank(simple) && checkKeyLength(secretKey, algorithm)) {
             SecretKey key = generatorKey(secretKey, algorithm);
             return encode(simple.getBytes(StandardCharsets.UTF_8), key, algorithm);
         }
@@ -110,7 +109,7 @@ public final class ReciprocalUtils {
     }
 
     public static String decoder(byte[] ciphersBytes, String secretKey, String algorithm) {
-        if (keyLengthCheck(secretKey, algorithm)) {
+        if (checkKeyLength(secretKey, algorithm)) {
             SecretKey key = generatorKey(secretKey, algorithm);
             byte[] decoderBytes = decoder(ciphersBytes, key, algorithm);
 			
@@ -146,7 +145,7 @@ public final class ReciprocalUtils {
     }
 
     public static String encode2Hex(String simple, String secretKey, String algorithm) {
-        if (keyLengthCheck(secretKey, algorithm)) {
+        if (checkKeyLength(secretKey, algorithm)) {
             byte[] cipher = encode(simple, secretKey, algorithm);
             // Encode bytes to HEX to get a string
             return HexUtils.bytes2HexString(cipher);
@@ -157,7 +156,7 @@ public final class ReciprocalUtils {
     public static String decoderHex(String ciphers, String secretKey, String algorithm) {
         if(StringUtils.isBlank(ciphers))return "";
         
-        if (keyLengthCheck(secretKey, algorithm)) {
+        if (checkKeyLength(secretKey, algorithm)) {
             byte[] byteSimple = HexUtils.hex2Bytes(ciphers);
 
             return decoder(byteSimple, secretKey, algorithm);
@@ -175,7 +174,7 @@ public final class ReciprocalUtils {
     	return decoderHex(ciphers,key,Algorithm.TRIPLE_DES);
     }
     
-    private static boolean keyLengthCheck(String secretKey, String algorithm) {
+    private static boolean checkKeyLength(String secretKey, String algorithm) {
         boolean lengthCheck = false;
         if (algorithm.equals(Algorithm.DES)) {
             if (secretKey.length() == 8) {
@@ -234,7 +233,7 @@ public final class ReciprocalUtils {
     public static String aesDecoder(String ciphers, String secretKey) {
         return decoderHex(ciphers, secretKey, Algorithm.AES);
     }
-
+/**
     public static String generateKey(String algorithm) {
         if (algorithm.equals(Algorithm.DES)) {
             return (new StringGenerator(8)).randomGenerate();
@@ -248,4 +247,5 @@ public final class ReciprocalUtils {
             return (new StringGenerator()).uniqueGenerate();
         }
     }
+    **/
 }

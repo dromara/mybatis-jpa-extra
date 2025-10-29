@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.id;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -65,7 +66,11 @@ public class IdentifierGeneratorFactory {
 	
 	public static String generate(String strategy) {
 		strategy = strategy.toLowerCase();
-		return identifierGeneratorMap.get(strategy).generate(strategy);
+		if(identifierGeneratorMap.containsKey(strategy)) {
+			return identifierGeneratorMap.get(strategy).generate(strategy);
+		}else {
+			return UUID.randomUUID().toString().toLowerCase();
+		}
 	}
 
 }

@@ -2,11 +2,16 @@ package org.dromara.mybatis.jpa.test.dao.service;
 
 import java.util.List;
 
+import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.service.IJpaService;
+import org.dromara.mybatis.jpa.test.entity.StudentQueryDto;
 import org.dromara.mybatis.jpa.test.entity.Students;
+import org.dromara.mybatis.jpa.test.entity.StudentVo;
 
 public interface StudentsService extends IJpaService<Students>{
 
+	public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) ;
+	
 	public List<Students> findByStdNo(String stdNo);
 	
 	public List<Students> findByStdNoIs(String stdNo);

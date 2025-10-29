@@ -29,7 +29,7 @@ public class UpdateSetsBuilder {
 	private static final  Logger logger = LoggerFactory.getLogger(UpdateSetsBuilder.class);
 	
 	public static String buildSetSql(List<Condition> sets) {
-		StringBuilder setSql = new StringBuilder("");
+	    StringBuilder setSql = new StringBuilder("");
 		for(Condition condition : sets) {
 			if(StringUtils.isNoneBlank(setSql)) {
 				setSql.append(" , ");

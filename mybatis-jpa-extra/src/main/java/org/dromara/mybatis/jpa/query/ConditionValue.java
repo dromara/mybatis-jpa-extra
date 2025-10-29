@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,9 @@ public class ConditionValue {
 	private static final Logger logger = LoggerFactory.getLogger(ConditionValue.class);
 	
 	public static String valueOfList(List<?> listValue) {
-		StringBuilder conditionArray = new StringBuilder();
+	    StringBuilder conditionArray = new StringBuilder();
 		for (Object value : listValue) {
-			if (!conditionArray.isEmpty()) {
+			if (StringUtils.isNotBlank(conditionArray)) {
 				conditionArray.append(" , ");
 			}
 			conditionArray.append(SafeValueHandler.valueOfType(value));
@@ -42,9 +43,9 @@ public class ConditionValue {
 	}
 	
 	public static String valueOfArray(Object[] objects) {
-		StringBuilder conditionArray = new StringBuilder();
+	    StringBuilder conditionArray = new StringBuilder();
 		for (int i = 0 ; i< objects.length ; i++) {
-			if (!conditionArray.isEmpty()) {
+			if (StringUtils.isNotBlank(conditionArray)) {
 				conditionArray.append(" , ");
 			}
 			conditionArray.append(SafeValueHandler.valueOfType(objects[i]));
@@ -53,9 +54,9 @@ public class ConditionValue {
 	}
 	
 	public static String valueOfCollection(Collection<?> cObjects) {
-		StringBuilder conditionArray = new StringBuilder();
+	    StringBuilder conditionArray = new StringBuilder();
         for (Object element : cObjects) {//for循环读取集合
-        	if (!conditionArray.isEmpty()) {
+        	if (StringUtils.isNotBlank(conditionArray)) {
 				conditionArray.append(" , ");
 			}
         	conditionArray.append(SafeValueHandler.valueOfType(element));
@@ -64,11 +65,11 @@ public class ConditionValue {
 	}
 	
 	public static String valueOfIterator(List<?> listValue) {
-		StringBuilder conditionArray = new StringBuilder();
+	    StringBuilder conditionArray = new StringBuilder();
 		Iterator<?> iterator = listValue.iterator();
         while (iterator.hasNext()) {//while循环读取集合
         	Object element = iterator.next();
-        	if (!conditionArray.isEmpty()) {
+        	if (StringUtils.isNotBlank(conditionArray)) {
 				conditionArray.append(" , ");
 			}
         	conditionArray.append(SafeValueHandler.valueOfType(element));
@@ -78,7 +79,8 @@ public class ConditionValue {
 	
 	@SuppressWarnings("rawtypes")
 	public static String getCollectionValues(Object value) {
-		logger.trace("expression Class() {} , getSimpleName {}",value.getClass().getCanonicalName(),value.getClass().getSimpleName());
+		String canonicalName = value.getClass().getCanonicalName();
+		logger.trace("expression Class() {} , getSimpleName {}",canonicalName,value.getClass().getSimpleName());
 		String collectionValues = "";
 		if (value.getClass().isArray()) {
 			Object[] objects = (Object[]) value;
@@ -93,14 +95,13 @@ public class ConditionValue {
 				logger.trace("not  isArray {}" , objects);
 				collectionValues = ConditionValue.valueOfArray(objects);
 			}
-		}else if(value.getClass().getCanonicalName().startsWith("java.util.ImmutableCollections")) {
+		}else if(canonicalName.startsWith("java.util.ImmutableCollections")) {
 			collectionValues = ConditionValue.valueOfIterator((List<?>) value);
-		}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.ArrayList")) {
+		}else if(canonicalName.equalsIgnoreCase("java.util.ArrayList")) {
 			collectionValues = ConditionValue.valueOfList((ArrayList) value);
-		}else if(value.getClass().getCanonicalName().equalsIgnoreCase("java.util.LinkedList")) {
+		}else if(canonicalName.equalsIgnoreCase("java.util.LinkedList")) {
 			collectionValues = ConditionValue.valueOfList((LinkedList) value);
 		}
 		return collectionValues;
 	}
-	
 }

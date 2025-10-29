@@ -34,11 +34,9 @@ public class LambdaQueryTestRunner  extends BaseTestRunner{
 	void queryByLambdaQuery(){
 		_logger.info("query by LambdaQuery ...");
 		List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
-		List<Students> list = service.query(
+		service.query(
 				new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, majorList)
 				.or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
-		
-		_logger.info("list {}",list);
 		//service.query(
 		//		new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, new Object[]{"政治","化学"})
 		//		.or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
@@ -71,7 +69,6 @@ public class LambdaQueryTestRunner  extends BaseTestRunner{
 		_logger.info("ids {}",ids.getClass().getCanonicalName());
 		
 		list = service.query(new LambdaQuery<Students>().in(Students::getId, majorList));
-		_logger.info("id query list {}",list);
-	}
+		_logger.info("id query list {}",list);	}
 
 }

@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class StrUtils {
 	public static final char UNDERLINE = '_';
@@ -59,8 +60,8 @@ public class StrUtils {
 		}
 		return num;
 	}
-	
-	public static List<String> string2List(String string, String split) {
+
+	public static List<String> stringToList(String string, String split) {
 		String[] strs = {};
 		if (string != null && !string.equals("")) {
 			strs = string.split(split);
@@ -75,20 +76,20 @@ public class StrUtils {
 		return resultList;
 	}
 
-	public static String list2String(List<String> list, String split) {
-		String string = "";
-		if (CollectionUtils.isEmpty(list)) {
-			return string;
-		}
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i) != null && !list.get(i).equals("")) {
-				string += list.get(i) + split;
+	public static String listToString(List<String> list, String split) {
+		StringBuilder string = new StringBuilder("");
+		if (CollectionUtils.isNotEmpty(list)) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i) != null && !list.get(i).equals("")) {
+					string.append(list.get(i)).append( split );
+				}
+			}
+			//删除最后一个分隔符
+			if (StringUtils.endsWith(string,split)) {
+				string = string.deleteCharAt(string.length() - 1);
 			}
 		}
-		if (string.length() > 0) {
-			string = string.substring(0, string.length() - 1);
-		}
-		return string;
+		return string.toString();
 	}
 
 	public static String lineBreakToBlank(String sql) {

@@ -115,15 +115,15 @@ public class BeanUtil {
 		return false;
 	}
 	
-	public static Boolean isPublicProperty(Class<? extends Object> cls, String fieldName) {
+	public static boolean isPublicProperty(Class<? extends Object> cls, String fieldName) {
 		return (isSetProperty(cls, fieldName)&& isGetProperty(cls, fieldName));
 	}
 
-	public static Boolean isPublicProperty(Object bean, String fieldName) {
+	public static boolean isPublicProperty(Object bean, String fieldName) {
 		return isSetProperty(bean.getClass(), fieldName) && isGetProperty(bean.getClass(), fieldName);
 	}
 
-	public static <T> Boolean isSetProperty(Class<T> cls, String fieldName) {
+	public static <T> boolean isSetProperty(Class<T> cls, String fieldName) {
 		Method[] method = cls.getDeclaredMethods();
 		for (int i = 0; i < method.length; i++) {
 			if (method[i].getModifiers() == Modifier.PUBLIC
@@ -134,7 +134,7 @@ public class BeanUtil {
 		return false;
 	}
 
-	public static <T> Boolean isGetProperty(Class<T> cls, String fieldName) {
+	public static <T> boolean isGetProperty(Class<T> cls, String fieldName) {
 		Method[] method = cls.getDeclaredMethods();
 		for (int i = 0; i < method.length; i++) {
 			if (method[i].getModifiers() == Modifier.PUBLIC
@@ -360,7 +360,7 @@ public class BeanUtil {
 		return mapBean;
 	}
 	@SuppressWarnings("rawtypes")
-	public static <T> Object mapToBean(T bean,HashMap<?, ?> valueMap){
+	public static <T> Object mapToBean(T bean,Map<?, ?> valueMap){
 		Map<?, ?> beanFiledMap=null;
 		try {
 			beanFiledMap = BeanUtil.getFields(bean);

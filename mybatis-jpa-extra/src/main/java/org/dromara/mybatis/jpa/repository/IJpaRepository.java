@@ -271,8 +271,18 @@ public  interface  IJpaRepository <T> {
 	 */
 	public boolean update(String setSql , LambdaQuery <T> lambdaQuery) ;
 	
+	/**
+	 * update by updateWrapper
+	 * @param updateWrapper
+	 * @return
+	 */
 	public boolean update(UpdateWrapper updateWrapper) ;
 	
+	/**
+	 * update by lambdaUpdateWrapper
+	 * @param lambdaUpdateWrapper
+	 * @return
+	 */
 	public boolean update(LambdaUpdateWrapper <T> lambdaUpdateWrapper) ;
 	
 	/**

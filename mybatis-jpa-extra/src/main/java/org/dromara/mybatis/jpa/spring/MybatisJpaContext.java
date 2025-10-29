@@ -62,9 +62,9 @@ public final class MybatisJpaContext {
 		if (jpaContext.containsBean(propertyConfigurerBeanName)) {
 			logger.trace("init MybatisJpaContext properties");
             PropertySourcesPlaceholderConfigurer propertyConfigurer = 
-            		((PropertySourcesPlaceholderConfigurer) applicationContext.getBean(propertyConfigurerBeanName));
+                    ((PropertySourcesPlaceholderConfigurer) applicationContext.getBean(propertyConfigurerBeanName));
             
-            properties =  (StandardEnvironment) propertyConfigurer
+            properties = (StandardEnvironment) propertyConfigurer
                     .getAppliedPropertySources()
                     .get(PropertySourcesPlaceholderConfigurer.ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME)
                     .getSource();
@@ -88,8 +88,8 @@ public final class MybatisJpaContext {
 	 */
 	public static Object getBean(String id){
 		if(jpaContext == null) {
-			ApplicationContext applicationContext = getApplicationContext();
-			return ((applicationContext == null ) ? null : applicationContext.getBean(id));
+		    ApplicationContext applicationContext = getApplicationContext();
+			return ((applicationContext == null) ? null:applicationContext.getBean(id));
 		}else {
 			return jpaContext.getBean(id);
 		}
@@ -98,16 +98,16 @@ public final class MybatisJpaContext {
 	public static <T> T getBean(Class<T> requiredType){
 		if(jpaContext == null) {
 			ApplicationContext applicationContext = getApplicationContext();
-			return ((applicationContext == null ) ? null : applicationContext.getBean(requiredType));
+			return ((applicationContext == null) ? null: applicationContext.getBean(requiredType));
 		}else {
 			return jpaContext.getBean(requiredType);
 		}
 	}
 	
     public static <T> T getBean(String name, Class<T> requiredType) throws BeansException{
-    	if(jpaContext == null) {
-    		ApplicationContext applicationContext = getApplicationContext();
-            return ((applicationContext == null ) ? null : applicationContext.getBean(name,requiredType));
+        if(jpaContext == null) {
+            ApplicationContext applicationContext = getApplicationContext();
+			return ((applicationContext == null) ? null : applicationContext.getBean(name,requiredType));
         }else {
             return jpaContext.getBean(name,requiredType);
         }
@@ -120,7 +120,7 @@ public final class MybatisJpaContext {
 	 */
 	public static HttpServletRequest getRequest(){
 		ServletRequestAttributes servletRequestAttributes =(ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		return ((servletRequestAttributes == null ) ? null  : servletRequestAttributes.getRequest());
+		return ((servletRequestAttributes == null )? null : servletRequestAttributes.getRequest());
 	}
 
 	/**

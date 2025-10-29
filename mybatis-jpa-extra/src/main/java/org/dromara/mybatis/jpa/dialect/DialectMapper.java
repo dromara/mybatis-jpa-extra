@@ -26,7 +26,7 @@ public class DialectMapper {
 	private static final Logger logger 			= 	LoggerFactory.getLogger(DialectMapper.class);
 
 	public static final String DEFAULT_DIALECT 		= 	DialectName.MYSQL;
-	
+
 	protected static HashMap<String,String> dialectMap;
 	
 	static {

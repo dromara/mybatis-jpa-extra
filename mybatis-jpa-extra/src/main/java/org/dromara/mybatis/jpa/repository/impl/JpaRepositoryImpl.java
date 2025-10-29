@@ -86,12 +86,13 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	 * @param entity
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public JpaPageResults<T> fetch(JpaPage page , T entity) {
 		try {
 			page.build();
 			List<T> resultslist = getMapper().fetch(page, entity);
-			return buildPageResults(page , resultslist);
+			return (JpaPageResults<T>) buildPageResults(page , resultslist);
 		}catch (Exception e) {
 			logger.error("fetch Exception " , e);
 		}
@@ -104,12 +105,13 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	 * @param query
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public JpaPageResults<T> fetch(JpaPage page ,Query query) {
 		try {
 			page.build();
 			List<T> resultslist = getMapper().fetchByQuery(page, query , this.entityClass);
-			return buildPageResults(page , resultslist);
+			return (JpaPageResults<T>) buildPageResults(page , resultslist);
 		}catch (Exception e) {
 			logger.error("fetch by Query Exception " , e);
 		}
@@ -122,12 +124,13 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	 * @param lambdaQuery
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public JpaPageResults<T> fetch(JpaPage page ,LambdaQuery<T> lambdaQuery) {
 		try {
 			page.build();
 			List<T> resultslist = getMapper().fetchByLambdaQuery(page, lambdaQuery , this.entityClass);
-			return buildPageResults(page , resultslist);
+			return (JpaPageResults<T>) buildPageResults(page , resultslist);
 		}catch (Exception e) {
 			logger.error("fetch by LambdaQuery Exception " , e);
 		}
@@ -139,22 +142,24 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	 * @param entity
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public JpaPageResults<T> fetchPageResults(T entity) {
 		try {
 			entity.build();
 			List<T> resultslist = getMapper().fetchPageResults(entity);
-			return buildPageResults(entity , resultslist);
+			return (JpaPageResults<T>) buildPageResults(entity , resultslist);
 		}catch (Exception e) {
 			logger.error("fetchPageResults Exception " , e);
 		}
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JpaPageResults<T> fetchPageResults(JpaPage page , T entity) {
 		try {
 			entity.build();
 			List<T> resultslist = getMapper().fetchPageResults(page , entity);
-			return buildPageResults(entity , resultslist);
+			return (JpaPageResults<T>) buildPageResults(entity , resultslist);
 		}catch (Exception e) {
 			logger.error("fetchPageResults page Exception " , e);
 		}
@@ -181,7 +186,7 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 			entity.build();
 			List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, 
 					page == null ? new Object[]{entity} : new Object[]{page , entity});
-			return buildPageResults(entity , resultslist);
+			return (JpaPageResults<T>) buildPageResults(entity , resultslist);
 		}catch (NoSuchMethodException e) {
 			logger.error("Mapper no fetchPageResults Method Exception " , e);
 		}catch (Exception e) {
@@ -573,7 +578,7 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	public boolean update(UpdateWrapper updateWrapper) {
 		try {
 			Integer count =  getMapper().updateByUpdateWrapper(entityClass,updateWrapper);
-			logger.debug("update by UpdateWrapper : {}" , count);
+			logger.debug("update by UpdateWrapper count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
 			logger.error("update by UpdateWrapper Exception " , e);
@@ -589,7 +594,7 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 	public boolean update(LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
 		try {
 			Integer count =  getMapper().updateByLambdaUpdateWrapper(entityClass,lambdaUpdateWrapper);
-			logger.debug("update by LambdaUpdateWrapper : {}" , count);
+			logger.debug("update by LambdaUpdateWrapper count : {}" , count);
 			return count > 0;
 		} catch(Exception e) {
 			logger.error("update by LambdaUpdateWrapper Exception " , e);
@@ -793,13 +798,13 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 		}
 		return count;
 	}
-	
 
-	protected JpaPageResults<T> buildPageResults(JpaPage page , List<T> resultslist) {
+	protected JpaPageResults<?> buildPageResults(JpaPage page , List<?> resultslist) {
 		//当前页记录数
 		Integer records = JpaPageResults.parseRecords(resultslist);
 		//总页数
 		Integer totalCount = fetchCount(page, resultslist);
+		//构建返回对象
 		return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),records,totalCount,resultslist);
 	}
 	
@@ -820,6 +825,4 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
 		}
 		return totalCount;
 	}
-
-
 }

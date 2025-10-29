@@ -130,7 +130,6 @@ public class MapperProvider <T extends JpaEntity>{
 		return new UpdateProvider().updateByLambdaUpdateWrapper(entityClass , lambdaUpdateWrapper);
 	}
 	
-	
 	//fetch
 	public String fetch(Map<String, Object>  parametersMap) {
 		return new FetchProvider().fetch(parametersMap);

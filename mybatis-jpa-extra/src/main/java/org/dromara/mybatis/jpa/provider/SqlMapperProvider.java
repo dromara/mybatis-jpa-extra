@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @SuppressWarnings({"rawtypes" })
-public class SqlMapperProvider{	
+public class SqlMapperProvider {	
 	static final Logger logger 	= 	LoggerFactory.getLogger(SqlMapperProvider.class);
 	
 	public SqlMapperProvider() {

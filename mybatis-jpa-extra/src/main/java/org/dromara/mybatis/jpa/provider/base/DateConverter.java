@@ -28,11 +28,12 @@ public class DateConverter{
 			if(date == null) {
 				dateValue = convertDateTime(LocalDateTime.now(),fieldColumnMapper);
 			}else {
-				if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.TIMESTAMP) {
+				TemporalType temporalType = fieldColumnMapper.getTemporalAnnotation().value();
+				if(temporalType == TemporalType.TIMESTAMP) {
 					dateValue = new SimpleDateFormat(TIMESTAMP_FORMATTER).format(date);
-				}else if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.DATE) {
+				}else if(temporalType == TemporalType.DATE) {
 					dateValue = new SimpleDateFormat(DATE_FORMATTER).format(date);
-				}else if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.TIME) {
+				}else if(temporalType == TemporalType.TIME) {
 					dateValue = new SimpleDateFormat(TIME_FORMATTER).format(date);
 				}
 			}
@@ -60,9 +61,10 @@ public class DateConverter{
 	}
 	
 	public static String convertDateTime(LocalDateTime localDateTime ,ColumnMapper fieldColumnMapper) {
-		if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.TIMESTAMP) {
+		TemporalType temporalType = fieldColumnMapper.getTemporalAnnotation().value();
+		if(temporalType == TemporalType.TIMESTAMP) {
 			return localDateTime.format(DateTimeFormatter.ofPattern(TIMESTAMP_FORMATTER));
-		}else if(fieldColumnMapper.getTemporalAnnotation().value() == TemporalType.DATE) {
+		}else if(temporalType == TemporalType.DATE) {
 			return localDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
 		}else{
 			return localDateTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));

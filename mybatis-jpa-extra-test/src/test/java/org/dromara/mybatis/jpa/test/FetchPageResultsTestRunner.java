@@ -18,7 +18,9 @@
 package org.dromara.mybatis.jpa.test;
 
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.test.entity.StudentQueryDto;
 import org.dromara.mybatis.jpa.test.entity.Students;
+import org.dromara.mybatis.jpa.test.entity.StudentVo;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,20 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
 		 student.setPageNumber(2);
 		 
 		 JpaPageResults<Students>  results =service.fetchPageResults("fetchPageResults1",student);
+		 
+		 _logger.info("records {} , total {} , totalPage {} , page {} ",
+				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+	}
+	
+	@Test
+	void fetchPageResultsByDto(){
+		_logger.info("fetchPageResults by fetchPageResultsByDto...");
+		 StudentQueryDto student=new StudentQueryDto();
+		 student.setStdGender("M");
+		 student.setPageSize(10);
+		 student.setPageNumber(2);
+		 
+		 JpaPageResults<StudentVo> results = service.fetchPageResultsVo(student);
 		 
 		 _logger.info("records {} , total {} , totalPage {} , page {} ",
 				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());

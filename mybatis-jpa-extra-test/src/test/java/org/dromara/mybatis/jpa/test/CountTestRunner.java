@@ -32,6 +32,13 @@ public class CountTestRunner  extends BaseTestRunner{
 	private static final Logger _logger = LoggerFactory.getLogger(CountTestRunner.class);
 
 	
+	@Test
+	void countByQueryNull(){
+		_logger.info("count by query ...");
+		long count = service.count(new Query());
+		_logger.info("count {}",count);
+	}
+	
 	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
 	@Test
 	void countByQuery(){
@@ -42,6 +49,13 @@ public class CountTestRunner  extends BaseTestRunner{
 		_logger.info("count {}",count);
 	}
 
+	@Test
+	void countByLambdaQueryNull(){
+		_logger.info("count by LambdaQuery ...");
+		long count = service.count(new LambdaQuery<Students>());
+		_logger.info("count {}",count);
+	}
+	
 	@Test
 	void countByLambdaQuery(){
 		_logger.info("count by LambdaQuery ...");

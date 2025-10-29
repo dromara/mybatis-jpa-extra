@@ -61,6 +61,7 @@ public interface IJpaSqlRepository {
      */
     JpaPageResults<Map<String,Object>> fetch(String sql , JpaPage page , Map<String, Object> parameters);
     
+    
     /**
      * 插入数据
      *

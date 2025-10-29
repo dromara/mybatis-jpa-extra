@@ -36,23 +36,22 @@ import org.slf4j.LoggerFactory;
 public class MapperMetadata{
 	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
 	
-	static ConcurrentMap<String, String>sqlsMap 	= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, String>sqlsMap 				= 	new ConcurrentHashMap<>();
 
-	static IdentifierGeneratorFactory identifierGeneratorFactory = new IdentifierGeneratorFactory();
+	static IdentifierGeneratorFactory identifierGeneratorFactory= new IdentifierGeneratorFactory();
 	
 	static EncryptFactory encryptFactory;
 	
-	
-	/**
-	  * 表名和字段名
-	  */
-	 static int         tableColumnCase                          = ConstCaseType.LOWERCASE;
-	 
-	 static boolean     tableColumnEscape                        = false;
-	 
-	 static String      tableColumnEscapeChar                    =  "`";
-	 
-	 static String      partitionColumn                          =  "inst_id";
+	   /**
+     * 表名和字段名
+     */
+    static int         tableColumnCase                          = ConstCaseType.LOWERCASE;
+    
+    static boolean     tableColumnEscape                        = false;
+    
+    static String      tableColumnEscapeChar                    =  "`";
+    
+    static String      partitionColumn                          =  "inst_id";
 	
 	/**
 	 * Case Converter
@@ -101,37 +100,38 @@ public class MapperMetadata{
 	public static void setEncryptFactory(EncryptFactory encryptFactory) {
 		MapperMetadata.encryptFactory = encryptFactory;
 	}
-
-	public static int getTableColumnCase() {
-		return tableColumnCase;
-	}
-
-	public static void setTableColumnCase(int tableColumnCase) {
-		MapperMetadata.tableColumnCase = tableColumnCase;
-	}
-
-	public static boolean isTableColumnEscape() {
-		return tableColumnEscape;
-	}
-
-	public static void setTableColumnEscape(boolean tableColumnEscape) {
-		MapperMetadata.tableColumnEscape = tableColumnEscape;
-	}
-
-	public static String getTableColumnEscapeChar() {
-		return tableColumnEscapeChar;
-	}
-
-	public static void setTableColumnEscapeChar(String tableColumnEscapeChar) {
-		MapperMetadata.tableColumnEscapeChar = tableColumnEscapeChar;
-	}
-
-	public static String getPartitionColumn() {
-		return partitionColumn;
-	}
-
-	public static void setPartitionColumn(String partitionColumn) {
-		MapperMetadata.partitionColumn = partitionColumn;
-	}
 	
+
+    public static int getTableColumnCase() {
+        return tableColumnCase;
+    }
+
+    public static void setTableColumnCase(int tableColumnCase) {
+        MapperMetadata.tableColumnCase = tableColumnCase;
+    }
+
+    public static boolean isTableColumnEscape() {
+        return tableColumnEscape;
+    }
+
+    public static void setTableColumnEscape(boolean tableColumnEscape) {
+        MapperMetadata.tableColumnEscape = tableColumnEscape;
+    }
+
+    public static String getTableColumnEscapeChar() {
+        return tableColumnEscapeChar;
+    }
+
+    public static void setTableColumnEscapeChar(String tableColumnEscapeChar) {
+        MapperMetadata.tableColumnEscapeChar = tableColumnEscapeChar;
+    }
+
+    public static String getPartitionColumn() {
+        return partitionColumn;
+    }
+
+    public static void setPartitionColumn(String partitionColumn) {
+        MapperMetadata.partitionColumn = partitionColumn;
+    }
+    
 }

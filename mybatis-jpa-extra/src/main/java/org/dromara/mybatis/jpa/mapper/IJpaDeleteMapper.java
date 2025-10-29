@@ -32,9 +32,21 @@ import org.dromara.mybatis.jpa.query.Query;
  */
 public interface IJpaDeleteMapper<T> {
 	
+	/**
+	 * delete by Query
+	 * @param entityClass
+	 * @param query
+	 * @return
+	 */
 	@DeleteProvider(type = MapperProvider.class, method = "deleteByQuery")
 	public Integer deleteByQuery(Class<?> entityClass , Query query);	
 	
+	/**
+	 * delete by LambdaQuery
+	 * @param entityClass
+	 * @param lambdaQuery
+	 * @return
+	 */
 	@DeleteProvider(type = MapperProvider.class, method = "deleteByLambdaQuery")
 	public Integer deleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);	
 	
@@ -47,7 +59,14 @@ public interface IJpaDeleteMapper<T> {
 	public Integer deleteById(	@Param (ConstMetadata.ENTITY_CLASS)			Class<?> entityClass,
 							@Param (ConstMetadata.PARAMETER_ID) String id,
 							@Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
-		
+	
+	/**
+	 * delete by idList
+	 * @param entityClass
+	 * @param idList
+	 * @param partitionKey
+	 * @return
+	 */
 	@DeleteProvider(type = MapperProvider.class, method = "deleteBatch")
 	public Integer deleteBatch(	
 							@Param (ConstMetadata.ENTITY_CLASS)			Class<?> entityClass,

@@ -88,7 +88,9 @@ public enum Operator {
 	IGNORE_CASE("ignoreCase"),
 	;
 	
-    
+    /**
+     * 符号
+     */
 	private String notation;
 
 	Operator(String notation) {

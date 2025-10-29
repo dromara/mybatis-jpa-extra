@@ -21,18 +21,18 @@ public interface IdentifierGenerator {
 	/**
 	 * The configuration parameter holding the entity name
 	 */
-	String ENTITY_NAME = "entity_name";
+	String ENTITY_NAME 		= "entity_name";
 
 	/**
 	 * The configuration parameter holding the JPA entity name
 	 */
-	String JPA_ENTITY_NAME = "jpa_entity_name";
+	String JPA_ENTITY_NAME 	= "jpa_entity_name";
 
 	/**
 	 * Used as a key to pass the name used as {@link GeneratedValue#generator()} to  the
 	 * {@link IdentifierGenerator} as it is configured.
 	 */
-	String GENERATOR_NAME = "GENERATOR_NAME";
+	String GENERATOR_NAME 	= "GENERATOR_NAME";
 
 	/**
 	 * Generate a new identifier.

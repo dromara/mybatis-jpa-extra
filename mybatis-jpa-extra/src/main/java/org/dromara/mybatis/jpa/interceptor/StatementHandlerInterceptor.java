@@ -53,6 +53,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 		return invocation.proceed();
 	}
 
+	@Override
 	public Object plugin(Object target) {
 		return Plugin.wrap(target, this);
 	}
@@ -64,9 +65,7 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
 			BoundSql boundSql = statement.getBoundSql();
 			Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
 			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
-			if(parameterObject != null) {
-				logger.trace("parameter {}({})" , parameterObject,parameterObject.getClass().getCanonicalName());
-			}
+			logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
 			if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
 				FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
 				FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());

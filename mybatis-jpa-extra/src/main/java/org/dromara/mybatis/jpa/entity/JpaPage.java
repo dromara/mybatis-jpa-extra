@@ -20,12 +20,9 @@
  */
 package org.dromara.mybatis.jpa.entity;
 
-import java.util.UUID;
-
 import org.dromara.mybatis.jpa.id.IdentifierStrategy;
+import org.dromara.mybatis.jpa.constants.ConstPage;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
-import org.dromara.mybatis.jpa.metadata.MapperMetadata;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Transient;
@@ -37,12 +34,6 @@ import jakarta.persistence.Transient;
  */
 public class JpaPage {
 	
-	public static final int MAX_RESULTS 	= 10000;
-	
-    public static final String PAGE_NUMBER 	= "pageNumber";
-    
-    public static final String PAGE_SIZE 	= "pageSize";
-
 	@JsonIgnore
 	@Transient
 	protected int rows;
@@ -119,28 +110,7 @@ public class JpaPage {
 
 	
 	public String generateId() {
-		if(MapperMetadata.getIdentifierGeneratorFactory() != null) {
-			return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
-		}else {
-			return UUID.randomUUID().toString().toLowerCase();
-		}
-	}
-	
-	
-	/**
-	 * calculate StartRow
-	 * @param page
-	 * @param pageResults
-	 * @return
-	 */
-	protected Integer calculateStartRow(Integer page,Integer pageSize){
-		return (page - 1) * pageSize;
-	}
-	
-	public void build() {
-		this.pageSelectId= generateId();
-		this.startRow= calculateStartRow(this.pageNumber ,this.pageSize);
-		this.pageable = true;
+		return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
 	}
 	
 	@JsonIgnore
@@ -227,8 +197,8 @@ public class JpaPage {
 	}
 
 	public void setPageSize(int pageSize) {
-		if(pageSize == -1 || pageSize > MAX_RESULTS) {
-			pageSize = MAX_RESULTS;
+		if(pageSize == -1 || pageSize > ConstPage.MAX_RESULTS) {
+			pageSize = ConstPage.MAX_RESULTS;
 		}
 		this.pageSize = pageSize;
 	}
@@ -289,6 +259,23 @@ public class JpaPage {
 
 	public void setPageSelectId(String pageSelectId) {
 		this.pageSelectId = pageSelectId;
+	}
+	
+	
+	/**
+	 * calculate StartRow
+	 * @param page
+	 * @param pageResults
+	 * @return
+	 */
+	protected Integer calculateStartRow(Integer page,Integer pageSize){
+		return (page - 1) * pageSize;
+	}
+	
+	public void build() {
+		this.pageSelectId= generateId();
+		this.startRow= calculateStartRow(this.pageNumber ,this.pageSize);
+		this.pageable = true;
 	}
 
 	@Override

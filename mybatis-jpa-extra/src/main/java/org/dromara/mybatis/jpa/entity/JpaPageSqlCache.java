@@ -21,9 +21,9 @@ import org.apache.ibatis.mapping.BoundSql;
 
 public class JpaPageSqlCache {
 	
-	String sql;
+	String 		sql;
 	
-	BoundSql boundSql;
+	BoundSql 	boundSql;
 	
 	public JpaPageSqlCache(String sql, BoundSql boundSql) {
 		super();

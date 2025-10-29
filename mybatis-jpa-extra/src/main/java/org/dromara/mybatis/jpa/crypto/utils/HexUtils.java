@@ -20,7 +20,7 @@
  */
 package org.dromara.mybatis.jpa.crypto.utils;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Crystal.Sea
@@ -35,29 +35,22 @@ public final class HexUtils {
 	
 	
 	public static String hex2String(byte[] b) {
-		String result = "";
+	    StringBuilder  result = new StringBuilder ("");
 		for (int i = 0; i < b.length; i++) {
-			result += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
+			result.append(Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1));
 		}
-		return result;
+		return result.toString();
 	}
 
 	public static String bytes2HexString(byte[] raw) {
 		byte[] hex = new byte[2 * raw.length];
 		int index = 0;
-
 		for (byte b : raw) {
 			int v = b & 0xFF;
 			hex[index++] = HEX_CHAR_TABLE[v >>> 4];
 			hex[index++] = HEX_CHAR_TABLE[v & 0xF];
 		}
-		String s = "";
-		try {
-			s = new String(hex, "ASCII");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return s;
+		return new String(hex, StandardCharsets.US_ASCII);
 	}
 	
 	 public static byte[] hex2Bytes(char[] hex) {

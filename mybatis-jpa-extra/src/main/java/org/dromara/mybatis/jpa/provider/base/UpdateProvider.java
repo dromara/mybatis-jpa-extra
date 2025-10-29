@@ -120,6 +120,7 @@ public class UpdateProvider <T extends JpaEntity>{
 	public String updateByQuery(Class<?> entityClass,String setSql, Query query) {
 		logger.trace("update By Query \n{}" , query);
 		ColumnMetadata.buildColumnMapper(entityClass);
+
 		SQL sql = new SQL()
 				.UPDATE(TableMetadata.getTableName(entityClass))
 				.SET(setSql).WHERE(QueryBuilder.build(query));

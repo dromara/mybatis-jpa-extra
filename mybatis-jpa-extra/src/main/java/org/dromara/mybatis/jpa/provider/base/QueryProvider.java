@@ -17,6 +17,7 @@
 package org.dromara.mybatis.jpa.provider.base;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
@@ -24,6 +25,7 @@ import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
+import org.dromara.mybatis.jpa.query.builder.ConditionBuilder;
 import org.dromara.mybatis.jpa.query.builder.LambdaQueryBuilder;
 import org.dromara.mybatis.jpa.query.builder.QueryBuilder;
 import org.dromara.mybatis.jpa.util.BeanUtil;
@@ -42,22 +44,27 @@ public class QueryProvider<T extends JpaEntity> {
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
 		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+		
+		//查询语句
+		String querySql = QueryBuilder.build(query);
+		if(StringUtils.isNotBlank(querySql)) {
+			sql.WHERE("( " + querySql +" ) ");
+		}
+		
+		//逻辑删除
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
-			sql.WHERE("( %s ) and %s = '%s'"
+			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
-							QueryBuilder.build(query),
 							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
-		}else {
-			sql.WHERE(QueryBuilder.build(query));
 		}
 		
 		if (query.getGroupBy() != null) {
-			sql.GROUP_BY(QueryBuilder.buildGroupBy(query));
+			sql.GROUP_BY(ConditionBuilder.buildGroupBy(query.getGroupBy()));
 		}
 		if (query.getOrderBy() != null) {
-			sql.ORDER_BY(QueryBuilder.buildOrderBy(query));
+			sql.ORDER_BY(ConditionBuilder.buildOrderBy(query.getOrderBy()));
 		}
 		logger.trace("filter By Query SQL \n{}" , sql);
 		return sql.toString();
@@ -66,26 +73,34 @@ public class QueryProvider<T extends JpaEntity> {
 	public String queryByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
 		logger.trace("LambdaQuery \n{}" , lambdaQuery);
 		
-		
 		SQL sql = TableMetadata.buildSelect(entityClass);
 		
 		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+		
+		StringBuilder whereSql = new StringBuilder("");
+		//查询语句
+		String querySql = LambdaQueryBuilder.build(lambdaQuery);
+		if(StringUtils.isNotBlank(querySql)) {
+			sql.WHERE("( " + querySql +" ) ");
+		}
+		//逻辑删除
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
-			sql.WHERE("( %s ) and %s = '%s'"
+			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
-							LambdaQueryBuilder.build(lambdaQuery),
 							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
-		}else {
-			sql.WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		}
+		
+		if(StringUtils.isNotBlank(whereSql)) {
+			sql.WHERE(whereSql.toString());
 		}
 		
 		if (CollectionUtils.isNotEmpty(lambdaQuery.getGroupBy())) {
-			sql.GROUP_BY(LambdaQueryBuilder.buildGroupBy(lambdaQuery));
+			sql.GROUP_BY(ConditionBuilder.buildGroupBy(lambdaQuery.getGroupBy()));
 		}
 		if (CollectionUtils.isNotEmpty(lambdaQuery.getOrderBy())) {
-			sql.ORDER_BY(LambdaQueryBuilder.buildOrderBy(lambdaQuery));
+			sql.ORDER_BY(ConditionBuilder.buildOrderBy(lambdaQuery.getOrderBy()));
 		}
 		logger.trace("filter By Query SQL \n{}" , sql);
 		return sql.toString();
@@ -101,22 +116,22 @@ public class QueryProvider<T extends JpaEntity> {
 			logger.trace("ColumnName {} , FieldType {} , value {}", fieldColumnMapper.getColumn(), fieldType,
 					fieldValue);
 			if(fieldColumnMapper.isLogicDelete()) {
-				sql.WHERE(fieldColumnMapper.getColumn() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
-			}else {
-				if(fieldValue == null ) {
-					logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getField(),fieldColumnMapper.getColumn());
-					// skip null field value
-				} else if(("string".equals(fieldType) && "".equals(fieldValue))
-						|| ("byte".startsWith(fieldType))
-						|| ("Int".equals(fieldType) && "0".equals(fieldValue))
-						|| ("Long".equals(fieldType)&& "0".equals(fieldValue))
-						|| ("Integer".equals(fieldType)&& "0".equals(fieldValue))
-						|| ("Float".equals(fieldType)&& "0.0".equals(fieldValue))
-						|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
-					// skip default field value
-				}else {
-					sql.WHERE(fieldColumnMapper.getColumn() + " = #{" + fieldColumnMapper.getField() + "}");
-				}
+			    sql.WHERE(fieldColumnMapper.getColumn() + " = '" + fieldColumnMapper.getSoftDelete().value() + "'");
+			} else {
+    			if(fieldValue == null ) {
+    				logger.trace("skip  {} ({}) is null ",fieldColumnMapper.getField(),fieldColumnMapper.getColumn());
+    				// skip null field value
+    			} else if(("string".equals(fieldType) && "".equals(fieldValue))
+    					|| ("byte".startsWith(fieldType))
+    					|| ("Int".equals(fieldType) && "0".equals(fieldValue))
+    					|| ("Long".equals(fieldType)&& "0".equals(fieldValue))
+    					|| ("Integer".equals(fieldType)&& "0".equals(fieldValue))
+    					|| ("Float".equals(fieldType)&& "0.0".equals(fieldValue))
+    					|| ("Double".equals(fieldType)&& "0.0".equals(fieldValue))){
+    				// skip default field value
+    			}else {
+    			    sql.WHERE(fieldColumnMapper.getColumn() + " = #{" + fieldColumnMapper.getField() + "}");
+    			}
 			}
 		}
 		logger.trace("filter By Entity SQL \n{}" , sql);
@@ -128,15 +143,24 @@ public class QueryProvider<T extends JpaEntity> {
 		SQL sql = TableMetadata.buildSelectCount(entityClass);
 		
 		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+		StringBuilder whereSql = new StringBuilder("");
+		//查询语句
+		String querySql = QueryBuilder.build(query);
+		if(StringUtils.isNotBlank(querySql)) {
+			sql.WHERE("( " + querySql +" ) ");
+		}
+		
+		//逻辑删除
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
-			sql.WHERE("( %s ) and %s = '%s'"
+			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
-							QueryBuilder.build(query),
 							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
-		}else {
-			sql.WHERE(QueryBuilder.build(query));
+		}
+		
+		if(StringUtils.isNotBlank(whereSql)) {
+			sql.WHERE(whereSql.toString());
 		}
 		
 		logger.trace("count By Query SQL \n{}" , sql);
@@ -149,15 +173,23 @@ public class QueryProvider<T extends JpaEntity> {
 		SQL sql = TableMetadata.buildSelectCount(entityClass);
 		
 		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+		StringBuilder whereSql = new StringBuilder("");
+		//查询语句
+		String querySql = LambdaQueryBuilder.build(lambdaQuery);
+		if(StringUtils.isNotBlank(querySql)) {
+			sql.WHERE("( " + querySql +" ) ");
+		}
+		//逻辑删除
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
-			sql.WHERE("( %s ) and %s = '%s'"
+			sql.WHERE(" ( %s = '%s' )" 
 					.formatted(
-							LambdaQueryBuilder.build(lambdaQuery),
 							logicColumnMapper.getColumn(),
 							logicColumnMapper.getSoftDelete().value())
 					);
-		}else {
-			sql.WHERE(LambdaQueryBuilder.build(lambdaQuery));
+		}
+		
+		if(StringUtils.isNotBlank(whereSql)) {
+			sql.WHERE(whereSql.toString());
 		}
 
 		logger.trace("count By Query SQL \n{}" , sql);

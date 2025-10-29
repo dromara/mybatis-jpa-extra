@@ -40,25 +40,25 @@ import jakarta.persistence.Transient;
 public class ColumnMetadata {
 	private static final Logger logger 	= 	LoggerFactory.getLogger(ColumnMetadata.class);
 	
-	static ConcurrentMap<String, List<ColumnMapper>> fieldsMap 	= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, List<ColumnMapper>> columnMapper 	= 	new ConcurrentHashMap<>();
 	
-	static ConcurrentMap<String, ColumnMapper> logicColumnMap 		= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, ColumnMapper> logicColumnMapper 	= 	new ConcurrentHashMap<>();
 	
-	static ConcurrentMap<String, ColumnMapper> idColumnMap 		= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, ColumnMapper> idColumnMapper 		= 	new ConcurrentHashMap<>();
 	
-	static ConcurrentMap<String, ColumnMapper> partitionKeyMap 		= 	new ConcurrentHashMap<>();
+	static ConcurrentMap<String, ColumnMapper> partitionKeyMapper 	= 	new ConcurrentHashMap<>();
 	
 	
 	public static  ColumnMapper getIdColumn(Class<?> entityClass) {
-		return idColumnMap.get(entityClass.getName());
+		return idColumnMapper.get(entityClass.getName());
 	}
 	
 	public static  ColumnMapper getLogicColumn(Class<?> entityClass) {
-		return logicColumnMap.get(entityClass.getName());
+		return logicColumnMapper.get(entityClass.getName());
 	}
 	
 	public static  ColumnMapper getPartitionKey(Class<?> entityClass) {
-		return partitionKeyMap.get(entityClass.getName());
+		return partitionKeyMapper.get(entityClass.getName());
 	}
 	
 	/**
@@ -67,9 +67,9 @@ public class ColumnMetadata {
 	 * @return selectColumn
 	 */
 	public static String selectColumnMapper(Class<?> entityClass) {
-		StringBuilder  selectColumn = new StringBuilder (ConstMetadata.SELECT_TMP_TABLE + ".* ");
+	    StringBuilder selectColumn = new StringBuilder(ConstMetadata.SELECT_TMP_TABLE + ".* ");
 		int columnCount = 0;
-		for(ColumnMapper fieldColumnMapper  : fieldsMap.get(entityClass.getName())) {
+		for(ColumnMapper fieldColumnMapper  : columnMapper.get(entityClass.getName())) {
 			columnCount ++;
 			//不同的属性和数据库字段不一致的需要进行映射
 			if(!fieldColumnMapper.getColumn().equalsIgnoreCase(fieldColumnMapper.getField())) {
@@ -87,15 +87,15 @@ public class ColumnMetadata {
 	}
 	
 	/**
-	 * buildColumnList
+	 * buildColumnMapper
 	 * @param entityClass
 	 */
 	public static List<ColumnMapper> buildColumnMapper(Class<?> entityClass) {
 		String entityClassName = entityClass.getName();
-		if (!fieldsMap.containsKey(entityClassName)) {	
+		if (!columnMapper.containsKey(entityClassName)) {
 			logger.trace("entityClass {}" , entityClass);
 			Field[] fields = entityClass.getDeclaredFields();
-			List<ColumnMapper>fieldColumnMapperList = new ArrayList<>(fields.length);
+			List<ColumnMapper>columnMapperList = new ArrayList<>(fields.length);
 	
 			for (Field field : fields) {
 				//skip Transient field
@@ -121,7 +121,7 @@ public class ColumnMetadata {
 					
 					if(field.isAnnotationPresent(Id.class)) {
 						fieldColumnMapper.setIdColumn(true);
-						idColumnMap.put(entityClassName, fieldColumnMapper);
+						idColumnMapper.put(entityClassName, fieldColumnMapper);
 					}
 					
 					if(field.isAnnotationPresent(GeneratedValue.class)) {
@@ -140,13 +140,13 @@ public class ColumnMetadata {
 					if (field.isAnnotationPresent(PartitionKey.class)) {
 						PartitionKey partitionKey = field.getAnnotation(PartitionKey.class);
 						fieldColumnMapper.setPartitionKey(partitionKey);
-						partitionKeyMap.put(entityClassName, fieldColumnMapper);
+						partitionKeyMapper.put(entityClassName, fieldColumnMapper);
 					}
 					if (field.isAnnotationPresent(SoftDelete.class)) {
 						SoftDelete columnLogic = field.getAnnotation(SoftDelete.class);
 						fieldColumnMapper.setSoftDelete(columnLogic);
 						fieldColumnMapper.setLogicDelete(true);
-						logicColumnMap.put(entityClassName, fieldColumnMapper);
+						logicColumnMapper.put(entityClassName, fieldColumnMapper);
 					}
 					
 					if (field.isAnnotationPresent(Encrypted.class)) {
@@ -156,14 +156,15 @@ public class ColumnMetadata {
 					}
 					
 					logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
-					fieldColumnMapperList.add(fieldColumnMapper);
+					columnMapperList.add(fieldColumnMapper);
 				}
 			}
+			logger.trace("Class {} , Column List : {}" , entityClassName,columnMapperList);
 			
-			fieldsMap.put(entityClassName, fieldColumnMapperList);
-			logger.trace("fieldsMap : {}" , fieldsMap);
+			columnMapper.put(entityClassName, columnMapperList);
+			logger.trace("Column Mapper : {}" , columnMapper);
 		}
-		return fieldsMap.get(entityClassName);
+		return columnMapper.get(entityClassName);
 	}
 
 }

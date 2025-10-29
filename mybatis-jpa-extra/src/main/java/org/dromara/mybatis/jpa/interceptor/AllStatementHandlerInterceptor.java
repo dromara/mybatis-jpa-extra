@@ -115,13 +115,15 @@ public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInte
 	}
 	
 	private Object handleResultSets(Invocation invocation) throws Throwable {
-		//ResultSetHandler resultSetHandler = (ResultSetHandler) invocation.getTarget();
+	    /*
+		ResultSetHandler resultSetHandler = (ResultSetHandler) invocation.getTarget();
 		
-		//MetaObject metaObject=MetaObject.forObject(resultSetHandler);
-		//RowBounds rowBounds=(RowBounds)metaObject.getValue("rowBounds");
-		//if (rowBounds.getLimit() > 0&& rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT) {
-		//	metaObject.setValue("rowBounds", RowBounds.DEFAULT);
-		//}
+		MetaObject metaObject=MetaObject.forObject(resultSetHandler);
+		RowBounds rowBounds=(RowBounds)metaObject.getValue("rowBounds");
+		if (rowBounds.getLimit() > 0&& rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT) {
+			metaObject.setValue("rowBounds", RowBounds.DEFAULT);
+		}
+	     */
 		return invocation.proceed();
 	}
 	

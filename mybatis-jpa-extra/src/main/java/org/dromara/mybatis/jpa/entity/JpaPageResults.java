@@ -24,11 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * PageResults 前端控件的组装类
+ * JpaPageResults 前端控件的组装类
  * 需要提供
  * 		1、当前页码 		page
  * 		2、当前页记录数 	total
- * 		3、总页数		 	totalPage
+ * 		3、总页数		totalPage
  * 		4、总记录数 		records
  * 		5、记录的列表 	List<T> rows
 
@@ -157,6 +157,15 @@ public  class JpaPageResults <T>{
 	}
 	
 	/**
+	 * 当前页记录数
+	 * @param resultslist
+	 * @return
+	 */
+	public static Integer parseRecords( List<?> resultslist){
+		return CollectionUtils.isEmpty(resultslist) ? 0 : resultslist.size();
+	}
+	
+	/**
 	 * parse Object Count to Integer
 	 * @param totalCount
 	 * @return
@@ -169,15 +178,6 @@ public  class JpaPageResults <T>{
 			retTotalCount = Integer.parseInt(totalCount.toString());
 		}
 		return retTotalCount;
-	}
-	
-	/**
-	 * 当前页记录数
-	 * @param resultslist
-	 * @return
-	 */
-	public static Integer parseRecords( List<?> resultslist){
-		return CollectionUtils.isEmpty(resultslist) ? 0 : resultslist.size();
 	}
 	
 	/**

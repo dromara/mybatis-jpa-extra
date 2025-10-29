@@ -141,13 +141,13 @@ public class MybatisAutoConfiguration implements InitializingBean {
   @Bean
   @ConditionalOnMissingBean
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-	  logger.debug("init sqlSessionFactory .");
-	  //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+    //SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
     //mybatis-jpa
     MyBatisJpaSessionFactoryBean factory = new MyBatisJpaSessionFactoryBean();
     factory.setDataSource(dataSource);
     //mybatis-jpa for map MapWrapper
     factory.setObjectWrapperFactory(new MapWrapperFactory());
+    
     if (properties.getConfiguration() == null || properties.getConfiguration().getVfsImpl() == null) {
       factory.setVfs(SpringBootVFS.class);
     }
@@ -167,13 +167,12 @@ public class MybatisAutoConfiguration implements InitializingBean {
     }
     
     if(this.properties.isTableColumnEscape()) {
-    	MapperMetadata.setTableColumnEscape(true);
+        MapperMetadata.setTableColumnEscape(true);
         if(StringUtils.hasLength(this.properties.getTableColumnEscapeChar())) {
-        	MapperMetadata.setTableColumnEscapeChar( this.properties.getTableColumnEscapeChar());
+            MapperMetadata.setTableColumnEscapeChar(this.properties.getTableColumnEscapeChar());
         }
     }
     
-    //default is lowercase
     int caseType = ConstCaseType.LOWERCASE;
     if (StringUtils.hasLength(this.properties.getTableColumnCase())) {
     	caseType = ConstCaseType.getCaseType(this.properties.getTableColumnCase());
@@ -225,7 +224,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
     applySqlSessionFactoryBeanCustomizers(factory);
     return factory.getObject();
   }
-  
+
   private void applyConfiguration(SqlSessionFactoryBean factory) {
     MybatisProperties.CoreConfiguration coreConfiguration = this.properties.getConfiguration();
     Configuration configuration = null;

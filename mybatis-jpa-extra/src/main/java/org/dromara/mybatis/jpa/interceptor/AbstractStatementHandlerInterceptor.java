@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractStatementHandlerInterceptor  implements Interceptor {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	protected Dialect dialect;
+	protected Dialect 	dialect;
 	
-	protected String dialectString;
+	protected String 	dialectString;
 
 	/**
 	 * @param dialect the dialect to set

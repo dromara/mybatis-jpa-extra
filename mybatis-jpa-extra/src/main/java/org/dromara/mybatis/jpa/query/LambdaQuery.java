@@ -25,15 +25,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.functions.IGetter;
 import org.dromara.mybatis.jpa.util.LambdaUtil;
 
-public class LambdaQuery <T> {
-
-	List<Condition> conditions = new ArrayList<>();
-	
-	List<Condition> groupBy ;
-	
-	List<Condition> orderBy ;
-	
-	boolean softDelete = true;
+public class LambdaQuery <T>  extends BaseQuery {
 	
 	public LambdaQuery() {
 		super();
@@ -606,32 +598,12 @@ public class LambdaQuery <T> {
 		return  this;
 	}
 
-	public List<Condition> getGroupBy() {
-		return groupBy;
-	}
-
-	public List<Condition> getConditions() {
-		return conditions;
-	}
-	
-	public List<Condition> getOrderBy() {
-		return orderBy;
-	}
-	
-	public boolean isSoftDelete() {
-		return softDelete;
-	}
-
-	public void setSoftDelete(boolean softDelete) {
-		this.softDelete = softDelete;
-	}
-
 	/**
 	 * 通过IGetter获取对应的ColumnName名称
 	 * @param getter
 	 * @return ColumnName
 	 */
-	public String getColumnName(IGetter <T> getter ) {
+	protected String getColumnName(IGetter <T> getter ) {
 		return LambdaUtil.getColumnName(getter);
 	}
 

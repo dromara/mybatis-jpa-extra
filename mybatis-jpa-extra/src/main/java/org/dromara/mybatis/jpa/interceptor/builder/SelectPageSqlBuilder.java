@@ -89,11 +89,11 @@ public class SelectPageSqlBuilder {
 				}
 			}
 		}else if(parameterObject instanceof HashMap<?,?> parameterMap){
-			if(parameterMap.containsKey(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE)) {
-				page = (JpaPage)parameterMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE);
-				logger.trace("page : {} " , page);
-			}
-		}else {
+            if(parameterMap.containsKey(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE)) {
+                page = (JpaPage)parameterMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE);
+                logger.trace("page : {} " , page);
+            }
+        }else {
 			//is object not have JpaPage , do nothing
 		}
 		return page;

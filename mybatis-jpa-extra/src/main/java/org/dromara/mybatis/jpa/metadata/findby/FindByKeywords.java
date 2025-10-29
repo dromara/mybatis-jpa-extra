@@ -113,7 +113,7 @@ public class FindByKeywords {
 		 * findByAge(Is)NotNull <br>
 		 * where x.age is not null
 		 */
-		public static final String NOT_NULL 			= "NotNull";
+		public static final String NOT_NULL 		= "NotNull";
 		/**
 		 * findByFirstnameLike <br>
 		 * where x.firstname like ?1
@@ -123,7 +123,7 @@ public class FindByKeywords {
 		 * findByFirstnameNotLike <br>
 		 * where x.firstname not like ?1
 		 */
-		public static final String NOT_LIKE 			= "NotLike";
+		public static final String NOT_LIKE 		= "NotLike";
 		/**
 		 * findByFirstnameStartingWith <br>
 		 * where x.firstname like ?1 (parameter bound with appended %)
@@ -143,7 +143,7 @@ public class FindByKeywords {
 		 * findByAgeOrderByLastnameDesc <br>
 		 * where x.age = ?1 order by x.lastname desc
 		 */
-		public static final String ORDER_BY 			= "OrderBy";
+		public static final String ORDER_BY 		= "OrderBy";
 		/**
 		 * findByLastnameNot <br>
 		 * where x.lastname <> ?1
@@ -175,6 +175,7 @@ public class FindByKeywords {
 		 */
 		public static final String IGNORE_CASE 		= "IgnoreCase";
 	}
+	
 	static {
 		keywords = new ArrayList<>();
 

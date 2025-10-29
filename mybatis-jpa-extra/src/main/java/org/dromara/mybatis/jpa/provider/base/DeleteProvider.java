@@ -48,7 +48,7 @@ public class DeleteProvider <T extends JpaEntity>{
 	public String deleteById(Map<String, Object>  parametersMap) { 
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		ColumnMetadata.buildColumnMapper(entityClass);
-
+		
 		String idValue = (String) parametersMap.get(ConstMetadata.PARAMETER_ID);
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
 		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
@@ -84,12 +84,14 @@ public class DeleteProvider <T extends JpaEntity>{
 		
 		StringBuilder keyValue = new StringBuilder();
 		for(String value : idValues) {
-			if(StringUtils.isNotBlank(value)) {
+			if( StringUtils.isNotBlank(value)) {
 				keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
 				logger.trace("delete by id {}" , value);
 			}
 		}
-		//remove ;
+		/**
+		 * remove ;
+		 */
 		String keyValues = keyValue.substring(1).replace(";", "");
 		
 		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
@@ -110,7 +112,7 @@ public class DeleteProvider <T extends JpaEntity>{
 			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
 		}
 		
-        String deleteSql=sql.toString(); 
+        String deleteSql = sql.toString(); 
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 

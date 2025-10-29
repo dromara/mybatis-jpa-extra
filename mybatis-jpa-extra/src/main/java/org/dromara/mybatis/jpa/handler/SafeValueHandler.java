@@ -21,7 +21,7 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class SafeValueHandler {
 
-	public final class NUMBER_SIGN{
+	public final class NumberSign{
     	public static final String SYMBOL 		= "#";
     	public static final String REPLACE 		= "0x23";
     }
@@ -31,7 +31,7 @@ public class SafeValueHandler {
     	public static final String REPLACE 		= "0x27";
     }
     
-    public final class DECREMENT{
+    public final class Decrement{
     	public static final String SYMBOL 		= "--";
     	public static final String REPLACE 		= "0x2D0x2D";
     }
@@ -87,11 +87,11 @@ public class SafeValueHandler {
 			if(replace.indexOf(SingleQuote.SYMBOL) > -1) {
 				replace = replace.replace(SingleQuote.SYMBOL, SingleQuote.REPLACE);
 			}
-			if(replace.indexOf(DECREMENT.SYMBOL) > -1) {
-				replace = replace.replace(DECREMENT.SYMBOL, DECREMENT.REPLACE);
+			if(replace.indexOf(Decrement.SYMBOL) > -1) {
+				replace = replace.replace(Decrement.SYMBOL, Decrement.REPLACE);
 			}
-			if(replace.indexOf(NUMBER_SIGN.SYMBOL) > -1) {
-				replace = replace.replace(NUMBER_SIGN.SYMBOL, NUMBER_SIGN.REPLACE);
+			if(replace.indexOf(NumberSign.SYMBOL) > -1) {
+				replace = replace.replace(NumberSign.SYMBOL, NumberSign.REPLACE);
 			}
 		}
 		return replace;
@@ -106,7 +106,7 @@ public class SafeValueHandler {
 		return column.replace("'", "")
 				.replace(" ", "")
 				.replace(";", "")
-				.replace(DECREMENT.SYMBOL, DECREMENT.REPLACE);
+				.replace(Decrement.SYMBOL, Decrement.REPLACE);
 	}
 	
 }

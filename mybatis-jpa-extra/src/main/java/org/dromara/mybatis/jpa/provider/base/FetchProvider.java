@@ -96,9 +96,11 @@ public class FetchProvider <T extends JpaEntity>{
 		
 		SQL sql = new SQL()
 				.SELECT(column)
-				.FROM(TableMetadata.getTableName(entity.getClass()))
-				.WHERE(conditions.toString());
+				.FROM(TableMetadata.getTableName(entity.getClass()));
 		
+		if(StringUtils.isNotBlank(conditions)) {
+			sql.WHERE(conditions.toString());
+		}
 		logger.trace("Query Page SQL : \n{}" , sql);
 		return sql.toString();
 	}
@@ -111,6 +113,7 @@ public class FetchProvider <T extends JpaEntity>{
 	public String fetchByQuery(Map<String, Object>  parametersMap) {
 		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
 		Query condition = (Query)parametersMap.get(ConstMetadata.CONDITION);
+		
 		List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
 		String[] column = new String[listFields.size()] ;
 		for(int i = 0 ; i< listFields.size() ; i++) {
