@@ -33,6 +33,7 @@ public class MapWrapperFactory implements ObjectWrapperFactory {
     }
 
     @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public ObjectWrapper getWrapperFor(MetaObject metaObject, Object object) {
         return new MapKeyLowerWrapper(metaObject, (Map) object);
     }
