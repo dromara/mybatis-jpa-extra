@@ -33,7 +33,7 @@ public class ConditionValue {
 	public static String valueOfList(List<?> listValue) {
 		StringBuilder conditionArray = new StringBuilder();
 		for (Object value : listValue) {
-			if (conditionArray.isEmpty()) {
+			if (!conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
 			conditionArray.append(SafeValueHandler.valueOfType(value));
@@ -44,7 +44,7 @@ public class ConditionValue {
 	public static String valueOfArray(Object[] objects) {
 		StringBuilder conditionArray = new StringBuilder();
 		for (int i = 0 ; i< objects.length ; i++) {
-			if (conditionArray.isEmpty()) {
+			if (!conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
 			conditionArray.append(SafeValueHandler.valueOfType(objects[i]));
@@ -55,7 +55,7 @@ public class ConditionValue {
 	public static String valueOfCollection(Collection<?> cObjects) {
 		StringBuilder conditionArray = new StringBuilder();
         for (Object element : cObjects) {//for循环读取集合
-        	if (conditionArray.isEmpty()) {
+        	if (!conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
         	conditionArray.append(SafeValueHandler.valueOfType(element));
@@ -68,7 +68,7 @@ public class ConditionValue {
 		Iterator<?> iterator = listValue.iterator();
         while (iterator.hasNext()) {//while循环读取集合
         	Object element = iterator.next();
-        	if (conditionArray.isEmpty()) {
+        	if (!conditionArray.isEmpty()) {
 				conditionArray.append(" , ");
 			}
         	conditionArray.append(SafeValueHandler.valueOfType(element));
