@@ -25,9 +25,9 @@ import org.dromara.mybatis.jpa.id.IdentifierGenerator;
  */
 public class UUIDGenerator implements IdentifierGenerator{
 
-	@Override
-	public String generate(Object object) {
-		return UUID.randomUUID().toString().toLowerCase();
-	}
+    @Override
+    public String generate(Object object) {
+        return UUID.randomUUID().toString().toLowerCase();
+    }
 
 }

@@ -21,17 +21,17 @@ package org.dromara.mybatis.jpa.id;
  */
 public class IdentifierStrategy {
 
-	/**
-	 * uuid
-	 */
-	public static final  String UUID			= "uuid";
-	/**
-	 * snowflakeid
-	 */
-	public static final  String SNOWFLAKEID		= "snowflakeid";
-	/**
-	 * as snowflakeid
-	 */
-	public static final  String DEFAULT			= "default";
-	
+    /**
+     * uuid
+     */
+    public static final  String UUID            = "uuid";
+    /**
+     * snowflakeid
+     */
+    public static final  String SNOWFLAKEID        = "snowflakeid";
+    /**
+     * as snowflakeid
+     */
+    public static final  String DEFAULT            = "default";
+    
 }

@@ -42,88 +42,88 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SoftDeleteProvider <T extends JpaEntity>{	
-	static final Logger logger 	= 	LoggerFactory.getLogger(SoftDeleteProvider.class);
+public class SoftDeleteProvider <T extends JpaEntity>{    
+    static final Logger logger     =     LoggerFactory.getLogger(SoftDeleteProvider.class);
 
-	@SuppressWarnings("unchecked")
-	public String softDelete(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
-		
-		StringBuilder keyValue = new StringBuilder();
-		for(String value : idValues) {
-			if(StringUtils.isNotBlank(value)) {
-				keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
-				logger.trace("softDelete by id {}" , value);
-			}
-		}
-		/**
-		 *  remove ;
-		 */
-		String keyValues = keyValue.substring(1).replace(";", "");
-		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
-		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
-		
-		SQL sql=new SQL()
-				.UPDATE(TableMetadata.getTableName(entityClass))
-				.SET(" %s = '%s' ".formatted(
-						logicColumnMapper.getColumn(),
-						logicColumnMapper.getSoftDelete().delete()
-					)
-				);
-		
-		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-			sql.WHERE("%s = #{%s} and %s  in ( %s )"
-					.formatted(
-							partitionKeyColumnMapper.getColumn() ,
-							partitionKeyValue,
-							idFieldColumnMapper.getColumn(),
-							idFieldColumnMapper.getField())
-        			);  
-		}else {
-			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
-		}
-		
+    @SuppressWarnings("unchecked")
+    public String softDelete(Map<String, Object>  parametersMap) { 
+        Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
+        
+        StringBuilder keyValue = new StringBuilder();
+        for(String value : idValues) {
+            if(StringUtils.isNotBlank(value)) {
+                keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
+                logger.trace("softDelete by id {}" , value);
+            }
+        }
+        /**
+         *  remove ;
+         */
+        String keyValues = keyValue.substring(1).replace(";", "");
+        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
+        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+        ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        
+        SQL sql=new SQL()
+                .UPDATE(TableMetadata.getTableName(entityClass))
+                .SET(" %s = '%s' ".formatted(
+                        logicColumnMapper.getColumn(),
+                        logicColumnMapper.getSoftDelete().delete()
+                    )
+                );
+        
+        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
+            sql.WHERE("%s = #{%s} and %s  in ( %s )"
+                    .formatted(
+                            partitionKeyColumnMapper.getColumn() ,
+                            partitionKeyValue,
+                            idFieldColumnMapper.getColumn(),
+                            idFieldColumnMapper.getField())
+                    );  
+        }else {
+            sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
+        }
+        
         String deleteSql = sql.toString(); 
         logger.trace("softDelete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
-	
-	public String softDeleteByQuery(Class<?> entityClass, Query query) {
-		logger.trace("softDelete By Query \n{}" , query);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-		
-		SQL sql = new SQL()
-				.UPDATE(TableMetadata.getTableName(entityClass))
-				.SET(" %s = '%s' ".formatted(
-						logicColumnMapper.getColumn(),
-						logicColumnMapper.getSoftDelete().delete()
-					)
-				).WHERE(QueryBuilder.build(query));
-		
-		logger.trace("softDelete By Query  SQL \n{}" , sql);
-		return sql.toString();
-	}
-	
-	public String softDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
-		logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-		
-		SQL sql = new SQL()
-				.UPDATE(TableMetadata.getTableName(entityClass))
-				.SET(" %s = '%s' ".formatted(
-						logicColumnMapper.getColumn(),
-						logicColumnMapper.getSoftDelete().delete()
-					)
-				).WHERE(LambdaQueryBuilder.build(lambdaQuery));
-		
-		logger.trace("softDelete By LambdaQuery  SQL \n{}" , sql);
-		return sql.toString();
-	}
+    
+    public String softDeleteByQuery(Class<?> entityClass, Query query) {
+        logger.trace("softDelete By Query \n{}" , query);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+        
+        SQL sql = new SQL()
+                .UPDATE(TableMetadata.getTableName(entityClass))
+                .SET(" %s = '%s' ".formatted(
+                        logicColumnMapper.getColumn(),
+                        logicColumnMapper.getSoftDelete().delete()
+                    )
+                ).WHERE(QueryBuilder.build(query));
+        
+        logger.trace("softDelete By Query  SQL \n{}" , sql);
+        return sql.toString();
+    }
+    
+    public String softDeleteByLambdaQuery(Class<?> entityClass, LambdaQuery <T> lambdaQuery) {
+        logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+        
+        SQL sql = new SQL()
+                .UPDATE(TableMetadata.getTableName(entityClass))
+                .SET(" %s = '%s' ".formatted(
+                        logicColumnMapper.getColumn(),
+                        logicColumnMapper.getSoftDelete().delete()
+                    )
+                ).WHERE(LambdaQueryBuilder.build(lambdaQuery));
+        
+        logger.trace("softDelete By LambdaQuery  SQL \n{}" , sql);
+        return sql.toString();
+    }
 
 }

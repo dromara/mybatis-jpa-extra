@@ -24,67 +24,67 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class OracleDialect extends AbstractDialect {
 
-	public OracleDialect() {
-		super();
+    public OracleDialect() {
+        super();
 
-	}
+    }
 
-	@Override
-	public boolean supportsLimit() {
-		return true;
-	}
-	
-	@Override
-	public String getLimitString(String sql,  JpaPage page) {
-		if ( page.getPageSize() == 0 ) {
-			return sql + " fetch first " + page.getStartRow() + " rows only";
-		}
-		StringBuilder pagingSelect = new StringBuilder( sql.length() + 200 )
-				.append(
-						"select * from (select inner_table_.*, rownum as rownumber_  from ( "
-				)
-				.append( sql )  //nest the main query in an outer select
-				.append( ")  inner_table_ )  where rownumber_ > " )
-				.append( page.getStartRow() )
-				.append(" and rownumber_ <=")
-				.append( page.getEndRow() )
-				.append( " order by rownumber_" );
-		return pagingSelect.toString();
-	}
-	
-	/**
-	 * LIMIT #{pageResults}  OFFSET #{startRow}
-	 */
-	@Override
-	public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
-		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " limit ? , ?";
-		}else if(pagination.getPageSize()>0){
-			return sql +  " limit  ? ";
-		}else{
-			return sql +  " limit ?";
-		}
-	}
-	
-	@Override
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
-		
-		try {
-			if(page.getPageSize()>0&&page.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-			}else if(page.getPageSize()>0){
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-			}else{
-				preparedStatement.setInt(++parameterSize, 1000);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public String toString() {
-		return "OracleDialect [" + OracleDialect.class + "]";
-	}
+    @Override
+    public boolean supportsLimit() {
+        return true;
+    }
+    
+    @Override
+    public String getLimitString(String sql,  JpaPage page) {
+        if ( page.getPageSize() == 0 ) {
+            return sql + " fetch first " + page.getStartRow() + " rows only";
+        }
+        StringBuilder pagingSelect = new StringBuilder( sql.length() + 200 )
+                .append(
+                        "select * from (select inner_table_.*, rownum as rownumber_  from ( "
+                )
+                .append( sql )  //nest the main query in an outer select
+                .append( ")  inner_table_ )  where rownumber_ > " )
+                .append( page.getStartRow() )
+                .append(" and rownumber_ <=")
+                .append( page.getEndRow() )
+                .append( " order by rownumber_" );
+        return pagingSelect.toString();
+    }
+    
+    /**
+     * LIMIT #{pageResults}  OFFSET #{startRow}
+     */
+    @Override
+    public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
+        if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
+            return sql +  " limit ? , ?";
+        }else if(pagination.getPageSize()>0){
+            return sql +  " limit  ? ";
+        }else{
+            return sql +  " limit ?";
+        }
+    }
+    
+    @Override
+    public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
+        
+        try {
+            if(page.getPageSize()>0&&page.getStartRow()>0){
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+            }else if(page.getPageSize()>0){
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+            }else{
+                preparedStatement.setInt(++parameterSize, 1000);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public String toString() {
+        return "OracleDialect [" + OracleDialect.class + "]";
+    }
 }

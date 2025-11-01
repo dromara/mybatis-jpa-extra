@@ -25,64 +25,64 @@ import org.slf4j.LoggerFactory;
  * 提供数据源切换、获取、清理等操作
  */
 public class DataSourceSwitch {
-	private static final Logger logger = LoggerFactory.getLogger(DataSourceSwitch.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceSwitch.class);
 
-	/**
-	 * 切换数据源
-	 * @param key 数据源key
-	 * @return 当前生效的数据源key
-	 * @throws IllegalArgumentException 当数据源key为空时抛出
-	 */
-	public static String change(String key) {
-		if (StringUtils.isBlank(key)) {
-			throw new IllegalArgumentException("DataSource key cannot be null or empty");
-		}
+    /**
+     * 切换数据源
+     * @param key 数据源key
+     * @return 当前生效的数据源key
+     * @throws IllegalArgumentException 当数据源key为空时抛出
+     */
+    public static String change(String key) {
+        if (StringUtils.isBlank(key)) {
+            throw new IllegalArgumentException("DataSource key cannot be null or empty");
+        }
 
-		String currentKey = DynamicDataSourceContextHolder.getDataSource();
-		logger.debug("Current DataSource: {}, Target DataSource: {}", currentKey, key);
+        String currentKey = DynamicDataSourceContextHolder.getDataSource();
+        logger.debug("Current DataSource: {}, Target DataSource: {}", currentKey, key);
 
-		// 如果目标数据源与当前数据源相同，无需切换
-		if (key.equals(currentKey)) {
-			logger.trace("DataSource {} is already active, no change needed", key);
-			return currentKey;
-		}
+        // 如果目标数据源与当前数据源相同，无需切换
+        if (key.equals(currentKey)) {
+            logger.trace("DataSource {} is already active, no change needed", key);
+            return currentKey;
+        }
 
-		// 检查目标数据源是否存在
-		if (!DynamicRoutingDataSource.isExist(key)) {
-			logger.error("DataSource key '{}' does not exist in the configured data sources", key);
-			throw new IllegalArgumentException("DataSource key '" + key + "' does not exist");
-		}
+        // 检查目标数据源是否存在
+        if (!DynamicRoutingDataSource.isExist(key)) {
+            logger.error("DataSource key '{}' does not exist in the configured data sources", key);
+            throw new IllegalArgumentException("DataSource key '" + key + "' does not exist");
+        }
 
-		DynamicDataSourceContextHolder.setDataSource(key);
-		logger.info("Successfully switched DataSource from '{}' to '{}'", currentKey, key);
-		return key;
-	}
+        DynamicDataSourceContextHolder.setDataSource(key);
+        logger.info("Successfully switched DataSource from '{}' to '{}'", currentKey, key);
+        return key;
+    }
 
-	/**
-	 * 切换到默认数据源
-	 * @return 默认数据源key，如果没有配置则返回null
-	 */
-	public static String switchToDefault() {
-		String defaultKey = DynamicRoutingDataSource.getDefaultDataSourceKey();
-		DynamicDataSourceContextHolder.clearDataSource();
-		logger.info("Switched to default DataSource: {}", defaultKey);
-		return defaultKey;
-	}
+    /**
+     * 切换到默认数据源
+     * @return 默认数据源key，如果没有配置则返回null
+     */
+    public static String switchToDefault() {
+        String defaultKey = DynamicRoutingDataSource.getDefaultDataSourceKey();
+        DynamicDataSourceContextHolder.clearDataSource();
+        logger.info("Switched to default DataSource: {}", defaultKey);
+        return defaultKey;
+    }
 
-	/**
-	 * 获取当前数据源key
-	 * @return 当前数据源key
-	 */
-	public static String getCurrentDataSource() {
-		return DynamicDataSourceContextHolder.getDataSource();
-	}
+    /**
+     * 获取当前数据源key
+     * @return 当前数据源key
+     */
+    public static String getCurrentDataSource() {
+        return DynamicDataSourceContextHolder.getDataSource();
+    }
 
-	/**
-	 * 检查指定数据源是否存在
-	 * @param key 数据源key
-	 * @return true如果存在，false如果不存在
-	 */
-	public static boolean exists(String key) {
-		return DynamicRoutingDataSource.isExist(key);
-	}
+    /**
+     * 检查指定数据源是否存在
+     * @param key 数据源key
+     * @return true如果存在，false如果不存在
+     */
+    public static boolean exists(String key) {
+        return DynamicRoutingDataSource.isExist(key);
+    }
 }

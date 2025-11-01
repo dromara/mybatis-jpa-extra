@@ -163,7 +163,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
     }
     //mybatis-jpa
     if (StringUtils.hasLength(this.properties.getDialect())) {
-    	factory.setDialect(this.properties.getDialect());
+        factory.setDialect(this.properties.getDialect());
     }
     
     if(this.properties.isTableColumnEscape()) {
@@ -175,16 +175,16 @@ public class MybatisAutoConfiguration implements InitializingBean {
     
     int caseType = ConstCaseType.LOWERCASE;
     if (StringUtils.hasLength(this.properties.getTableColumnCase())) {
-    	caseType = ConstCaseType.getCaseType(this.properties.getTableColumnCase());
+        caseType = ConstCaseType.getCaseType(this.properties.getTableColumnCase());
     }
     MapperMetadata.setTableColumnCase(caseType);
     
     if(this.properties.getTableColumnSnowflakeDatacenterId()>0 && 
-    		this.properties.getTableColumnSnowflakeMachineId()>0) {
-    	logger.debug("TableColumn Snowflake init ");
-    	IdentifierGeneratorFactory  identifierGeneratorFactory = new IdentifierGeneratorFactory(
-    			this.properties.getTableColumnSnowflakeDatacenterId(),this.properties.getTableColumnSnowflakeMachineId());
-    	MapperMetadata.setIdentifierGeneratorFactory(identifierGeneratorFactory);
+            this.properties.getTableColumnSnowflakeMachineId()>0) {
+        logger.debug("TableColumn Snowflake init ");
+        IdentifierGeneratorFactory  identifierGeneratorFactory = new IdentifierGeneratorFactory(
+                this.properties.getTableColumnSnowflakeDatacenterId(),this.properties.getTableColumnSnowflakeMachineId());
+        MapperMetadata.setIdentifierGeneratorFactory(identifierGeneratorFactory);
     }
     
     if (this.databaseIdProvider != null) {

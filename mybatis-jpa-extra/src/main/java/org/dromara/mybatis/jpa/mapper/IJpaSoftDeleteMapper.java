@@ -31,17 +31,17 @@ import org.dromara.mybatis.jpa.query.Query;
  * @param <T>
  */
 public interface IJpaSoftDeleteMapper<T> {
-	
-	@UpdateProvider(type = MapperProvider.class, method = "softDelete")
-	public Integer softDelete(	
-							@Param (ConstMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
-							@Param (ConstMetadata.PARAMETER_ID_LIST) 		List<String> idList,
-							@Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
-	
-	@UpdateProvider(type = MapperProvider.class, method = "softDeleteByQuery")
-	public Integer softDeleteByQuery(Class<?> entityClass , Query query);	
-	
-	@UpdateProvider(type = MapperProvider.class, method = "softDeleteByLambdaQuery")
-	public Integer softDeleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);	
-		
+    
+    @UpdateProvider(type = MapperProvider.class, method = "softDelete")
+    public Integer softDelete(    
+                            @Param (ConstMetadata.ENTITY_CLASS)            Class<?>     entityClass,
+                            @Param (ConstMetadata.PARAMETER_ID_LIST)         List<String> idList,
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+    
+    @UpdateProvider(type = MapperProvider.class, method = "softDeleteByQuery")
+    public Integer softDeleteByQuery(Class<?> entityClass , Query query);    
+    
+    @UpdateProvider(type = MapperProvider.class, method = "softDeleteByLambdaQuery")
+    public Integer softDeleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);    
+        
 }

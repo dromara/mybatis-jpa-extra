@@ -24,94 +24,94 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FindByMapper {
-	private static final Logger logger 	= 	LoggerFactory.getLogger(FindByMapper.class);
-	
-	/**
-	 * 
-	 */
-	String mappedStatementId;
-	
-	/**
-	 * 
-	 */
-	String mappedStatementMethodName;
-	
-	/**
-	 * 
-	 */
-	String removedFindByName;
-	
-	/**
-	 * 
-	 */
-	Class<?> mappedStatementClass;
-	
-	String mappedStatementClassName;
-	/**
-	 * 
-	 */
-	Class<?> entityClass;
-	
-	boolean isDistinct = false;
-	
+    private static final Logger logger     =     LoggerFactory.getLogger(FindByMapper.class);
+    
+    /**
+     * 
+     */
+    String mappedStatementId;
+    
+    /**
+     * 
+     */
+    String mappedStatementMethodName;
+    
+    /**
+     * 
+     */
+    String removedFindByName;
+    
+    /**
+     * 
+     */
+    Class<?> mappedStatementClass;
+    
+    String mappedStatementClassName;
+    /**
+     * 
+     */
+    Class<?> entityClass;
+    
+    boolean isDistinct = false;
+    
 
-	public FindByMapper(String mappedStatementId) {
-		this.mappedStatementId = mappedStatementId;
-	}
-	
-	public void parseFindBy() {
-		mappedStatementClassName = mappedStatementId.substring(0, mappedStatementId.lastIndexOf("."));
-		logger.trace("mappedStatementClass {}" ,mappedStatementClassName);
-		mappedStatementMethodName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
-		logger.trace("methodName {}" , mappedStatementMethodName);
+    public FindByMapper(String mappedStatementId) {
+        this.mappedStatementId = mappedStatementId;
+    }
+    
+    public void parseFindBy() {
+        mappedStatementClassName = mappedStatementId.substring(0, mappedStatementId.lastIndexOf("."));
+        logger.trace("mappedStatementClass {}" ,mappedStatementClassName);
+        mappedStatementMethodName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
+        logger.trace("methodName {}" , mappedStatementMethodName);
 
-		if(mappedStatementMethodName.startsWith(FindByKeywords.FINDBY)) {
-			removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDBY.length());
-		}else if(mappedStatementMethodName.startsWith(FindByKeywords.FINDDISTINCTBY)){
-			isDistinct = true;
-			removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDDISTINCTBY.length());
-		}
-		logger.trace("removed FindBy name : {}" , removedFindByName);
-	}
-	
-	public void parseEntityClass() {
-		try {
-			mappedStatementClass  = Class.forName(mappedStatementClassName);
-			Type[] pType = mappedStatementClass.getGenericInterfaces();
-			if (pType != null && pType.length >= 1) {
-				ParameterizedType parameterizedType = (ParameterizedType)pType[0];
-				if(parameterizedType != null && parameterizedType.getActualTypeArguments().length > 0) {
-					entityClass = (Class<?>)parameterizedType.getActualTypeArguments()[0];
-					logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
-				}
-			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+        if(mappedStatementMethodName.startsWith(FindByKeywords.FINDBY)) {
+            removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDBY.length());
+        }else if(mappedStatementMethodName.startsWith(FindByKeywords.FINDDISTINCTBY)){
+            isDistinct = true;
+            removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDDISTINCTBY.length());
+        }
+        logger.trace("removed FindBy name : {}" , removedFindByName);
+    }
+    
+    public void parseEntityClass() {
+        try {
+            mappedStatementClass  = Class.forName(mappedStatementClassName);
+            Type[] pType = mappedStatementClass.getGenericInterfaces();
+            if (pType != null && pType.length >= 1) {
+                ParameterizedType parameterizedType = (ParameterizedType)pType[0];
+                if(parameterizedType != null && parameterizedType.getActualTypeArguments().length > 0) {
+                    entityClass = (Class<?>)parameterizedType.getActualTypeArguments()[0];
+                    logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public String getMappedStatementId() {
-		return mappedStatementId;
-	}
+    public String getMappedStatementId() {
+        return mappedStatementId;
+    }
 
-	public String getMappedStatementMethodName() {
-		return mappedStatementMethodName;
-	}
+    public String getMappedStatementMethodName() {
+        return mappedStatementMethodName;
+    }
 
-	public String getRemovedFindByName() {
-		return removedFindByName;
-	}
+    public String getRemovedFindByName() {
+        return removedFindByName;
+    }
 
-	public Class<?> getMappedStatementClass() {
-		return mappedStatementClass;
-	}
+    public Class<?> getMappedStatementClass() {
+        return mappedStatementClass;
+    }
 
-	public Class<?> getEntityClass() {
-		return entityClass;
-	}
+    public Class<?> getEntityClass() {
+        return entityClass;
+    }
 
-	public boolean isDistinct() {
-		return isDistinct;
-	}
+    public boolean isDistinct() {
+        return isDistinct;
+    }
 
 }

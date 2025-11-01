@@ -30,14 +30,14 @@ import org.springframework.context.annotation.Primary;
 public class MybatisJpaConfig {
 
     @Bean
-	@Primary
-	@ConfigurationProperties("spring.datasource")
-	public DataSource dataSource() {
-		return DruidDataSourceBuilder.create().build();
-	}
+    @Primary
+    @ConfigurationProperties("spring.datasource")
+    public DataSource dataSource() {
+        return DruidDataSourceBuilder.create().build();
+    }
 
     @Bean
     PersistFieldAutoFillHandler mxkFieldAutoFillHandler() {
-    	return new PersistFieldAutoFillHandler();
+        return new PersistFieldAutoFillHandler();
     }
 }

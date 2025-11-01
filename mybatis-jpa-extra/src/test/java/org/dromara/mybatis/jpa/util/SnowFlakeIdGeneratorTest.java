@@ -23,14 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SnowFlakeIdGeneratorTest {
-	private static final Logger _logger = LoggerFactory.getLogger(SnowFlakeIdGeneratorTest.class);
-	@Test
-	 void generator() {
-		SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator();
-		_logger.info(uhg.generate(""));
-		_logger.info(uhg.generate(""));
-		StringBuilder  conditionString =new StringBuilder ("");
-		_logger.info("length {}",conditionString.length());
-	}
+    private static final Logger _logger = LoggerFactory.getLogger(SnowFlakeIdGeneratorTest.class);
+    @Test
+     void generator() {
+        SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator();
+        _logger.info(uhg.generate(""));
+        _logger.info(uhg.generate(""));
+        StringBuilder  conditionString =new StringBuilder ("");
+        _logger.info("length {}",conditionString.length());
+    }
 
 }

@@ -30,38 +30,38 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
  */
 public abstract class AbstractDialect implements Dialect{
 
-	protected AbstractDialect() {
+    protected AbstractDialect() {
 
-	}
+    }
 
-	@Override
+    @Override
     public String toString() {
-		return getClass().getName();
-	}
+        return getClass().getName();
+    }
 
-	/**
-	 * Given a limit and an offset, apply the limit clause to the query.
-	 *
-	 * @param query The query to which to apply the limit.
-	 * @param offset The offset of the limit
-	 * @param limit The limit of the limit ;)
-	 * @return The modified query statement with the limit applied.
-	 */
+    /**
+     * Given a limit and an offset, apply the limit clause to the query.
+     *
+     * @param query The query to which to apply the limit.
+     * @param offset The offset of the limit
+     * @param limit The limit of the limit ;)
+     * @return The modified query statement with the limit applied.
+     */
 
-	public String getLimitString(String query, JpaPage page) {
-		throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
-	}
-	
-	public String getPreparedStatementLimitString(String query, JpaPage page) {
-		throw new UnsupportedOperationException( "PreparedStatement Paged queries not supported by " + getClass().getName());
-	}
-	
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage pagination) {
-		throw new UnsupportedOperationException( "Limit Paramter Paged queries not supported by " + getClass().getName());
-	}
-	
-	public boolean supportsLimit() {
-		return false;
-	}
-	
+    public String getLimitString(String query, JpaPage page) {
+        throw new UnsupportedOperationException( "Paged queries not supported by " + getClass().getName());
+    }
+    
+    public String getPreparedStatementLimitString(String query, JpaPage page) {
+        throw new UnsupportedOperationException( "PreparedStatement Paged queries not supported by " + getClass().getName());
+    }
+    
+    public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage pagination) {
+        throw new UnsupportedOperationException( "Limit Paramter Paged queries not supported by " + getClass().getName());
+    }
+    
+    public boolean supportsLimit() {
+        return false;
+    }
+    
 }

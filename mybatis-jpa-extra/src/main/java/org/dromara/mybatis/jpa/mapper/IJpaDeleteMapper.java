@@ -31,46 +31,46 @@ import org.dromara.mybatis.jpa.query.Query;
  * @param <T>
  */
 public interface IJpaDeleteMapper<T> {
-	
-	/**
-	 * delete by Query
-	 * @param entityClass
-	 * @param query
-	 * @return
-	 */
-	@DeleteProvider(type = MapperProvider.class, method = "deleteByQuery")
-	public Integer deleteByQuery(Class<?> entityClass , Query query);	
-	
-	/**
-	 * delete by LambdaQuery
-	 * @param entityClass
-	 * @param lambdaQuery
-	 * @return
-	 */
-	@DeleteProvider(type = MapperProvider.class, method = "deleteByLambdaQuery")
-	public Integer deleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);	
-	
-	/**
-	 * delete by id
-	 * @param id
-	 * @return
-	 */
-	@DeleteProvider(type = MapperProvider.class, method = "deleteById")
-	public Integer deleteById(	@Param (ConstMetadata.ENTITY_CLASS)			Class<?> entityClass,
-							@Param (ConstMetadata.PARAMETER_ID) String id,
-							@Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
-	
-	/**
-	 * delete by idList
-	 * @param entityClass
-	 * @param idList
-	 * @param partitionKey
-	 * @return
-	 */
-	@DeleteProvider(type = MapperProvider.class, method = "deleteBatch")
-	public Integer deleteBatch(	
-							@Param (ConstMetadata.ENTITY_CLASS)			Class<?> entityClass,
-							@Param (ConstMetadata.PARAMETER_ID_LIST)	 	List<String> idList,
-							@Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);	
-		
+    
+    /**
+     * delete by Query
+     * @param entityClass
+     * @param query
+     * @return
+     */
+    @DeleteProvider(type = MapperProvider.class, method = "deleteByQuery")
+    public Integer deleteByQuery(Class<?> entityClass , Query query);    
+    
+    /**
+     * delete by LambdaQuery
+     * @param entityClass
+     * @param lambdaQuery
+     * @return
+     */
+    @DeleteProvider(type = MapperProvider.class, method = "deleteByLambdaQuery")
+    public Integer deleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);    
+    
+    /**
+     * delete by id
+     * @param id
+     * @return
+     */
+    @DeleteProvider(type = MapperProvider.class, method = "deleteById")
+    public Integer deleteById(    @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
+                            @Param (ConstMetadata.PARAMETER_ID) String id,
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+    
+    /**
+     * delete by idList
+     * @param entityClass
+     * @param idList
+     * @param partitionKey
+     * @return
+     */
+    @DeleteProvider(type = MapperProvider.class, method = "deleteBatch")
+    public Integer deleteBatch(    
+                            @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
+                            @Param (ConstMetadata.PARAMETER_ID_LIST)         List<String> idList,
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);    
+        
 }

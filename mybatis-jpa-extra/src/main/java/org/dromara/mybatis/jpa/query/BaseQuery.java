@@ -25,36 +25,36 @@ import java.util.List;
  */
 public class BaseQuery {
 
-	ArrayList<Condition> conditions = new ArrayList<>();
-	
-	ArrayList<Condition> groupBy ;
-	
-	ArrayList<Condition> orderBy ;
-	
-	boolean softDelete = true;
-	
-	public BaseQuery() {
-		super();
-	}
+    ArrayList<Condition> conditions = new ArrayList<>();
+    
+    ArrayList<Condition> groupBy ;
+    
+    ArrayList<Condition> orderBy ;
+    
+    boolean softDelete = true;
+    
+    public BaseQuery() {
+        super();
+    }
 
-	public List<Condition> getConditions() {
-		return conditions;
-	}
+    public List<Condition> getConditions() {
+        return conditions;
+    }
 
-	public List<Condition> getOrderBy() {
-		return orderBy;
-	}
+    public List<Condition> getOrderBy() {
+        return orderBy;
+    }
 
-	public List<Condition> getGroupBy() {
-		return groupBy;
-	}
+    public List<Condition> getGroupBy() {
+        return groupBy;
+    }
 
-	public boolean isSoftDelete() {
-		return softDelete;
-	}
+    public boolean isSoftDelete() {
+        return softDelete;
+    }
 
-	public void setSoftDelete(boolean softDelete) {
-		this.softDelete = softDelete;
-	}
-	
+    public void setSoftDelete(boolean softDelete) {
+        this.softDelete = softDelete;
+    }
+    
 }

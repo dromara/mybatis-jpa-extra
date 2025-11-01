@@ -22,15 +22,15 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public interface Dialect {
 
-	public static final String DEFAULT_BATCH_SIZE	= 	"20";
-	public static final String NO_BATCH 			= 	"0";
-	
-	public boolean supportsLimit();
-	
-	public String getLimitString(String query, JpaPage page) ;
-	
-	public String getPreparedStatementLimitString(String sql,  JpaPage pagination);
-	
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page);
-	
+    public static final String DEFAULT_BATCH_SIZE    =     "20";
+    public static final String NO_BATCH             =     "0";
+    
+    public boolean supportsLimit();
+    
+    public String getLimitString(String query, JpaPage page) ;
+    
+    public String getPreparedStatementLimitString(String sql,  JpaPage pagination);
+    
+    public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page);
+    
 }

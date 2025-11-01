@@ -30,11 +30,11 @@ import org.dromara.mybatis.jpa.functions.IGetter;
 import jakarta.persistence.Column;
 
 public class LambdaUtil {
-	public static final String PREFIX_GET 		= "get";
+    public static final String PREFIX_GET         = "get";
 
-    public static final String PREFIX_IS 		= "is";
+    public static final String PREFIX_IS         = "is";
     
-    public static final String WRITE_REPLACE 	= "writeReplace";
+    public static final String WRITE_REPLACE     = "writeReplace";
     
 
     /**
@@ -74,7 +74,7 @@ public class LambdaUtil {
             method.setAccessible(Boolean.TRUE);
             return (SerializedLambda) method.invoke(func);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-        	throw new RuntimeException("can't parser getter name of " + clazz.getClass().getSimpleName(), e);
+            throw new RuntimeException("can't parser getter name of " + clazz.getClass().getSimpleName(), e);
         }
     }
     
@@ -82,22 +82,22 @@ public class LambdaUtil {
         try {
             return Class.forName(impClass.replace("/", "."));
         } catch (ClassNotFoundException e) {
-        	throw new RuntimeException("ClassNotFoundException class name of " + impClass, e);
+            throw new RuntimeException("ClassNotFoundException class name of " + impClass, e);
         }
     }
     
     public static Field findField(Class<?> clazz, String fieldName) {
         if (StringUtils.isNotBlank(fieldName)) {
-	        Class<?> searchType = clazz;
-	        while (Object.class != searchType && searchType != null) {
-	            Field[] fields = searchType.getDeclaredFields();
-	            for (Field field : fields) {
-	                if (fieldName.equals(field.getName())) {
-	                    return field;
-	                }
-	            }
-	            searchType = searchType.getSuperclass();
-	        }
+            Class<?> searchType = clazz;
+            while (Object.class != searchType && searchType != null) {
+                Field[] fields = searchType.getDeclaredFields();
+                for (Field field : fields) {
+                    if (fieldName.equals(field.getName())) {
+                        return field;
+                    }
+                }
+                searchType = searchType.getSuperclass();
+            }
         }
         return null;
     }

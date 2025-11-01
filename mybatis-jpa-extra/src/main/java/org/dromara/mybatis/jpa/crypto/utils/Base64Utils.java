@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Base64Utils {
-	private static Logger logger = LoggerFactory.getLogger(Base64Utils.class);
+    private static Logger logger = LoggerFactory.getLogger(Base64Utils.class);
 
     private Base64Utils(){
 
@@ -63,22 +63,22 @@ public class Base64Utils {
     }
 
     public static String encodeImage(BufferedImage bufferedImage) {
-    	try {
-    		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			ImageIO.write(bufferedImage, "png", stream);
-			String b64Image = "data:image/png;base64," +
-					java.util.Base64.getEncoder().encodeToString(stream.toByteArray());
-			stream.close();
-	        return b64Image;
-    	}catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    	return "";
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", stream);
+            String b64Image = "data:image/png;base64," +
+                    java.util.Base64.getEncoder().encodeToString(stream.toByteArray());
+            stream.close();
+            return b64Image;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static String encodeImage(byte[] byteImage) {
-    	return "data:image/png;base64," +
-    			java.util.Base64.getEncoder().encodeToString(byteImage);
+        return "data:image/png;base64," +
+                java.util.Base64.getEncoder().encodeToString(byteImage);
     }
 
     /**
@@ -95,7 +95,7 @@ public class Base64Utils {
             byte[] buffer = inputFile.readAllBytes();
             return encodeBase64(buffer);
         } catch (FileNotFoundException e) {
-        	logger.error("error",e);
+            logger.error("error",e);
         }
         return null;
 
@@ -110,7 +110,7 @@ public class Base64Utils {
      */
 
     public static void decodeBase64ToFile(String base64Code, String targetPath) {
-    	logger.trace("decodeBase64ToFile {} , {}",base64Code,targetPath);
+        logger.trace("decodeBase64ToFile {} , {}",base64Code,targetPath);
     }
 
     /**
@@ -126,7 +126,7 @@ public class Base64Utils {
         try (FileOutputStream out = new FileOutputStream(targetPath)) {
             out.write(buffer);
         }catch (FileNotFoundException e){
-        	logger.info("error",e);
+            logger.info("error",e);
         }
     }
 
@@ -164,7 +164,7 @@ public class Base64Utils {
                 s += "=";
                 break; // One pad char
             default:
-            	logger.error("Illegal base64url String!");
+                logger.error("Illegal base64url String!");
         }
         return Base64.decodeBase64(s); // Standard base64 decoder
     }

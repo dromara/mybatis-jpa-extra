@@ -35,133 +35,133 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(name = "STUDENTS")
 public class Stds extends JpaEntity implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6928570405840778151L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6928570405840778151L;
 
-	@Id
-	@Column
-	@GeneratedValue
-	// @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
-	// @GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
-	private String id;
-	@Column
-	private String stdNo;
-	@Column
-	private String stdName;
-	@Column
-	@ColumnDefault("'M'")
-	private String stdGender;
-	@Column
-	private Integer stdAge;
-	@Column
-	private String stdMajor;
-	@Column
-	private String stdClass;
-	@Column
-	private byte[] images;
-	@Column(insertable = false)
-	@GeneratedValue
-	@Temporal(TemporalType.TIMESTAMP)
+    @Id
+    @Column
+    @GeneratedValue
+    // @GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_MYBATIS_STUD")
+    // @GeneratedValue(strategy=GenerationType.IDENTITY,generator="SEQ_MYBATIS_STUD")
+    private String id;
+    @Column
+    private String stdNo;
+    @Column
+    private String stdName;
+    @Column
+    @ColumnDefault("'M'")
+    private String stdGender;
+    @Column
+    private Integer stdAge;
+    @Column
+    private String stdMajor;
+    @Column
+    private String stdClass;
+    @Column
+    private byte[] images;
+    @Column(insertable = false)
+    @GeneratedValue
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
-	
-	@SoftDelete
-	@Column(name ="deletedColumn")
-	private char deleted;
-	
-	public Stds() {
-		super();
-	}
+    
+    @SoftDelete
+    @Column(name ="deletedColumn")
+    private char deleted;
+    
+    public Stds() {
+        super();
+    }
 
-	public Stds(String stdNo) {
-		this.stdNo = stdNo;
-	}
+    public Stds(String stdNo) {
+        this.stdNo = stdNo;
+    }
 
-	public String getStdNo() {
-		return stdNo;
-	}
+    public String getStdNo() {
+        return stdNo;
+    }
 
-	public void setStdNo(String stdNo) {
-		this.stdNo = stdNo;
-	}
+    public void setStdNo(String stdNo) {
+        this.stdNo = stdNo;
+    }
 
-	public String getStdName() {
-		return stdName;
-	}
+    public String getStdName() {
+        return stdName;
+    }
 
-	public void setStdName(String stdName) {
-		this.stdName = stdName;
-	}
+    public void setStdName(String stdName) {
+        this.stdName = stdName;
+    }
 
-	public String getStdGender() {
-		return stdGender;
-	}
+    public String getStdGender() {
+        return stdGender;
+    }
 
-	public void setStdGender(String stdGender) {
-		this.stdGender = stdGender;
-	}
+    public void setStdGender(String stdGender) {
+        this.stdGender = stdGender;
+    }
 
-	public Integer getStdAge() {
-		return stdAge;
-	}
+    public Integer getStdAge() {
+        return stdAge;
+    }
 
-	public void setStdAge(Integer stdAge) {
-		this.stdAge = stdAge;
-	}
+    public void setStdAge(Integer stdAge) {
+        this.stdAge = stdAge;
+    }
 
-	public String getStdMajor() {
-		return stdMajor;
-	}
+    public String getStdMajor() {
+        return stdMajor;
+    }
 
-	public void setStdMajor(String stdMajor) {
-		this.stdMajor = stdMajor;
-	}
+    public void setStdMajor(String stdMajor) {
+        this.stdMajor = stdMajor;
+    }
 
-	public String getStdClass() {
-		return stdClass;
-	}
+    public String getStdClass() {
+        return stdClass;
+    }
 
-	public void setStdClass(String stdClass) {
-		this.stdClass = stdClass;
-	}
+    public void setStdClass(String stdClass) {
+        this.stdClass = stdClass;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public byte[] getImages() {
-		return images;
-	}
+    public byte[] getImages() {
+        return images;
+    }
 
-	public void setImages(byte[] images) {
-		this.images = images;
-	}
+    public void setImages(byte[] images) {
+        this.images = images;
+    }
 
-	public LocalDateTime getModifyDate() {
-		return modifyDate;
-	}
+    public LocalDateTime getModifyDate() {
+        return modifyDate;
+    }
 
-	public void setModifyDate(LocalDateTime modifyDate) {
-		this.modifyDate = modifyDate;
-	}
+    public void setModifyDate(LocalDateTime modifyDate) {
+        this.modifyDate = modifyDate;
+    }
 
-	public char getDeleted() {
-		return deleted;
-	}
+    public char getDeleted() {
+        return deleted;
+    }
 
-	public void setDeleted(char deleted) {
-		this.deleted = deleted;
-	}
+    public void setDeleted(char deleted) {
+        this.deleted = deleted;
+    }
 
-	@Override
-	public String toString() {
-		return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
-				+ ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
-	}
+    @Override
+    public String toString() {
+        return "Students [id=" + id + ", stdNo=" + stdNo + ", stdName=" + stdName + ", stdGender=" + stdGender
+                + ", stdAge=" + stdAge + ", stdMajor=" + stdMajor + ", stdClass=" + stdClass + "]";
+    }
 
 }

@@ -25,27 +25,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class QueryBuilder {
-	private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
-	
-	public static String build(Query query) {
-	    StringBuilder conditionString = new StringBuilder("");
-		Operator lastExpression = Operator.AND;
-		for (Condition condition : query.getConditions()) {
-			Operator expression = condition.getExpression();
-			Object value = condition.getValue();
-			String column = SafeValueHandler.safeColumn(condition.getColumn());
-			condition.setColumn(column);
-			if (expression.equals(Operator.AND) || expression.equals(Operator.OR)) {
-				lastExpression = condition.getExpression();
-				if (value instanceof Query subQuery) {
-					ConditionBuilder.appendSubQuery(conditionString,build(subQuery),lastExpression);
-				}
-			}else {
-				ConditionBuilder.build(conditionString, column, expression, lastExpression, value, value);
-			}
-		}
-		logger.trace("conditionString {}" , conditionString);
-		return conditionString.toString();
-	}
+    private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
+    
+    public static String build(Query query) {
+        StringBuilder conditionString = new StringBuilder("");
+        Operator lastExpression = Operator.AND;
+        for (Condition condition : query.getConditions()) {
+            Operator expression = condition.getExpression();
+            Object value = condition.getValue();
+            String column = SafeValueHandler.safeColumn(condition.getColumn());
+            condition.setColumn(column);
+            if (expression.equals(Operator.AND) || expression.equals(Operator.OR)) {
+                lastExpression = condition.getExpression();
+                if (value instanceof Query subQuery) {
+                    ConditionBuilder.appendSubQuery(conditionString,build(subQuery),lastExpression);
+                }
+            }else {
+                ConditionBuilder.build(conditionString, column, expression, lastExpression, value, value);
+            }
+        }
+        logger.trace("conditionString {}" , conditionString);
+        return conditionString.toString();
+    }
 
 }

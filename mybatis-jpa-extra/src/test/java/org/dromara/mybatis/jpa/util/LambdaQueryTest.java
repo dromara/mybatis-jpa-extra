@@ -22,15 +22,15 @@ import org.dromara.mybatis.jpa.query.builder.LambdaQueryBuilder;
 
 public class LambdaQueryTest {
 
-	public static void main(String[] args) {
-		LambdaQuery<Stds> lambdaQuery = new LambdaQuery<>();
-		
-		lambdaQuery.between(Stds::getStdName, 1,20);
-		
-		System.out.println(lambdaQuery.getConditions());
-		
-		System.out.println(LambdaQueryBuilder.build(lambdaQuery));
-		
-	}
+    public static void main(String[] args) {
+        LambdaQuery<Stds> lambdaQuery = new LambdaQuery<>();
+        
+        lambdaQuery.between(Stds::getStdName, 1,20);
+        
+        System.out.println(lambdaQuery.getConditions());
+        
+        System.out.println(LambdaQueryBuilder.build(lambdaQuery));
+        
+    }
 
 }

@@ -25,12 +25,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SqlRepositoryImpl extends JpaSqlRepositoryImpl implements ISqlRepository {
 
-	@Autowired
-	private ISqlMapper mapper;
-	
-	@Override
-	public ISqlMapper getMapper() {
-		return mapper;
-	}
-	
+    @Autowired
+    private ISqlMapper mapper;
+    
+    @Override
+    public ISqlMapper getMapper() {
+        return mapper;
+    }
+    
 }

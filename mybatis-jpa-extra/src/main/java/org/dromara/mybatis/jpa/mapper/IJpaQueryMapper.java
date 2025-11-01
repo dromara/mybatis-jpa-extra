@@ -32,30 +32,30 @@ import org.dromara.mybatis.jpa.query.Query;
  * @param <T>
  */
 public interface IJpaQueryMapper<T> {
-	
-	/**
-	 *  query by id
-	 * @param id
-	 * @return one 
-	 */
-	@SelectProvider(type = MapperProvider.class, method = "get")
-	public T get(
-					@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass,
-					@Param (ConstMetadata.PARAMETER_ID) String id,
-					@Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
-	
-	@SelectProvider(type = MapperProvider.class, method = "query")
-	public List<T> query(T entity);
-	
-	@SelectProvider(type = MapperProvider.class, method = "queryByQuery")
-	public List<T> queryByQuery(Class<?> entityClass,Query query);
-	
-	@SelectProvider(type = MapperProvider.class, method = "queryByLambdaQuery")
-	public List<T> queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
-	
-	@SelectProvider(type = MapperProvider.class, method = "countByQuery")
-	public long countByQuery(Class<?> entityClass,Query query);
-	
-	@SelectProvider(type = MapperProvider.class, method = "countByLambdaQuery")
-	public long countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
+    
+    /**
+     *  query by id
+     * @param id
+     * @return one 
+     */
+    @SelectProvider(type = MapperProvider.class, method = "get")
+    public T get(
+                    @Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass,
+                    @Param (ConstMetadata.PARAMETER_ID) String id,
+                    @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+    
+    @SelectProvider(type = MapperProvider.class, method = "query")
+    public List<T> query(T entity);
+    
+    @SelectProvider(type = MapperProvider.class, method = "queryByQuery")
+    public List<T> queryByQuery(Class<?> entityClass,Query query);
+    
+    @SelectProvider(type = MapperProvider.class, method = "queryByLambdaQuery")
+    public List<T> queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
+    
+    @SelectProvider(type = MapperProvider.class, method = "countByQuery")
+    public long countByQuery(Class<?> entityClass,Query query);
+    
+    @SelectProvider(type = MapperProvider.class, method = "countByLambdaQuery")
+    public long countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
 }

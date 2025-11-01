@@ -35,40 +35,40 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class GetProvider <T extends JpaEntity>{	
-	static final Logger logger 	= 	LoggerFactory.getLogger(GetProvider.class);
-	
-	public String get(Map<String, Object>  parametersMap) {
-		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		ColumnMetadata.buildColumnMapper(entityClass);
+public class GetProvider <T extends JpaEntity>{    
+    static final Logger logger     =     LoggerFactory.getLogger(GetProvider.class);
+    
+    public String get(Map<String, Object>  parametersMap) {
+        Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        ColumnMetadata.buildColumnMapper(entityClass);
 
-		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
-		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
-		
-		SQL sql = TableMetadata.buildSelect(entityClass);
-		
-		sql.WHERE(" %s = #{%s}"
-				.formatted(
-						idFieldColumnMapper.getColumn(),
-						idFieldColumnMapper.getField())
-				);
-		
-		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-			sql.WHERE(" %s = #{%s} ".formatted(
-					partitionKeyColumnMapper.getColumn() ,
-					partitionKeyValue));
-		}
-		
-		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-			sql.WHERE(" %s = '%s'"
-					.formatted(
-							logicColumnMapper.getColumn(),
-							logicColumnMapper.getSoftDelete().value())
-					);
-		}
-		
+        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
+        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+        ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        
+        SQL sql = TableMetadata.buildSelect(entityClass);
+        
+        sql.WHERE(" %s = #{%s}"
+                .formatted(
+                        idFieldColumnMapper.getColumn(),
+                        idFieldColumnMapper.getField())
+                );
+        
+        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
+            sql.WHERE(" %s = #{%s} ".formatted(
+                    partitionKeyColumnMapper.getColumn() ,
+                    partitionKeyValue));
+        }
+        
+        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+            sql.WHERE(" %s = '%s'"
+                    .formatted(
+                            logicColumnMapper.getColumn(),
+                            logicColumnMapper.getSoftDelete().value())
+                    );
+        }
+        
         String getSql = sql.toString(); 
         logger.trace("Get SQL \n{}" , getSql);
         return getSql;  

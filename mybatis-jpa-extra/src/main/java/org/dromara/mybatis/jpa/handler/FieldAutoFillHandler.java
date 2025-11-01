@@ -22,18 +22,18 @@ import java.util.Objects;
 import org.apache.ibatis.reflection.MetaObject;
 
 public abstract class FieldAutoFillHandler {
-	
-	public abstract void insertFill(MetaObject metaObject) ;
-	
+    
+    public abstract void insertFill(MetaObject metaObject) ;
+    
 
-	public abstract void updateFill(MetaObject metaObject) ;
-	
-	
-	protected FieldAutoFillHandler setFieldValue(MetaObject metaObject , String field, Object value) {
+    public abstract void updateFill(MetaObject metaObject) ;
+    
+    
+    protected FieldAutoFillHandler setFieldValue(MetaObject metaObject , String field, Object value) {
         if (Objects.nonNull(value) && metaObject.hasSetter(field)) {
             metaObject.setValue(field, value);
         }
         return this;
     }
-	
+    
 }

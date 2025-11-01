@@ -23,52 +23,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EncryptedTestRunner  extends BaseTestRunner{
-	private static final Logger _logger = LoggerFactory.getLogger(EncryptedTestRunner.class);
-	
-	@Test
-	void insert(){
-		_logger.info("insert...");
-		Students student=new Students();
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
-		student.setStdMajor("政治");
-		student.setStdClass("4");
-		student.setPassword("password");
-		service.insert(student);
-		
-		_logger.info("insert id {}" , student.getId());
-	}
+    private static final Logger _logger = LoggerFactory.getLogger(EncryptedTestRunner.class);
+    
+    @Test
+    void insert(){
+        _logger.info("insert...");
+        Students student=new Students();
+        student.setStdNo("10024");
+        student.setStdGender("M");
+        student.setStdName("司马昭");
+        student.setStdAge(20);
+        student.setStdMajor("政治");
+        student.setStdClass("4");
+        student.setPassword("password");
+        service.insert(student);
+        
+        _logger.info("insert id {}" , student.getId());
+    }
 
-	
-	@Test
-	void update(){
-		_logger.info("get...");
-		Students student=service.get("1007058902925180928");
-		 _logger.info("Students {}",student);
-		 
-		 _logger.info("update...");
-		 student.setImages(null);
-		 service.update(student);
-		 _logger.info("updateed.");
-		 
-		 student.setImages("ssss".getBytes());
-		 student.setPassword("12345");
-		 service.update(student);
-		 _logger.info("updateed2.");
-	}
-	
-	@Test
-	void updatePassword(){
-		_logger.info("get...");
-		Students student = service.get("1007058902925180928");
-		_logger.info("Students {}", student);
+    
+    @Test
+    void update(){
+        _logger.info("get...");
+        Students student=service.get("1007058902925180928");
+         _logger.info("Students {}",student);
+         
+         _logger.info("update...");
+         student.setImages(null);
+         service.update(student);
+         _logger.info("updateed.");
+         
+         student.setImages("ssss".getBytes());
+         student.setPassword("12345");
+         service.update(student);
+         _logger.info("updateed2.");
+    }
+    
+    @Test
+    void updatePassword(){
+        _logger.info("get...");
+        Students student = service.get("1007058902925180928");
+        _logger.info("Students {}", student);
 
-		student.setPassword("12345");
-		service.updatePassword(student);
-		_logger.info("updatePassword.");
-	}
-	
-	
+        student.setPassword("12345");
+        service.updatePassword(student);
+        _logger.info("updatePassword.");
+    }
+    
+    
 }

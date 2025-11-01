@@ -26,24 +26,24 @@ import org.dromara.mybatis.jpa.query.Operator;
 import org.dromara.mybatis.jpa.query.Query;
 
 public class UpdateWrapper extends Query{
-	
-	List<Condition> sets ;
-	
-	public UpdateWrapper set(String column ,Object value) {
-		if(CollectionUtils.isEmpty(sets)) {
-			this.sets = new ArrayList<>();
-		}
-		sets.add(new Condition(Operator.EQ,column,value));
-		return  this;
-	}
+    
+    List<Condition> sets ;
+    
+    public UpdateWrapper set(String column ,Object value) {
+        if(CollectionUtils.isEmpty(sets)) {
+            this.sets = new ArrayList<>();
+        }
+        sets.add(new Condition(Operator.EQ,column,value));
+        return  this;
+    }
 
-	public List<Condition> getSets() {
-		return sets;
-	}
+    public List<Condition> getSets() {
+        return sets;
+    }
 
-	@Override
-	public String toString() {
-		return "UpdateWrapper [sets=" + sets + "]";
-	}
-	
+    @Override
+    public String toString() {
+        return "UpdateWrapper [sets=" + sets + "]";
+    }
+    
 }

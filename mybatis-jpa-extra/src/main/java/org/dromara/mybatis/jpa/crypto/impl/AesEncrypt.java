@@ -24,84 +24,84 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AesEncrypt implements SymmetricEncrypt{
-	private static final  Logger logger = LoggerFactory.getLogger(AesEncrypt.class);
-	
-	static AesEncrypt encrypt;
-	
-	static final String PREFIX 		= "{aesec}";
-	
-	static final String PLAIN 		= "{plain}";
-	
-	String salt   					= "3e4a1d42a9b6147e";
-	
-	static final int PREFFIX_LENGTH = 7;
-	public AesEncrypt(){
-		
-	}
-	
-	public AesEncrypt(String cryptKey){
-		this.salt = ReciprocalUtils.cutSecretKey(cryptKey, ReciprocalUtils.Algorithm.AES);
-	}
-	
+    private static final  Logger logger = LoggerFactory.getLogger(AesEncrypt.class);
+    
+    static AesEncrypt encrypt;
+    
+    static final String PREFIX         = "{aesec}";
+    
+    static final String PLAIN         = "{plain}";
+    
+    String salt                       = "3e4a1d42a9b6147e";
+    
+    static final int PREFFIX_LENGTH = 7;
+    public AesEncrypt(){
+        
+    }
+    
+    public AesEncrypt(String cryptKey){
+        this.salt = ReciprocalUtils.cutSecretKey(cryptKey, ReciprocalUtils.Algorithm.AES);
+    }
+    
     public static AesEncrypt getInstance() {
         if (encrypt == null) {
-        	encrypt = new AesEncrypt();
+            encrypt = new AesEncrypt();
         }
         return encrypt;
     }
     
-	@Override
-	public String decrypt(String ciphers) throws SQLException {
-		if(ciphers == null) {
-    		return null;
-    	}
-    	
-    	String encodedPasswordString  = ciphers;
-    	if(encodedPasswordString.startsWith(PREFIX)) {
-    		try {
-    			return ReciprocalUtils.decoderHex(encodedPasswordString.substring(PREFFIX_LENGTH), salt,ReciprocalUtils.Algorithm.AES);
-			} catch (Exception e) {
-				logger.error("decryptHex_AES Exception", e);
-			}
-    	}else if(encodedPasswordString.startsWith(PLAIN)) {
-    		return encodedPasswordString.substring(PREFFIX_LENGTH);
-    	}
-    	return encodedPasswordString;
-	}
+    @Override
+    public String decrypt(String ciphers) throws SQLException {
+        if(ciphers == null) {
+            return null;
+        }
+        
+        String encodedPasswordString  = ciphers;
+        if(encodedPasswordString.startsWith(PREFIX)) {
+            try {
+                return ReciprocalUtils.decoderHex(encodedPasswordString.substring(PREFFIX_LENGTH), salt,ReciprocalUtils.Algorithm.AES);
+            } catch (Exception e) {
+                logger.error("decryptHex_AES Exception", e);
+            }
+        }else if(encodedPasswordString.startsWith(PLAIN)) {
+            return encodedPasswordString.substring(PREFFIX_LENGTH);
+        }
+        return encodedPasswordString;
+    }
 
-	@Override
-	public String encrypt(String simple) throws SQLException {
-		return encodeToHex(simple);
-	}
-	
+    @Override
+    public String encrypt(String simple) throws SQLException {
+        return encodeToHex(simple);
+    }
+    
 
-	public String encode(CharSequence plain,boolean isEncode) {
-		if(isEncode) {
-			return encodeToHex(plain);
-		}else {
-			return PLAIN + plain;
-		}
-	}
-	
-	private String encodeToHex(CharSequence plain ) {
-		if(plain == null) {
-			return null;
-		}
-		
-		try {
-			return PREFIX + ReciprocalUtils.encode2Hex(plain.toString(), salt,ReciprocalUtils.Algorithm.AES);
-		} catch (Exception e) {
-			logger.error("encryptHex_AES Exception", e);
-		}
-		return "";
-	}
-	
-	public  String getSalt() {
-		return salt;
-	}
-	
-	@Override
-	public  void setSalt(String salt) {
-		this.salt = salt;
-	}
+    public String encode(CharSequence plain,boolean isEncode) {
+        if(isEncode) {
+            return encodeToHex(plain);
+        }else {
+            return PLAIN + plain;
+        }
+    }
+    
+    private String encodeToHex(CharSequence plain ) {
+        if(plain == null) {
+            return null;
+        }
+        
+        try {
+            return PREFIX + ReciprocalUtils.encode2Hex(plain.toString(), salt,ReciprocalUtils.Algorithm.AES);
+        } catch (Exception e) {
+            logger.error("encryptHex_AES Exception", e);
+        }
+        return "";
+    }
+    
+    public  String getSalt() {
+        return salt;
+    }
+    
+    @Override
+    public  void setSalt(String salt) {
+        this.salt = salt;
+    }
 }

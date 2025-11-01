@@ -21,88 +21,88 @@ package org.dromara.mybatis.jpa.query;
  * 操作符
  */
 public enum Operator {
-	/**
-	 * and
-	 */
-	AND("and"),
-	/**
-	 * or
-	 */
-	OR("or"),
-	
-	/** 等于= */
-	EQ("="),
-	/** 不等于&lt;&gt; */
-	NOT_EQ("<>"),
-	
-	/** 大于&gt; */
-	GT(">"),
-	/** 大于等于&gt;= */
-	GE(">="),
-	
-	/** 小于&lt; */
-	LT("<"),
-	/** 小于等于&lt;= */
-	LE("<="),
-	
-	/** in()查询  */
-	IN("in"),
-	/** not in()查询 */
-	NOT_IN("not in"),
-	
-	/** between查询 */
-	BETWEEN("between"),
-	/** not between查询 */
-	NOT_BETWEEN("not between"),
-	/** 模糊查询,两边模糊查询,like '%xx%' */
-	LIKE("like"),
-	
-	NOT_LIKE("not like"),
-	/** 左模糊查询,like '%xx' */
-	LIKE_LEFT("like"),
-	/** 右模糊查询,like 'xx%' */
-	LIKE_RIGHT("like"),
-	/**
-	 * 空
-	 */
-	IS_NULL("is null"),
-	/**
-	 * 不为空
-	 */
-	IS_NOT_NULL("is not null"),
-	/**
-	 * 条件
-	 */
-	CONDITION("condition"),
-	/**
-	 * 分组
-	 */
-	GROUP("group"),
-	/**
-	 * 	排序
-	 */
-	ORDER("order"),
-	/**
-	 * 忽略大小写
-	 */
-	IGNORE_CASE("ignoreCase"),
-	;
-	
+    /**
+     * and
+     */
+    AND("and"),
+    /**
+     * or
+     */
+    OR("or"),
+    
+    /** 等于= */
+    EQ("="),
+    /** 不等于&lt;&gt; */
+    NOT_EQ("<>"),
+    
+    /** 大于&gt; */
+    GT(">"),
+    /** 大于等于&gt;= */
+    GE(">="),
+    
+    /** 小于&lt; */
+    LT("<"),
+    /** 小于等于&lt;= */
+    LE("<="),
+    
+    /** in()查询  */
+    IN("in"),
+    /** not in()查询 */
+    NOT_IN("not in"),
+    
+    /** between查询 */
+    BETWEEN("between"),
+    /** not between查询 */
+    NOT_BETWEEN("not between"),
+    /** 模糊查询,两边模糊查询,like '%xx%' */
+    LIKE("like"),
+    
+    NOT_LIKE("not like"),
+    /** 左模糊查询,like '%xx' */
+    LIKE_LEFT("like"),
+    /** 右模糊查询,like 'xx%' */
+    LIKE_RIGHT("like"),
+    /**
+     * 空
+     */
+    IS_NULL("is null"),
+    /**
+     * 不为空
+     */
+    IS_NOT_NULL("is not null"),
+    /**
+     * 条件
+     */
+    CONDITION("condition"),
+    /**
+     * 分组
+     */
+    GROUP("group"),
+    /**
+     *     排序
+     */
+    ORDER("order"),
+    /**
+     * 忽略大小写
+     */
+    IGNORE_CASE("ignoreCase"),
+    ;
+    
     /**
      * 符号
      */
-	private String notation;
+    private String notation;
 
-	Operator(String notation) {
-		this.notation = notation;
-	}
+    Operator(String notation) {
+        this.notation = notation;
+    }
 
-	/**
-	 * 返回操作符
-	 * @return 返回操作符
-	 */
-	public String getOperator() {
-		return notation;
-	}
+    /**
+     * 返回操作符
+     * @return 返回操作符
+     */
+    public String getOperator() {
+        return notation;
+    }
 
 }

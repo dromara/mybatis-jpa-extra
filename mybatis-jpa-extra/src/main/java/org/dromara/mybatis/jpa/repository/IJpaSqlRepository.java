@@ -29,13 +29,13 @@ import org.dromara.mybatis.jpa.entity.JpaPageResults;
  */
 public interface IJpaSqlRepository {
 
-	/**
-	 * 
-	 * @return IJpaSqlMapper
-	 */
-	public IJpaSqlMapper getMapper();
-	
-	 /**
+    /**
+     * 
+     * @return IJpaSqlMapper
+     */
+    public IJpaSqlMapper getMapper();
+    
+     /**
      * 查询数据返回
      *
      * @param sql sql语句

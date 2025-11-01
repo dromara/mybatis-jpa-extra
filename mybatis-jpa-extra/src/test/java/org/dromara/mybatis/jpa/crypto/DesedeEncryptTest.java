@@ -24,14 +24,14 @@ import org.junit.jupiter.api.Test;
 
 public class DesedeEncryptTest {
 
-	@Test
-	void encrypt() throws SQLException{
-		SymmetricEncrypt se = new DesedeEncrypt();
-		String simple = "shimingxy";
-		String ciphers = se.encrypt(simple);
-		
-		System.out.println(ciphers);
-		
-		System.out.println(se.decrypt(ciphers));
-	}
+    @Test
+    void encrypt() throws SQLException{
+        SymmetricEncrypt se = new DesedeEncrypt();
+        String simple = "shimingxy";
+        String ciphers = se.encrypt(simple);
+        
+        System.out.println(ciphers);
+        
+        System.out.println(se.decrypt(ciphers));
+    }
 }

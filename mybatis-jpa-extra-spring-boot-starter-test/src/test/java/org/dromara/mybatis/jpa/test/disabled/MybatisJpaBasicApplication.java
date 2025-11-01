@@ -35,8 +35,8 @@ public class MybatisJpaBasicApplication{
 
     @BeforeEach
     public void before() {
-    	_logger.info("---------------- before");
-    	MybatisJpaContext.init(applicationContext);
+        _logger.info("---------------- before");
+        MybatisJpaContext.init(applicationContext);
 
     }
 

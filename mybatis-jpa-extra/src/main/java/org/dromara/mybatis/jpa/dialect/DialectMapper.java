@@ -23,37 +23,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DialectMapper {
-	private static final Logger logger 			= 	LoggerFactory.getLogger(DialectMapper.class);
+    private static final Logger logger             =     LoggerFactory.getLogger(DialectMapper.class);
 
-	public static final String DEFAULT_DIALECT 		= 	DialectName.MYSQL;
+    public static final String DEFAULT_DIALECT         =     DialectName.MYSQL;
 
-	protected static HashMap<String,String> dialectMap;
-	
-	static {
-		dialectMap=new HashMap<>();
-		dialectMap.put(DialectName.DB2, 		DialectClass.DB2);
-		dialectMap.put(DialectName.DERBY, 		DialectClass.DERBY);
-		dialectMap.put(DialectName.MYSQL, 		DialectClass.MYSQL);
-		dialectMap.put(DialectName.ORACLE, 		DialectClass.ORACLE);
-		dialectMap.put(DialectName.POSTGRESQL, 	DialectClass.POSTGRESQL);
-		dialectMap.put(DialectName.HIGHGO, 		DialectClass.HIGHGO);
-		dialectMap.put(DialectName.SQLSERVER, 	DialectClass.SQLSERVER);
-		
-		logger.trace("Dialect Mapper : \n{}" ,dialectMap);
-	}
-	
-	/**
-	 * @return the dialectMap
-	 */
-	public static Map<String, String> getDialectMap() {
-		return dialectMap;
-	}
-	
-	public static String getDialect(String dialect) {
-		String dialectString = dialectMap.get(dialect);
-		if(dialectString == null) {
-			dialectString = dialectMap.get(DEFAULT_DIALECT);
-		}
-		return dialectString;
-	}
+    protected static HashMap<String,String> dialectMap;
+    
+    static {
+        dialectMap=new HashMap<>();
+        dialectMap.put(DialectName.DB2,         DialectClass.DB2);
+        dialectMap.put(DialectName.DERBY,         DialectClass.DERBY);
+        dialectMap.put(DialectName.MYSQL,         DialectClass.MYSQL);
+        dialectMap.put(DialectName.ORACLE,         DialectClass.ORACLE);
+        dialectMap.put(DialectName.POSTGRESQL,     DialectClass.POSTGRESQL);
+        dialectMap.put(DialectName.HIGHGO,         DialectClass.HIGHGO);
+        dialectMap.put(DialectName.SQLSERVER,     DialectClass.SQLSERVER);
+        
+        logger.trace("Dialect Mapper : \n{}" ,dialectMap);
+    }
+    
+    /**
+     * @return the dialectMap
+     */
+    public static Map<String, String> getDialectMap() {
+        return dialectMap;
+    }
+    
+    public static String getDialect(String dialect) {
+        String dialectString = dialectMap.get(dialect);
+        if(dialectString == null) {
+            dialectString = dialectMap.get(DEFAULT_DIALECT);
+        }
+        return dialectString;
+    }
 }

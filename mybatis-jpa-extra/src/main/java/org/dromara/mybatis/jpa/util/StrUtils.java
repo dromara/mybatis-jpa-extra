@@ -26,79 +26,79 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class StrUtils {
-	public static final char UNDERLINE = '_';
+    public static final char UNDERLINE = '_';
 
-	public static boolean isNumeric(String val) {
-		char[] chars = val.toCharArray();
-		if (chars.length == 0) {
-			return false;
-		}
-		for (int i = chars.length - 1; i >= 0; i--) {
-			char c = chars[i];
-			if (c < '0' || c > '9') {
-				return false;
-			}
-		}
-		return true;
-	}
+    public static boolean isNumeric(String val) {
+        char[] chars = val.toCharArray();
+        if (chars.length == 0) {
+            return false;
+        }
+        for (int i = chars.length - 1; i >= 0; i--) {
+            char c = chars[i];
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	public static long lastNumber(String val) {
-		long num = 0;
-		char[] chars = val.toCharArray();
-		if (chars.length == 0) {
-			throw new NumberFormatException(val);
-		}
-		long j = 1;
-		for (int i = chars.length - 1; i >= 0; i--, j *= 10) {
-			char c = chars[i];
-			if (c >= '0' && c <= '9') {
-				int bit = c - '0';
-				num += bit * j;
-			} else {
-				break;
-			}
-		}
-		return num;
-	}
+    public static long lastNumber(String val) {
+        long num = 0;
+        char[] chars = val.toCharArray();
+        if (chars.length == 0) {
+            throw new NumberFormatException(val);
+        }
+        long j = 1;
+        for (int i = chars.length - 1; i >= 0; i--, j *= 10) {
+            char c = chars[i];
+            if (c >= '0' && c <= '9') {
+                int bit = c - '0';
+                num += bit * j;
+            } else {
+                break;
+            }
+        }
+        return num;
+    }
 
-	public static List<String> stringToList(String string, String split) {
-		String[] strs = {};
-		if (string != null && !string.equals("")) {
-			strs = string.split(split);
-		}
-		ArrayList<String> resultList = new ArrayList<>(0);
-		for (int i = 0; i < strs.length; i++) {
-			if (strs[i] != null&& !strs[i].equals("")) {
-				resultList.add(strs[i]);
-			}
-		}
-		resultList.trimToSize();
-		return resultList;
-	}
+    public static List<String> stringToList(String string, String split) {
+        String[] strs = {};
+        if (string != null && !string.equals("")) {
+            strs = string.split(split);
+        }
+        ArrayList<String> resultList = new ArrayList<>(0);
+        for (int i = 0; i < strs.length; i++) {
+            if (strs[i] != null&& !strs[i].equals("")) {
+                resultList.add(strs[i]);
+            }
+        }
+        resultList.trimToSize();
+        return resultList;
+    }
 
-	public static String listToString(List<String> list, String split) {
-		StringBuilder string = new StringBuilder("");
-		if (CollectionUtils.isNotEmpty(list)) {
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i) != null && !list.get(i).equals("")) {
-					string.append(list.get(i)).append( split );
-				}
-			}
-			//删除最后一个分隔符
-			if (StringUtils.endsWith(string,split)) {
-				string = string.deleteCharAt(string.length() - 1);
-			}
-		}
-		return string.toString();
-	}
+    public static String listToString(List<String> list, String split) {
+        StringBuilder string = new StringBuilder("");
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) != null && !list.get(i).equals("")) {
+                    string.append(list.get(i)).append( split );
+                }
+            }
+            //删除最后一个分隔符
+            if (StringUtils.endsWith(string,split)) {
+                string = string.deleteCharAt(string.length() - 1);
+            }
+        }
+        return string.toString();
+    }
 
-	public static String lineBreakToBlank(String sql) {
-		return 	sql.replaceAll("\r\n+", " \n")
-				   .replaceAll("\n+", " \n")
-				   .replaceAll("\t", " ")
-				   .replaceAll(" +"," ");
-	}
-	
+    public static String lineBreakToBlank(String sql) {
+        return     sql.replaceAll("\r\n+", " \n")
+                   .replaceAll("\n+", " \n")
+                   .replaceAll("\t", " ")
+                   .replaceAll(" +"," ");
+    }
+    
     /**
      * 驼峰格式字符串转换为下划线格式字符串
      *

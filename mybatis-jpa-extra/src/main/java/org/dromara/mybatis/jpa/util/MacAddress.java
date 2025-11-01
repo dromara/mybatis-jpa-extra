@@ -34,60 +34,60 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MacAddress {
-	private static final  Logger logger = LoggerFactory.getLogger(MacAddress.class);
-	
-	public static final String OS_NAME;
-	
-	static{
-		Properties prop = System.getProperties();
-		OS_NAME = prop.getProperty("os.name");
-		logger.info("OS : {}" , OS_NAME); 
-	}
-	
-	public static  String  getAllHostMacAddress(){  
-		StringBuilder hostIpAddress = new StringBuilder();
-	    try {  
-	        Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();  
-	        InetAddress inetAddress = null;  
-	        while (netInterfaces.hasMoreElements()) {  
-	            NetworkInterface ni = netInterfaces.nextElement(); 
-	            if(ni.getInetAddresses().hasMoreElements()){
-	            	inetAddress = ni.getInetAddresses().nextElement(); 
-	            	if(!inetAddress.isLoopbackAddress()){
-	            	    String mac = getMac(inetAddress);
-		            	hostIpAddress.append(mac).append(",");
-		            	logger.info("host MAC : {}" , mac ); 
-	            	}
-	            }
-	        }  
-	    } catch (SocketException e) {  
-	    	logger.error("Socket Exception",e);   
-	    }  
-	     return hostIpAddress.toString();  
-	   }  
-	
-	
-	public static String getMac(InetAddress ia) throws SocketException {
-		//获取网卡，获取地址
-		byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
-		StringBuilder  sb = new StringBuilder("");
-		for(int i=0; i<mac.length; i++) {
-			if(i!=0) {
-				if(OS_NAME.startsWith("win") || OS_NAME.startsWith("Win") ){
-					sb.append("-");//win
-				}else{
-					sb.append(":");//linux
-				}
-			}
-			//字节转换为整数
-			int temp = mac[i]&0xff;
-			String str = Integer.toHexString(temp);
-			if(str.length() == 1) {
-				sb.append("0").append(str);
-			}else {
-				sb.append(str);
-			}
-		}
-		return sb.toString().toUpperCase();
-	}
+    private static final  Logger logger = LoggerFactory.getLogger(MacAddress.class);
+    
+    public static final String OS_NAME;
+    
+    static{
+        Properties prop = System.getProperties();
+        OS_NAME = prop.getProperty("os.name");
+        logger.info("OS : {}" , OS_NAME); 
+    }
+    
+    public static  String  getAllHostMacAddress(){  
+        StringBuilder hostIpAddress = new StringBuilder();
+        try {  
+            Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();  
+            InetAddress inetAddress = null;  
+            while (netInterfaces.hasMoreElements()) {  
+                NetworkInterface ni = netInterfaces.nextElement(); 
+                if(ni.getInetAddresses().hasMoreElements()){
+                    inetAddress = ni.getInetAddresses().nextElement(); 
+                    if(!inetAddress.isLoopbackAddress()){
+                        String mac = getMac(inetAddress);
+                        hostIpAddress.append(mac).append(",");
+                        logger.info("host MAC : {}" , mac ); 
+                    }
+                }
+            }  
+        } catch (SocketException e) {  
+            logger.error("Socket Exception",e);   
+        }  
+         return hostIpAddress.toString();  
+       }  
+    
+    
+    public static String getMac(InetAddress ia) throws SocketException {
+        //获取网卡，获取地址
+        byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+        StringBuilder  sb = new StringBuilder("");
+        for(int i=0; i<mac.length; i++) {
+            if(i!=0) {
+                if(OS_NAME.startsWith("win") || OS_NAME.startsWith("Win") ){
+                    sb.append("-");//win
+                }else{
+                    sb.append(":");//linux
+                }
+            }
+            //字节转换为整数
+            int temp = mac[i]&0xff;
+            String str = Integer.toHexString(temp);
+            if(str.length() == 1) {
+                sb.append("0").append(str);
+            }else {
+                sb.append(str);
+            }
+        }
+        return sb.toString().toUpperCase();
+    }
 }

@@ -25,156 +25,156 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 public class StudentVo extends JpaEntity implements Serializable {
 
-	private static final long serialVersionUID = -6928570405840778151L;
+    private static final long serialVersionUID = -6928570405840778151L;
 
 
-	private String id;
+    private String id;
 
-	private String stdNo;
-	//Encrypted default is AES , support SM4 , AES , DES , DESede
+    private String stdNo;
+    //Encrypted default is AES , support SM4 , AES , DES , DESede
 
-	@Encrypted
-	private String password;
+    @Encrypted
+    private String password;
 
-	private String stdName;
+    private String stdName;
 
-	private String stdGender;
+    private String stdGender;
 
-	private Integer stdAge;
+    private Integer stdAge;
 
-	private String stdMajor;
+    private String stdMajor;
 
-	private String stdClass;
+    private String stdClass;
 
-	private byte[] images;
+    private byte[] images;
 
     private LocalDateTime modifyDate;
 
-	private char deleted;
-	
-	public StudentVo() {
-		super();
-	}
+    private char deleted;
+    
+    public StudentVo() {
+        super();
+    }
 
-	public StudentVo(String stdNo) {
-		this.stdNo = stdNo;
-	}
+    public StudentVo(String stdNo) {
+        this.stdNo = stdNo;
+    }
 
-	public String getStdNo() {
-		return stdNo;
-	}
+    public String getStdNo() {
+        return stdNo;
+    }
 
-	public void setStdNo(String stdNo) {
-		this.stdNo = stdNo;
-	}
+    public void setStdNo(String stdNo) {
+        this.stdNo = stdNo;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getStdName() {
-		return stdName;
-	}
+    public String getStdName() {
+        return stdName;
+    }
 
-	public void setStdName(String stdName) {
-		this.stdName = stdName;
-	}
+    public void setStdName(String stdName) {
+        this.stdName = stdName;
+    }
 
-	public String getStdGender() {
-		return stdGender;
-	}
+    public String getStdGender() {
+        return stdGender;
+    }
 
-	public void setStdGender(String stdGender) {
-		this.stdGender = stdGender;
-	}
+    public void setStdGender(String stdGender) {
+        this.stdGender = stdGender;
+    }
 
-	public Integer getStdAge() {
-		return stdAge;
-	}
+    public Integer getStdAge() {
+        return stdAge;
+    }
 
-	public void setStdAge(Integer stdAge) {
-		this.stdAge = stdAge;
-	}
+    public void setStdAge(Integer stdAge) {
+        this.stdAge = stdAge;
+    }
 
-	public String getStdMajor() {
-		return stdMajor;
-	}
+    public String getStdMajor() {
+        return stdMajor;
+    }
 
-	public void setStdMajor(String stdMajor) {
-		this.stdMajor = stdMajor;
-	}
+    public void setStdMajor(String stdMajor) {
+        this.stdMajor = stdMajor;
+    }
 
-	public String getStdClass() {
-		return stdClass;
-	}
+    public String getStdClass() {
+        return stdClass;
+    }
 
-	public void setStdClass(String stdClass) {
-		this.stdClass = stdClass;
-	}
+    public void setStdClass(String stdClass) {
+        this.stdClass = stdClass;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public byte[] getImages() {
-		return images;
-	}
+    public byte[] getImages() {
+        return images;
+    }
 
-	public void setImages(byte[] images) {
-		this.images = images;
-	}
+    public void setImages(byte[] images) {
+        this.images = images;
+    }
 
-	public LocalDateTime getModifyDate() {
-		return modifyDate;
-	}
+    public LocalDateTime getModifyDate() {
+        return modifyDate;
+    }
 
-	public void setModifyDate(LocalDateTime modifyDate) {
-		this.modifyDate = modifyDate;
-	}
+    public void setModifyDate(LocalDateTime modifyDate) {
+        this.modifyDate = modifyDate;
+    }
 
-	public char getDeleted() {
-		return deleted;
-	}
+    public char getDeleted() {
+        return deleted;
+    }
 
-	public void setDeleted(char deleted) {
-		this.deleted = deleted;
-	}
+    public void setDeleted(char deleted) {
+        this.deleted = deleted;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Students [id=");
-		builder.append(id);
-		builder.append(", stdNo=");
-		builder.append(stdNo);
-		builder.append(", password=");
-		builder.append(password);
-		builder.append(", stdName=");
-		builder.append(stdName);
-		builder.append(", stdGender=");
-		builder.append(stdGender);
-		builder.append(", stdAge=");
-		builder.append(stdAge);
-		builder.append(", stdMajor=");
-		builder.append(stdMajor);
-		builder.append(", stdClass=");
-		builder.append(stdClass);
-		builder.append(", images=");
-		builder.append(Arrays.toString(images));
-		builder.append(", modifyDate=");
-		builder.append(modifyDate);
-		builder.append(", deleted=");
-		builder.append(deleted);
-		builder.append("]");
-		return builder.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Students [id=");
+        builder.append(id);
+        builder.append(", stdNo=");
+        builder.append(stdNo);
+        builder.append(", password=");
+        builder.append(password);
+        builder.append(", stdName=");
+        builder.append(stdName);
+        builder.append(", stdGender=");
+        builder.append(stdGender);
+        builder.append(", stdAge=");
+        builder.append(stdAge);
+        builder.append(", stdMajor=");
+        builder.append(stdMajor);
+        builder.append(", stdClass=");
+        builder.append(stdClass);
+        builder.append(", images=");
+        builder.append(Arrays.toString(images));
+        builder.append(", modifyDate=");
+        builder.append(modifyDate);
+        builder.append(", deleted=");
+        builder.append(deleted);
+        builder.append("]");
+        return builder.toString();
+    }
 
 }

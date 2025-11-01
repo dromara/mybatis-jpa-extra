@@ -30,8 +30,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target( {FIELD, METHOD} )
 @Retention( RUNTIME )
 public @interface ColumnDefault {
-	/**
-	 * @return a SQL expression that evaluates to the default column value
-	 */
-	String value();
+    /**
+     * @return a SQL expression that evaluates to the default column value
+     */
+    String value();
 }

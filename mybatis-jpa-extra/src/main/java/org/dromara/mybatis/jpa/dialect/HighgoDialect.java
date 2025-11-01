@@ -24,65 +24,65 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class HighgoDialect extends AbstractDialect {
 
-	public HighgoDialect() {
-		super();
+    public HighgoDialect() {
+        super();
 
-	}
+    }
 
-	@Override
-	public boolean supportsLimit() {
-		return true;
-	}
-	
-	/**
-	 * LIMIT #{pageResults}  OFFSET #{startRow}
-	 */
-	@Override
-	public String getLimitString(String sql,  JpaPage page) {
-		//
-		if(page.getPageSize()>0&&page.getStartRow()>0){
-			return sql +  " limit " + page.getPageSize()+" offset  "+page.getStartRow() ;
-		}else if(page.getPageSize()>0){
-			return sql +  " limit " + page.getPageSize();
-		}else{
-			return sql +  " limit 1000";
-		}
-	}
-	
-	/**
-	 * LIMIT #{pageResults}  OFFSET #{startRow}
-	 */
-	@Override
-	public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
-		if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
-			return sql +  " limit ? , ?";
-		}else if(pagination.getPageSize()>0){
-			return sql +  " limit  ? ";
-		}else{
-			return sql +  " limit ?";
-		}
-	}
-	
-	
-	@Override
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
-		
-		try {
-			if(page.getPageSize()>0&&page.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-			}else if(page.getPageSize()>0){
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-			}else{
-				preparedStatement.setInt(++parameterSize, 1000);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public String toString() {
-		return "HighgoDialect [" + HighgoDialect.class + "]";
-	}
+    @Override
+    public boolean supportsLimit() {
+        return true;
+    }
+    
+    /**
+     * LIMIT #{pageResults}  OFFSET #{startRow}
+     */
+    @Override
+    public String getLimitString(String sql,  JpaPage page) {
+        //
+        if(page.getPageSize()>0&&page.getStartRow()>0){
+            return sql +  " limit " + page.getPageSize()+" offset  "+page.getStartRow() ;
+        }else if(page.getPageSize()>0){
+            return sql +  " limit " + page.getPageSize();
+        }else{
+            return sql +  " limit 1000";
+        }
+    }
+    
+    /**
+     * LIMIT #{pageResults}  OFFSET #{startRow}
+     */
+    @Override
+    public String getPreparedStatementLimitString(String sql,  JpaPage pagination) {
+        if(pagination.getPageSize()>0&&pagination.getStartRow()>0){
+            return sql +  " limit ? , ?";
+        }else if(pagination.getPageSize()>0){
+            return sql +  " limit  ? ";
+        }else{
+            return sql +  " limit ?";
+        }
+    }
+    
+    
+    @Override
+    public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
+        
+        try {
+            if(page.getPageSize()>0&&page.getStartRow()>0){
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+            }else if(page.getPageSize()>0){
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+            }else{
+                preparedStatement.setInt(++parameterSize, 1000);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public String toString() {
+        return "HighgoDialect [" + HighgoDialect.class + "]";
+    }
 }

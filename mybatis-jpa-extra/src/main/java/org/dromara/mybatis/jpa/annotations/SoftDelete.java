@@ -30,11 +30,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target( {FIELD, METHOD} )
 @Retention( RUNTIME )
 public @interface SoftDelete {
-	/**
-	 * @return a SQL expression that evaluates to the default column value
-	 */
-	String value()  default "n" ;
-	
-	String delete() default "y" ;
-	
+    /**
+     * @return a SQL expression that evaluates to the default column value
+     */
+    String value()  default "n" ;
+    
+    String delete() default "y" ;
+    
 }

@@ -21,110 +21,110 @@ import org.dromara.mybatis.jpa.entity.JpaEntity;
 
 
 public class StudentQueryDto extends JpaEntity implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -930733935605100727L;
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -930733935605100727L;
 
-	private String id;
-	
-	private String stdNo;
-
-
-	private String stdName;
-
-	private String stdGender;
-
-	private Integer stdAge;
-
-	private String stdMajor;
-
-	private String stdClass;
-	
-	public StudentQueryDto() {
-		super();
-	}
-
-	public StudentQueryDto(String stdNo) {
-		this.stdNo = stdNo;
-	}
-	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getStdNo() {
-		return stdNo;
-	}
-
-	public void setStdNo(String stdNo) {
-		this.stdNo = stdNo;
-	}
+    private String id;
+    
+    private String stdNo;
 
 
-	public String getStdName() {
-		return stdName;
-	}
+    private String stdName;
 
-	public void setStdName(String stdName) {
-		this.stdName = stdName;
-	}
+    private String stdGender;
 
-	public String getStdGender() {
-		return stdGender;
-	}
+    private Integer stdAge;
 
-	public void setStdGender(String stdGender) {
-		this.stdGender = stdGender;
-	}
+    private String stdMajor;
 
-	public Integer getStdAge() {
-		return stdAge;
-	}
+    private String stdClass;
+    
+    public StudentQueryDto() {
+        super();
+    }
 
-	public void setStdAge(Integer stdAge) {
-		this.stdAge = stdAge;
-	}
+    public StudentQueryDto(String stdNo) {
+        this.stdNo = stdNo;
+    }
+    
+    public String getId() {
+        return id;
+    }
 
-	public String getStdMajor() {
-		return stdMajor;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setStdMajor(String stdMajor) {
-		this.stdMajor = stdMajor;
-	}
+    public String getStdNo() {
+        return stdNo;
+    }
 
-	public String getStdClass() {
-		return stdClass;
-	}
+    public void setStdNo(String stdNo) {
+        this.stdNo = stdNo;
+    }
 
-	public void setStdClass(String stdClass) {
-		this.stdClass = stdClass;
-	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("StudentQueryDto [stdNo=");
-		builder.append(stdNo);
-		builder.append(", stdName=");
-		builder.append(stdName);
-		builder.append(", stdGender=");
-		builder.append(stdGender);
-		builder.append(", stdAge=");
-		builder.append(stdAge);
-		builder.append(", stdMajor=");
-		builder.append(stdMajor);
-		builder.append(", stdClass=");
-		builder.append(stdClass);
-		builder.append("]");
-		return builder.toString();
-	}
+    public String getStdName() {
+        return stdName;
+    }
 
-	
+    public void setStdName(String stdName) {
+        this.stdName = stdName;
+    }
+
+    public String getStdGender() {
+        return stdGender;
+    }
+
+    public void setStdGender(String stdGender) {
+        this.stdGender = stdGender;
+    }
+
+    public Integer getStdAge() {
+        return stdAge;
+    }
+
+    public void setStdAge(Integer stdAge) {
+        this.stdAge = stdAge;
+    }
+
+    public String getStdMajor() {
+        return stdMajor;
+    }
+
+    public void setStdMajor(String stdMajor) {
+        this.stdMajor = stdMajor;
+    }
+
+    public String getStdClass() {
+        return stdClass;
+    }
+
+    public void setStdClass(String stdClass) {
+        this.stdClass = stdClass;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("StudentQueryDto [stdNo=");
+        builder.append(stdNo);
+        builder.append(", stdName=");
+        builder.append(stdName);
+        builder.append(", stdGender=");
+        builder.append(stdGender);
+        builder.append(", stdAge=");
+        builder.append(stdAge);
+        builder.append(", stdMajor=");
+        builder.append(stdMajor);
+        builder.append(", stdClass=");
+        builder.append(stdClass);
+        builder.append("]");
+        return builder.toString();
+    }
+
+    
 }

@@ -22,8 +22,8 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
 
 public class UpdateBuilder extends QueryBuilder{
 
-	public static String buildSetSql(UpdateWrapper updateWrapper) {
-		return UpdateSetsBuilder.buildSetSql(updateWrapper.getSets());
-	}
+    public static String buildSetSql(UpdateWrapper updateWrapper) {
+        return UpdateSetsBuilder.buildSetSql(updateWrapper.getSets());
+    }
 
 }

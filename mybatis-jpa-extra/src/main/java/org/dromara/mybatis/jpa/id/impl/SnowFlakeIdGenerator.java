@@ -35,38 +35,38 @@ import org.slf4j.LoggerFactory;
  * @create 2021-04-17
  **/
 public class SnowFlakeIdGenerator  implements IdentifierGenerator{
-	private static final Logger logger 	= 	LoggerFactory.getLogger(SnowFlakeIdGenerator.class);
+    private static final Logger logger     =     LoggerFactory.getLogger(SnowFlakeIdGenerator.class);
     /**
      * 起始的时间戳
      */
-    private static final  long START_STMP 			= 1480166465631L;
+    private static final  long START_STMP             = 1480166465631L;
 
     /**
      * 每一部分占用的位数，序列号占用的位数
      */
-    private static final  long SEQUENCE_BIT 		= 12; 
+    private static final  long SEQUENCE_BIT         = 12; 
     /**
      * 机器标识占用的位数
      */
-    private static final  long MACHINE_BIT 			= 5;   
+    private static final  long MACHINE_BIT             = 5;   
     /**
      * 数据中心占用的位数
      */
-    private static final  long DATACENTER_BIT 		= 5;
+    private static final  long DATACENTER_BIT         = 5;
 
     /**
      * 每一部分的最大值
      */
-    private static final long MAX_DATACENTER_NUM	= -1L ^ (-1L << DATACENTER_BIT);
-    private static final long MAX_MACHINE_NUM 		= -1L ^ (-1L << MACHINE_BIT);
-    private static final long MAX_SEQUENCE 			= -1L ^ (-1L << SEQUENCE_BIT);
+    private static final long MAX_DATACENTER_NUM    = -1L ^ (-1L << DATACENTER_BIT);
+    private static final long MAX_MACHINE_NUM         = -1L ^ (-1L << MACHINE_BIT);
+    private static final long MAX_SEQUENCE             = -1L ^ (-1L << SEQUENCE_BIT);
 
     /**
      * 每一部分向左的位移
      */
-    private static final long MACHINE_LEFT 			= SEQUENCE_BIT;
-    private static final long DATACENTER_LEFT 		= SEQUENCE_BIT + MACHINE_BIT;
-    private static final long TIMESTMP_LEFT 		= DATACENTER_LEFT + DATACENTER_BIT;
+    private static final long MACHINE_LEFT             = SEQUENCE_BIT;
+    private static final long DATACENTER_LEFT         = SEQUENCE_BIT + MACHINE_BIT;
+    private static final long TIMESTMP_LEFT         = DATACENTER_LEFT + DATACENTER_BIT;
 
     /**
      * 数据中心
@@ -92,7 +92,7 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
         long id = 0L;
         try {
             if (null == inetAddress) {
-            	inetAddress = InetAddress.getLocalHost();
+                inetAddress = InetAddress.getLocalHost();
             }
             NetworkInterface network = NetworkInterface.getByInetAddress(inetAddress);
             if (null == network) {
@@ -105,11 +105,11 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
                 }
             }
         } catch (Exception e) {
-        	logger.error(" getDatacenterId Exception" , e);
+            logger.error(" getDatacenterId Exception" , e);
         }
     }
     
-	public SnowFlakeIdGenerator(long datacenterId, long machineId) {
+    public SnowFlakeIdGenerator(long datacenterId, long machineId) {
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
             throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");
         }
@@ -121,21 +121,21 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     }
 
     public SnowFlakeIdGenerator(long datacenterId, long machineId, long sequence, long lastStmp) {
-		super();
-		this.datacenterId = datacenterId;
-		this.machineId = machineId;
-		this.sequence = sequence;
-		this.lastStmp = lastStmp;
-		DateTime datetime=
-				new DateTime(
-						fromatTime(lastStmp), 
-						ISOChronology.getInstanceUTC()
-						);
-		
-		dateTime = datetime.toString();
-	}
+        super();
+        this.datacenterId = datacenterId;
+        this.machineId = machineId;
+        this.sequence = sequence;
+        this.lastStmp = lastStmp;
+        DateTime datetime=
+                new DateTime(
+                        fromatTime(lastStmp), 
+                        ISOChronology.getInstanceUTC()
+                        );
+        
+        dateTime = datetime.toString();
+    }
 
-	/**
+    /**
      * 产生下一个ID
      *
      * @return
@@ -207,47 +207,47 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     
 
     public long getDatacenterId() {
-		return datacenterId;
-	}
+        return datacenterId;
+    }
 
-	public void setDatacenterId(long datacenterId) {
-		this.datacenterId = datacenterId;
-	}
+    public void setDatacenterId(long datacenterId) {
+        this.datacenterId = datacenterId;
+    }
 
-	public long getMachineId() {
-		return machineId;
-	}
+    public long getMachineId() {
+        return machineId;
+    }
 
-	public void setMachineId(long machineId) {
-		this.machineId = machineId;
-	}
+    public void setMachineId(long machineId) {
+        this.machineId = machineId;
+    }
 
-	public long getSequence() {
-		return sequence;
-	}
+    public long getSequence() {
+        return sequence;
+    }
 
-	public void setSequence(long sequence) {
-		this.sequence = sequence;
-	}
+    public void setSequence(long sequence) {
+        this.sequence = sequence;
+    }
 
-	public long getLastStmp() {
-		return lastStmp;
-	}
+    public long getLastStmp() {
+        return lastStmp;
+    }
 
-	public void setLastStmp(long lastStmp) {
-		this.lastStmp = lastStmp;
-	}
+    public void setLastStmp(long lastStmp) {
+        this.lastStmp = lastStmp;
+    }
 
-	public String getDateTime() {
-		return dateTime;
-	}
+    public String getDateTime() {
+        return dateTime;
+    }
 
-	public void setDateTime(String dateTime) {
-		this.dateTime = dateTime;
-	}
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	@Override
-	public String generate(Object object) {
-		return this.nextId() + "";
-	}
+    @Override
+    public String generate(Object object) {
+        return this.nextId() + "";
+    }
 }

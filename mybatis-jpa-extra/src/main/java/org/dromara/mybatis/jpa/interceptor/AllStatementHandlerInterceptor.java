@@ -44,92 +44,92 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Intercepts({
-		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class }),
-		@Signature(type = StatementHandler.class, method = "parameterize", args = { Statement.class }),
-		@Signature(type = ResultSetHandler.class, method = "handleResultSets", args = { Statement.class })  
+        @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class }),
+        @Signature(type = StatementHandler.class, method = "parameterize", args = { Statement.class }),
+        @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = { Statement.class })  
 })
 public class AllStatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {
-	private static Logger logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
-	
-	@Override
-	public Object intercept(Invocation invocation) throws Throwable {
-		Method m = invocation.getMethod();
-		if ("prepare".equals(m.getName())) { // prepare Statement
-			return prepare(invocation);
-		} else if ("parameterize".equals(m.getName())) { // parameterize
-			return parameterize(invocation);
-		} else if ("handleResultSets".equals(m.getName())) {// handleResultSets
-			return handleResultSets(invocation);
-		}
-		return invocation.proceed();
-	}
+    private static Logger logger = LoggerFactory.getLogger(AllStatementHandlerInterceptor.class);
+    
+    @Override
+    public Object intercept(Invocation invocation) throws Throwable {
+        Method m = invocation.getMethod();
+        if ("prepare".equals(m.getName())) { // prepare Statement
+            return prepare(invocation);
+        } else if ("parameterize".equals(m.getName())) { // parameterize
+            return parameterize(invocation);
+        } else if ("handleResultSets".equals(m.getName())) {// handleResultSets
+            return handleResultSets(invocation);
+        }
+        return invocation.proceed();
+    }
 
-	@Override
-	public Object plugin(Object target) {
-		return Plugin.wrap(target, this);
-	}
+    @Override
+    public Object plugin(Object target) {
+        return Plugin.wrap(target, this);
+    }
 
-	@Override
-	public void setProperties(Properties properties) {
-	}
-	
-	private Object prepare(Invocation invocation) throws Throwable {
-		StatementHandler statement = getStatementHandler(invocation);
-		if (statement instanceof SimpleStatementHandler 
-				|| statement instanceof PreparedStatementHandler) {
-			MetaObject metaObject=SystemMetaObject.forObject(statement);
-			Object parameterObject=metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
-			BoundSql boundSql = statement.getBoundSql();
-			String sql = boundSql.getSql();
-			logger.debug("startsWith select : {} , prepare  boundSql : {}" , isSelectSql(sql),sql);
-			if (isSelectSql(sql) && (parameterObject instanceof JpaEntity jpaEntity)) {
-				if(statement instanceof SimpleStatementHandler){
-					sql = dialect.getLimitString(sql, jpaEntity);
-				}else if(statement instanceof PreparedStatementHandler){
-					sql = dialect.getPreparedStatementLimitString(sql, jpaEntity);
-				}
-			}
-			metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, sql);
-		}
-		return invocation.proceed();
-	}
+    @Override
+    public void setProperties(Properties properties) {
+    }
+    
+    private Object prepare(Invocation invocation) throws Throwable {
+        StatementHandler statement = getStatementHandler(invocation);
+        if (statement instanceof SimpleStatementHandler 
+                || statement instanceof PreparedStatementHandler) {
+            MetaObject metaObject=SystemMetaObject.forObject(statement);
+            Object parameterObject=metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
+            BoundSql boundSql = statement.getBoundSql();
+            String sql = boundSql.getSql();
+            logger.debug("startsWith select : {} , prepare  boundSql : {}" , isSelectSql(sql),sql);
+            if (isSelectSql(sql) && (parameterObject instanceof JpaEntity jpaEntity)) {
+                if(statement instanceof SimpleStatementHandler){
+                    sql = dialect.getLimitString(sql, jpaEntity);
+                }else if(statement instanceof PreparedStatementHandler){
+                    sql = dialect.getPreparedStatementLimitString(sql, jpaEntity);
+                }
+            }
+            metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, sql);
+        }
+        return invocation.proceed();
+    }
 
-	private Object parameterize(Invocation invocation) throws Throwable {
-		Statement statement = (Statement) invocation.getArgs()[0];
-		if (statement instanceof PreparedStatement ps) {
-			StatementHandler statementHandler = getStatementHandler(invocation);
-			RowBounds rowBounds = getRowBounds(statementHandler);
-			logger.debug("rowBounds {}", rowBounds);
-			MetaObject metaObject=SystemMetaObject.forObject(statementHandler);
-			Object parameterObject=metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
-			BoundSql boundSql = statementHandler.getBoundSql();
-			
-			if (isSelectSql(boundSql.getSql()) && (parameterObject instanceof JpaEntity jpaEntity)) {
-				List<ParameterMapping>  pms= boundSql.getParameterMappings();
-				logger.debug("ParameterMapping {}" , pms);
-				int parameterSize = pms.size();
-				dialect.setLimitParamters(ps, parameterSize,jpaEntity);
-			}
-		}
-		return invocation.proceed();
-	}
-	
-	private Object handleResultSets(Invocation invocation) throws Throwable {
-	    /*
-		ResultSetHandler resultSetHandler = (ResultSetHandler) invocation.getTarget();
-		
-		MetaObject metaObject=MetaObject.forObject(resultSetHandler);
-		RowBounds rowBounds=(RowBounds)metaObject.getValue("rowBounds");
-		if (rowBounds.getLimit() > 0&& rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT) {
-			metaObject.setValue("rowBounds", RowBounds.DEFAULT);
-		}
-	     */
-		return invocation.proceed();
-	}
-	
-	private boolean isSelectSql(String sql) {
-		return sql.toLowerCase().trim().startsWith(ConstSqlSyntax.SELECT.toLowerCase());
-	}
+    private Object parameterize(Invocation invocation) throws Throwable {
+        Statement statement = (Statement) invocation.getArgs()[0];
+        if (statement instanceof PreparedStatement ps) {
+            StatementHandler statementHandler = getStatementHandler(invocation);
+            RowBounds rowBounds = getRowBounds(statementHandler);
+            logger.debug("rowBounds {}", rowBounds);
+            MetaObject metaObject=SystemMetaObject.forObject(statementHandler);
+            Object parameterObject=metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
+            BoundSql boundSql = statementHandler.getBoundSql();
+            
+            if (isSelectSql(boundSql.getSql()) && (parameterObject instanceof JpaEntity jpaEntity)) {
+                List<ParameterMapping>  pms= boundSql.getParameterMappings();
+                logger.debug("ParameterMapping {}" , pms);
+                int parameterSize = pms.size();
+                dialect.setLimitParamters(ps, parameterSize,jpaEntity);
+            }
+        }
+        return invocation.proceed();
+    }
+    
+    private Object handleResultSets(Invocation invocation) throws Throwable {
+        /*
+        ResultSetHandler resultSetHandler = (ResultSetHandler) invocation.getTarget();
+        
+        MetaObject metaObject=MetaObject.forObject(resultSetHandler);
+        RowBounds rowBounds=(RowBounds)metaObject.getValue("rowBounds");
+        if (rowBounds.getLimit() > 0&& rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT) {
+            metaObject.setValue("rowBounds", RowBounds.DEFAULT);
+        }
+         */
+        return invocation.proceed();
+    }
+    
+    private boolean isSelectSql(String sql) {
+        return sql.toLowerCase().trim().startsWith(ConstSqlSyntax.SELECT.toLowerCase());
+    }
 
-	
+    
 }

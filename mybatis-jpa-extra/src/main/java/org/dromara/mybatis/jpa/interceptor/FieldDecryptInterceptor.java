@@ -35,13 +35,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Intercepts({
-	@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+    @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
 })
 public class FieldDecryptInterceptor  implements Interceptor {
-	private static Logger logger = LoggerFactory.getLogger(FieldDecryptInterceptor.class);
-	
-	@SuppressWarnings("unchecked")
-	@Override
+    private static Logger logger = LoggerFactory.getLogger(FieldDecryptInterceptor.class);
+    
+    @SuppressWarnings("unchecked")
+    @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Object dataSet = invocation.proceed();
         if (dataSet instanceof List) {
@@ -60,18 +60,18 @@ public class FieldDecryptInterceptor  implements Interceptor {
     private void intercept(Object entity) throws Throwable {
         List <ColumnMapper> listFieldColumn = ColumnMetadata.buildColumnMapper(entity.getClass());
         for (ColumnMapper encryptField : listFieldColumn) {
-        	if(encryptField.isEncrypted()) {
-        		logger.debug("FieldName {} is need Encrypted ",encryptField.getField());
-	            encryptField.getEntityField().setAccessible(true);
-	            String cipherValue = (String) encryptField.getEntityField().get(entity);
-	            String plainValue = decrypt(cipherValue,encryptField.getEncryptedAnnotation().algorithm());
-	            encryptField.getEntityField().set(entity, plainValue);
-        	}
+            if(encryptField.isEncrypted()) {
+                logger.debug("FieldName {} is need Encrypted ",encryptField.getField());
+                encryptField.getEntityField().setAccessible(true);
+                String cipherValue = (String) encryptField.getEntityField().get(entity);
+                String plainValue = decrypt(cipherValue,encryptField.getEncryptedAnnotation().algorithm());
+                encryptField.getEntityField().set(entity, plainValue);
+            }
         }
     }
 
     private String decrypt(String cipherValue,String algorithm) throws SQLException {
-    	return MapperMetadata.getEncryptFactory().getEncryptor(algorithm.toLowerCase()).decrypt(cipherValue);  
+        return MapperMetadata.getEncryptFactory().getEncryptor(algorithm.toLowerCase()).decrypt(cipherValue);  
     }
     
     @Override

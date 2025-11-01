@@ -19,17 +19,17 @@ package org.dromara.mybatis.jpa.dialect;
 
 public class DialectName {
 
-	public static final String MYSQL 		= 	"mysql";
-	
-	public static final String DB2 			= 	"db2";
-	
-	public static final String DERBY 		= 	"derby";
-	
-	public static final String ORACLE 		= 	"oracle";
-	
-	public static final String POSTGRESQL 	= 	"postgresql";
-	
-	public static final String HIGHGO 		= 	"highgo";
-	
-	public static final String SQLSERVER 	= 	"sqlserver";
+    public static final String MYSQL         =     "mysql";
+    
+    public static final String DB2             =     "db2";
+    
+    public static final String DERBY         =     "derby";
+    
+    public static final String ORACLE         =     "oracle";
+    
+    public static final String POSTGRESQL     =     "postgresql";
+    
+    public static final String HIGHGO         =     "highgo";
+    
+    public static final String SQLSERVER     =     "sqlserver";
 }

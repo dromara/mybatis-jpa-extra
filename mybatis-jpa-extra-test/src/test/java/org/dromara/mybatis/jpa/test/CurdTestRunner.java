@@ -27,91 +27,91 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CurdTestRunner  extends BaseTestRunner{
-	private static final Logger _logger = LoggerFactory.getLogger(CurdTestRunner.class);
-	
-	@Test
-	void insert(){
-		_logger.info("insert...");
-		Students student=new Students();
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setPassword("shimingxy");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
-		student.setStdMajor("政治");
-		student.setStdClass("4");
-		service.insert(student);
-		
-		_logger.info("insert id {}" , student.getId());
-	}
-	
-	@Test
-	void merge(){
-		_logger.info("merge...");
-		Students student=new Students();
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
-		student.setStdMajor("政治");
-		student.setStdClass("4");
-		service.merge(student);
-		
-		_logger.info("insert id {}" , student.getId());
-		
-	}
+    private static final Logger _logger = LoggerFactory.getLogger(CurdTestRunner.class);
+    
+    @Test
+    void insert(){
+        _logger.info("insert...");
+        Students student=new Students();
+        student.setStdNo("10024");
+        student.setStdGender("M");
+        student.setPassword("shimingxy");
+        student.setStdName("司马昭");
+        student.setStdAge(20);
+        student.setStdMajor("政治");
+        student.setStdClass("4");
+        service.insert(student);
+        
+        _logger.info("insert id {}" , student.getId());
+    }
+    
+    @Test
+    void merge(){
+        _logger.info("merge...");
+        Students student=new Students();
+        student.setStdNo("10024");
+        student.setStdGender("M");
+        student.setStdName("司马昭");
+        student.setStdAge(20);
+        student.setStdMajor("政治");
+        student.setStdClass("4");
+        service.merge(student);
+        
+        _logger.info("insert id {}" , student.getId());
+        
+    }
 
-	@Test
-	void get(){
-		_logger.info("get...");
-		Students student=service.get("1071439277251887104");
-		 _logger.info("Students {}",student);
-	}
-	
-	@Test
-	void update(){
-		_logger.info("get...");
-		Students student=service.get("1071432244066779136");
-		 _logger.info("Students {}",student);
-		 
-		 _logger.info("update...");
-		 student.setImages(null);
-		 service.update(student);
-		 _logger.info("updateed.");
-		 
-		 student.setImages("ssss".getBytes());
-		 service.update(student);
-		 _logger.info("updateed2.");
-	}
-	
-	@Test
-	void updateByQuery(){
-		_logger.info("updateByQuery...");
-		service.update("id = '5'",Query.builder().eq("id", "2"));
-	}
-	
-	@Test
-	void remove(){
-		_logger.info("remove...");
-		service.delete("b1e2-92fb23b5e512");
-		service.delete("921d3377-937a-4578-b1e2-92fb23b5e512");
-	}
-	
-	@Test
-	void batchDelete(){
-		_logger.info("batchDelete...");
-		List<String> idList=new ArrayList<String>();
-		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		service.deleteBatch(idList);
-	}
-	
-	@Test
-	void deleteByQuery(){
-		_logger.info("deleteByQuery...");
-		service.delete(Query.builder().eq("id", "2"));
-	}
-	
+    @Test
+    void get(){
+        _logger.info("get...");
+        Students student=service.get("1071439277251887104");
+         _logger.info("Students {}",student);
+    }
+    
+    @Test
+    void update(){
+        _logger.info("get...");
+        Students student=service.get("1071432244066779136");
+         _logger.info("Students {}",student);
+         
+         _logger.info("update...");
+         student.setImages(null);
+         service.update(student);
+         _logger.info("updateed.");
+         
+         student.setImages("ssss".getBytes());
+         service.update(student);
+         _logger.info("updateed2.");
+    }
+    
+    @Test
+    void updateByQuery(){
+        _logger.info("updateByQuery...");
+        service.update("id = '5'",Query.builder().eq("id", "2"));
+    }
+    
+    @Test
+    void remove(){
+        _logger.info("remove...");
+        service.delete("b1e2-92fb23b5e512");
+        service.delete("921d3377-937a-4578-b1e2-92fb23b5e512");
+    }
+    
+    @Test
+    void batchDelete(){
+        _logger.info("batchDelete...");
+        List<String> idList=new ArrayList<String>();
+        idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+        idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+        idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
+        idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+        service.deleteBatch(idList);
+    }
+    
+    @Test
+    void deleteByQuery(){
+        _logger.info("deleteByQuery...");
+        service.delete(Query.builder().eq("id", "2"));
+    }
+    
 }

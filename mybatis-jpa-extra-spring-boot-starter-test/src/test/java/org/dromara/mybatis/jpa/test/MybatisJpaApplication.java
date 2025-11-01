@@ -48,26 +48,26 @@ public class MybatisJpaApplication implements ApplicationRunner{
      * @param args args
      */
     public static void mainBackup(String[] args) {
-    	new SpringApplicationBuilder(MybatisJpaApplication.class)
+        new SpringApplicationBuilder(MybatisJpaApplication.class)
          .web(WebApplicationType.NONE) // .REACTIVE, .SERVLET
          .bannerMode(Banner.Mode.OFF).run(args) ;
     }
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		MybatisJpaContext.init(applicationContext);
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        MybatisJpaContext.init(applicationContext);
 
-		_logger.info("queryPageResults by mapperId...");
-		 Students student=new Students();
-		 student.setStdGender("M");
-		 //student.setStdMajor(政治");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 JpaPageResults<Students>  jpaPageResults=studentsService.fetchPageResults("fetchPageResults1",student);
-		 for (Students s : jpaPageResults.getRows()) {
-			 _logger.info("Students {}",s);
-		 }
+        _logger.info("queryPageResults by mapperId...");
+         Students student=new Students();
+         student.setStdGender("M");
+         //student.setStdMajor(政治");
+         student.setPageSize(10);
+         student.setPageNumber(2);
+         JpaPageResults<Students>  jpaPageResults=studentsService.fetchPageResults("fetchPageResults1",student);
+         for (Students s : jpaPageResults.getRows()) {
+             _logger.info("Students {}",s);
+         }
 
-	}
+    }
 
 }

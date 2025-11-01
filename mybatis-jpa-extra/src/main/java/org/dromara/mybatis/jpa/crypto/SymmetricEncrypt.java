@@ -21,10 +21,10 @@ import java.sql.SQLException;
 
 public interface SymmetricEncrypt {
 
-	String decrypt(String ciphers) throws SQLException ;
-	
-	String encrypt(String simple) throws SQLException ;
-	
-	public void setSalt(String salt) ;
-	
+    String decrypt(String ciphers) throws SQLException ;
+    
+    String encrypt(String simple) throws SQLException ;
+    
+    public void setSalt(String salt) ;
+    
 }

@@ -31,53 +31,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractStatementHandlerInterceptor  implements Interceptor {
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-	protected Dialect 	dialect;
-	
-	protected String 	dialectString;
+    private Logger logger = LoggerFactory.getLogger(getClass());
+    
+    protected Dialect     dialect;
+    
+    protected String     dialectString;
 
-	/**
-	 * @param dialect the dialect to set
-	 */
-	public void setDialect(AbstractDialect dialect) {
-		logger.debug("dialect from bean : {}" , dialect);
-		this.dialect = dialect;
-	}
+    /**
+     * @param dialect the dialect to set
+     */
+    public void setDialect(AbstractDialect dialect) {
+        logger.debug("dialect from bean : {}" , dialect);
+        this.dialect = dialect;
+    }
 
-	
-	/**
-	 * @param dialectString the dialectString to set
-	 */
-	public void setDialectString(String dialectString) {
-		this.dialectString = dialectString;
-		try {
-			logger.debug("dialect from String : {}" , dialectString);
-			this.dialect =(AbstractDialect)Class.forName(dialectString).getDeclaredConstructor().newInstance();
-		} catch (Exception e) {
-			logger.error("Dialect new error : " , e);
-		} 
-	}
+    
+    /**
+     * @param dialectString the dialectString to set
+     */
+    public void setDialectString(String dialectString) {
+        this.dialectString = dialectString;
+        try {
+            logger.debug("dialect from String : {}" , dialectString);
+            this.dialect =(AbstractDialect)Class.forName(dialectString).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            logger.error("Dialect new error : " , e);
+        } 
+    }
 
-	protected StatementHandler getStatementHandler(Invocation invocation) {
-		StatementHandler statement = (StatementHandler) invocation.getTarget();
-		if (statement instanceof RoutingStatementHandler) {
-			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			return (StatementHandler)metaObject.getValue(ConstMetaObject.DELEGATE);
-		
-		}
-		return statement;
-	}
-	
-	protected RowBounds getRowBounds(StatementHandler statement) {
-			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			return (RowBounds)metaObject.getValue(ConstMetaObject.ROWBOUNDS);
-	}
-	
-	protected boolean hasBounds(RowBounds rowBounds) {
-		return (rowBounds != null 
-				&& rowBounds.getLimit() > 0 
-				&& rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT);
-	}
-	
+    protected StatementHandler getStatementHandler(Invocation invocation) {
+        StatementHandler statement = (StatementHandler) invocation.getTarget();
+        if (statement instanceof RoutingStatementHandler) {
+            MetaObject metaObject = SystemMetaObject.forObject(statement);
+            return (StatementHandler)metaObject.getValue(ConstMetaObject.DELEGATE);
+        
+        }
+        return statement;
+    }
+    
+    protected RowBounds getRowBounds(StatementHandler statement) {
+            MetaObject metaObject = SystemMetaObject.forObject(statement);
+            return (RowBounds)metaObject.getValue(ConstMetaObject.ROWBOUNDS);
+    }
+    
+    protected boolean hasBounds(RowBounds rowBounds) {
+        return (rowBounds != null 
+                && rowBounds.getLimit() > 0 
+                && rowBounds.getLimit() < RowBounds.NO_ROW_LIMIT);
+    }
+    
 }

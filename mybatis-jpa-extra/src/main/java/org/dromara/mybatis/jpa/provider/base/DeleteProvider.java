@@ -42,101 +42,101 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class DeleteProvider <T extends JpaEntity>{	
-	static final Logger logger 	= 	LoggerFactory.getLogger(DeleteProvider.class);
-	
-	public String deleteById(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		
-		String idValue = (String) parametersMap.get(ConstMetadata.PARAMETER_ID);
-		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
-		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
-		
-		SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
-		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-			sql.WHERE(" %s = #{%s} and %s = '%s' "
-					.formatted(
-							partitionKeyColumnMapper.getColumn() ,
-							partitionKeyValue,
-							idFieldColumnMapper.getColumn(),
-							SafeValueHandler.valueOf(idValue))
-        			);  
-		}else {
-			sql.WHERE("%s = '%s'"
-					.formatted(
-							idFieldColumnMapper.getColumn(),
-							SafeValueHandler.valueOf(idValue)) 
-					);  
-		}
-		
+public class DeleteProvider <T extends JpaEntity>{    
+    static final Logger logger     =     LoggerFactory.getLogger(DeleteProvider.class);
+    
+    public String deleteById(Map<String, Object>  parametersMap) { 
+        Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        
+        String idValue = (String) parametersMap.get(ConstMetadata.PARAMETER_ID);
+        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
+        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+        ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        
+        SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
+        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
+            sql.WHERE(" %s = #{%s} and %s = '%s' "
+                    .formatted(
+                            partitionKeyColumnMapper.getColumn() ,
+                            partitionKeyValue,
+                            idFieldColumnMapper.getColumn(),
+                            SafeValueHandler.valueOf(idValue))
+                    );  
+        }else {
+            sql.WHERE("%s = '%s'"
+                    .formatted(
+                            idFieldColumnMapper.getColumn(),
+                            SafeValueHandler.valueOf(idValue)) 
+                    );  
+        }
+        
         String deleteSql = sql.toString(); 
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     }  
-	
-	@SuppressWarnings("unchecked")
-	public String batchDelete(Map<String, Object>  parametersMap) { 
-		Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
-		
-		StringBuilder keyValue = new StringBuilder();
-		for(String value : idValues) {
-			if( StringUtils.isNotBlank(value)) {
-				keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
-				logger.trace("delete by id {}" , value);
-			}
-		}
-		/**
-		 * remove ;
-		 */
-		String keyValues = keyValue.substring(1).replace(";", "");
-		
-		String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
-		ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
-		ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
-		
-		SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
-		
-		if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-			sql.WHERE("%s = #{%s} and %s  in ( %s )"
-					.formatted(
-							partitionKeyColumnMapper.getColumn() ,
-							partitionKeyValue,
-							idFieldColumnMapper.getColumn(),
-							idFieldColumnMapper.getField())
-        			);  
-		}else {
-			sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
-		}
-		
+    
+    @SuppressWarnings("unchecked")
+    public String batchDelete(Map<String, Object>  parametersMap) { 
+        Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
+        
+        StringBuilder keyValue = new StringBuilder();
+        for(String value : idValues) {
+            if( StringUtils.isNotBlank(value)) {
+                keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
+                logger.trace("delete by id {}" , value);
+            }
+        }
+        /**
+         * remove ;
+         */
+        String keyValues = keyValue.substring(1).replace(";", "");
+        
+        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
+        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+        ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        
+        SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
+        
+        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
+            sql.WHERE("%s = #{%s} and %s  in ( %s )"
+                    .formatted(
+                            partitionKeyColumnMapper.getColumn() ,
+                            partitionKeyValue,
+                            idFieldColumnMapper.getColumn(),
+                            idFieldColumnMapper.getField())
+                    );  
+        }else {
+            sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
+        }
+        
         String deleteSql = sql.toString(); 
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql;  
     } 
-	
-	public String deleteByQuery(Class<?> entityClass, Query query) {
-		logger.trace("delete By Query \n{}" , query);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		SQL sql = new SQL()
-					.DELETE_FROM(TableMetadata.getTableName(entityClass))
-					.WHERE(QueryBuilder.build(query));
-		
-		logger.trace("delete By Query SQL \n{}" , sql);
-		return sql.toString();
-	}
-	
-	public String deleteByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
-		logger.trace("delete By LambdaQuery \n{}" , lambdaQuery);
-		ColumnMetadata.buildColumnMapper(entityClass);
-		SQL sql = new SQL()
-					.DELETE_FROM(TableMetadata.getTableName(entityClass))
-					.WHERE(LambdaQueryBuilder.build(lambdaQuery));
-		
-		logger.trace("delete By LambdaQuery SQL \n{}" , sql);
-		return sql.toString();
-	}
-	
+    
+    public String deleteByQuery(Class<?> entityClass, Query query) {
+        logger.trace("delete By Query \n{}" , query);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        SQL sql = new SQL()
+                    .DELETE_FROM(TableMetadata.getTableName(entityClass))
+                    .WHERE(QueryBuilder.build(query));
+        
+        logger.trace("delete By Query SQL \n{}" , sql);
+        return sql.toString();
+    }
+    
+    public String deleteByLambdaQuery(Class<?> entityClass, LambdaQuery<T> lambdaQuery) {
+        logger.trace("delete By LambdaQuery \n{}" , lambdaQuery);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        SQL sql = new SQL()
+                    .DELETE_FROM(TableMetadata.getTableName(entityClass))
+                    .WHERE(LambdaQueryBuilder.build(lambdaQuery));
+        
+        logger.trace("delete By LambdaQuery SQL \n{}" , sql);
+        return sql.toString();
+    }
+    
 }

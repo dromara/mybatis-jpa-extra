@@ -24,72 +24,72 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class DB2Dialect extends AbstractDialect {
 
-	public DB2Dialect() {
-		super();
+    public DB2Dialect() {
+        super();
 
-	}
+    }
 
-	@Override
-	public boolean supportsLimit() {
-		return true;
-	}
-	
-	@Override
-	public String getLimitString(String sql,  JpaPage page) {
-		if ( page.getPageSize() == 0 ) {
-			return sql + " fetch first " + page.getStartRow() + " rows only";
-		}
-		
-		StringBuilder pagingSelectSql = new StringBuilder( sql.length() + 200 )
-				.append(
-						"select * from ( select inner2_.*, rownumber() over(order by order of inner2_) as rownumber_ from ( "
-				)
-				.append( sql )  //nest the main query in an outer select
-				.append(" fetch first ")
-				.append(page.getPageSize())
-				.append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > " )
-				.append(page.getStartRow())
-				.append(" order by rownumber_");
-		
-		return pagingSelectSql.toString();
-	}
-	
-	/**
-	 * LIMIT #{pageResults}  OFFSET #{startRow}
-	 */
-	@Override
-	public String getPreparedStatementLimitString(String sql,  JpaPage page) {
-		if(page.getPageSize()>0&&page.getStartRow()>0){
-			return sql +  " limit ? , ?";
-		}else if(page.getPageSize()>0){
-			return sql +  " limit  ? ";
-		}else{
-			return sql +  " limit ?";
-		}
-	}
-	
-	
-	@Override
-	public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
-		
-		try {
-			if(page.getPageSize()>0&&page.getStartRow()>0){
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-			}else if(page.getPageSize()>0){
-				preparedStatement.setInt(++parameterSize, page.getPageSize());
-			}else{
-				preparedStatement.setInt(++parameterSize, 1000);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public boolean supportsLimit() {
+        return true;
+    }
+    
+    @Override
+    public String getLimitString(String sql,  JpaPage page) {
+        if ( page.getPageSize() == 0 ) {
+            return sql + " fetch first " + page.getStartRow() + " rows only";
+        }
+        
+        StringBuilder pagingSelectSql = new StringBuilder( sql.length() + 200 )
+                .append(
+                        "select * from ( select inner2_.*, rownumber() over(order by order of inner2_) as rownumber_ from ( "
+                )
+                .append( sql )  //nest the main query in an outer select
+                .append(" fetch first ")
+                .append(page.getPageSize())
+                .append(" rows only ) as inner2_ ) as inner1_ where rownumber_ > " )
+                .append(page.getStartRow())
+                .append(" order by rownumber_");
+        
+        return pagingSelectSql.toString();
+    }
+    
+    /**
+     * LIMIT #{pageResults}  OFFSET #{startRow}
+     */
+    @Override
+    public String getPreparedStatementLimitString(String sql,  JpaPage page) {
+        if(page.getPageSize()>0&&page.getStartRow()>0){
+            return sql +  " limit ? , ?";
+        }else if(page.getPageSize()>0){
+            return sql +  " limit  ? ";
+        }else{
+            return sql +  " limit ?";
+        }
+    }
+    
+    
+    @Override
+    public void setLimitParamters(PreparedStatement preparedStatement,int parameterSize,JpaPage page) {
+        
+        try {
+            if(page.getPageSize()>0&&page.getStartRow()>0){
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+            }else if(page.getPageSize()>0){
+                preparedStatement.setInt(++parameterSize, page.getPageSize());
+            }else{
+                preparedStatement.setInt(++parameterSize, 1000);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public String toString() {
-		return "DB2Dialect [" + DB2Dialect.class + "]";
-	}
-	
-	
+    @Override
+    public String toString() {
+        return "DB2Dialect [" + DB2Dialect.class + "]";
+    }
+    
+    
 }

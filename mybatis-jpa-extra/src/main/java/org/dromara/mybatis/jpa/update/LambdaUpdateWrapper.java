@@ -32,27 +32,27 @@ import org.dromara.mybatis.jpa.query.Operator;
  */
 public class LambdaUpdateWrapper  <T> extends LambdaQuery<T>{
 
-	List<Condition> sets ;
+    List<Condition> sets ;
 
-	public LambdaUpdateWrapper() {
-		super();
-	}
+    public LambdaUpdateWrapper() {
+        super();
+    }
 
-	public LambdaUpdateWrapper <T> set(IGetter<T> getter ,Object value) {
-		if(CollectionUtils.isEmpty(sets)) {
-			this.sets = new ArrayList<>();
-		}
-		sets.add(new Condition(Operator.EQ,getColumnName(getter),value));
-		return  this;
-	}
-	
-	public List<Condition> getSets() {
-		return sets;
-	}
+    public LambdaUpdateWrapper <T> set(IGetter<T> getter ,Object value) {
+        if(CollectionUtils.isEmpty(sets)) {
+            this.sets = new ArrayList<>();
+        }
+        sets.add(new Condition(Operator.EQ,getColumnName(getter),value));
+        return  this;
+    }
+    
+    public List<Condition> getSets() {
+        return sets;
+    }
 
-	@Override
-	public String toString() {
-		return "LambdaUpdateWrapper [sets=" + sets + "]";
-	}
+    @Override
+    public String toString() {
+        return "LambdaUpdateWrapper [sets=" + sets + "]";
+    }
 
 }

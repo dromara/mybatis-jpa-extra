@@ -29,40 +29,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CountTestRunner  extends BaseTestRunner{
-	private static final Logger _logger = LoggerFactory.getLogger(CountTestRunner.class);
+    private static final Logger _logger = LoggerFactory.getLogger(CountTestRunner.class);
 
-	
-	@Test
-	void countByQueryNull(){
-		_logger.info("count by query ...");
-		long count = service.count(new Query());
-		_logger.info("count {}",count);
-	}
-	
-	//WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
-	@Test
-	void countByQuery(){
-		_logger.info("count by query ...");
-		long count = service.count(
-				new Query().eq("stdMajor", "政治").gt("STDAGE", 30).in("stdMajor", new Object[]{"政治","化学"})
-				.or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
-		_logger.info("count {}",count);
-	}
+    
+    @Test
+    void countByQueryNull(){
+        _logger.info("count by query ...");
+        long count = service.count(new Query());
+        _logger.info("count {}",count);
+    }
+    
+    //WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
+    @Test
+    void countByQuery(){
+        _logger.info("count by query ...");
+        long count = service.count(
+                new Query().eq("stdMajor", "政治").gt("STDAGE", 30).in("stdMajor", new Object[]{"政治","化学"})
+                .or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
+        _logger.info("count {}",count);
+    }
 
-	@Test
-	void countByLambdaQueryNull(){
-		_logger.info("count by LambdaQuery ...");
-		long count = service.count(new LambdaQuery<Students>());
-		_logger.info("count {}",count);
-	}
-	
-	@Test
-	void countByLambdaQuery(){
-		_logger.info("count by LambdaQuery ...");
-		List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
-		long count = service.count(
-				new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, majorList)
-				.or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
-		_logger.info("count {}",count);
-	}
+    @Test
+    void countByLambdaQueryNull(){
+        _logger.info("count by LambdaQuery ...");
+        long count = service.count(new LambdaQuery<Students>());
+        _logger.info("count {}",count);
+    }
+    
+    @Test
+    void countByLambdaQuery(){
+        _logger.info("count by LambdaQuery ...");
+        List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
+        long count = service.count(
+                new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, majorList)
+                .or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
+        _logger.info("count {}",count);
+    }
 }

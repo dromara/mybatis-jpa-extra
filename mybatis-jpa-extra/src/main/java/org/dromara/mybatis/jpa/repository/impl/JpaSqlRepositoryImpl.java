@@ -32,24 +32,24 @@ import org.slf4j.LoggerFactory;
  * JpaSqlRepositoryImpl
  */
 public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
-	private static final  Logger logger = LoggerFactory.getLogger(JpaSqlRepositoryImpl.class);
+    private static final  Logger logger = LoggerFactory.getLogger(JpaSqlRepositoryImpl.class);
 
-	@Override
-	public IJpaSqlMapper getMapper() {
-		return null;
-	}
-	
-	@Override
-	public List<Map<String, Object>> selectList(String sql) {
-		return getMapper().selectList(mapperValue(sql,null));
-	}
+    @Override
+    public IJpaSqlMapper getMapper() {
+        return null;
+    }
+    
+    @Override
+    public List<Map<String, Object>> selectList(String sql) {
+        return getMapper().selectList(mapperValue(sql,null));
+    }
 
-	@Override
-	public List<Map<String, Object>> selectList(String sql, Map<String, Object> parameters) {
-		return getMapper().selectList(mapperValue(sql,parameters));
-	}
-	
-	   
+    @Override
+    public List<Map<String, Object>> selectList(String sql, Map<String, Object> parameters) {
+        return getMapper().selectList(mapperValue(sql,parameters));
+    }
+    
+       
     //follow is  for query paging
     
     /**
@@ -114,44 +114,44 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
         return totalCount;
     }
 
-	@Override
-	public int insert(String sql) {
-		return getMapper().insert(mapperValue(sql,null));
-	}
+    @Override
+    public int insert(String sql) {
+        return getMapper().insert(mapperValue(sql,null));
+    }
 
-	@Override
-	public int insert(String sql, Map<String, Object> entity) {
-		return getMapper().insert(mapperValue(sql,entity));
-	}
+    @Override
+    public int insert(String sql, Map<String, Object> entity) {
+        return getMapper().insert(mapperValue(sql,entity));
+    }
 
-	@Override
-	public int update(String sql) {
-		return getMapper().update(mapperValue(sql,null));
-	}
+    @Override
+    public int update(String sql) {
+        return getMapper().update(mapperValue(sql,null));
+    }
 
-	@Override
-	public int update(String sql, Map<String, Object> entity) {
-		return getMapper().update(mapperValue(sql,entity));
-	}
+    @Override
+    public int update(String sql, Map<String, Object> entity) {
+        return getMapper().update(mapperValue(sql,entity));
+    }
 
-	@Override
-	public int delete(String sql) {
-		return getMapper().delete(mapperValue(sql,null));
-	}
+    @Override
+    public int delete(String sql) {
+        return getMapper().delete(mapperValue(sql,null));
+    }
 
-	@Override
-	public int delete(String sql, Map<String, Object> parameters) {
-		return getMapper().delete(mapperValue(sql,parameters));
-	}
-	
-	private Map<String, Object> mapperValue(String sql, Map<String, Object> parameters){
-		if(parameters == null) {
-			parameters = new HashMap<>();
-		}
-		logger.trace("sql {}",sql);
-		logger.trace("parameters {}",parameters);
-		parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_SQL, sql);
-		return parameters;
-	}
+    @Override
+    public int delete(String sql, Map<String, Object> parameters) {
+        return getMapper().delete(mapperValue(sql,parameters));
+    }
+    
+    private Map<String, Object> mapperValue(String sql, Map<String, Object> parameters){
+        if(parameters == null) {
+            parameters = new HashMap<>();
+        }
+        logger.trace("sql {}",sql);
+        logger.trace("parameters {}",parameters);
+        parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_SQL, sql);
+        return parameters;
+    }
 
 }

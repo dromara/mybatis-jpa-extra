@@ -26,19 +26,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UpdateSetsBuilder {
-	private static final  Logger logger = LoggerFactory.getLogger(UpdateSetsBuilder.class);
-	
-	public static String buildSetSql(List<Condition> sets) {
-	    StringBuilder setSql = new StringBuilder("");
-		for(Condition condition : sets) {
-			if(StringUtils.isNoneBlank(setSql)) {
-				setSql.append(" , ");
-			}
-			setSql.append(condition.getColumn())
-				  .append(" = ")
-				  .append(SafeValueHandler.valueOfType(condition.getValue()));
-		}
-		logger.debug("setSql {}" , setSql);
-		return setSql.toString();
-	}
+    private static final  Logger logger = LoggerFactory.getLogger(UpdateSetsBuilder.class);
+    
+    public static String buildSetSql(List<Condition> sets) {
+        StringBuilder setSql = new StringBuilder("");
+        for(Condition condition : sets) {
+            if(StringUtils.isNoneBlank(setSql)) {
+                setSql.append(" , ");
+            }
+            setSql.append(condition.getColumn())
+                  .append(" = ")
+                  .append(SafeValueHandler.valueOfType(condition.getValue()));
+        }
+        logger.debug("setSql {}" , setSql);
+        return setSql.toString();
+    }
 }

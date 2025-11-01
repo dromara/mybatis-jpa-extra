@@ -32,35 +32,35 @@ import org.slf4j.LoggerFactory;
  * @Encrypted just SM4 , AES , DES , DESede
  */
 public class EncryptFactory {
-	private static final Logger logger 	= 	LoggerFactory.getLogger(EncryptFactory.class);
-	
-	Map<String , SymmetricEncrypt> encryptor = new HashMap<>();
-	
-	public EncryptFactory(){
-		encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt());
-		encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt());
-		encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt());
-		encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt());
-		logger.debug("Encryptor {}",encryptor);
-	}
-	
-	
-	public EncryptFactory(String cryptKey){
-		if(StringUtils.isBlank(cryptKey)) {
-			encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt());
-			encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt());
-			encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt());
-			encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt());
-		}else {
-			encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt(cryptKey));
-			encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt(cryptKey));
-			encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt(cryptKey));
-			encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt(cryptKey));
-		}
-		logger.debug("Encryptor {}",encryptor);
-	}
-	
-	public SymmetricEncrypt getEncryptor(String algorithm) {
-		return encryptor.get(algorithm.toLowerCase());
-	}
+    private static final Logger logger     =     LoggerFactory.getLogger(EncryptFactory.class);
+    
+    Map<String , SymmetricEncrypt> encryptor = new HashMap<>();
+    
+    public EncryptFactory(){
+        encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt());
+        encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt());
+        encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt());
+        encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt());
+        logger.debug("Encryptor {}",encryptor);
+    }
+    
+    
+    public EncryptFactory(String cryptKey){
+        if(StringUtils.isBlank(cryptKey)) {
+            encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt());
+            encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt());
+            encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt());
+            encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt());
+        }else {
+            encryptor.put(ReciprocalUtils.Algorithm.AES.toLowerCase(), new AesEncrypt(cryptKey));
+            encryptor.put(ReciprocalUtils.Algorithm.DES.toLowerCase(), new DesEncrypt(cryptKey));
+            encryptor.put(ReciprocalUtils.Algorithm.TRIPLE_DES.toLowerCase(), new DesedeEncrypt(cryptKey));
+            encryptor.put(ReciprocalUtils.Algorithm.SM4.toLowerCase(), new Sm4Encrypt(cryptKey));
+        }
+        logger.debug("Encryptor {}",encryptor);
+    }
+    
+    public SymmetricEncrypt getEncryptor(String algorithm) {
+        return encryptor.get(algorithm.toLowerCase());
+    }
 }

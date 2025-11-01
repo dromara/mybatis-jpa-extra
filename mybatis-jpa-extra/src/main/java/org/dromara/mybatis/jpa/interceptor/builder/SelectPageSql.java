@@ -20,12 +20,12 @@ package org.dromara.mybatis.jpa.interceptor.builder;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 
 public class SelectPageSql {
-	/**
-	 * select 语句标记
-	 */
-	boolean selectTrack;
-	
-	/**
+    /**
+     * select 语句标记
+     */
+    boolean selectTrack;
+    
+    /**
      * 是否分页标识
      */
     boolean pageable;
@@ -33,40 +33,40 @@ public class SelectPageSql {
     /**
      * 数据分页对象
      */
-	JpaPage page;
+    JpaPage page;
 
-	public SelectPageSql() {
-	}
+    public SelectPageSql() {
+    }
 
-	public SelectPageSql(boolean selectTrack, JpaPage page) {
-		super();
-		this.selectTrack = selectTrack;
-		this.page = page;
-	}
+    public SelectPageSql(boolean selectTrack, JpaPage page) {
+        super();
+        this.selectTrack = selectTrack;
+        this.page = page;
+    }
 
-	public boolean isSelectTrack() {
-		return selectTrack;
-	}
+    public boolean isSelectTrack() {
+        return selectTrack;
+    }
 
-	public void setSelectTrack(boolean selectTrack) {
-		this.selectTrack = selectTrack;
-	}
+    public void setSelectTrack(boolean selectTrack) {
+        this.selectTrack = selectTrack;
+    }
 
-	public JpaPage getPage() {
-		return page;
-	}
+    public JpaPage getPage() {
+        return page;
+    }
 
-	public void setPage(JpaPage page) {
-		this.page = page;
-	}
+    public void setPage(JpaPage page) {
+        this.page = page;
+    }
 
-	public boolean isPageable() {
-		return pageable;
-	}
+    public boolean isPageable() {
+        return pageable;
+    }
 
-	public void setPageable(boolean pageable) {
-		this.pageable = pageable;
-	}
+    public void setPageable(boolean pageable) {
+        this.pageable = pageable;
+    }
 
     @Override
     public String toString() {
@@ -80,5 +80,5 @@ public class SelectPageSql {
         builder.append("]");
         return builder.toString();
     }
-	
+    
 }

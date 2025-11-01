@@ -34,15 +34,15 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MapperMetadata{
-	private static final Logger logger 	= 	LoggerFactory.getLogger(MapperMetadata.class);
-	
-	static ConcurrentMap<String, String>sqlsMap 				= 	new ConcurrentHashMap<>();
+    private static final Logger logger     =     LoggerFactory.getLogger(MapperMetadata.class);
+    
+    static ConcurrentMap<String, String>sqlsMap                 =     new ConcurrentHashMap<>();
 
-	static IdentifierGeneratorFactory identifierGeneratorFactory= new IdentifierGeneratorFactory();
-	
-	static EncryptFactory encryptFactory;
-	
-	   /**
+    static IdentifierGeneratorFactory identifierGeneratorFactory= new IdentifierGeneratorFactory();
+    
+    static EncryptFactory encryptFactory;
+    
+       /**
      * 表名和字段名
      */
     static int         tableColumnCase                          = ConstCaseType.LOWERCASE;
@@ -52,55 +52,55 @@ public class MapperMetadata{
     static String      tableColumnEscapeChar                    =  "`";
     
     static String      partitionColumn                          =  "inst_id";
-	
-	/**
-	 * Case Converter
-	 * @param name
-	 * @return case
-	 */
-	public static String tableOrColumnCaseConverter(String name) {
-		if(MapperMetadata.tableColumnCase  == ConstCaseType.LOWERCASE) {
-			name = name.toLowerCase();
-		}else if(MapperMetadata.tableColumnCase  == ConstCaseType.UPPERCASE) {
-			name = name.toUpperCase();
-		}
-		return name;
-	}
+    
+    /**
+     * Case Converter
+     * @param name
+     * @return case
+     */
+    public static String tableOrColumnCaseConverter(String name) {
+        if(MapperMetadata.tableColumnCase  == ConstCaseType.LOWERCASE) {
+            name = name.toLowerCase();
+        }else if(MapperMetadata.tableColumnCase  == ConstCaseType.UPPERCASE) {
+            name = name.toUpperCase();
+        }
+        return name;
+    }
 
-	/**
-	 * Escape Converter
-	 * @param name
-	 * @return Escape name
-	 */
-	public static String tableOrColumnEscape(String name) {
-		return MapperMetadata.tableColumnEscape ? MapperMetadata.tableColumnEscapeChar + name + MapperMetadata.tableColumnEscapeChar : name;
-	}
-	
-	public static ConcurrentMap<String, String> getSqlsMap() {
-		return sqlsMap;
-	}
+    /**
+     * Escape Converter
+     * @param name
+     * @return Escape name
+     */
+    public static String tableOrColumnEscape(String name) {
+        return MapperMetadata.tableColumnEscape ? MapperMetadata.tableColumnEscapeChar + name + MapperMetadata.tableColumnEscapeChar : name;
+    }
+    
+    public static ConcurrentMap<String, String> getSqlsMap() {
+        return sqlsMap;
+    }
 
-	public static void setSqlsMap(ConcurrentMap<String, String> sqlsMap) {
-		MapperMetadata.sqlsMap = sqlsMap;
-	}
+    public static void setSqlsMap(ConcurrentMap<String, String> sqlsMap) {
+        MapperMetadata.sqlsMap = sqlsMap;
+    }
 
-	public static IdentifierGeneratorFactory getIdentifierGeneratorFactory() {
-		return identifierGeneratorFactory;
-	}
+    public static IdentifierGeneratorFactory getIdentifierGeneratorFactory() {
+        return identifierGeneratorFactory;
+    }
 
-	public static void setIdentifierGeneratorFactory(IdentifierGeneratorFactory identifierGeneratorFactory) {
-		MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
-		logger.debug("Identifier Generator Factory {}",identifierGeneratorFactory);
-	}
+    public static void setIdentifierGeneratorFactory(IdentifierGeneratorFactory identifierGeneratorFactory) {
+        MapperMetadata.identifierGeneratorFactory = identifierGeneratorFactory;
+        logger.debug("Identifier Generator Factory {}",identifierGeneratorFactory);
+    }
 
-	public static EncryptFactory getEncryptFactory() {
-		return encryptFactory;
-	}
+    public static EncryptFactory getEncryptFactory() {
+        return encryptFactory;
+    }
 
-	public static void setEncryptFactory(EncryptFactory encryptFactory) {
-		MapperMetadata.encryptFactory = encryptFactory;
-	}
-	
+    public static void setEncryptFactory(EncryptFactory encryptFactory) {
+        MapperMetadata.encryptFactory = encryptFactory;
+    }
+    
 
     public static int getTableColumnCase() {
         return tableColumnCase;

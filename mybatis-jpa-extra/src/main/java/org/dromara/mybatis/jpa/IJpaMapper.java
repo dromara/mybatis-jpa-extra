@@ -31,11 +31,11 @@ import org.dromara.mybatis.jpa.mapper.IJpaQueryMapper;
  * @param <T>
  */
 public interface IJpaMapper<T> extends  IJpaQueryMapper<T>,
-										IJpaFetchMapper<T>,
-										IJpaFindMapper<T>,
-										IJpaSoftDeleteMapper<T>,
-										IJpaDeleteMapper<T>,
-										IJpaInsertMapper<T>,
-										IJpaUpdateMapper<T>{
-			
+                                        IJpaFetchMapper<T>,
+                                        IJpaFindMapper<T>,
+                                        IJpaSoftDeleteMapper<T>,
+                                        IJpaDeleteMapper<T>,
+                                        IJpaInsertMapper<T>,
+                                        IJpaUpdateMapper<T>{
+            
 }

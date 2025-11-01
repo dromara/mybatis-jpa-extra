@@ -42,92 +42,92 @@ public class MybatisJpaApplicationTest extends MybatisJpaBasicApplication{
     StudentsService studentsService;
 
     @Test
-	void insert() throws Exception{
-		_logger.info("insert...");
-		Students student=new Students();
-		student.setStdNo("10024");
-		student.setStdGender("M");
-		student.setStdName("司马昭");
-		student.setStdAge(20);
-		student.setStdMajor("政治");
-		student.setStdClass("4");
-		studentsService.insert(student);
+    void insert() throws Exception{
+        _logger.info("insert...");
+        Students student=new Students();
+        student.setStdNo("10024");
+        student.setStdGender("M");
+        student.setStdName("司马昭");
+        student.setStdAge(20);
+        student.setStdMajor("政治");
+        student.setStdClass("4");
+        studentsService.insert(student);
 
-		studentsService.delete(student.getId());
+        studentsService.delete(student.getId());
 
-	}
+    }
 
-	@Test
-	void get(){
-		_logger.info("get...");
-		Students student=studentsService.get("921d3377-937a-4578-b1e2-92fb23b5e512");
+    @Test
+    void get(){
+        _logger.info("get...");
+        Students student=studentsService.get("921d3377-937a-4578-b1e2-92fb23b5e512");
 
-		 _logger.info("Students {}",student);
+         _logger.info("Students {}",student);
 
-	}
+    }
 
-	@Test
-	void remove(){
+    @Test
+    void remove(){
 
-		_logger.info("remove...");
-		Students student=new Students();
-		student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
-		studentsService.delete(student.getId());
+        _logger.info("remove...");
+        Students student=new Students();
+        student.setId("921d3377-937a-4578-b1e2-92fb23b5e512");
+        studentsService.delete(student.getId());
 
-	}
+    }
 
-	@Test
-	void batchDelete() throws Exception{
-		_logger.info("batchDelete...");
-		List<String> idList=new ArrayList<String>();
-		idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-		idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
-		idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-		idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
-		studentsService.deleteBatch(idList);
-	}
+    @Test
+    void batchDelete() throws Exception{
+        _logger.info("batchDelete...");
+        List<String> idList=new ArrayList<String>();
+        idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+        idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+        idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
+        idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+        studentsService.deleteBatch(idList);
+    }
 
-	@Test
-	void fetchPageResults(){
+    @Test
+    void fetchPageResults(){
 
-		_logger.info("fetchPageResults...");
-		 Students student=new Students();
-		 student.setStdGender("M");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 List<Students> allListStudents =
-				 studentsService.fetchPageResults(student).getRows();
-		 for (Students s : allListStudents) {
-			 _logger.info("Students {}",s);
-		 }
-	}
+        _logger.info("fetchPageResults...");
+         Students student=new Students();
+         student.setStdGender("M");
+         student.setPageSize(10);
+         student.setPageNumber(2);
+         List<Students> allListStudents =
+                 studentsService.fetchPageResults(student).getRows();
+         for (Students s : allListStudents) {
+             _logger.info("Students {}",s);
+         }
+    }
 
-	@Test
-	void fetchPageResultsByMapperId(){
+    @Test
+    void fetchPageResultsByMapperId(){
 
-		_logger.info("fetchPageResults by mapperId...");
-		 Students student=new Students();
-		 student.setStdGender("M");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
+        _logger.info("fetchPageResults by mapperId...");
+         Students student=new Students();
+         student.setStdGender("M");
+         student.setPageSize(10);
+         student.setPageNumber(2);
 
-		 List<Students> allListStudents =
-				 studentsService.fetchPageResults("fetchPageResults1",student).getRows();
-		 for (Students s : allListStudents) {
-			 _logger.info("Students {}",s);
-		 }
+         List<Students> allListStudents =
+                 studentsService.fetchPageResults("fetchPageResults1",student).getRows();
+         for (Students s : allListStudents) {
+             _logger.info("Students {}",s);
+         }
 
-	}
+    }
 
 
-	 @Test
-	 void findAll() {
-			_logger.info("---------------- ALL");
+     @Test
+     void findAll() {
+            _logger.info("---------------- ALL");
 
-			List<Students> allListStudents=studentsService.findAll();
-			 for (Students s : allListStudents) {
-				 _logger.info("Students {}",s);
-			 }
-	 }
+            List<Students> allListStudents=studentsService.findAll();
+             for (Students s : allListStudents) {
+                 _logger.info("Students {}",s);
+             }
+     }
 
 }

@@ -41,45 +41,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Intercepts( {
-		@Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class })})
+        @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class ,Integer.class })})
 public class StatementHandlerInterceptor extends AbstractStatementHandlerInterceptor implements Interceptor {
-	private static Logger logger = LoggerFactory.getLogger(StatementHandlerInterceptor.class);
-	
-	public Object intercept(Invocation invocation) throws Throwable {
-		Method m = invocation.getMethod();
-		if ("prepare".equals(m.getName())) {
-			return prepare(invocation);
-		}
-		return invocation.proceed();
-	}
+    private static Logger logger = LoggerFactory.getLogger(StatementHandlerInterceptor.class);
+    
+    public Object intercept(Invocation invocation) throws Throwable {
+        Method m = invocation.getMethod();
+        if ("prepare".equals(m.getName())) {
+            return prepare(invocation);
+        }
+        return invocation.proceed();
+    }
 
-	@Override
-	public Object plugin(Object target) {
-		return Plugin.wrap(target, this);
-	}
+    @Override
+    public Object plugin(Object target) {
+        return Plugin.wrap(target, this);
+    }
 
-	private Object prepare(Invocation invocation) throws Throwable {
-		StatementHandler statement = getStatementHandler(invocation);
-		if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
-			MetaObject metaObject = SystemMetaObject.forObject(statement);
-			BoundSql boundSql = statement.getBoundSql();
-			Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
-			MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
-			logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
-			if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
-				FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
-				FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
-				String findBySql = FindBySqlBuilder.translate(findByMapper,parameterObject);
-				metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, findBySql);
-			}else {
-				SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
-				//判断是否select语句及需要分页支持
-				if (selectPageSql.isSelectTrack() && selectPageSql.isPageable()) {
-					String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,selectPageSql);
-					metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, selectSql);
-				}
-			}
-		}
-		return invocation.proceed();
-	}	
+    private Object prepare(Invocation invocation) throws Throwable {
+        StatementHandler statement = getStatementHandler(invocation);
+        if (statement instanceof SimpleStatementHandler || statement instanceof PreparedStatementHandler) {
+            MetaObject metaObject = SystemMetaObject.forObject(statement);
+            BoundSql boundSql = statement.getBoundSql();
+            Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
+            MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
+            logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
+            if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
+                FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
+                FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
+                String findBySql = FindBySqlBuilder.translate(findByMapper,parameterObject);
+                metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, findBySql);
+            }else {
+                SelectPageSql  selectPageSql = SelectPageSqlBuilder.parse(boundSql, parameterObject);
+                //判断是否select语句及需要分页支持
+                if (selectPageSql.isSelectTrack() && selectPageSql.isPageable()) {
+                    String selectSql = SelectPageSqlBuilder.translate(statement,dialect,boundSql,selectPageSql);
+                    metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, selectSql);
+                }
+            }
+        }
+        return invocation.proceed();
+    }    
 }

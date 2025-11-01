@@ -29,40 +29,40 @@ import org.dromara.mybatis.jpa.provider.MapperProvider;
  * @param <T>
  */
 public interface IJpaFindMapper<T> {
-	
-	/**
-	 * 查询所有数据
-	 * @param entityClass
-	 * @return
-	 */
-	@SelectProvider(type = MapperProvider.class, method = "findAll")
-	public List<T> findAll(@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
+    
+    /**
+     * 查询所有数据
+     * @param entityClass
+     * @return
+     */
+    @SelectProvider(type = MapperProvider.class, method = "findAll")
+    public List<T> findAll(@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
 
-	/**
-	 * 根据ids列表查询
-	 * @param entityClass
-	 * @param idList
-	 * @param partitionKey
-	 * @return
-	 */
-	@SelectProvider(type = MapperProvider.class, method = "findByIds")
-	public List<T> findByIds(	
-							@Param (ConstMetadata.ENTITY_CLASS)			Class<?> 	entityClass,
-							@Param (ConstMetadata.PARAMETER_ID_LIST) 		List<String> idList,
-							@Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+    /**
+     * 根据ids列表查询
+     * @param entityClass
+     * @param idList
+     * @param partitionKey
+     * @return
+     */
+    @SelectProvider(type = MapperProvider.class, method = "findByIds")
+    public List<T> findByIds(    
+                            @Param (ConstMetadata.ENTITY_CLASS)            Class<?>     entityClass,
+                            @Param (ConstMetadata.PARAMETER_ID_LIST)         List<String> idList,
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
 
-	/**
-	 * 根据给定的过滤条件，参数，参数类型查询
-	 * @param entityClass
-	 * @param filter
-	 * @param args
-	 * @param argTypes
-	 * @return
-	 */
-	@SelectProvider(type = MapperProvider.class, method = "find")
-	public List<T> find(	@Param (ConstMetadata.ENTITY_CLASS)	Class<?> 	entityClass,
-							@Param (ConstMetadata.QUERY_FILTER)	String 		filter,
-							@Param (ConstMetadata.QUERY_ARGS) 		Object[] 	args, 
-							@Param (ConstMetadata.QUERY_ARGTYPES) 	int[] 		argTypes);
-	
+    /**
+     * 根据给定的过滤条件，参数，参数类型查询
+     * @param entityClass
+     * @param filter
+     * @param args
+     * @param argTypes
+     * @return
+     */
+    @SelectProvider(type = MapperProvider.class, method = "find")
+    public List<T> find(    @Param (ConstMetadata.ENTITY_CLASS)    Class<?>     entityClass,
+                            @Param (ConstMetadata.QUERY_FILTER)    String         filter,
+                            @Param (ConstMetadata.QUERY_ARGS)         Object[]     args, 
+                            @Param (ConstMetadata.QUERY_ARGTYPES)     int[]         argTypes);
+    
 }

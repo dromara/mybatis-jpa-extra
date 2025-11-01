@@ -32,31 +32,31 @@ import org.dromara.mybatis.jpa.query.Query;
  * @param <T>
  */
 public interface IJpaFetchMapper<T>{
-	
-	@SelectProvider(type = MapperProvider.class, method = "fetchCount")
-	public Integer fetchCount(JpaPage page);
-	
-	@SelectProvider(type = MapperProvider.class, method = "fetch")
-	public List<T> fetch(
-					@Param (ConstMetadata.PAGE)JpaPage page,
-					@Param (ConstMetadata.ENTITY) T entity);
-	
-	@SelectProvider(type = MapperProvider.class, method = "fetchByQuery")
-	public List<T> fetchByQuery(
-					@Param (ConstMetadata.PAGE) JpaPage page,
-					@Param (ConstMetadata.CONDITION) Query query,
-					@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
-	
-	@SelectProvider(type = MapperProvider.class, method = "fetchByLambdaQuery")
-	public List<T> fetchByLambdaQuery(
-					@Param (ConstMetadata.PAGE) JpaPage page,
-					@Param (ConstMetadata.CONDITION) LambdaQuery<T> lambdaQuery,
-					@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
-	
+    
+    @SelectProvider(type = MapperProvider.class, method = "fetchCount")
+    public Integer fetchCount(JpaPage page);
+    
+    @SelectProvider(type = MapperProvider.class, method = "fetch")
+    public List<T> fetch(
+                    @Param (ConstMetadata.PAGE)JpaPage page,
+                    @Param (ConstMetadata.ENTITY) T entity);
+    
+    @SelectProvider(type = MapperProvider.class, method = "fetchByQuery")
+    public List<T> fetchByQuery(
+                    @Param (ConstMetadata.PAGE) JpaPage page,
+                    @Param (ConstMetadata.CONDITION) Query query,
+                    @Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
+    
+    @SelectProvider(type = MapperProvider.class, method = "fetchByLambdaQuery")
+    public List<T> fetchByLambdaQuery(
+                    @Param (ConstMetadata.PAGE) JpaPage page,
+                    @Param (ConstMetadata.CONDITION) LambdaQuery<T> lambdaQuery,
+                    @Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
+    
 
-	//
-	public List<T> fetchPageResults(T entity);
-	
-	public List<T> fetchPageResults(@Param (ConstMetadata.PAGE) JpaPage page ,@Param (ConstMetadata.ENTITY) T entity);
-		
+    //
+    public List<T> fetchPageResults(T entity);
+    
+    public List<T> fetchPageResults(@Param (ConstMetadata.PAGE) JpaPage page ,@Param (ConstMetadata.ENTITY) T entity);
+        
 }

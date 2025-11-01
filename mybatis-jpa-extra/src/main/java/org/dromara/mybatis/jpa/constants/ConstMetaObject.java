@@ -17,19 +17,19 @@
 package org.dromara.mybatis.jpa.constants;
 
 public class ConstMetaObject {
-	
-	public static final String PARAMETER_OBJECT        = "parameterHandler.parameterObject";
+    
+    public static final String PARAMETER_OBJECT        = "parameterHandler.parameterObject";
 
-	public static final String MAPPED_STATEMENT        = "mappedStatement";
-	
-	public static final String BOUNDSQL_SQL            = "boundSql.sql";
-	
-	public static final String ROWBOUNDS               = "rowBounds";
-	
-	public static final String DELEGATE                = "delegate";
-	
-	public static final String SQL_PLACEHOLDER         = "?";
-	
-	public static final String SQL_PLACEHOLDER_REGEX   = "\\?";
-	
+    public static final String MAPPED_STATEMENT        = "mappedStatement";
+    
+    public static final String BOUNDSQL_SQL            = "boundSql.sql";
+    
+    public static final String ROWBOUNDS               = "rowBounds";
+    
+    public static final String DELEGATE                = "delegate";
+    
+    public static final String SQL_PLACEHOLDER         = "?";
+    
+    public static final String SQL_PLACEHOLDER_REGEX   = "\\?";
+    
 }

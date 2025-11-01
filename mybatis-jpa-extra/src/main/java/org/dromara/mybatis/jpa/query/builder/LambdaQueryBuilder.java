@@ -28,28 +28,28 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({"rawtypes"})
 public class LambdaQueryBuilder {
-	private static final Logger logger = LoggerFactory.getLogger(LambdaQueryBuilder.class);
-			
-	public static String build(LambdaQuery lambdaQuery) {
-	    StringBuilder conditionString = new StringBuilder("");
-		List<Condition> conditions = lambdaQuery.getConditions();
-		Operator lastExpression = Operator.AND;
-		for (Condition condition : conditions) {
-			Operator expression = condition.getExpression();
-			Object value = condition.getValue();
-			String column = SafeValueHandler.safeColumn(condition.getColumn());
-			condition.setColumn(column);
-			if (expression.equals(Operator.AND) || expression.equals(Operator.OR)) {
-				lastExpression = condition.getExpression();
-				if (value instanceof LambdaQuery subQuery) {
-					ConditionBuilder.appendSubQuery(conditionString,build(subQuery),lastExpression);
-				}
-			}else {
-				ConditionBuilder.build(conditionString, column, expression, lastExpression, value, value);
-			}
-		}
-		logger.trace("conditionString {}" , conditionString);
-		return conditionString.toString();
-	}
-	
+    private static final Logger logger = LoggerFactory.getLogger(LambdaQueryBuilder.class);
+            
+    public static String build(LambdaQuery lambdaQuery) {
+        StringBuilder conditionString = new StringBuilder("");
+        List<Condition> conditions = lambdaQuery.getConditions();
+        Operator lastExpression = Operator.AND;
+        for (Condition condition : conditions) {
+            Operator expression = condition.getExpression();
+            Object value = condition.getValue();
+            String column = SafeValueHandler.safeColumn(condition.getColumn());
+            condition.setColumn(column);
+            if (expression.equals(Operator.AND) || expression.equals(Operator.OR)) {
+                lastExpression = condition.getExpression();
+                if (value instanceof LambdaQuery subQuery) {
+                    ConditionBuilder.appendSubQuery(conditionString,build(subQuery),lastExpression);
+                }
+            }else {
+                ConditionBuilder.build(conditionString, column, expression, lastExpression, value, value);
+            }
+        }
+        logger.trace("conditionString {}" , conditionString);
+        return conditionString.toString();
+    }
+    
 }

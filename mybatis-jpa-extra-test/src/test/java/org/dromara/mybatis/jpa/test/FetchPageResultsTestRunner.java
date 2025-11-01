@@ -26,47 +26,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FetchPageResultsTestRunner  extends BaseTestRunner{
-	private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
+    private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 
-	@Test
-	void fetchPageResults(){
-		
-		_logger.info("fetchPageResults...");
-		 Students student=new Students();
-		 student.setPageNumber(2);
-		 student.setPageSize(10);
-		 JpaPageResults<Students>  results = service.fetchPageResults(student);
+    @Test
+    void fetchPageResults(){
+        
+        _logger.info("fetchPageResults...");
+         Students student=new Students();
+         student.setPageNumber(2);
+         student.setPageSize(10);
+         JpaPageResults<Students>  results = service.fetchPageResults(student);
 
-		 _logger.info("records {} , total {} , totalPage {} , page {} ",
-				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
-	}
-	
-	@Test
-	void fetchPageResultsByMapperId(){
-		_logger.info("fetchPageResults by mapperId...");
-		 Students student=new Students();
-		 student.setStdGender("M");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 
-		 JpaPageResults<Students>  results =service.fetchPageResults("fetchPageResults1",student);
-		 
-		 _logger.info("records {} , total {} , totalPage {} , page {} ",
-				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
-	}
-	
-	@Test
-	void fetchPageResultsByDto(){
-		_logger.info("fetchPageResults by fetchPageResultsByDto...");
-		 StudentQueryDto student=new StudentQueryDto();
-		 student.setStdGender("M");
-		 student.setPageSize(10);
-		 student.setPageNumber(2);
-		 
-		 JpaPageResults<StudentVo> results = service.fetchPageResultsVo(student);
-		 
-		 _logger.info("records {} , total {} , totalPage {} , page {} ",
-				 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
-	}
+         _logger.info("records {} , total {} , totalPage {} , page {} ",
+                 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+    }
+    
+    @Test
+    void fetchPageResultsByMapperId(){
+        _logger.info("fetchPageResults by mapperId...");
+         Students student=new Students();
+         student.setStdGender("M");
+         student.setPageSize(10);
+         student.setPageNumber(2);
+         
+         JpaPageResults<Students>  results =service.fetchPageResults("fetchPageResults1",student);
+         
+         _logger.info("records {} , total {} , totalPage {} , page {} ",
+                 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+    }
+    
+    @Test
+    void fetchPageResultsByDto(){
+        _logger.info("fetchPageResults by fetchPageResultsByDto...");
+         StudentQueryDto student=new StudentQueryDto();
+         student.setStdGender("M");
+         student.setPageSize(10);
+         student.setPageNumber(2);
+         
+         JpaPageResults<StudentVo> results = service.fetchPageResultsVo(student);
+         
+         _logger.info("records {} , total {} , totalPage {} , page {} ",
+                 results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
+    }
 
 }

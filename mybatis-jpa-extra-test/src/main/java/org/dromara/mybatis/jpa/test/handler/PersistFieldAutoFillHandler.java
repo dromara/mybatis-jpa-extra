@@ -21,15 +21,15 @@ import org.dromara.mybatis.jpa.handler.FieldAutoFillHandler;
 
 public class PersistFieldAutoFillHandler  extends FieldAutoFillHandler{
 
-	@Override
-	public void insertFill(MetaObject metaObject) {
-		this.setFieldValue(metaObject , "stdNo", "AutoFill_Insert");
-	}
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        this.setFieldValue(metaObject , "stdNo", "AutoFill_Insert");
+    }
 
-	@Override
-	public void updateFill(MetaObject metaObject) {
-		this.setFieldValue(metaObject , "stdNo", "AutoFill_Update");
-		
-	}
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        this.setFieldValue(metaObject , "stdNo", "AutoFill_Update");
+        
+    }
 
 }

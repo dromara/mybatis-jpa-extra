@@ -23,7 +23,7 @@ import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class LambdaUpdateBuilder extends LambdaQueryBuilder{
 
-	public static String buildSetSql(LambdaUpdateWrapper updateWrapper) {
-		return UpdateSetsBuilder.buildSetSql(updateWrapper.getSets());
-	}
+    public static String buildSetSql(LambdaUpdateWrapper updateWrapper) {
+        return UpdateSetsBuilder.buildSetSql(updateWrapper.getSets());
+    }
 }

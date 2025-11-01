@@ -39,16 +39,16 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public final class ReciprocalUtils {
-	private static final  Logger logger = LoggerFactory.getLogger(ReciprocalUtils.class);
-	
-    public static final String DEFAULT_KEY 		= "l0JqT7NvIzP9oRaG4kFc1QmD_bWu3x8E5yS2h6"; //
+    private static final  Logger logger = LoggerFactory.getLogger(ReciprocalUtils.class);
+    
+    public static final String DEFAULT_KEY         = "l0JqT7NvIzP9oRaG4kFc1QmD_bWu3x8E5yS2h6"; //
 
     public final class Algorithm {
-        public static final String DES 			= "DES";
-        public static final String TRIPLE_DES 	= "DESede";
-        public static final String BLOWFISH 	= "Blowfish";
-        public static final String AES 			= "AES";
-        public static final String SM4 			= "SM4";
+        public static final String DES             = "DES";
+        public static final String TRIPLE_DES     = "DESede";
+        public static final String BLOWFISH     = "Blowfish";
+        public static final String AES             = "AES";
+        public static final String SM4             = "SM4";
     }
 
 /*
@@ -112,8 +112,8 @@ public final class ReciprocalUtils {
         if (checkKeyLength(secretKey, algorithm)) {
             SecretKey key = generatorKey(secretKey, algorithm);
             byte[] decoderBytes = decoder(ciphersBytes, key, algorithm);
-			
-			return decoderBytes == null ? null : new String(decoderBytes, StandardCharsets.UTF_8);
+            
+            return decoderBytes == null ? null : new String(decoderBytes, StandardCharsets.UTF_8);
         }
         return null;
     }
@@ -137,7 +137,7 @@ public final class ReciprocalUtils {
 
     private static SecretKey generatorKey(String secretKey, String algorithm) {
         try {
-        	return new SecretKeySpec(secretKey.getBytes(), algorithm);
+            return new SecretKeySpec(secretKey.getBytes(), algorithm);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,13 +165,13 @@ public final class ReciprocalUtils {
     }
     
     public static String encode2Hex(String simple, String secretKey) {
-    	String key = generatorDefaultKey(secretKey + DEFAULT_KEY,Algorithm.TRIPLE_DES);
-    	return encode2Hex(simple,key, Algorithm.TRIPLE_DES);
+        String key = generatorDefaultKey(secretKey + DEFAULT_KEY,Algorithm.TRIPLE_DES);
+        return encode2Hex(simple,key, Algorithm.TRIPLE_DES);
     }
 
     public static String decoderHex(String ciphers, String secretKey) {
-    	String key = generatorDefaultKey(secretKey + DEFAULT_KEY,Algorithm.TRIPLE_DES);
-    	return decoderHex(ciphers,key,Algorithm.TRIPLE_DES);
+        String key = generatorDefaultKey(secretKey + DEFAULT_KEY,Algorithm.TRIPLE_DES);
+        return decoderHex(ciphers,key,Algorithm.TRIPLE_DES);
     }
     
     private static boolean checkKeyLength(String secretKey, String algorithm) {
@@ -180,25 +180,25 @@ public final class ReciprocalUtils {
             if (secretKey.length() == 8) {
                 lengthCheck = true;
             } else {
-            	logger.error("DES key length is  {} ,must lequal 8",secretKey.getBytes().length);
+                logger.error("DES key length is  {} ,must lequal 8",secretKey.getBytes().length);
             }
         } else if (algorithm.equals(Algorithm.TRIPLE_DES)) {
             if (secretKey.length() == 24) {
                 lengthCheck = true;
             } else {
-            	logger.error("DESede key length is  {} ,must equal 24",secretKey.getBytes().length);
+                logger.error("DESede key length is  {} ,must equal 24",secretKey.getBytes().length);
             }
         } else if (algorithm.equals(Algorithm.AES)) {
             if (secretKey.length() == 16) {
                 lengthCheck = true;
             } else {
-            	logger.error("AES key length is  {} ,must equal 16",secretKey.getBytes().length);
+                logger.error("AES key length is  {} ,must equal 16",secretKey.getBytes().length);
             }
         } else if (algorithm.equals(Algorithm.BLOWFISH)) {
             if (secretKey.length() <= 16) {
                 lengthCheck = true;
             } else {
-            	logger.error("Blowfish key length is {} ,must be less then 16",secretKey.getBytes().length);
+                logger.error("Blowfish key length is {} ,must be less then 16",secretKey.getBytes().length);
             }
         }
         return lengthCheck;
@@ -207,17 +207,17 @@ public final class ReciprocalUtils {
     
     public static String cutSecretKey(String secretKey, String algorithm) {
         if (algorithm.equals(Algorithm.DES)) {
-        	return secretKey.substring(0, 8);
+            return secretKey.substring(0, 8);
         } else if (algorithm.equals(Algorithm.TRIPLE_DES)) {
-        	return secretKey.substring(0, 24);
+            return secretKey.substring(0, 24);
         } else if (algorithm.equals(Algorithm.AES)) {
-        	return secretKey.substring(0, 16);
+            return secretKey.substring(0, 16);
         } else if (algorithm.equals(Algorithm.BLOWFISH)) {
-        	return secretKey.substring(0, 16);
+            return secretKey.substring(0, 16);
         } else if (algorithm.equals(Algorithm.SM4)) {
-        	return secretKey.substring(0, 32);
+            return secretKey.substring(0, 32);
         }else {
-        	return secretKey;
+            return secretKey;
         }
     }
 

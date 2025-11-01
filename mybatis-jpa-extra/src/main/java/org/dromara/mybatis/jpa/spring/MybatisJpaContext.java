@@ -40,27 +40,27 @@ import jakarta.servlet.http.HttpSession;
  * @since 3.0
  */
 public final class MybatisJpaContext {
-	static final Logger logger = LoggerFactory.getLogger(MybatisJpaContext.class);
-	
-	static StandardEnvironment properties;
-	
-	static ApplicationContext jpaContext;
-	
-	static String propertyConfigurerBeanName = "propertySourcesPlaceholderConfigurer";
-	
-	private MybatisJpaContext() {}
-	
-	/**
-	 * init mybatisJpaContext and properties
-	 * 
-	 * @param applicationContext
-	 */
-	public static void init(ApplicationContext applicationContext) {
-		
-		jpaContext = applicationContext;
-		
-		if (jpaContext.containsBean(propertyConfigurerBeanName)) {
-			logger.trace("init MybatisJpaContext properties");
+    static final Logger logger = LoggerFactory.getLogger(MybatisJpaContext.class);
+    
+    static StandardEnvironment properties;
+    
+    static ApplicationContext jpaContext;
+    
+    static String propertyConfigurerBeanName = "propertySourcesPlaceholderConfigurer";
+    
+    private MybatisJpaContext() {}
+    
+    /**
+     * init mybatisJpaContext and properties
+     * 
+     * @param applicationContext
+     */
+    public static void init(ApplicationContext applicationContext) {
+        
+        jpaContext = applicationContext;
+        
+        if (jpaContext.containsBean(propertyConfigurerBeanName)) {
+            logger.trace("init MybatisJpaContext properties");
             PropertySourcesPlaceholderConfigurer propertyConfigurer = 
                     ((PropertySourcesPlaceholderConfigurer) applicationContext.getBean(propertyConfigurerBeanName));
             
@@ -68,103 +68,103 @@ public final class MybatisJpaContext {
                     .getAppliedPropertySources()
                     .get(PropertySourcesPlaceholderConfigurer.ENVIRONMENT_PROPERTIES_PROPERTY_SOURCE_NAME)
                     .getSource();
-		}
-		
-	}
-	
-	/**
-	 * get ApplicationContext from web  ServletContext configuration
-	 * @return ApplicationContext
-	 */
-	public static ApplicationContext getApplicationContext(){
-		HttpSession session = getSession();
-		return ((session == null) ? null : WebApplicationContextUtils.getWebApplicationContext(session.getServletContext()));
-	}
-	
-	/**
-	 * get bean from spring configuration by bean id
-	 * @param id
-	 * @return Object
-	 */
-	public static Object getBean(String id){
-		if(jpaContext == null) {
-		    ApplicationContext applicationContext = getApplicationContext();
-			return ((applicationContext == null) ? null:applicationContext.getBean(id));
-		}else {
-			return jpaContext.getBean(id);
-		}
-	}
-	
-	public static <T> T getBean(Class<T> requiredType){
-		if(jpaContext == null) {
-			ApplicationContext applicationContext = getApplicationContext();
-			return ((applicationContext == null) ? null: applicationContext.getBean(requiredType));
-		}else {
-			return jpaContext.getBean(requiredType);
-		}
-	}
-	
+        }
+        
+    }
+    
+    /**
+     * get ApplicationContext from web  ServletContext configuration
+     * @return ApplicationContext
+     */
+    public static ApplicationContext getApplicationContext(){
+        HttpSession session = getSession();
+        return ((session == null) ? null : WebApplicationContextUtils.getWebApplicationContext(session.getServletContext()));
+    }
+    
+    /**
+     * get bean from spring configuration by bean id
+     * @param id
+     * @return Object
+     */
+    public static Object getBean(String id){
+        if(jpaContext == null) {
+            ApplicationContext applicationContext = getApplicationContext();
+            return ((applicationContext == null) ? null:applicationContext.getBean(id));
+        }else {
+            return jpaContext.getBean(id);
+        }
+    }
+    
+    public static <T> T getBean(Class<T> requiredType){
+        if(jpaContext == null) {
+            ApplicationContext applicationContext = getApplicationContext();
+            return ((applicationContext == null) ? null: applicationContext.getBean(requiredType));
+        }else {
+            return jpaContext.getBean(requiredType);
+        }
+    }
+    
     public static <T> T getBean(String name, Class<T> requiredType) throws BeansException{
         if(jpaContext == null) {
             ApplicationContext applicationContext = getApplicationContext();
-			return ((applicationContext == null) ? null : applicationContext.getBean(name,requiredType));
+            return ((applicationContext == null) ? null : applicationContext.getBean(name,requiredType));
         }else {
             return jpaContext.getBean(name,requiredType);
         }
     }
-	
-	//below method is common HttpServlet method
-	/**
-	 * get Spring HttpServletRequest
-	 * @return HttpServletRequest
-	 */
-	public static HttpServletRequest getRequest(){
-		ServletRequestAttributes servletRequestAttributes =(ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		return ((servletRequestAttributes == null )? null : servletRequestAttributes.getRequest());
-	}
+    
+    //below method is common HttpServlet method
+    /**
+     * get Spring HttpServletRequest
+     * @return HttpServletRequest
+     */
+    public static HttpServletRequest getRequest(){
+        ServletRequestAttributes servletRequestAttributes =(ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+        return ((servletRequestAttributes == null )? null : servletRequestAttributes.getRequest());
+    }
 
-	/**
-	 * get current Session
-	 * @return HttpSession
-	 */
-	public static HttpSession getSession(){
-		HttpServletRequest request  = getRequest();
-		return ((request== null) ? null : request.getSession());
-	}
+    /**
+     * get current Session
+     * @return HttpSession
+     */
+    public static HttpSession getSession(){
+        HttpServletRequest request  = getRequest();
+        return ((request== null) ? null : request.getSession());
+    }
 
-	public static StandardEnvironment getProperties() {
-		return properties;
-	}
+    public static StandardEnvironment getProperties() {
+        return properties;
+    }
 
-	public static ApplicationContext getJpaContext() {
-		return jpaContext;
-	}
+    public static ApplicationContext getJpaContext() {
+        return jpaContext;
+    }
 
-	public static String version() {
-		return 
-				String.format("""
-					---------------------------------------------------------------------------------
-					-              JAVA    
-					-              %s java version %s, class %s
-					-              %s (build %s, %s)
-					---------------------------------------------------------------------------------
-					-                                MyBatis JPA Extra 
-					-						                                
-					-              %sCopyright 2018 - %s https://gitee.com/dromara/mybatis-jpa-extra/
-					-
-					-              Licensed under the Apache License, Version 2.0 
-					---------------------------------------------------------------------------------
-					""",
-					SystemUtils.JAVA_VENDOR,
-					SystemUtils.JAVA_VERSION,
-					SystemUtils.JAVA_CLASS_VERSION,
-					SystemUtils.JAVA_VM_NAME,
-					SystemUtils.JAVA_VM_VERSION,
-					SystemUtils.JAVA_VM_INFO,
-					(char)0xA9,
-					LocalDateTime.now().getYear()
-				);
-	}
-	
-	
+    public static String version() {
+        return 
+                String.format("""
+                    ---------------------------------------------------------------------------------
+                    -              JAVA    
+                    -              %s java version %s, class %s
+                    -              %s (build %s, %s)
+                    ---------------------------------------------------------------------------------
+                    -                                MyBatis JPA Extra 
+                    -                                                        
+                    -              %sCopyright 2018 - %s https://gitee.com/dromara/mybatis-jpa-extra/
+                    -
+                    -              Licensed under the Apache License, Version 2.0 
+                    ---------------------------------------------------------------------------------
+                    """,
+                    SystemUtils.JAVA_VENDOR,
+                    SystemUtils.JAVA_VERSION,
+                    SystemUtils.JAVA_CLASS_VERSION,
+                    SystemUtils.JAVA_VM_NAME,
+                    SystemUtils.JAVA_VM_VERSION,
+                    SystemUtils.JAVA_VM_INFO,
+                    (char)0xA9,
+                    LocalDateTime.now().getYear()
+                );
+    }
+    
+    
 }

@@ -35,35 +35,35 @@ import org.slf4j.LoggerFactory;
 
 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
 public class FieldAutoFillInterceptor  implements Interceptor {
-	protected static Logger  logger = LoggerFactory.getLogger(FieldAutoFillInterceptor.class);
-	
-	boolean isAutoFill;
-	FieldAutoFillHandler fieldAutoFillHandler;
-	
-	@Override
-	public Object intercept(Invocation invocation) throws Throwable {
-		if(!isAutoFill) {
-			try {
-				isAutoFill = true;
-				fieldAutoFillHandler = MybatisJpaContext.getBean(FieldAutoFillHandler.class);
-				logger.debug("get bean by fieldAutoFillHandler class");
-			}catch(Exception e){
-				logger.debug("get bean by fieldAutoFillHandler Exception",e);
-			}
-		}
-		if(fieldAutoFillHandler != null) {
-			MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-			Configuration configuration = mappedStatement.getConfiguration();
-	        Object parameter = invocation.getArgs()[1];
-	        MetaObject metaObject = configuration.newMetaObject(parameter);
-	        if (Objects.equals(SqlCommandType.INSERT, mappedStatement.getSqlCommandType())) {
-	        	fieldAutoFillHandler.insertFill(metaObject);
-	        }else if (Objects.equals(SqlCommandType.UPDATE, mappedStatement.getSqlCommandType())) {
-	        	fieldAutoFillHandler.updateFill(metaObject);
-	        }
-		}
-		return invocation.proceed();
-	}
+    protected static Logger  logger = LoggerFactory.getLogger(FieldAutoFillInterceptor.class);
+    
+    boolean isAutoFill;
+    FieldAutoFillHandler fieldAutoFillHandler;
+    
+    @Override
+    public Object intercept(Invocation invocation) throws Throwable {
+        if(!isAutoFill) {
+            try {
+                isAutoFill = true;
+                fieldAutoFillHandler = MybatisJpaContext.getBean(FieldAutoFillHandler.class);
+                logger.debug("get bean by fieldAutoFillHandler class");
+            }catch(Exception e){
+                logger.debug("get bean by fieldAutoFillHandler Exception",e);
+            }
+        }
+        if(fieldAutoFillHandler != null) {
+            MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
+            Configuration configuration = mappedStatement.getConfiguration();
+            Object parameter = invocation.getArgs()[1];
+            MetaObject metaObject = configuration.newMetaObject(parameter);
+            if (Objects.equals(SqlCommandType.INSERT, mappedStatement.getSqlCommandType())) {
+                fieldAutoFillHandler.insertFill(metaObject);
+            }else if (Objects.equals(SqlCommandType.UPDATE, mappedStatement.getSqlCommandType())) {
+                fieldAutoFillHandler.updateFill(metaObject);
+            }
+        }
+        return invocation.proceed();
+    }
 
     @Override
     public Object plugin(Object target) {

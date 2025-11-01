@@ -29,23 +29,23 @@ import org.dromara.mybatis.jpa.crypto.utils.Base64Utils;
 
 public class StringGenerator {
 
-    private static final char[] DEFAULT_CODEC 		= "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static final char[] DEFAULT_CODEC         = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    static final char[] DEFAULT_CODE_NUMBER 		= "1234567890".toCharArray();
+    static final char[] DEFAULT_CODE_NUMBER         = "1234567890".toCharArray();
 
-    static final char[] DEFAULT_CODE_LOWERCASE 		= "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    static final char[] DEFAULT_CODE_LOWERCASE         = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    static final char[] DEFAULT_CODE_UPPERCASE 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    static final char[] DEFAULT_CODE_UPPERCASE         = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
-    static final char[] DEFAULT_CODE_LETTERS 		= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    static final char[] DEFAULT_CODE_LETTERS         = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
     static final char[] DEFAULT_CODE_NUMBER_LETTERS = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    static final String UUID_REGEX 					=  "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$";
+    static final String UUID_REGEX                     =  "^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$";
     
-    private char[] codec 							= DEFAULT_CODEC;
+    private char[] codec                             = DEFAULT_CODEC;
     
-    private Random random 							= new SecureRandom();
+    private Random random                             = new SecureRandom();
 
     private int length;
     

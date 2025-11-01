@@ -220,58 +220,58 @@ public class MybatisProperties {
     this.configuration = configuration;
   }
 
-	public String getDialect() {
-		return dialect;
-	}
+    public String getDialect() {
+        return dialect;
+    }
 
-	public void setDialect(String dialect) {
-		this.dialect = dialect;
-	}
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
+    }
 
-	public boolean isTableColumnEscape() {
-		return tableColumnEscape;
-	}
+    public boolean isTableColumnEscape() {
+        return tableColumnEscape;
+    }
 
-	public void setTableColumnEscape(boolean tableColumnEscape) {
-		this.tableColumnEscape = tableColumnEscape;
-	}
+    public void setTableColumnEscape(boolean tableColumnEscape) {
+        this.tableColumnEscape = tableColumnEscape;
+    }
 
-	public String getTableColumnEscapeChar() {
-		return tableColumnEscapeChar;
-	}
+    public String getTableColumnEscapeChar() {
+        return tableColumnEscapeChar;
+    }
 
-	public void setTableColumnEscapeChar(String tableColumnEscapeChar) {
-		this.tableColumnEscapeChar = tableColumnEscapeChar;
-	}
+    public void setTableColumnEscapeChar(String tableColumnEscapeChar) {
+        this.tableColumnEscapeChar = tableColumnEscapeChar;
+    }
 
-	public String getTableColumnCase() {
-		return tableColumnCase;
-	}
+    public String getTableColumnCase() {
+        return tableColumnCase;
+    }
 
-	public void setTableColumnCase(String tableColumnCase) {
-		this.tableColumnCase = tableColumnCase;
-	}
+    public void setTableColumnCase(String tableColumnCase) {
+        this.tableColumnCase = tableColumnCase;
+    }
 
-	public int getTableColumnSnowflakeDatacenterId() {
-		return tableColumnSnowflakeDatacenterId;
-	}
+    public int getTableColumnSnowflakeDatacenterId() {
+        return tableColumnSnowflakeDatacenterId;
+    }
 
-	public void setTableColumnSnowflakeDatacenterId(int tableColumnSnowflakeDatacenterId) {
-		this.tableColumnSnowflakeDatacenterId = tableColumnSnowflakeDatacenterId;
-	}
+    public void setTableColumnSnowflakeDatacenterId(int tableColumnSnowflakeDatacenterId) {
+        this.tableColumnSnowflakeDatacenterId = tableColumnSnowflakeDatacenterId;
+    }
 
-	public int getTableColumnSnowflakeMachineId() {
-		return tableColumnSnowflakeMachineId;
-	}
+    public int getTableColumnSnowflakeMachineId() {
+        return tableColumnSnowflakeMachineId;
+    }
 
-	public void setTableColumnSnowflakeMachineId(int tableColumnSnowflakeMachineId) {
-		this.tableColumnSnowflakeMachineId = tableColumnSnowflakeMachineId;
-	}
+    public void setTableColumnSnowflakeMachineId(int tableColumnSnowflakeMachineId) {
+        this.tableColumnSnowflakeMachineId = tableColumnSnowflakeMachineId;
+    }
 
-	public Resource[] resolveMapperLocations() {
-		return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))
-				.flatMap(location -> Stream.of(getResources(location))).toArray(Resource[]::new);
-	}
+    public Resource[] resolveMapperLocations() {
+        return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))
+                .flatMap(location -> Stream.of(getResources(location))).toArray(Resource[]::new);
+    }
 
   private Resource[] getResources(String location) {
     try {

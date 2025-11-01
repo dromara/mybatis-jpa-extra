@@ -53,7 +53,7 @@ public class SqlRepositoryTest {
 
     @Test
     public void testSelectList() throws Exception {
-    	databaseInitializer.run(null);
+        databaseInitializer.run(null);
         DataSourceSwitch.change("test1");
         // 
         
@@ -83,7 +83,7 @@ public class SqlRepositoryTest {
     
     @Test
     public void testJpaPageResults() throws Exception {
-    	databaseInitializer.run(null);
+        databaseInitializer.run(null);
         DataSourceSwitch.change("test1");
         // 
         

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 
 public class StrUtilsTest {
 
-	@Test
+    @Test
     void test() {
         String aaa = "app_version_fld";
         System.out.println(StrUtils.underlineToCamel(aaa));

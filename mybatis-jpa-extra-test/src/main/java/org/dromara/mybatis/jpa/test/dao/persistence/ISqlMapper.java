@@ -25,5 +25,5 @@ import org.dromara.mybatis.jpa.IJpaSqlMapper;
  * @param <T>
  */
 public interface ISqlMapper extends IJpaSqlMapper{
-	
+    
 }

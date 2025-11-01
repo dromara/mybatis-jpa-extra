@@ -29,45 +29,45 @@ import org.slf4j.LoggerFactory;
  *
  */
 @SuppressWarnings({"rawtypes" })
-public class SqlMapperProvider {	
-	static final Logger logger 	= 	LoggerFactory.getLogger(SqlMapperProvider.class);
-	
-	public SqlMapperProvider() {
-		logger.debug("constructor init .");
-	}
-
-	public String selectList(Map<String, Object>  parametersMap) {
-		return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
+public class SqlMapperProvider {    
+    static final Logger logger     =     LoggerFactory.getLogger(SqlMapperProvider.class);
+    
+    public SqlMapperProvider() {
+        logger.debug("constructor init .");
     }
-	
-	/**
-	 * @param entity
-	 * @return insert sql String
-	 */
-	public String insert(Map<String ,Object> entityMap) {
-		return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
-	}
 
-	//update
-	/**
-	 * @param entity
-	 * @return update sql String
-	 */
-	public String update(Map<String ,Object> entityMap) {
-		return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
-	}
+    public String selectList(Map<String, Object>  parametersMap) {
+        return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
+    }
+    
+    /**
+     * @param entity
+     * @return insert sql String
+     */
+    public String insert(Map<String ,Object> entityMap) {
+        return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
+    }
 
-	
-	public String delete(Map<String ,Object> parametersMap) {
-		return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
-	}
-	
-	/**
-	 * @param entity
-	 * @return insert sql String
-	 */
-	public String fetchCount(JpaPage entity) {
-		return new FetchCountProvider().executeCount(entity);
-	}
-	
+    //update
+    /**
+     * @param entity
+     * @return update sql String
+     */
+    public String update(Map<String ,Object> entityMap) {
+        return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
+    }
+
+    
+    public String delete(Map<String ,Object> parametersMap) {
+        return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
+    }
+    
+    /**
+     * @param entity
+     * @return insert sql String
+     */
+    public String fetchCount(JpaPage entity) {
+        return new FetchCountProvider().executeCount(entity);
+    }
+    
 }

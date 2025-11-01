@@ -40,75 +40,75 @@ import org.slf4j.LoggerFactory;
  * MyBatisJpaSessionFactoryBean
  */
 public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
-	protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
-	
-	private int timeout 					= 30 ;
-	
-	private String dialect 					= DialectMapper.DEFAULT_DIALECT;
-	
-	private String cryptKey 				= ReciprocalUtils.DEFAULT_KEY;
-	
-	private List<Interceptor> interceptors 	= Collections.emptyList();
-	
-	public void setInterceptors(List<Interceptor> interceptors) {
-		this.interceptors = interceptors;
-	}
-	
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
-	}
-	
-	public void setDialect(String dialect) {
-		this.dialect = dialect;
-	}
-	
-	public void setCryptKey(String cryptKey) {
-		this.cryptKey = cryptKey;
-	}
+    protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
+    
+    private int timeout                     = 30 ;
+    
+    private String dialect                     = DialectMapper.DEFAULT_DIALECT;
+    
+    private String cryptKey                 = ReciprocalUtils.DEFAULT_KEY;
+    
+    private List<Interceptor> interceptors     = Collections.emptyList();
+    
+    public void setInterceptors(List<Interceptor> interceptors) {
+        this.interceptors = interceptors;
+    }
+    
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+    
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
+    }
+    
+    public void setCryptKey(String cryptKey) {
+        this.cryptKey = cryptKey;
+    }
 
-	@Override
-	protected SqlSessionFactory buildSqlSessionFactory() throws Exception {
-		SqlSessionFactory factory = super.buildSqlSessionFactory();
-		
-		Configuration config = factory.getConfiguration();
-		logger.debug("buildSqlSessionFactory : {}" , config);
-		for (Interceptor interceptor : interceptors) {
-			config.addInterceptor(interceptor);
-		}
-		
-		//for @Encrypt
-		MapperMetadata.setEncryptFactory(new EncryptFactory(this.cryptKey));
-		
-		//设置
-		StatementHandlerInterceptor statementHandlerInterceptor =new StatementHandlerInterceptor();
-		statementHandlerInterceptor.setDialectString(DialectMapper.getDialect(dialect));
-		//select for page and findBy
-		config.addInterceptor(statementHandlerInterceptor);
-		//Encrypt
-		config.addInterceptor(new FieldEncryptInterceptor());
-		//Decrypt
-		config.addInterceptor(new FieldDecryptInterceptor());
-		//data AutoFill , insert and update
-		config.addInterceptor(new FieldAutoFillInterceptor());
-		//Trace SQL and Execute Cost Time
-		config.addInterceptor(new TraceSqlIntercept());
-		//set Default Statement Timeout
-		if(config.getDefaultStatementTimeout() == null || config.getDefaultStatementTimeout() == 0) {
-			config.setDefaultStatementTimeout(timeout);
-		}
-		
-		logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
-		
-		if(logger.isTraceEnabled()) {
-			for(String mappedStatementName : config.getMappedStatementNames()) {
-				logger.trace("MappedStatementName {} " ,mappedStatementName);
-			}
-		}
-		
-		return factory;
-	}
-	
-	public SqlSessionFactory build() throws Exception {
-		return buildSqlSessionFactory();
-	}	
+    @Override
+    protected SqlSessionFactory buildSqlSessionFactory() throws Exception {
+        SqlSessionFactory factory = super.buildSqlSessionFactory();
+        
+        Configuration config = factory.getConfiguration();
+        logger.debug("buildSqlSessionFactory : {}" , config);
+        for (Interceptor interceptor : interceptors) {
+            config.addInterceptor(interceptor);
+        }
+        
+        //for @Encrypt
+        MapperMetadata.setEncryptFactory(new EncryptFactory(this.cryptKey));
+        
+        //设置
+        StatementHandlerInterceptor statementHandlerInterceptor =new StatementHandlerInterceptor();
+        statementHandlerInterceptor.setDialectString(DialectMapper.getDialect(dialect));
+        //select for page and findBy
+        config.addInterceptor(statementHandlerInterceptor);
+        //Encrypt
+        config.addInterceptor(new FieldEncryptInterceptor());
+        //Decrypt
+        config.addInterceptor(new FieldDecryptInterceptor());
+        //data AutoFill , insert and update
+        config.addInterceptor(new FieldAutoFillInterceptor());
+        //Trace SQL and Execute Cost Time
+        config.addInterceptor(new TraceSqlIntercept());
+        //set Default Statement Timeout
+        if(config.getDefaultStatementTimeout() == null || config.getDefaultStatementTimeout() == 0) {
+            config.setDefaultStatementTimeout(timeout);
+        }
+        
+        logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
+        
+        if(logger.isTraceEnabled()) {
+            for(String mappedStatementName : config.getMappedStatementNames()) {
+                logger.trace("MappedStatementName {} " ,mappedStatementName);
+            }
+        }
+        
+        return factory;
+    }
+    
+    public SqlSessionFactory build() throws Exception {
+        return buildSqlSessionFactory();
+    }    
 }
