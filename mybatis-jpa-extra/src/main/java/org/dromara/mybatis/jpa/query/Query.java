@@ -369,11 +369,16 @@ public class Query extends BaseQuery {
         return this;
     }
     
-    public Query orderBy(String column,String orderType) {
+    public Query orderBy(String column,String order) {
         if(CollectionUtils.isEmpty(orderBy)) {
             this.orderBy = new ArrayList<>();
         }
-        orderBy.add(new Condition(Operator.ORDER,column,orderType));
+        orderBy.add(new Condition(Operator.ORDER,column,order));
+        return this;
+    }
+    
+    public Query orderBy(String column,OrderBy order) {
+        orderBy(column,order.getOrder());
         return this;
     }
 
