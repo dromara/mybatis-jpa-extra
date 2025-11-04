@@ -456,6 +456,22 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
         }
         return 0;
     }
+    
+    /**
+     * exists by query
+     */
+    @Override
+    public boolean exists(Query query) {
+        return count(query) > 0;
+    }
+    
+    /**
+     * exists by lambdaQuery
+     */
+    @Override
+    public boolean exists(LambdaQuery<T> lambdaQuery) {
+        return count(lambdaQuery) > 0;
+    }
 
     //follow function for insert update and delete
     /**

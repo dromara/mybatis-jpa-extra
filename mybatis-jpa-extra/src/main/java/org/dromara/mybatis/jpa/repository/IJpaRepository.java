@@ -218,6 +218,20 @@ public  interface  IJpaRepository <T> {
      * @return
      */
     public long count(LambdaQuery<T> lambdaQuery) ;
+    
+    /**
+     * exists by query
+     * @param query
+     * @return boolean
+     */
+    public boolean exists(Query query) ;
+    
+    /**
+     * exists by lambdaQuery
+     * @param lambdaQuery
+     * @return boolean
+     */
+    public boolean exists(LambdaQuery<T> lambdaQuery) ;
 
     //follow function for insert update and delete
     /**
