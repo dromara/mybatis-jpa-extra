@@ -4,7 +4,7 @@
     <!--parent -->
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra-parent</artifactId>
-    <version>3.3.6</version>
+    <version>3.3.7</version>
     <packaging>pom</packaging>
     
     <!--modules -->
@@ -487,7 +487,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- GPG 
+            <!-- GPG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -510,7 +510,7 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>                
 </project>
