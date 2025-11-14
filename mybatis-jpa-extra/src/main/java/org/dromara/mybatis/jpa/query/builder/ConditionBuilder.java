@@ -43,7 +43,7 @@ public class ConditionBuilder {
 
             }else if (expression.equals(Operator.IGNORE_CASE)) {
                 conditionString.append("UPPER(").append(column).append(") ").append(Operator.EQ.getOperator()).append(" ");
-                conditionString.append("UPPER(").append(SafeValueHandler.valueOf(value)).append(")");
+                conditionString.append("UPPER('").append(SafeValueHandler.valueOf(value)).append("')");
 
             } else if (expression.equals(Operator.LIKE_LEFT)) {
 

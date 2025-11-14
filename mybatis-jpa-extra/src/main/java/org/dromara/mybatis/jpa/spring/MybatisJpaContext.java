@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.spring;
 import java.time.LocalDateTime;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -70,6 +71,10 @@ public final class MybatisJpaContext {
                     .getSource();
         }
         
+    }
+    
+    public static void setMapUnderscoreToCamelCase(boolean mapUnderscoreToCamelCase) {
+        MapperMetadata.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);
     }
     
     /**
