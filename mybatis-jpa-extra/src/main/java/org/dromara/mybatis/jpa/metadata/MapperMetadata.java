@@ -49,6 +49,8 @@ public class MapperMetadata{
     
     static boolean     tableColumnEscape                        = false;
     
+    static boolean     mapUnderscoreToCamelCase                 = false;
+    
     static String      tableColumnEscapeChar                    =  "`";
     
     static String      partitionColumn                          =  "inst_id";
@@ -102,7 +104,15 @@ public class MapperMetadata{
     }
     
 
-    public static int getTableColumnCase() {
+    public static boolean isMapUnderscoreToCamelCase() {
+		return mapUnderscoreToCamelCase;
+	}
+
+	public static void setMapUnderscoreToCamelCase(boolean mapUnderscoreToCamelCase) {
+		MapperMetadata.mapUnderscoreToCamelCase = mapUnderscoreToCamelCase;
+	}
+
+	public static int getTableColumnCase() {
         return tableColumnCase;
     }
 

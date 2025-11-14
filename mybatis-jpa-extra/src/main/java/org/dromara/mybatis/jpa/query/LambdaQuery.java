@@ -23,7 +23,9 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.functions.IGetter;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.util.LambdaUtil;
+import org.dromara.mybatis.jpa.util.StrUtils;
 
 public class LambdaQuery <T>  extends BaseQuery {
     
@@ -604,7 +606,11 @@ public class LambdaQuery <T>  extends BaseQuery {
      * @return ColumnName
      */
     protected String getColumnName(IGetter <T> getter ) {
-        return LambdaUtil.getColumnName(getter);
+    	String columnName = LambdaUtil.getColumnName(getter);
+    	if(MapperMetadata.isMapUnderscoreToCamelCase()) {
+    		columnName = StrUtils.camelToUnderline(columnName);
+    	}
+        return columnName;
     }
 
     @Override

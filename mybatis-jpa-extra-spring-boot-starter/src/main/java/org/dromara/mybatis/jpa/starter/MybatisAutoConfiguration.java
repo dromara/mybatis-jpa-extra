@@ -179,6 +179,11 @@ public class MybatisAutoConfiguration implements InitializingBean {
     }
     MapperMetadata.setTableColumnCase(caseType);
     
+    //MapUnderscoreToCamelCase
+    if(Boolean.TRUE.equals(this.properties.getConfiguration().getMapUnderscoreToCamelCase())) {
+        MapperMetadata.setMapUnderscoreToCamelCase(true);
+    }
+    
     if(this.properties.getTableColumnSnowflakeDatacenterId()>0 && 
             this.properties.getTableColumnSnowflakeMachineId()>0) {
         logger.debug("TableColumn Snowflake init ");

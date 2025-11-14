@@ -28,7 +28,7 @@ public class FindByMetadata {
     
     static ConcurrentMap<String, FindByMapper>findByMapperMap     =     new ConcurrentHashMap<>();
 
-    public static ConcurrentMap<String, FindByMapper> getFindByMapperMap1() {
+    public static ConcurrentMap<String, FindByMapper> getFindByMapperMap() {
         return findByMapperMap;
     }
     

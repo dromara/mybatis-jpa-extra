@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.annotations.ColumnDefault;
 import org.dromara.mybatis.jpa.annotations.Encrypted;
 import org.dromara.mybatis.jpa.annotations.PartitionKey;
 import org.dromara.mybatis.jpa.annotations.SoftDelete;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
+import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,10 +109,14 @@ public class ColumnMetadata {
                     String columnName = "";
                     Column columnAnnotation = field.getAnnotation(Column.class);
                     //if column name is null or '' , then set as field name
-                    if (columnAnnotation.name() != null && !columnAnnotation.name().equals("")) {
+                    if (StringUtils.isNotBlank(columnAnnotation.name())) {
                         columnName = columnAnnotation.name();
                     } else {
-                        columnName = field.getName();
+                    	if(MapperMetadata.isMapUnderscoreToCamelCase()) {
+                    		columnName = StrUtils.camelToUnderline(field.getName());
+                    	}else {
+                    		columnName = field.getName();
+                    	}
                     }
                     columnName = MapperMetadata.tableOrColumnCaseConverter(columnName);
                     columnName = MapperMetadata.tableOrColumnEscape(columnName);

@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.junit.jupiter.api.BeforeAll;
@@ -41,7 +42,7 @@ public class BaseTestRunner {
         _logger.info("-- --Init Start at {}" , startTime);
         _logger.info("Application dir {}",System.getProperty("user.dir"));
         context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
-
+        MapperMetadata.setMapUnderscoreToCamelCase(true);
         MybatisJpaContext.init(context);
         service = (StudentsService)MybatisJpaContext.getBean(StudentsService.class);
         return service;

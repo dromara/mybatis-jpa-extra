@@ -86,7 +86,7 @@ public class FindByMapper {
                 }
             }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        	logger.error("ClassNotFoundException" , e);
         }
     }
 
