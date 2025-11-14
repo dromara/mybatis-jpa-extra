@@ -69,17 +69,21 @@ public class ColumnMetadata {
      * @return selectColumn
      */
     public static String selectColumnMapper(Class<?> entityClass) {
-        StringBuilder selectColumn = new StringBuilder(ConstMetadata.SELECT_TMP_TABLE + ".* ");
+        StringBuilder selectColumn = new StringBuilder("");
         int columnCount = 0;
         for(ColumnMapper fieldColumnMapper  : columnMapper.get(entityClass.getName())) {
-            columnCount ++;
-            //不同的属性和数据库字段不一致的需要进行映射
-            if(!fieldColumnMapper.getColumn().equalsIgnoreCase(fieldColumnMapper.getField())) {
-                selectColumn.append(",")
-                            .append(fieldColumnMapper.getColumn())
-                            .append(" ")
-                            .append(fieldColumnMapper.getField());
+            if(columnCount > 0) {
+                    selectColumn.append(",");
             }
+            //不同的属性和数据库字段不一致的需要进行映射
+            if(fieldColumnMapper.getColumn().equalsIgnoreCase(fieldColumnMapper.getField())) {
+	            selectColumn.append(fieldColumnMapper.getColumn());
+            }else {
+            	selectColumn.append(fieldColumnMapper.getColumn())
+			                .append(" ")
+			                .append(fieldColumnMapper.getField());
+            }
+            columnCount ++;
             if(logger.isTraceEnabled()) {
                 logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
                     String.format(ConstMetadata.LOG_FORMAT_COUNT, columnCount),String.format(ConstMetadata.LOG_FORMAT, fieldColumnMapper.getColumn()),fieldColumnMapper.getField());
