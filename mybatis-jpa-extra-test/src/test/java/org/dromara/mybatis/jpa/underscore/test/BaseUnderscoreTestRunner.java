@@ -19,8 +19,11 @@ package org.dromara.mybatis.jpa.underscore.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.sql.DataSource;
+
 import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.dromara.mybatis.jpa.test.FetchPageResultsTestRunner;
+import org.dromara.mybatis.jpa.test.InitDatabase;
 import org.dromara.mybatis.jpa.test.dao.service.ScoresService;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
@@ -44,6 +47,7 @@ public class BaseUnderscoreTestRunner{
         context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
         MybatisJpaContext.setMapUnderscoreToCamelCase(true);
         MybatisJpaContext.init(context);
+        new InitDatabase().init(MybatisJpaContext.getBean(DataSource.class));
         service = (ScoresService)MybatisJpaContext.getBean(ScoresService.class);
         return service;
     }
