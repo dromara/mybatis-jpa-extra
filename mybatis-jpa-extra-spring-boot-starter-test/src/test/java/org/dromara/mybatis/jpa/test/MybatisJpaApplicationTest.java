@@ -1,5 +1,5 @@
 /*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2025] [MaxKey of copyright http://www.maxkey.top]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,26 @@
  */
 
 
-package org.dromara.mybatis.jpa.test.disabled;
+package org.dromara.mybatis.jpa.test;
 
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
-import org.junit.jupiter.api.BeforeEach;
+import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.UseMainMethod;
 
-public class MybatisJpaBasicApplication{
-    static final Logger _logger = LoggerFactory.getLogger(MybatisJpaBasicApplication.class);
-
+@SpringBootTest(useMainMethod = UseMainMethod.ALWAYS)
+public class MybatisJpaApplicationTest {
+    private static final Logger _logger = LoggerFactory.getLogger(MybatisJpaApplicationTest.class);
+    
     @Autowired
-    org.apache.ibatis.session.SqlSessionFactory SqlSessionFactory;
+    StudentsService service;
 
-    @Autowired
-    ApplicationContext applicationContext;
-
-    @BeforeEach
-    public void before() {
-        _logger.info("---------------- before");
-        MybatisJpaContext.init(applicationContext);
-
+    @Test
+    void findAll() throws Exception{
+        _logger.debug("students {}",service.findAll());
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2025] [MaxKey of copyright http://www.maxkey.top]
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,14 @@
  */
 
 
-package org.dromara.mybatis.jpa.test.config;
-
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-
-import javax.sql.DataSource;
+package org.dromara.mybatis.jpa.test;
 
 import org.dromara.mybatis.jpa.test.handler.PersistFieldAutoFillHandler;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Configuration;
 
-//@Configuration
+@Configuration
 public class MybatisJpaConfig {
-
-    @Bean
-    @Primary
-    @ConfigurationProperties("spring.datasource")
-    public DataSource dataSource() {
-        return DruidDataSourceBuilder.create().build();
-    }
 
     @Bean
     PersistFieldAutoFillHandler mxkFieldAutoFillHandler() {

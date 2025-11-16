@@ -41,6 +41,7 @@ public class CurdTestRunner  extends BaseUnderscoreTestRunner{
         service.insert(score);
         
         _logger.info("insert id {}" , score.getId());
+        service.delete(score.getId());
     }
     
     @Test
@@ -61,7 +62,7 @@ public class CurdTestRunner  extends BaseUnderscoreTestRunner{
     @Test
     void get(){
         _logger.info("get...");
-        Scores student=service.get("1071439277251887104");
+        Scores student=service.get("1004539842878504975");
          _logger.info("Students {}",student);
     }
     

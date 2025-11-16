@@ -48,6 +48,7 @@
         <mybatis.version>3.5.19</mybatis.version>
         <mybatis-spring.version>3.0.4</mybatis-spring.version>
         <druid.version>1.2.23</druid.version>
+        <h2.version>2.2.220</h2.version>
 
         <caffeine.version>3.2.2</caffeine.version>
         <joda-time.version>2.14.0</joda-time.version>
@@ -397,6 +398,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- H2 数据库  -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies> 

@@ -110,6 +110,12 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-test-autoconfigure</artifactId>
+		    <version>${springboot.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-configuration-processor</artifactId>
 	        <optional>true</optional>
@@ -121,13 +127,7 @@
 				</exclusion>
 			</exclusions>
 	    </dependency>
-		<!-- H2 数据库 - 指定具体版本 -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.2.220</version> <!-- 明确指定版本 -->
-			<scope>test</scope>
-		</dependency>
+		
 	</dependencies>
 	<build>
 		<testResources>

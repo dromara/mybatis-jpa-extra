@@ -1,59 +1,34 @@
-/*
- * Copyright [2025] [MaxKey of copyright http://www.maxkey.top]
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- 
-package org.dromara.mybatis.jpa.test.existing;
+package org.dromara.mybatis.jpa.test;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.dromara.mybatis.jpa.datasource.DataSourceSwitch;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.repository.IJpaSqlRepository;
-import org.dromara.mybatis.jpa.test.config.DataSourceConfig;
-import org.dromara.mybatis.jpa.test.config.DatabaseInitializer;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.boot.test.context.SpringBootTest.UseMainMethod;
 
-/**
- * @description:
- * @author: shimh
- * @time: 2025/9/24 9:51
- */
-@SpringBootTest
-@ActiveProfiles("test")
-@Import({DataSourceConfig.class,})
+@SpringBootTest(useMainMethod = UseMainMethod.ALWAYS)
 public class SqlRepositoryTest {
     static final Logger _logger = LoggerFactory.getLogger(SqlRepositoryTest.class);
 
     @Autowired
-    private IJpaSqlRepository sqlRepository;
+    DataSource dataSource;
     
     @Autowired
-    DatabaseInitializer databaseInitializer;
-
+    private IJpaSqlRepository sqlRepository;
+    
     @Test
     public void testSelectList() throws Exception {
-        databaseInitializer.run(null);
         DataSourceSwitch.change("test1");
         // 
         
@@ -83,8 +58,8 @@ public class SqlRepositoryTest {
     
     @Test
     public void testJpaPageResults() throws Exception {
-        databaseInitializer.run(null);
         DataSourceSwitch.change("test1");
+        _logger.debug("CurrentDataSource {}",DataSourceSwitch.getCurrentDataSource());
         // 
         
         String sql="INSERT INTO test_user (id,name, email, data_source) VALUES (#{id},#{name}, #{email}, #{dataSource})";
@@ -109,6 +84,4 @@ public class SqlRepositoryTest {
         JpaPageResults<Map<String, Object>> pageResults = sqlRepository.fetch(selectSql, page, p);
         _logger.debug("pageResults {}",pageResults);
     }
-    
-    
 }

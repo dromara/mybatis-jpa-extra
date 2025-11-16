@@ -180,7 +180,9 @@ public class MybatisAutoConfiguration implements InitializingBean {
     MapperMetadata.setTableColumnCase(caseType);
     
     //MapUnderscoreToCamelCase
-    if(Boolean.TRUE.equals(this.properties.getConfiguration().getMapUnderscoreToCamelCase())) {
+    if(this.properties.getConfiguration() != null
+            && this.properties.getConfiguration().getMapUnderscoreToCamelCase() != null
+            && Boolean.TRUE.equals(this.properties.getConfiguration().getMapUnderscoreToCamelCase())) {
         MapperMetadata.setMapUnderscoreToCamelCase(true);
     }
     

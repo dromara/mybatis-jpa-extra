@@ -33,7 +33,7 @@ public class LambdaQueryTestRunner  extends BaseUnderscoreTestRunner{
     @Test
     void queryByLambdaQuery(){
         _logger.info("query by LambdaQuery ...");
-        List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
+        List<String> majorList = new ArrayList<>(Arrays.asList("政治","数学"));
         service.query(
                 new LambdaQuery<Scores>().eq(Scores::getCourseName, "政治").and().gt(Scores::getGrade, Integer.valueOf(30)).and().in(Scores::getCourseName, majorList)
                 .or(new LambdaQuery<Scores>().eq(Scores::getStdName, "周瑜").or().eq(Scores::getStdName, "吕蒙")));
@@ -42,7 +42,7 @@ public class LambdaQueryTestRunner  extends BaseUnderscoreTestRunner{
     @Test
     void queryByLambdaQuery2(){
         _logger.info("query by LambdaQuery ...");
-        List<String> majorList = new ArrayList<>(Arrays.asList("政治","化学"));
+        List<String> majorList = new ArrayList<>(Arrays.asList("政治","体育"));
         service.query(
                 new LambdaQuery<Scores>().eq(Scores::getCourseName, "政治").gt(Scores::getGrade, Integer.valueOf(30)).in(Scores::getCourseName, majorList)
                 .or(new LambdaQuery<Scores>().eq(Scores::getStdName, "周瑜").or().eq(Scores::getStdName, "吕蒙")));
@@ -52,7 +52,7 @@ public class LambdaQueryTestRunner  extends BaseUnderscoreTestRunner{
     @Test
     void queryByLambdaQueryIterator(){
         _logger.info("query by LambdaQuery ...");
-        List<String> majorList = List.of("政治","化学");
+        List<String> majorList = List.of("政治","数学");
         _logger.debug("{}",majorList.getClass().getSimpleName());
         List<Scores> list = service.query(new LambdaQuery<Scores>().in(Scores::getCourseName, majorList));
 

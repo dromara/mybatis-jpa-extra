@@ -32,12 +32,12 @@ public class QueryTestRunner  extends BaseTestRunner{
         service.query(new Students("10024"));
     }
     
-    //WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
+    //WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '数学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
     @Test
     void queryByQuery(){
         _logger.info("query by query ...");
         service.query(
-                new Query().eq("stdMajor", "政治").gt("STDAGE", 30).in("stdMajor", new Object[]{"政治","化学"})
+                new Query().eq("stdMajor", "政治").gt("STDAGE", 30).in("stdMajor", new Object[]{"政治","数学"})
                 .or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
     }
 
