@@ -35,7 +35,7 @@ public class InitDatabase {
             Resource schema = new ClassPathResource("/sql/schema-h2.sql");
             Resource data = new ClassPathResource("/sql/data-h2.sql");
             _logger.debug("schema path {}",schema.getURL());
-            File f = new File("./db/test_h2.lock");
+            File f = new File("./db/mybatis_jpa_extra_h2.lock");
             if(!f.exists()){
                 ScriptUtils.executeSqlScript(dataSource.getConnection(),schema);
                 ScriptUtils.executeSqlScript(dataSource.getConnection(),data);
