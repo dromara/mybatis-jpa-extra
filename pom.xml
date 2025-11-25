@@ -19,10 +19,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
         <servlet-api.version>6.0.0</servlet-api.version>
-        <junit.version>5.9.2</junit.version>
+        <junit.version>6.0.1</junit.version>
         
-        <spring.version>6.2.11</spring.version>
-        <springboot.version>3.4.10</springboot.version>
+        <spring.version>7.0.1</spring.version>
+        <springboot.version>4.0.0</springboot.version>
         
         <commons-collections.version>4.5.0</commons-collections.version>
         <beanutils.version>1.11.0</beanutils.version>
@@ -253,6 +253,7 @@
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring.version}</version>
         </dependency>
+        <!--
         <dependency>
           <groupId>com.alibaba</groupId>
           <artifactId>druid</artifactId>
@@ -263,6 +264,7 @@
             <artifactId>druid-spring-boot-3-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
+        -->
         <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
@@ -370,6 +372,12 @@
             <artifactId>jakarta.activation-api</artifactId>
             <version>${activation.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jspecify/jspecify -->
+		<dependency>
+		    <groupId>org.jspecify</groupId>
+		    <artifactId>jspecify</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
         <dependency>
             <groupId>aopalliance</groupId>
             <artifactId>aopalliance</artifactId>
