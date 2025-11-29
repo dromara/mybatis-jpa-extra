@@ -42,11 +42,11 @@ import org.slf4j.LoggerFactory;
 public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
     protected static Logger  logger = LoggerFactory.getLogger(MyBatisJpaSessionFactoryBean.class);
     
-    private int timeout                     = 30 ;
+    private int timeout                        = 30 ;
     
     private String dialect                     = DialectMapper.DEFAULT_DIALECT;
     
-    private String cryptKey                 = ReciprocalUtils.DEFAULT_KEY;
+    private String cryptKey                    = ReciprocalUtils.DEFAULT_KEY;
     
     private List<Interceptor> interceptors     = Collections.emptyList();
     

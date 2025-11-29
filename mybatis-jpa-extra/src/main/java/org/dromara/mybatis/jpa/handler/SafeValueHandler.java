@@ -23,17 +23,17 @@ public class SafeValueHandler {
 
     public final class NumberSign{
         public static final String SYMBOL         = "#";
-        public static final String REPLACE         = "0x23";
+        public static final String REPLACE        = "0x23";
     }
     
     public final class SingleQuote{
         public static final String SYMBOL         = "'";
-        public static final String REPLACE         = "0x27";
+        public static final String REPLACE        = "0x27";
     }
     
     public final class Decrement{
         public static final String SYMBOL         = "--";
-        public static final String REPLACE         = "0x2D0x2D";
+        public static final String REPLACE        = "0x2D0x2D";
     }
 
     public static String valueOf(Object value) {

@@ -277,6 +277,17 @@ public class JpaPage {
         this.startRow= calculateStartRow(this.pageNumber ,this.pageSize);
         this.pageable = true;
     }
+    
+    /**
+     * 分页设置
+     * @param page 页码
+     * @param size 记录数
+     */
+    public void of(int page, int size) {
+        this.pageNumber = page;
+        this.pageSize = size;
+        this.pageable = true;
+    }
 
     @Override
     public String toString() {

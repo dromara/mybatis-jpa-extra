@@ -23,7 +23,7 @@ import org.dromara.mybatis.jpa.entity.JpaPage;
 public interface Dialect {
 
     public static final String DEFAULT_BATCH_SIZE    =     "20";
-    public static final String NO_BATCH             =     "0";
+    public static final String NO_BATCH              =     "0";
     
     public boolean supportsLimit();
     

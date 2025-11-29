@@ -46,8 +46,8 @@ public class ConstMetadata{
     public static final String PARAMETER_ID_LIST                   = "idList";
     public static final String PARAMETER_ID                        = "id";
 
-    public static final String SQL_MAPPER_PARAMETER_PAGE             = "sql_mapper_parameter_page";
-    public static final String SQL_MAPPER_PARAMETER_SQL              = "sql_mapper_parameter_sql";
+    public static final String SQL_MAPPER_PARAMETER_PAGE           = "sql_mapper_parameter_page";
+    public static final String SQL_MAPPER_PARAMETER_SQL            = "sql_mapper_parameter_sql";
     
     /**
      * 查询的中间表别名
