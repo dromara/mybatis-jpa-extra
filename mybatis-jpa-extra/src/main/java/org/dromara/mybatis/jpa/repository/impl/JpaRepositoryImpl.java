@@ -65,19 +65,33 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
         return mapper;
     }
     
-    @SuppressWarnings({"unchecked","rawtypes"})
+    public void setMapper(M mapper) {
+        this.mapper = mapper;
+    }
+
     public JpaRepositoryImpl() {
+        init();
+    }
+    
+    public JpaRepositoryImpl(M mapper) {
+        init();
+        this.mapper = mapper;
+    }
+    
+    @SuppressWarnings({"unchecked","rawtypes"})
+    private void init() {
         Class mapperClass = null;
         Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
         if (pType != null && pType.length >= 2) {
             mapperClass=(Class<T>) pType[0];
             this.entityClass = (Class<T>) pType[1];
-            logger.trace("Mapper {} , Entity {}" , String.format(ConstMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
+            if(logger.isTraceEnabled()) {
+                logger.trace("Mapper {} , Entity {}" , String.format(ConstMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
+            }
         } else {
             logger.error("invalide initail, need generic type parameter! ");
         }
     }
-    
 
     //follow function for fetch page
     /**

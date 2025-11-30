@@ -34,11 +34,17 @@ import org.slf4j.LoggerFactory;
 public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
     private static final  Logger logger = LoggerFactory.getLogger(JpaSqlRepositoryImpl.class);
 
+    IJpaSqlMapper mapper ;
+    
     @Override
     public IJpaSqlMapper getMapper() {
-        return null;
+        return mapper;
     }
     
+    public void setMapper(IJpaSqlMapper mapper) {
+        this.mapper = mapper;
+    }
+
     @Override
     public List<Map<String, Object>> selectList(String sql) {
         return getMapper().selectList(mapperValue(sql,null));

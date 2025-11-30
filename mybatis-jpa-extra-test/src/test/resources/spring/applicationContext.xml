@@ -31,9 +31,10 @@
 	</bean>
  	
  	<!-- Datastore configuration  -->
-
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"  destroy-method="close" >      
-	   <!--  <property name="driverClass" value="#{dataSoruceConfig.driverClass}"/>     -->  
+	<!-- org.apache.commons.dbcp2.BasicDataSource -->
+	<!-- com.alibaba.druid.pool.DruidDataSource -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"  destroy-method="close" >      
+	    <!-- <property name="driverClass" value="${config.datasource.driverClass}"/> -->
 	    <property name="url" value="${config.datasource.url}"/>      
 	    <property name="username" value="${config.datasource.username}"/>      
 	    <property name="password" value="${config.datasource.password}"/>      

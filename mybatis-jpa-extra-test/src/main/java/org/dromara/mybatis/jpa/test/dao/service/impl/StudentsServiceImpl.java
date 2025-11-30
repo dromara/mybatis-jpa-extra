@@ -31,9 +31,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students> implements StudentsService{
 
-    public StudentsServiceImpl() {
-    }
-
     @SuppressWarnings("unchecked")
     public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) {
         entity.build();

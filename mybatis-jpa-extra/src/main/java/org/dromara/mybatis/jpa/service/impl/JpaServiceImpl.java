@@ -30,4 +30,11 @@ import org.dromara.mybatis.jpa.repository.impl.JpaRepositoryImpl;
  */
 public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> extends JpaRepositoryImpl<M , T> {
 
+    public JpaServiceImpl() {
+        super();
+    }
+    
+    public JpaServiceImpl(M mapper) {
+        super(mapper);
+    }
 }

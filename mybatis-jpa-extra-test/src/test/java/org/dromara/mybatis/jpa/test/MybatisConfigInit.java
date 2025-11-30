@@ -48,7 +48,9 @@ public class MybatisConfigInit {
         InputStream inputStream = Resources.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         StudentsMapper studentsMapper = sqlSessionFactory.openSession().getMapper(StudentsMapper.class);
-        MybatisConfigInit.service = new StudentsServiceImpl(studentsMapper);
+        StudentsServiceImpl studentsServiceImpl= new StudentsServiceImpl();
+        studentsServiceImpl.setMapper(studentsMapper);
+        MybatisConfigInit.service = studentsServiceImpl;
     }
 
 }
