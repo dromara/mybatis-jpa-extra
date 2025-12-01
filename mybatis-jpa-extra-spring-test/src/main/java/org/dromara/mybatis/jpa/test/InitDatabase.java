@@ -18,7 +18,8 @@
 package org.dromara.mybatis.jpa.test;
 
 import java.io.File;
-import java.sql.Connection;
+
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,18 +30,17 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 public class InitDatabase {
     private static final Logger _logger = LoggerFactory.getLogger(InitDatabase.class);
     
-    public void init(Connection connection){
+    public void init(DataSource dataSource){
         try {
             Resource schema = new ClassPathResource("/sql/schema-h2.sql");
             Resource data = new ClassPathResource("/sql/data-h2.sql");
             _logger.debug("schema path {}",schema.getURL());
             File f = new File("./db/mybatis_jpa_extra_h2.lock");
             if(!f.exists()){
-                ScriptUtils.executeSqlScript(connection,schema);
-                ScriptUtils.executeSqlScript(connection,data);
-                connection.commit();
-                f.createNewFile();
+                ScriptUtils.executeSqlScript(dataSource.getConnection(),schema);
+                ScriptUtils.executeSqlScript(dataSource.getConnection(),data);
             }
+            f.createNewFile();
             _logger.debug("db init success .");
         }catch(Exception e) {
             _logger.error("db init Exception !",e);

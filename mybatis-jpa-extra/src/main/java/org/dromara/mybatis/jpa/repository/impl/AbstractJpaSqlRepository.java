@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 /**
  * JpaSqlRepositoryImpl
  */
-public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
-    private static final  Logger logger = LoggerFactory.getLogger(JpaSqlRepositoryImpl.class);
+public class AbstractJpaSqlRepository implements IJpaSqlRepository {
+    private static final  Logger logger = LoggerFactory.getLogger(AbstractJpaSqlRepository.class);
 
     IJpaSqlMapper mapper ;
     

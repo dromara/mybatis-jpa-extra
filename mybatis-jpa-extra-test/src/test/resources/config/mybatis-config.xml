@@ -28,7 +28,5 @@
 	<mappers>
 		<mapper
 			resource="org/dromara/mybatis/jpa/test/dao/persistence/xml/mysql/StudentsMapper.xml" />
-		<mapper
-			resource="org/dromara/mybatis/jpa/test/dao/persistence/xml/mysql/ScoresMapper.xml" />
 	</mappers>
 </configuration>

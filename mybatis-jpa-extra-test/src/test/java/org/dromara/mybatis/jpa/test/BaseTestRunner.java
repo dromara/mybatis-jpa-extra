@@ -16,43 +16,38 @@
  
 package org.dromara.mybatis.jpa.test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.IOException;
+import java.io.InputStream;
 
-import javax.sql.DataSource;
-
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
+import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BaseTestRunner {
     private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
-    public static ApplicationContext context;
-    
+
     public static StudentsService service;
     
-    //Initialization ApplicationContext for Project
-    public StudentsService init(){
-        _logger.info("Init Spring Context...");
-        SimpleDateFormat sdf_ymdhms =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String startTime  = sdf_ymdhms.format(new Date());
-        _logger.info("-- --Init Start at {}" , startTime);
-        _logger.info("Application dir {}",System.getProperty("user.dir"));
-        context = new ClassPathXmlApplicationContext(new String[] {"spring/applicationContext.xml"});
-        MybatisJpaContext.init(context);
-        new InitDatabase().init(MybatisJpaContext.getBean(DataSource.class));
-        service = (StudentsService)MybatisJpaContext.getBean(StudentsService.class);
-        return service;
-    }
-    
     @BeforeAll
-    public static void initSpringContext(){
-        if(BaseTestRunner.context==null) {
-            new BaseTestRunner().init();
-        }
+    public static void initContext() throws IOException {
+    	_logger.debug("init Context");
+        String resource = "config/mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        new InitDatabase().init(sqlSession.getConnection());
+        StudentsMapper studentsMapper = sqlSession.getMapper(StudentsMapper.class);
+        StudentsServiceImpl studentsServiceImpl= new StudentsServiceImpl();
+        studentsServiceImpl.setMapper(studentsMapper);
+        BaseTestRunner.service = studentsServiceImpl;
+        _logger.debug("init Context success ");
     }
+
 }

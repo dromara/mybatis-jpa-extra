@@ -29,7 +29,6 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.dromara.mybatis.jpa.handler.FieldAutoFillHandler;
-import org.dromara.mybatis.jpa.spring.MybatisJpaContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,21 +36,21 @@ import org.slf4j.LoggerFactory;
 public class FieldAutoFillInterceptor  implements Interceptor {
     protected static Logger  logger = LoggerFactory.getLogger(FieldAutoFillInterceptor.class);
     
-    boolean isAutoFill;
     FieldAutoFillHandler fieldAutoFillHandler;
     
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        if(!isAutoFill) {
-            try {
-                isAutoFill = true;
-                fieldAutoFillHandler = MybatisJpaContext.getBean(FieldAutoFillHandler.class);
-                logger.debug("get bean by fieldAutoFillHandler class");
-            }catch(Exception e){
-                logger.debug("get bean by fieldAutoFillHandler Exception",e);
-            }
-        }
-        if(fieldAutoFillHandler != null) {
+        this.autoFill(invocation);
+        return invocation.proceed();
+    }
+
+    @Override
+    public Object plugin(Object target) {
+        return Plugin.wrap(target, this);
+    }
+    
+    protected void autoFill(Invocation invocation) {
+    	if(fieldAutoFillHandler != null) {
             MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
             Configuration configuration = mappedStatement.getConfiguration();
             Object parameter = invocation.getArgs()[1];
@@ -62,12 +61,6 @@ public class FieldAutoFillInterceptor  implements Interceptor {
                 fieldAutoFillHandler.updateFill(metaObject);
             }
         }
-        return invocation.proceed();
-    }
-
-    @Override
-    public Object plugin(Object target) {
-        return Plugin.wrap(target, this);
     }
 
 }

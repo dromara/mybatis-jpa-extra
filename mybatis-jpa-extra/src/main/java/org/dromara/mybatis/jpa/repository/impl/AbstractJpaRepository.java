@@ -37,7 +37,6 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,8 +47,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @param <T>
  */
-public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> implements IJpaRepository<T>{
-    private static final  Logger logger = LoggerFactory.getLogger(JpaRepositoryImpl.class);
+public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends JpaEntity> implements IJpaRepository<T>{
+    private static final  Logger logger = LoggerFactory.getLogger(AbstractJpaRepository.class);
     
     /**
      * entity Class
@@ -58,7 +57,6 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
     @SuppressWarnings("rawtypes")
     private Class entityClass;
     
-    @Autowired
     private M mapper;
 
     public M getMapper() {
@@ -69,17 +67,17 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
         this.mapper = mapper;
     }
 
-    public JpaRepositoryImpl() {
+    public AbstractJpaRepository() {
         init();
     }
     
-    public JpaRepositoryImpl(M mapper) {
+    public AbstractJpaRepository(M mapper) {
         init();
         this.mapper = mapper;
     }
     
     @SuppressWarnings({"unchecked","rawtypes"})
-    private void init() {
+    protected void init() {
         Class mapperClass = null;
         Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
         if (pType != null && pType.length >= 2) {

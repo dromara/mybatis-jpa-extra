@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.mybatis.jpa.test.dao.persistence.ScoresMapper" >
+
+	<sql id="sql_condition">
+		WHERE	1	=	1
+    	<if test="id != null">
+			AND	ID	=	'${id}'
+		</if>
+		<if test="stdName != null  and stdName != '' ">
+			AND STDNAME like '%${stdName}%'
+		</if>
+	</sql>
+	
+    <select id="fetchPageResults" parameterType="Scores" resultType="Scores">
+	    	SELECT * 	FROM Scores 
+	    	<include refid="sql_condition"/>
+    </select>
+   
+ 
+     <select id="fetchPageResults1" parameterType="Scores" resultType="Scores">
+	    	SELECT  *	FROM Scores 
+	    	<include refid="sql_condition"/>
+	    	AND std_no IN (
+	    		SELECT stdno FROM  STUDENTS
+	    	)
+    </select>
+       
+
+</mapper>

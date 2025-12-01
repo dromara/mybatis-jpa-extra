@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
@@ -47,7 +48,8 @@ public class MybatisConfigInit {
         String resource = "config/mybatis-config.xml";
         InputStream inputStream = Resources.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-        StudentsMapper studentsMapper = sqlSessionFactory.openSession().getMapper(StudentsMapper.class);
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        StudentsMapper studentsMapper = sqlSession.getMapper(StudentsMapper.class);
         StudentsServiceImpl studentsServiceImpl= new StudentsServiceImpl();
         studentsServiceImpl.setMapper(studentsMapper);
         MybatisConfigInit.service = studentsServiceImpl;
