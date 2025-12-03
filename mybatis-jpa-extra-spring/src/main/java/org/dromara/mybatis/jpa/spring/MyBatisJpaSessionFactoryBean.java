@@ -17,8 +17,10 @@
 
 package org.dromara.mybatis.jpa.spring;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -100,15 +102,15 @@ public class MyBatisJpaSessionFactoryBean extends SqlSessionFactoryBean {
         logger.debug("DefaultStatementTimeout : {}" , config.getDefaultStatementTimeout());
         
         if(logger.isTraceEnabled()) {
-            for(String mappedStatementName : config.getMappedStatementNames()) {
-                logger.trace("MappedStatementName {} " ,mappedStatementName);
+        	Collection<Class<?>> mappers  = config.getMapperRegistry().getMappers();
+            for(Class<?> mapper : mappers) {
+            	logger.debug("mapper {} " ,mapper.getCanonicalName());
             }
         }
-        
         return factory;
     }
     
     public SqlSessionFactory build() throws Exception {
         return buildSqlSessionFactory();
-    }    
+    } 
 }

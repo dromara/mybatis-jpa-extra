@@ -27,7 +27,7 @@ public class FindByTestRunner extends BaseTestRunner{
     private static final Logger _logger = LoggerFactory.getLogger(FindByTestRunner.class);
     
     @Test
-    void findBy(){
+    void findByStdNo(){
         _logger.info("find by");
         service.findByStdNo("10024");
     }

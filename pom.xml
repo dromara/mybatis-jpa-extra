@@ -431,7 +431,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- GPG -->
+            <!-- GPG 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -454,7 +454,7 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>                
 </project>

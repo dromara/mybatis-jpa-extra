@@ -42,6 +42,7 @@ public interface StudentsMapper extends IJpaMapper<Students> {
     public List<Students> fetchPageResults(Students entity);
 
     public List<StudentVo> fetchPageResultsVo(StudentQueryDto entity);
+    
 
     @Select({})
     public List<Students> findByStdNo(String stdNo);
