@@ -30,43 +30,43 @@ import jakarta.persistence.Temporal;
 
 public class ColumnMapper {
     
-    private Field             entityField;
+    private Field               entityField;
     /**
      * class field name
      */
-    private String             field;
+    private String              field;
     
     /**
      * class field type
      */
-    private String             fieldType;
+    private String              fieldType;
     
     /**
      * table column name
      */
-    private String             column;
+    private String              column;
     
-    private boolean         idColumn    =    false;
+    private boolean             idColumn     =    false;
     
-    private boolean         generated    =    false;
+    private boolean             generated    =    false;
     
-    private boolean         logicDelete    =    false;
+    private boolean             logicDelete  =    false;
     
-    private boolean         encrypted    =    false;
+    private boolean             encrypted    =    false;
     
-    private GeneratedValue     generatedValue;
+    private GeneratedValue      generatedValue;
     
-    private    Column             columnAnnotation;
+    private Column              columnAnnotation;
     
-    private Temporal         temporalAnnotation;
+    private Temporal            temporalAnnotation;
     
-    private ColumnDefault   columnDefault;
+    private ColumnDefault       columnDefault;
     
-    private PartitionKey    partitionKey;
+    private PartitionKey        partitionKey;
     
-    private SoftDelete         softDelete;
+    private SoftDelete          softDelete;
     
-    private Encrypted         encryptedAnnotation;
+    private Encrypted           encryptedAnnotation;
     
     public ColumnMapper() {
         
