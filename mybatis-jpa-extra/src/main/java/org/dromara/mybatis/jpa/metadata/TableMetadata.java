@@ -81,15 +81,15 @@ public class TableMetadata {
         String entityClassName = entityClass.getName();
         if(!tableNameMap.containsKey(entityClassName)) {
 
-            logger.debug("entity Class Name {}" , entityClassName);
+            logger.debug("getTableName entity Class Name {}" , entityClassName);
             String tableName = null;
             String schema = null;
             String catalog = null;
             //must use @Entity to ORM class
             Entity entity = entityClass.getAnnotation(Entity.class);
-            logger.trace("entity {}" , entity);
+            logger.trace("getTableName entity {}" , entity);
             Table table = entityClass.getAnnotation(Table.class);
-            logger.trace("table {}" , table);
+            logger.trace("getTableName table {}" , table);
             if(entity != null ) {
                 if(entity.name() != null && !entity.name().equals("")) {
                     tableName = entity.name();
@@ -100,12 +100,12 @@ public class TableMetadata {
                     }
                     if(table.schema() != null && !table.schema().equals("")) {
                         schema = table.schema();
-                        logger.trace("schema {}" , schema);
+                        logger.trace("getTableName schema {}" , schema);
                     }
                     
                     if(table.catalog() != null && !table.catalog().equals("")) {
                         catalog = table.catalog();
-                        logger.trace("catalog {}" , catalog);
+                        logger.trace("getTableName catalog {}" , catalog);
                     }
                 }
                 
@@ -127,7 +127,7 @@ public class TableMetadata {
             tableName = MapperMetadata.tableOrColumnEscape(tableName);
             
             tableNameMap.put(entityClassName,tableName);
-            logger.trace("Table Name {}" , tableName);
+            logger.trace("getTableName Table Name {}" , tableName);
         }
         return tableNameMap.get(entityClassName);
     }
