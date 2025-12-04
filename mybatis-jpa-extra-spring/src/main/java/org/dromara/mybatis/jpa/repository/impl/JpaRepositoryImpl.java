@@ -44,11 +44,11 @@ public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> 
     }
 
     public JpaRepositoryImpl() {
-        init();
+    	super();
     }
     
     public JpaRepositoryImpl(M mapper) {
-        init();
+    	super(mapper);
         this.mapper = mapper;
     }
     
