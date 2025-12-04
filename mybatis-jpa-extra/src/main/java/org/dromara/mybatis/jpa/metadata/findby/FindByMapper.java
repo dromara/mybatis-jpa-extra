@@ -71,7 +71,10 @@ public class FindByMapper {
             isDistinct = true;
             removedFindByName = mappedStatementMethodName.substring(FindByKeywords.FINDDISTINCTBY.length());
         }
+        
         logger.trace("removed FindBy name : {}" , removedFindByName);
+        
+        parseEntityClass();
     }
     
     public void parseEntityClass() {

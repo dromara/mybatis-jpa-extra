@@ -40,19 +40,26 @@ public class FindBySqlBuilder {
     private static final Logger logger     =     LoggerFactory.getLogger(FindBySqlBuilder.class);
 
     public static boolean isFindBy(String mappedStatementId,BoundSql boundSql) {
-        return StringUtils.isBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId);
+    	if(FindByMetadata.containsKey(mappedStatementId)) {
+    		return true;
+    	}
+    	String findByName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
+        return (StringUtils.startsWith(findByName, FindByKeywords.FINDBY) 
+        			|| StringUtils.startsWith(findByName, FindByKeywords.FINDDISTINCTBY))
+        				&& StringUtils.isBlank(boundSql.getSql());
     }
     
-    public static void parse(String mappedStatementId,BoundSql boundSql){
-        if(isFindBy(mappedStatementId , boundSql)){
-            FindByMapper findByMapper = new FindByMapper(mappedStatementId);
+    public static FindByMapper parse(String mappedStatementId){
+    	FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatementId);
+    	if(findByMapper == null) {
+            findByMapper = new FindByMapper(mappedStatementId);
             findByMapper.parseFindBy();
             FindByMetadata.put(mappedStatementId, findByMapper);
-        }
+    	}
+    	return findByMapper;
     }
     
     public static String translate(FindByMapper findByMapper,Object parameterObject) {
-        findByMapper.parseEntityClass();
         List<ColumnMapper> entityFields = ColumnMetadata.buildColumnMapper(findByMapper.getEntityClass());
         Query q = Query.builder();
         String fieldNameStart = findByMapper.getRemovedFindByName();
