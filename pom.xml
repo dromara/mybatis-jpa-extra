@@ -32,7 +32,7 @@
         <commons-pool2.version>2.12.1</commons-pool2.version>
         <commons-io.version>2.20.0</commons-io.version>
         <commons-codec.version>1.19.0</commons-codec.version>
-        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-logging.version>1.3.5</commons-logging.version>
         <commons-text.version>1.14.0</commons-text.version>
         <xmlbeans.version>5.2.0</xmlbeans.version>
@@ -42,21 +42,23 @@
         <slf4j.version>1.7.36</slf4j.version>
         <jackson.version2>2.14.0</jackson.version2>
         
+        <!--jdbc Driver-->
         <mysql.version>8.4.0</mysql.version>
         <ojdbc8.version>21.6.0.0.1</ojdbc8.version>
         <highgo.version>6.0.3.jre8</highgo.version>
         <postgresql.version>42.4.1</postgresql.version>
-        <persistence.version>3.1.0</persistence.version>
+        
+        <persistence.version>3.2.0</persistence.version>
         <mybatis.version>3.5.19</mybatis.version>
-        <mybatis-spring.version>3.0.4</mybatis-spring.version>
-        <druid.version>1.2.23</druid.version>
-        <h2.version>2.2.220</h2.version>
+        <mybatis-spring.version>4.0.0</mybatis-spring.version>
+        <druid.version>1.2.27</druid.version>
+        <h2.version>2.4.240</h2.version>
 
-        <caffeine.version>3.2.2</caffeine.version>
+        <caffeine.version>3.2.3</caffeine.version>
         <joda-time.version>2.14.0</joda-time.version>
         <activation.version>2.1.4</activation.version>
         <aopalliance.version>1.0</aopalliance.version>
-        <bouncycastle.version>1.81</bouncycastle.version>
+        <bouncycastle.version>1.83</bouncycastle.version>
 
     </properties>
 
@@ -86,14 +88,7 @@
         <developerConnection>scm:git:ssh://gitee.com/dromara/mybatis-jpa-extra.git</developerConnection>
         <url>https://gitee.com/dromara/mybatis-jpa-extra</url>
     </scm>
-    
-    <!--
-    <scm>
-        <connection>scm:git@github.com:dromara/mybatis-jpa-extra.git</connection>
-        <developerConnection>scm:git@github.com:dromara/mybatis-jpa-extra.git</developerConnection>
-        <url>git@github.com:dromara/mybatis-jpa-extra.git</url>
-    </scm>
-    -->
+
     <developers>
         <developer>
             <name>MaxKeyTop</name>
@@ -141,25 +136,31 @@
     </repositories>
     
     <dependencies>
-        
-
+        <!-- JDBC-->
+		<!-- H2 数据库  -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.highgo</groupId>
-            <artifactId>HgdbJdbc</artifactId>
-            <version>${highgo.version}</version>
-        </dependency>
-        <dependency>
+		<dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
         <!-- 
+        <dependency>
+            <groupId>com.highgo</groupId>
+            <artifactId>HgdbJdbc</artifactId>
+            <version>${highgo.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
@@ -336,13 +337,7 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- H2 数据库  -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-            <scope>test</scope>
-        </dependency>
+        
     </dependencies> 
     
     <build>
