@@ -32,6 +32,11 @@ public class LambdaQuery <T>  extends BaseQuery {
     public LambdaQuery() {
         super();
     }
+    
+    public LambdaQuery(boolean softDelete) {
+        super();
+        this.softDelete = softDelete;
+    }
 
     public void joint() {
         if(CollectionUtils.isNotEmpty(conditions)) {
@@ -598,6 +603,11 @@ public class LambdaQuery <T>  extends BaseQuery {
         }
         orderBy.add(new Condition(Operator.ORDER,getColumnName(getter),orderType));
         return  this;
+    }
+    
+    public LambdaQuery <T> softDelete(boolean softDelete) {
+        this.softDelete = softDelete;
+        return this;
     }
 
     /**

@@ -52,7 +52,7 @@ public class FetchTestRunner  extends BaseTestRunner{
          page.setPageable(true);
          
          Query condition = new Query().isNotNull("stdMajor");//.eq("stdMajor", "政治").and().gt("STDAGE", 30);
-         
+
          JpaPageResults<Students>  results = service.fetch(page,condition);
          _logger.info("records {} , total {} , totalPage {} , page {} ",
                  results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());
