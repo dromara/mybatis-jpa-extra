@@ -27,3 +27,4 @@ target
 target/mybatis-jpa-extra-parent-3.2.pom
 mybatis-jpa-extra-spring-test/db/mybatis_jpa_extra_h2.lock
 mybatis-jpa-extra-spring-test/db/mybatis_jpa_extra.mv.db
+mybatis-jpa-extra-spring-test/db/mybatis_jpa_extra.trace.db

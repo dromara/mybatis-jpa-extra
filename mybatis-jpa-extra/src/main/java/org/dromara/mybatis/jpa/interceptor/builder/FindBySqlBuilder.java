@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.interceptor.builder;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
@@ -44,8 +45,8 @@ public class FindBySqlBuilder {
     		return true;
     	}
     	String findByName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
-        return (StringUtils.startsWith(findByName, FindByKeywords.FINDBY) 
-        			|| StringUtils.startsWith(findByName, FindByKeywords.FINDDISTINCTBY))
+        return (Strings.CI.startsWith(findByName, FindByKeywords.FINDBY) 
+        			|| Strings.CI.startsWith(findByName, FindByKeywords.FINDDISTINCTBY))
         				&& StringUtils.isBlank(boundSql.getSql());
     }
     
