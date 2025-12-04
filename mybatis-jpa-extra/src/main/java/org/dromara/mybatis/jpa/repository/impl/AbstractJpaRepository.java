@@ -38,8 +38,6 @@ import org.dromara.mybatis.jpa.util.InstanceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 /**
  * JPA Base Repository
@@ -53,7 +51,6 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
     /**
      * entity Class
      */
-    @JsonIgnore
     @SuppressWarnings("rawtypes")
     private Class entityClass;
     
