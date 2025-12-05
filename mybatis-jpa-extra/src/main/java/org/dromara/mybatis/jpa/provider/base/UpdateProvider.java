@@ -88,7 +88,7 @@ public class UpdateProvider <T extends JpaEntity>{
                         String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
                 }
                 if(fieldColumnMapper.getColumnAnnotation().updatable()) {
-                    if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
+                    if(fieldColumnMapper.isGenerated() && DateConverter.isDateType(fieldType)) {
                         sql.SET(" %s =  '%s' ".formatted(columnName,DateConverter.convert(entity, fieldColumnMapper,true)));
                     }else {
                         sql.SET(" %s = #{%s} ".formatted(columnName,fieldName));

@@ -42,7 +42,6 @@
  * @GeneratedValue
  * @Encrypted
  * @Transient 
- * @Temporal
  * @PartitionKey
  * @SoftDelete
 

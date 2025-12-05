@@ -26,7 +26,6 @@ import org.dromara.mybatis.jpa.annotations.SoftDelete;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Temporal;
 
 public class ColumnMapper {
     
@@ -57,8 +56,6 @@ public class ColumnMapper {
     private GeneratedValue      generatedValue;
     
     private Column              columnAnnotation;
-    
-    private Temporal            temporalAnnotation;
     
     private ColumnDefault       columnDefault;
     
@@ -140,14 +137,6 @@ public class ColumnMapper {
         this.columnAnnotation = columnAnnotation;
     }
     
-    public Temporal getTemporalAnnotation() {
-        return temporalAnnotation;
-    }
-
-    public void setTemporalAnnotation(Temporal temporalAnnotation) {
-        this.temporalAnnotation = temporalAnnotation;
-    }
-    
     public boolean isGenerated() {
         return generated;
     }
@@ -225,8 +214,6 @@ public class ColumnMapper {
         builder.append(generatedValue);
         builder.append(", columnAnnotation=");
         builder.append(columnAnnotation);
-        builder.append(", temporalAnnotation=");
-        builder.append(temporalAnnotation);
         builder.append(", columnDefault=");
         builder.append(columnDefault);
         builder.append(", partitionKey=");

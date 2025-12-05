@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
 import jakarta.persistence.Transient;
 
 public class ColumnMetadata {
@@ -141,10 +140,6 @@ public class ColumnMetadata {
                         GeneratedValue generatedValue=field.getAnnotation(GeneratedValue.class);
                         fieldColumnMapper.setGeneratedValue(generatedValue);
                         fieldColumnMapper.setGenerated(true);
-                    }
-                    if (field.isAnnotationPresent(Temporal.class)) {
-                        Temporal temporalAnnotation = field.getAnnotation(Temporal.class);
-                        fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
                     }
                     if (field.isAnnotationPresent(ColumnDefault.class)) {
                         ColumnDefault columnDefault = field.getAnnotation(ColumnDefault.class);

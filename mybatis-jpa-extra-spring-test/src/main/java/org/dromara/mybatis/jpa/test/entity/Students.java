@@ -30,8 +30,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 /*
    ID                   varchar(40)                    not null,
@@ -80,7 +78,6 @@ public class Students extends JpaEntity implements Serializable {
     private byte[] images;
     @Column(insertable = false)
     @GeneratedValue
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
     @SoftDelete
     @Column(name ="deleted")

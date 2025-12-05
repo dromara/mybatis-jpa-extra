@@ -14,7 +14,12 @@ import java.io.Serializable;
 @Entity
 @Table(name = "test_user")
 public class TestUser extends JpaEntity implements Serializable {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3616223152327185739L;
+
+	@Id
     @Column
     @GeneratedValue
     private Long id;
