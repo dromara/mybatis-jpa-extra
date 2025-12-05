@@ -22,6 +22,7 @@ package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
@@ -63,7 +64,7 @@ public class FetchProvider <T extends JpaEntity>{
             String fieldType = fieldColumnMapper.getFieldType();
             Object fieldValue = BeanUtil.getValue(entity, fieldName);
             column[columnCount++] = columnName;
-            boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
+            boolean isFieldValueNull = Objects.isNull(fieldValue);
             
             if(isFieldValueNull || fieldType.startsWith("byte")) {
                 //skip null field value
