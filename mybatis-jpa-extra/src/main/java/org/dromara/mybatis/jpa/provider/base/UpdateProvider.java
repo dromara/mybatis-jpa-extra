@@ -21,6 +21,8 @@
 package org.dromara.mybatis.jpa.provider.base;
 
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
@@ -63,7 +65,7 @@ public class UpdateProvider <T extends JpaEntity>{
             String fieldName = fieldColumnMapper.getField();
             String fieldType = fieldColumnMapper.getFieldType();
             Object fieldValue = BeanUtil.getValue(entity, fieldName);
-            boolean isFieldValueNull = BeanUtil.isFieldBlank(fieldValue);
+            boolean isFieldValueNull = Objects.isNull(fieldValue);
             
             if (fieldColumnMapper.isIdColumn() ) {
                 idFieldColumnMapper = fieldColumnMapper;

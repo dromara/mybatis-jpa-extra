@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -430,7 +429,4 @@ public class BeanUtil {
         return bean;
     }
     
-    public static boolean isFieldBlank(Object value) {
-        return (value == null || StringUtils.isBlank(value.toString()) || "null".equalsIgnoreCase(value.toString()));
-    }
 }
