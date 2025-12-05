@@ -72,24 +72,22 @@ public class FetchProvider <T extends JpaEntity>{
                     logger.trace("Field {} , Type {} , Value is null , Skiped ",
                         String.format(ConstMetadata.LOG_FORMAT, fieldName),String.format(ConstMetadata.LOG_FORMAT, fieldType));
                 }
+            }else if(fieldColumnMapper.isLogicDelete()) {
+                //do nothing
             }else {
                 if(logger.isTraceEnabled()) {
                     logger.trace("Field {} , Type {} , Value {}",
                         String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
                 }
                 
-                if(fieldColumnMapper.isLogicDelete()) {
-                    //do nothing
-                }else {
-                    if(!conditions.isEmpty()) {
-                        conditions.append(" and ");
-                    }
-                    conditions.append(
-                            " %s = #{%s.%s} ".formatted(
-                                    columnName,
-                                    ConstMetadata.ENTITY,
-                                    fieldName));
+                if(!conditions.isEmpty()) {
+                    conditions.append(" and ");
                 }
+                conditions.append(
+                        " %s = #{%s.%s} ".formatted(
+                                columnName,
+                                ConstMetadata.ENTITY,
+                                fieldName));
             }
         }
         

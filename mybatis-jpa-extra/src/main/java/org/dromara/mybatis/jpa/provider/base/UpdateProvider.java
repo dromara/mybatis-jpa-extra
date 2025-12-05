@@ -66,23 +66,24 @@ public class UpdateProvider <T extends JpaEntity>{
             String fieldType = fieldColumnMapper.getFieldType();
             Object fieldValue = BeanUtil.getValue(entity, fieldName);
             boolean isFieldValueNull = Objects.isNull(fieldValue);
+            boolean isSkipField = false;
             
             if (fieldColumnMapper.isIdColumn() ) {
                 idFieldColumnMapper = fieldColumnMapper;
-                continue;
+                isSkipField = true;
             }
             if(fieldColumnMapper.getPartitionKey() != null) {
                 partitionKey = fieldColumnMapper;
-                continue;
+                isSkipField = true;
             }
             if(fieldColumnMapper.isLogicDelete()) {
-                continue;
+            	isSkipField = true;
             }
-            if(isFieldValueNull && !fieldColumnMapper.isGenerated()) {
+            if(isSkipField || isFieldValueNull && !fieldColumnMapper.isGenerated()) {
                 //skip null field value
                 if(logger.isTraceEnabled()) {
-                    logger.trace("Field {} , Type {} , Value is null , Skiped ",
-                        String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
+                    logger.trace("Field {} , Type {} , Value is {} or skiped ",
+                        String.format(ConstMetadata.LOG_FORMAT, fieldName), fieldValue, String.format(ConstMetadata.LOG_FORMAT, fieldType));
                 }
             }else {
                 if(logger.isTraceEnabled()) {

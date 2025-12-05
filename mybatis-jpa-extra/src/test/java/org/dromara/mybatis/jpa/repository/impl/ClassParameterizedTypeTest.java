@@ -12,12 +12,12 @@ public class ClassParameterizedTypeTest extends ParentClass<JpaEntity,Long>{
     static final  Logger logger = LoggerFactory.getLogger(ClassParameterizedTypeTest.class);
     
     public static void main(String[] args) {
-        Class entityClass;
-        Class mapperClass = null;
+        Class<?> entityClass;
+        Class<?> mapperClass = null;
         Type[] pType = ((ParameterizedType) ClassParameterizedTypeTest.class.getGenericSuperclass()).getActualTypeArguments();
         if (pType != null && pType.length >= 2) {
-            mapperClass=(Class) pType[0];
-            entityClass = (Class) pType[1];
+            mapperClass=(Class<?>) pType[0];
+            entityClass = (Class<?>) pType[1];
             logger.info("Mapper {} , Entity {}" , String.format(ConstMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
         } else {
             logger.error("invalide initail, need generic type parameter! ");

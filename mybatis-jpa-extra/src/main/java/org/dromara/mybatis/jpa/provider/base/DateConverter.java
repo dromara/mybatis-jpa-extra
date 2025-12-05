@@ -1,8 +1,10 @@
 package org.dromara.mybatis.jpa.provider.base;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -22,25 +24,31 @@ public class DateConverter{
         String dateValue = "";
         if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Date")) {
             Date date = (Date)BeanUtil.get(entity, fieldColumnMapper.getField());
-            if(date == null) {
-                dateValue = convertDateTime(LocalDateTime.now());
+            if(isUpdate || date == null) {
+            	LocalDateTime now = LocalDateTime.now();
+                dateValue = convertDateTime(now);
+                Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+                BeanUtil.set(entity, fieldColumnMapper.getField(), Date.from(instant));
             }
         }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("LocalDate")) {
             LocalDate localDate =(LocalDate)BeanUtil.get(entity, fieldColumnMapper.getField());
-            if(localDate == null) {
+            if(isUpdate || localDate == null) {
                 localDate = LocalDate.now();
+                BeanUtil.set(entity, fieldColumnMapper.getField(), localDate);
             }
             dateValue = localDate.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
         }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("LocalTime")) {
             LocalTime localTime =(LocalTime)BeanUtil.get(entity, fieldColumnMapper.getField());
-            if(localTime == null) {
+            if(isUpdate || localTime == null) {
                 localTime = LocalTime.now();
+                BeanUtil.set(entity, fieldColumnMapper.getField(), localTime);
             }
             dateValue = localTime.format(DateTimeFormatter.ofPattern(TIME_FORMATTER));
         }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("LocalDateTime")) {
             LocalDateTime localDateTime =(LocalDateTime)BeanUtil.get(entity, fieldColumnMapper.getField());
-            if(localDateTime == null) {
+            if(isUpdate || localDateTime == null) {
                 localDateTime = LocalDateTime.now();
+                BeanUtil.set(entity, fieldColumnMapper.getField(), localDateTime);
             }
             dateValue = convertDateTime(localDateTime);
         }

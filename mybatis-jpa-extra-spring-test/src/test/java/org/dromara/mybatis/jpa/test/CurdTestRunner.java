@@ -71,7 +71,7 @@ public class CurdTestRunner  extends BaseTestRunner{
     @Test
     void update(){
         _logger.info("get...");
-        Students student=service.get("1071432244066779136");
+        Students student=service.get("1194337314101264384");
          _logger.info("Students {}",student);
          
          _logger.info("update...");
