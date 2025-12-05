@@ -25,6 +25,11 @@ public class Query extends BaseQuery {
     public Query() {
         super();
     }
+    
+    public Query(boolean softDelete) {
+        super();
+        this.softDelete = softDelete;
+    }
 
     public static Query builder(){
         return new Query();
@@ -379,6 +384,11 @@ public class Query extends BaseQuery {
     
     public Query orderBy(String column,OrderBy order) {
         orderBy(column,order.getOrder());
+        return this;
+    }
+    
+    public Query softDelete(boolean softDelete) {
+        this.softDelete = softDelete;
         return this;
     }
 

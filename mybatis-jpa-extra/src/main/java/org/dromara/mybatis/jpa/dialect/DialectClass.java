@@ -18,11 +18,11 @@ package org.dromara.mybatis.jpa.dialect;
 
 public class DialectClass {
     
-    public static final String MYSQL         =     "org.dromara.mybatis.jpa.dialect.MySQLDialect";
+    public static final String MYSQL          =     "org.dromara.mybatis.jpa.dialect.MySQLDialect";
     
-    public static final String DB2             =     "org.dromara.mybatis.jpa.dialect.DB2Dialect";
+    public static final String DB2            =     "org.dromara.mybatis.jpa.dialect.DB2Dialect";
     
-    public static final String DERBY         =     "org.dromara.mybatis.jpa.dialect.DerbyDialect";
+    public static final String DERBY          =     "org.dromara.mybatis.jpa.dialect.DerbyDialect";
     
     public static final String ORACLE         =     "org.dromara.mybatis.jpa.dialect.OracleDialect";
     
@@ -30,5 +30,5 @@ public class DialectClass {
     
     public static final String HIGHGO         =     "org.dromara.mybatis.jpa.dialect.HighgoDialect";
     
-    public static final String SQLSERVER     =     "org.dromara.mybatis.jpa.dialect.SQLServerDialect";
+    public static final String SQLSERVER      =     "org.dromara.mybatis.jpa.dialect.SQLServerDialect";
 }

@@ -36,7 +36,6 @@ import org.dromara.mybatis.jpa.interceptor.builder.FindBySqlBuilder;
 import org.dromara.mybatis.jpa.interceptor.builder.SelectPageSql;
 import org.dromara.mybatis.jpa.interceptor.builder.SelectPageSqlBuilder;
 import org.dromara.mybatis.jpa.metadata.findby.FindByMapper;
-import org.dromara.mybatis.jpa.metadata.findby.FindByMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,9 +65,8 @@ public class StatementHandlerInterceptor extends AbstractStatementHandlerInterce
             Object parameterObject = metaObject.getValue(ConstMetaObject.PARAMETER_OBJECT);
             MappedStatement mappedStatement = (MappedStatement) metaObject.getValue(ConstMetaObject.MAPPED_STATEMENT);
             logger.trace("parameter {}({})" , parameterObject,parameterObject == null ? "": parameterObject.getClass().getCanonicalName());
-            if(FindBySqlBuilder.isFindBy(dialectString, boundSql)){
-                FindBySqlBuilder.parse(mappedStatement.getId(),boundSql);
-                FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatement.getId());
+            if(FindBySqlBuilder.isFindBy(mappedStatement.getId(), boundSql)){
+                FindByMapper findByMapper = FindBySqlBuilder.parse(mappedStatement.getId());
                 String findBySql = FindBySqlBuilder.translate(findByMapper,parameterObject);
                 metaObject.setValue(ConstMetaObject.BOUNDSQL_SQL, findBySql);
             }else {

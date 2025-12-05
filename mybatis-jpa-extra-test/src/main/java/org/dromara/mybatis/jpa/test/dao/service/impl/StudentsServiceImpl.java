@@ -20,19 +20,14 @@ package org.dromara.mybatis.jpa.test.dao.service.impl;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
-import org.dromara.mybatis.jpa.service.impl.JpaServiceImpl;
+import org.dromara.mybatis.jpa.repository.impl.AbstractJpaRepository;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.entity.StudentQueryDto;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.dromara.mybatis.jpa.test.entity.StudentVo;
-import org.springframework.stereotype.Service;
 
-@Service
-public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students> implements StudentsService{
-
-    public StudentsServiceImpl() {
-    }
+public class StudentsServiceImpl extends AbstractJpaRepository<StudentsMapper,Students> implements StudentsService{
 
     @SuppressWarnings("unchecked")
     public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) {

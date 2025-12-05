@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
 import jakarta.persistence.Transient;
 
 public class ColumnMetadata {
@@ -44,11 +43,13 @@ public class ColumnMetadata {
     
     static ConcurrentMap<String, List<ColumnMapper>> columnMapper     =     new ConcurrentHashMap<>();
     
-    static ConcurrentMap<String, ColumnMapper> logicColumnMapper     =     new ConcurrentHashMap<>();
+    static ConcurrentMap<String, ColumnMapper> logicColumnMapper      =     new ConcurrentHashMap<>();
     
     static ConcurrentMap<String, ColumnMapper> idColumnMapper         =     new ConcurrentHashMap<>();
     
     static ConcurrentMap<String, ColumnMapper> partitionKeyMapper     =     new ConcurrentHashMap<>();
+    
+    static ConcurrentMap<String, String> selectColumns                =     new ConcurrentHashMap<>();
     
     
     public static  ColumnMapper getIdColumn(Class<?> entityClass) {
@@ -69,27 +70,33 @@ public class ColumnMetadata {
      * @return selectColumn
      */
     public static String selectColumnMapper(Class<?> entityClass) {
-        StringBuilder selectColumn = new StringBuilder("");
-        int columnCount = 0;
-        for(ColumnMapper fieldColumnMapper  : columnMapper.get(entityClass.getName())) {
-            if(columnCount > 0) {
-                    selectColumn.append(",");
+        String cachedSelectColumn  = selectColumns.get(entityClass.getName());
+        if(cachedSelectColumn == null) {
+            StringBuilder selectColumn = new StringBuilder("");
+            int columnCount = 0;
+            for(ColumnMapper fieldColumnMapper  : columnMapper.get(entityClass.getName())) {
+                if(columnCount > 0) {
+                        selectColumn.append(",");
+                }
+                //不同的属性和数据库字段不一致的需要进行映射
+                if(fieldColumnMapper.getColumn().equalsIgnoreCase(fieldColumnMapper.getField())) {
+    	            selectColumn.append(fieldColumnMapper.getColumn());
+                }else {
+                	selectColumn.append(fieldColumnMapper.getColumn())
+    			                .append(" ")
+    			                .append(fieldColumnMapper.getField());
+                }
+                columnCount ++;
+                if(logger.isTraceEnabled()) {
+                    logger.trace("selectColumnMapper Column {} , ColumnName : {} , FieldName : {}"  ,
+                        String.format(ConstMetadata.LOG_FORMAT_COUNT, columnCount),String.format(ConstMetadata.LOG_FORMAT, fieldColumnMapper.getColumn()),fieldColumnMapper.getField());
+                }
             }
-            //不同的属性和数据库字段不一致的需要进行映射
-            if(fieldColumnMapper.getColumn().equalsIgnoreCase(fieldColumnMapper.getField())) {
-	            selectColumn.append(fieldColumnMapper.getColumn());
-            }else {
-            	selectColumn.append(fieldColumnMapper.getColumn())
-			                .append(" ")
-			                .append(fieldColumnMapper.getField());
-            }
-            columnCount ++;
-            if(logger.isTraceEnabled()) {
-                logger.trace("Column {} , ColumnName : {} , FieldName : {}"  ,
-                    String.format(ConstMetadata.LOG_FORMAT_COUNT, columnCount),String.format(ConstMetadata.LOG_FORMAT, fieldColumnMapper.getColumn()),fieldColumnMapper.getField());
-            }
+            cachedSelectColumn = selectColumn.toString();
+            selectColumns.put(entityClass.getName(), cachedSelectColumn);
+            
         }
-        return selectColumn.toString();
+        return cachedSelectColumn;
     }
     
     /**
@@ -99,16 +106,11 @@ public class ColumnMetadata {
     public static List<ColumnMapper> buildColumnMapper(Class<?> entityClass) {
         String entityClassName = entityClass.getName();
         if (!columnMapper.containsKey(entityClassName)) {
-            logger.trace("entityClass {}" , entityClass);
+            logger.trace("buildColumnMapper entityClass {}" , entityClass);
             Field[] fields = entityClass.getDeclaredFields();
             List<ColumnMapper>columnMapperList = new ArrayList<>(fields.length);
     
             for (Field field : fields) {
-                //skip Transient field
-                if(field.isAnnotationPresent(Transient.class)) {
-                    continue;
-                }
-                
                 if (field.isAnnotationPresent(Column.class)) {
                     String columnName = "";
                     Column columnAnnotation = field.getAnnotation(Column.class);
@@ -116,11 +118,11 @@ public class ColumnMetadata {
                     if (StringUtils.isNotBlank(columnAnnotation.name())) {
                         columnName = columnAnnotation.name();
                     } else {
-                    	if(MapperMetadata.isMapUnderscoreToCamelCase()) {
-                    		columnName = StrUtils.camelToUnderline(field.getName());
-                    	}else {
-                    		columnName = field.getName();
-                    	}
+                        	if(MapperMetadata.isMapUnderscoreToCamelCase()) {
+                        		columnName = StrUtils.camelToUnderline(field.getName());
+                        	}else {
+                        		columnName = field.getName();
+                        	}
                     }
                     columnName = MapperMetadata.tableOrColumnCaseConverter(columnName);
                     columnName = MapperMetadata.tableOrColumnEscape(columnName);
@@ -138,10 +140,6 @@ public class ColumnMetadata {
                         GeneratedValue generatedValue=field.getAnnotation(GeneratedValue.class);
                         fieldColumnMapper.setGeneratedValue(generatedValue);
                         fieldColumnMapper.setGenerated(true);
-                    }
-                    if (field.isAnnotationPresent(Temporal.class)) {
-                        Temporal temporalAnnotation = field.getAnnotation(Temporal.class);
-                        fieldColumnMapper.setTemporalAnnotation(temporalAnnotation);
                     }
                     if (field.isAnnotationPresent(ColumnDefault.class)) {
                         ColumnDefault columnDefault = field.getAnnotation(ColumnDefault.class);
@@ -165,14 +163,16 @@ public class ColumnMetadata {
                         fieldColumnMapper.setEncryptedAnnotation(columnEncrypted);
                     }
                     
-                    logger.trace("FieldColumnMapper : {}" , fieldColumnMapper);
+                    logger.trace("buildColumnMapper {}" , fieldColumnMapper);
                     columnMapperList.add(fieldColumnMapper);
+                }else if(field.isAnnotationPresent(Transient.class)) {
+                    //skip Transient field
                 }
             }
-            logger.trace("Class {} , Column List : {}" , entityClassName,columnMapperList);
+            logger.trace("buildColumnMapper Class {} , Column List : {}" , entityClassName,columnMapperList);
             
             columnMapper.put(entityClassName, columnMapperList);
-            logger.trace("Column Mapper : {}" , columnMapper);
+            logger.trace("buildColumnMapper Column Mapper : {}" , columnMapper);
         }
         return columnMapper.get(entityClassName);
     }

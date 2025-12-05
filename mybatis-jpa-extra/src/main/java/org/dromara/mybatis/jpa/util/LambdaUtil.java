@@ -30,7 +30,7 @@ import org.dromara.mybatis.jpa.functions.IGetter;
 import jakarta.persistence.Column;
 
 public class LambdaUtil {
-    public static final String PREFIX_GET         = "get";
+    public static final String PREFIX_GET        = "get";
 
     public static final String PREFIX_IS         = "is";
     

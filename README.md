@@ -42,7 +42,6 @@
  * @GeneratedValue
  * @Encrypted
  * @Transient 
- * @Temporal
  * @PartitionKey
  * @SoftDelete
 
@@ -87,7 +86,6 @@ public class Students extends JpaEntity implements Serializable{
     private byte[] images;
     @Column(insertable = false)
     @GeneratedValue
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
     @SoftDelete
     @Column(name ="is_deleted")

@@ -80,7 +80,7 @@ public class InsertProvider <T extends JpaEntity>{
                         logger.trace("Field {} , Type {} , Value {}",
                             String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
                     }
-                    if(fieldColumnMapper.isGenerated() && fieldColumnMapper.getTemporalAnnotation() != null) {
+                    if(fieldColumnMapper.isGenerated() && DateConverter.isDateType(fieldType)) {
                         sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
                     }else if((fieldColumnMapper.isGenerated()) && isFieldValueNull) {
                         generatedValue(sql , entity , fieldColumnMapper);

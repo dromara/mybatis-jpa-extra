@@ -4,5 +4,5 @@ public final class OrderType {
 
     public static final String ASC     = "asc";
     
-    public static final String DESC = "desc";
+    public static final String DESC    = "desc";
 }

@@ -26,12 +26,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.PropertyAccessorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BeanUtil {
+    protected static Logger  logger = LoggerFactory.getLogger(BeanUtil.class);
     
     public static void copyBean(Object  origin,Object target) {
         if( origin == null || target == null) {
@@ -59,13 +62,10 @@ public class BeanUtil {
     }
         
     public static Object getValue(Object bean,String  field ) {
-        if(bean == null) {
-            return null;
-        }
         try {
-            return PropertyAccessorFactory
-                        .forBeanPropertyAccess(bean)
-                        .getPropertyValue(field);
+            if(bean != null) {
+                return  PropertyUtils.getProperty(bean, field);
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -280,23 +280,23 @@ public class BeanUtil {
             isFieldNotEmpty= false;
         }
         
-        LogFactory.getLog(BeanUtil.class).debug("isFieldNotEmpty() fieldName : "+field.getName()+", fieldType : "+fieldType+", Value : "+fillValue+", isFieldNotEmpty : "+isFieldNotEmpty);
+        logger.debug("isFieldNotEmpty() fieldName : {}, fieldType : {}, Value : {}, isFieldNotEmpty : {}",field.getName(),fieldType,fillValue,isFieldNotEmpty);
         
         return isFieldNotEmpty;
     }
     
     public static void displayValues(Object bean) {
         Field[] flds = bean.getClass().getDeclaredFields();
-        LogFactory.getLog(BeanUtil.class).debug("displayValues() *******************************************");
-        LogFactory.getLog(BeanUtil.class).debug("displayValues() "+bean.getClass().getName());
+        logger.debug("displayValues() *******************************************");
+        logger.debug("displayValues() {}",bean.getClass().getName());
         for (int i = 0; i < flds.length; i++) {
             String name = flds[i].getName();
             if(isGetProperty(bean.getClass(),name)){
-                LogFactory.getLog(BeanUtil.class).debug("displayValues() Field "+(i+1)+" : "+name+" = "+BeanUtil.get(bean, name));
+                logger.debug("displayValues() Field {} : {} = {}",(i+1),name,BeanUtil.get(bean, name));
             }
         }
         
-        LogFactory.getLog(BeanUtils.class).debug("displayValues() *******************************************");
+        logger.debug("displayValues() *******************************************");
         
     }
     
@@ -328,7 +328,7 @@ public class BeanUtil {
                         (Character.toUpperCase(property.charAt(0)) + "") : 
                          Character.toUpperCase(
                                 property.charAt(0))+ property.substring(1));
-        LogFactory.getLog(BeanUtils.class).debug("getByProperty() methodName : "+methodName);
+        logger.debug("getByProperty() methodName : {}",methodName);
         return methodName;
     }
     
@@ -338,7 +338,7 @@ public class BeanUtil {
                         (Character.toUpperCase(property.charAt(0)) + "") : 
                          Character.toUpperCase(
                                 property.charAt(0))+ property.substring(1));
-        LogFactory.getLog(BeanUtils.class).debug("setByProperty() methodName : "+methodName);
+        logger.debug("setByProperty() methodName : {}",methodName);
         return methodName;
     }
     
@@ -346,14 +346,14 @@ public class BeanUtil {
     public static <T> Map<String, Object> beanToMap( T  bean){
         Map <String,Object> mapBean=new HashMap<>();
         Field[] flds = bean.getClass().getDeclaredFields();
-        LogFactory.getLog(BeanUtils.class).debug("beanToMap() *******************************************");
-        LogFactory.getLog(BeanUtils.class).debug("beanToMap() "+bean.getClass().getName());
+        logger.debug("beanToMap() *******************************************");
+        logger.debug("beanToMap() {}",bean.getClass().getName());
         for (int i = 0; i < flds.length; i++) {
             String fieldName = flds[i].getName();
             if(BeanUtil.isGetProperty(bean.getClass(),fieldName)){
                 Object value=BeanUtil.get(bean, fieldName);
                 mapBean.put(fieldName,value );
-                LogFactory.getLog(BeanUtils.class).debug("beanToMap() field "+(i+1)+" : "+fieldName+" = "+value+" type : "+flds[i].getType());
+                logger.debug("beanToMap() field {} : {} = {} type : {}",(i+1),fieldName,value,flds[i].getType());
             }
         }
         LogFactory.getLog(BeanUtils.class).debug("beanToMap() *******************************************");
@@ -371,63 +371,62 @@ public class BeanUtil {
             return bean;
         }
         Iterator<?> fieldit = beanFiledMap.entrySet().iterator(); 
-        LogFactory.getLog(BeanUtils.class).debug("mapToBean() *******************************************");
-        LogFactory.getLog(BeanUtils.class).debug("mapToBean() "+bean.getClass().getName());
+        logger.debug("mapToBean() *******************************************");
+        logger.debug("mapToBean() {}",bean.getClass().getName());
         int i=1;
         while (fieldit.hasNext()) {
             Map.Entry entry = (Map.Entry) fieldit.next();
             String fieldName = entry.getKey().toString();
             Object value = null;
             String fieldType=(String)beanFiledMap.get(fieldName);
-            if(valueMap.get(fieldName)==null) {
-                continue;
-            }
-            String fillValue=valueMap.get(fieldName).toString();
-            LogFactory.getLog(BeanUtils.class).debug("mapToBean() field "+(i++)+" : "+fieldName+" = "+fillValue+" type : "+fieldType);  
-            if(fieldType.equals("java.lang.String")){
-                value=String.valueOf(fillValue);
-            }else if(fieldType.equals("int")){
-                value=Integer.parseInt(fillValue);
-            }else if(fieldType.equals("java.lang.Integer")){
-                value=Integer.parseInt(fillValue);
-            }else if(fieldType.equals("long")){
-                value=Long.parseLong(fillValue);
-            }else if(fieldType.equals("java.lang.Long")){
-                value= Long.parseLong(fillValue);
-            }else if(fieldType.equals("double")){
-                value=(double)Double.valueOf(fillValue);
-            }else if(fieldType.equals("java.lang.Double")){
-                value=Double.valueOf(fillValue);
-            }else if(fieldType.equals("float")){
-                value=Float.parseFloat(fillValue);
-            }else if(fieldType.equals("java.lang.Float")){
-                value=Float.parseFloat(fillValue);
-            }else if(fieldType.equals("java.util.Date")){ 
-                try {
-                    if(fillValue.length()==10){
-                        fillValue+=" 00:00:00";
-                        value=(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")).parse(fillValue);
-                    }else{
-                        continue;
+            if(valueMap.get(fieldName)!=null) {
+                String fillValue=valueMap.get(fieldName).toString();
+                logger.debug("mapToBean() field {} : {} = {} type : {}",(i++),fieldName,fillValue,fieldType);  
+                if(fieldType.equals("java.lang.String")){
+                    value=String.valueOf(fillValue);
+                }else if(fieldType.equals("int")){
+                    value=Integer.parseInt(fillValue);
+                }else if(fieldType.equals("java.lang.Integer")){
+                    value=Integer.parseInt(fillValue);
+                }else if(fieldType.equals("long")){
+                    value=Long.parseLong(fillValue);
+                }else if(fieldType.equals("java.lang.Long")){
+                    value= Long.parseLong(fillValue);
+                }else if(fieldType.equals("double")){
+                    value=(double)Double.valueOf(fillValue);
+                }else if(fieldType.equals("java.lang.Double")){
+                    value=Double.valueOf(fillValue);
+                }else if(fieldType.equals("float")){
+                    value=Float.parseFloat(fillValue);
+                }else if(fieldType.equals("java.lang.Float")){
+                    value=Float.parseFloat(fillValue);
+                }else if(fieldType.equals("java.util.Date")){ 
+                    try {
+                        if(fillValue.length()==10){
+                            fillValue+=" 00:00:00";
+                            value=(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")).parse(fillValue);
+                        }else{
+                            continue;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                }else if(fieldType.equals("java.lang.Object")){
+                    value=valueMap.get(fieldName);
+                }else if(fieldType.equals("char")){
+                    value=Character.valueOf(fillValue.charAt(0));
+                }else if(fieldType.equals("boolean")){
+                    value=Boolean.parseBoolean(fillValue);
+                }else if(fieldType.equals("short")){
+                    value=Short.parseShort(fillValue);
+                }else if(fieldType.equals("byte")){
+                    value=Byte.parseByte(fillValue);
                 }
-            }else if(fieldType.equals("java.lang.Object")){
-                value=valueMap.get(fieldName);
-            }else if(fieldType.equals("char")){
-                value=Character.valueOf(fillValue.charAt(0));
-            }else if(fieldType.equals("boolean")){
-                value=Boolean.parseBoolean(fillValue);
-            }else if(fieldType.equals("short")){
-                value=Short.parseShort(fillValue);
-            }else if(fieldType.equals("byte")){
-                value=Byte.parseByte(fillValue);
+    
+               BeanUtil.set(bean, fieldName, value);   
             }
-
-           BeanUtil.set(bean, fieldName, value);   
         }
-        LogFactory.getLog(BeanUtils.class).debug("mapToBean() *******************************************");
+        logger.debug("mapToBean() *******************************************");
         return bean;
     }
     

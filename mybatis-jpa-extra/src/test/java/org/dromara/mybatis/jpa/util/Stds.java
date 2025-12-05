@@ -28,8 +28,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 
 @Entity
@@ -63,7 +61,6 @@ public class Stds extends JpaEntity implements Serializable {
     private byte[] images;
     @Column(insertable = false)
     @GeneratedValue
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
     
     @SoftDelete

@@ -15,6 +15,7 @@
  */
 package org.dromara.mybatis.jpa.interceptor;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -30,7 +31,6 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.dromara.mybatis.jpa.constants.ConstMetaObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ObjectUtils;
 
 import java.text.DateFormat;
 import java.util.Date;

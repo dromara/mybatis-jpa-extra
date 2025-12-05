@@ -56,5 +56,5 @@ public class BaseQuery {
     public void setSoftDelete(boolean softDelete) {
         this.softDelete = softDelete;
     }
-    
+     
 }

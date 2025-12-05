@@ -45,7 +45,7 @@ public class FieldEncryptInterceptor  implements Interceptor {
 
         for (ColumnMapper encryptField : listFieldColumn) {
             if(encryptField.isEncrypted()) {
-                logger.debug("FieldName {} is need {} Encrypted ",encryptField.getField(),encryptField.getEncryptedAnnotation().algorithm());
+                logger.trace("FieldName {} is need {} Encrypted ",encryptField.getField(),encryptField.getEncryptedAnnotation().algorithm());
                 encryptField.getEntityField().setAccessible(true);
                 String plainValue = (String) encryptField.getEntityField().get(entity);
                 if(StringUtils.isNotBlank(plainValue) 

@@ -26,47 +26,44 @@ import org.dromara.mybatis.jpa.annotations.SoftDelete;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Temporal;
 
 public class ColumnMapper {
     
-    private Field             entityField;
+    private Field               entityField;
     /**
      * class field name
      */
-    private String             field;
+    private String              field;
     
     /**
      * class field type
      */
-    private String             fieldType;
+    private String              fieldType;
     
     /**
      * table column name
      */
-    private String             column;
+    private String              column;
     
-    private boolean         idColumn    =    false;
+    private boolean             idColumn     =    false;
     
-    private boolean         generated    =    false;
+    private boolean             generated    =    false;
     
-    private boolean         logicDelete    =    false;
+    private boolean             logicDelete  =    false;
     
-    private boolean         encrypted    =    false;
+    private boolean             encrypted    =    false;
     
-    private GeneratedValue     generatedValue;
+    private GeneratedValue      generatedValue;
     
-    private    Column             columnAnnotation;
+    private Column              columnAnnotation;
     
-    private Temporal         temporalAnnotation;
+    private ColumnDefault       columnDefault;
     
-    private ColumnDefault   columnDefault;
+    private PartitionKey        partitionKey;
     
-    private PartitionKey    partitionKey;
+    private SoftDelete          softDelete;
     
-    private SoftDelete         softDelete;
-    
-    private Encrypted         encryptedAnnotation;
+    private Encrypted           encryptedAnnotation;
     
     public ColumnMapper() {
         
@@ -138,14 +135,6 @@ public class ColumnMapper {
 
     public void setColumnAnnotation(Column columnAnnotation) {
         this.columnAnnotation = columnAnnotation;
-    }
-    
-    public Temporal getTemporalAnnotation() {
-        return temporalAnnotation;
-    }
-
-    public void setTemporalAnnotation(Temporal temporalAnnotation) {
-        this.temporalAnnotation = temporalAnnotation;
     }
     
     public boolean isGenerated() {
@@ -225,8 +214,6 @@ public class ColumnMapper {
         builder.append(generatedValue);
         builder.append(", columnAnnotation=");
         builder.append(columnAnnotation);
-        builder.append(", temporalAnnotation=");
-        builder.append(temporalAnnotation);
         builder.append(", columnDefault=");
         builder.append(columnDefault);
         builder.append(", partitionKey=");

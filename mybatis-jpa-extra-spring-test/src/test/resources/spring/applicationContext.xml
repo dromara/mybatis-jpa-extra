@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:util="http://www.springframework.org/schema/util"
+		xsi:schemaLocation="
+	        http://www.springframework.org/schema/beans     
+	        http://www.springframework.org/schema/beans/spring-beans.xsd
+	        http://www.springframework.org/schema/context 
+	        http://www.springframework.org/schema/context/spring-context.xsd
+	        http://www.springframework.org/schema/tx 
+	        http://www.springframework.org/schema/tx/spring-tx.xsd
+	        http://www.springframework.org/schema/util     
+	        http://www.springframework.org/schema/util/spring-util.xsd
+	        http://www.springframework.org/schema/mvc 
+	        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+ 	<!-- 
+ 	<import resource="applicationContext-task.xml"/>
+ 	-->
+ 	<!-- Application properties configs  -->
+	<bean id="propertySourcesPlaceholderConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+	  <property name="locations">
+	    <list>
+	   	  	<value>classpath:config/applicationConfig.properties</value>
+	    </list>
+	  </property>
+	  <property name="ignoreUnresolvablePlaceholders" value="true"/>
+	</bean>
+ 	
+ 	<!-- Datastore configuration  -->
+	<!-- org.apache.commons.dbcp2.BasicDataSource -->
+	<!-- com.alibaba.druid.pool.DruidDataSource -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"  destroy-method="close" >      
+	    <!-- <property name="driverClass" value="${config.datasource.driverClass}"/> -->
+	    <property name="url" value="${config.datasource.url}"/>      
+	    <property name="username" value="${config.datasource.username}"/>      
+	    <property name="password" value="${config.datasource.password}"/>      
+	</bean> 
+
+  <tx:annotation-driven transaction-manager="txManager" />
+
+  <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
+	<!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+	<bean id="sqlSessionFactory" class="org.dromara.mybatis.jpa.spring.MyBatisJpaSessionFactoryBean">
+		<property name="timeout" value="30" />
+		<property name="dialect" value="mysql" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:/org/dromara/mybatis/jpa/test/dao/persistence/xml/mysql/*.xml" />
+		<property name="typeAliasesPackage" 
+        		  value="
+	        			org.dromara.mybatis.jpa.test.entity,
+        			" />
+		<property name="transactionFactory">
+			<bean class="org.apache.ibatis.transaction.managed.ManagedTransactionFactory" />
+		</property>
+	</bean>
+
+    <!-- scan for mappers and let them be autowired -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" 
+        		  value="
+        		  		org.dromara.mybatis.jpa.test.dao.persistence,
+        		  		" />
+      
+    </bean>
+
+ 	<!-- enable component scanning (beware that this does not enable mapper scanning!) -->    
+    <context:component-scan base-package="org.dromara.mybatis.jpa.test.dao.service" />
+    
+    <bean class ="org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory">
+    </bean>
+
+</beans>

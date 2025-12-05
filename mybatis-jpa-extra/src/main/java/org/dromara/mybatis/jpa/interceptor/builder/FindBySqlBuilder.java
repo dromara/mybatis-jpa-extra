@@ -20,6 +20,7 @@ package org.dromara.mybatis.jpa.interceptor.builder;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
@@ -40,19 +41,26 @@ public class FindBySqlBuilder {
     private static final Logger logger     =     LoggerFactory.getLogger(FindBySqlBuilder.class);
 
     public static boolean isFindBy(String mappedStatementId,BoundSql boundSql) {
-        return StringUtils.isBlank(boundSql.getSql()) && !FindByMetadata.containsKey(mappedStatementId);
+    	if(FindByMetadata.containsKey(mappedStatementId)) {
+    		return true;
+    	}
+    	String findByName = mappedStatementId.substring(mappedStatementId.lastIndexOf(".") + 1);
+        return (Strings.CI.startsWith(findByName, FindByKeywords.FINDBY) 
+        			|| Strings.CI.startsWith(findByName, FindByKeywords.FINDDISTINCTBY))
+        				&& StringUtils.isBlank(boundSql.getSql());
     }
     
-    public static void parse(String mappedStatementId,BoundSql boundSql){
-        if(isFindBy(mappedStatementId , boundSql)){
-            FindByMapper findByMapper = new FindByMapper(mappedStatementId);
+    public static FindByMapper parse(String mappedStatementId){
+    	FindByMapper findByMapper = FindByMetadata.getFindByMapper(mappedStatementId);
+    	if(findByMapper == null) {
+            findByMapper = new FindByMapper(mappedStatementId);
             findByMapper.parseFindBy();
             FindByMetadata.put(mappedStatementId, findByMapper);
-        }
+    	}
+    	return findByMapper;
     }
     
     public static String translate(FindByMapper findByMapper,Object parameterObject) {
-        findByMapper.parseEntityClass();
         List<ColumnMapper> entityFields = ColumnMetadata.buildColumnMapper(findByMapper.getEntityClass());
         Query q = Query.builder();
         String fieldNameStart = findByMapper.getRemovedFindByName();

@@ -76,15 +76,13 @@ public class FetchProvider <T extends JpaEntity>{
                     logger.trace("Field {} , Type {} , Value {}",
                         String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
                 }
-                if(!conditions.isEmpty()) {
-                    conditions.append(" and ");
-                }
+                
                 if(fieldColumnMapper.isLogicDelete()) {
-                    conditions.append(
-                            " %s = '%s' ".formatted(
-                                    columnName,
-                                    fieldColumnMapper.getSoftDelete().value()));
+                    //do nothing
                 }else {
+                    if(!conditions.isEmpty()) {
+                        conditions.append(" and ");
+                    }
                     conditions.append(
                             " %s = #{%s.%s} ".formatted(
                                     columnName,
@@ -101,6 +99,16 @@ public class FetchProvider <T extends JpaEntity>{
         if(StringUtils.isNotBlank(conditions)) {
             sql.WHERE(conditions.toString());
         }
+        
+        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entity.getClass());
+        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
+            sql.WHERE(" ( %s = '%s' )" 
+                    .formatted(
+                            logicColumnMapper.getColumn(),
+                            logicColumnMapper.getSoftDelete().value())
+                    );
+        }
+        
         logger.trace("Query Page SQL : \n{}" , sql);
         return sql.toString();
     }
