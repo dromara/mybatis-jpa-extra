@@ -66,28 +66,29 @@ public class InsertProvider <T extends JpaEntity>{
             boolean isFieldValueNull = Objects.isNull(fieldValue);
             
             if(fieldColumnMapper.getColumnAnnotation().insertable()) {
-                if(fieldColumnMapper.getColumnDefault() != null) {
-                    sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
-                }else if(fieldColumnMapper.isLogicDelete()) {
-                    sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
-                }else if(isFieldValueNull && !fieldColumnMapper.isGenerated()) {
-                    //skip null field value
-                    if(logger.isTraceEnabled()) {
-                        logger.trace("Field {} , Type {} , Value is null , Skiped ",
-                            String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
+                if(fieldColumnMapper.isGenerated()) {//自动生成字段值
+                	if(DateConverter.isDateType(fieldType)) {//日期类型
+                        sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
+                    }else if(isFieldValueNull) {//空值
+                        generatedValue(sql , entity , fieldColumnMapper);
                     }
-                }else {
-                    if(logger.isTraceEnabled()) {
+                }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
+                    sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
+                }else if(isFieldValueNull && fieldColumnMapper.getColumnDefault() != null) {
+                	//字段值为空，且标注默认值
+                    sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
+                }else if(!isFieldValueNull) {
+                	if(logger.isTraceEnabled()) {
                         logger.trace("Field {} , Type {} , Value {}",
                             String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
                     }
-                    if(fieldColumnMapper.isGenerated() && DateConverter.isDateType(fieldType)) {
-                        sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
-                    }else if((fieldColumnMapper.isGenerated()) && isFieldValueNull) {
-                        generatedValue(sql , entity , fieldColumnMapper);
-                    }else {
-                        sql.VALUES(columnName,"#{%s}".formatted(fieldName));
-                    }
+                    sql.VALUES(columnName,"#{%s}".formatted(fieldName));
+                }else {
+                	//skip null field value
+                    if(logger.isTraceEnabled()) {
+                        logger.trace("Field {} , Type {} , Value is null , skiped ",
+                            String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
+                    } 
                 }
             }
         }
