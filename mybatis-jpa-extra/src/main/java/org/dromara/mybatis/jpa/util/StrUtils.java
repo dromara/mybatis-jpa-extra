@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class StrUtils {
     public static final char UNDERLINE = '_';
@@ -85,7 +85,7 @@ public class StrUtils {
                 }
             }
             //删除最后一个分隔符
-            if (StringUtils.endsWith(string,split)) {
+            if (Strings.CS.endsWith(string,split)) {
                 string = string.deleteCharAt(string.length() - 1);
             }
         }

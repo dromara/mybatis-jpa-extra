@@ -28,8 +28,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "SCORES")
@@ -76,7 +74,6 @@ public class Scores extends JpaEntity implements Serializable {
      * 修改时间
      */
     @GeneratedValue
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifyDate;
     /**
      * 逻辑删除
