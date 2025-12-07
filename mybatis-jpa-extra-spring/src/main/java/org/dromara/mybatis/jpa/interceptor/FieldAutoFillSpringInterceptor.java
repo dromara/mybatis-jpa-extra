@@ -37,7 +37,7 @@ public class FieldAutoFillSpringInterceptor  extends FieldAutoFillInterceptor {
                 fieldAutoFillHandler = MybatisJpaContext.getBean(FieldAutoFillHandler.class);
                 logger.debug("get bean by fieldAutoFillHandler class");
             }catch(Exception e){
-                logger.debug("get bean by fieldAutoFillHandler Exception",e);
+                logger.error("get bean by fieldAutoFillHandler Exception",e);
             }
         }
         
