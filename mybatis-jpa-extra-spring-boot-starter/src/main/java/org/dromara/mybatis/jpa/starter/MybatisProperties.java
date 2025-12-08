@@ -33,6 +33,7 @@ import org.apache.ibatis.session.LocalCacheScope;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -348,7 +349,7 @@ public class MybatisProperties {
 
     /**
      * MyBatis, by default, returns null when all the columns of a returned row are NULL. When this setting is enabled,
-     * MyBatis returns an empty instance instead. Note that it is also applied to nested results (i.e. collectioin and
+     * MyBatis returns an empty instance instead. Note that it is also applied to nested results (i.e. collection and
      * association). Default is false.
      */
     private Boolean returnInstanceForEmptyRow;
@@ -507,6 +508,7 @@ public class MybatisProperties {
       this.aggressiveLazyLoading = aggressiveLazyLoading;
     }
 
+    @DeprecatedConfigurationProperty(since = "3.0.4", reason = "The option is not used at MyBatis core module. It will be removed in the future. See https://github.com/mybatis/mybatis-3/pull/3238")
     public Boolean getMultipleResultSetsEnabled() {
       return multipleResultSetsEnabled;
     }

@@ -1,5 +1,5 @@
 /*
- *    Copyright 2015-2022 the original author or authors.
+ *    Copyright 2015-2025 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -84,12 +84,13 @@ import org.springframework.util.StringUtils;
  * @author Josh Long
  * @author Kazuki Shimizu
  * @author Eduardo Macarrón
+ * @author shimingxy
  */
 @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
 @ConditionalOnSingleCandidate(DataSource.class)
 @EnableConfigurationProperties(MybatisProperties.class)
-@AutoConfigureAfter({ DataSourceAutoConfiguration.class })
+@AutoConfigureAfter({ DataSourceAutoConfiguration.class})
 public class MybatisAutoConfiguration implements InitializingBean {
 
   private static final Logger logger = LoggerFactory.getLogger(MybatisAutoConfiguration.class);
@@ -240,7 +241,6 @@ public class MybatisAutoConfiguration implements InitializingBean {
     }
     if (configuration != null && coreConfiguration != null) {
       coreConfiguration.applyTo(configuration);
-      configuration.setCallSettersOnNulls(true);
     }
     if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomizers)) {
       for (ConfigurationCustomizer customizer : this.configurationCustomizers) {
@@ -324,7 +324,7 @@ public class MybatisAutoConfiguration implements InitializingBean {
           builder.addPropertyValue("sqlSessionTemplateBeanName",
               sqlSessionTemplateBeanName.orElse("sqlSessionTemplate"));
         } else {
-          builder.addPropertyValue("sqlSessionFactoryBeanName", sqlSessionFactoryBeanName.get());
+          builder.addPropertyValue("sqlSessionFactoryBeanName", sqlSessionFactoryBeanName.orElseThrow());
         }
       }
       builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
