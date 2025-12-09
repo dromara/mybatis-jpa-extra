@@ -81,7 +81,7 @@ public class TableMetadata {
         String entityClassName = entityClass.getName();
         if(!tableNameMap.containsKey(entityClassName)) {
 
-            logger.debug("getTableName entity Class Name {}" , entityClassName);
+            logger.trace("getTableName entity Class Name {}" , entityClassName);
             String tableName = null;
             String schema = null;
             String catalog = null;
