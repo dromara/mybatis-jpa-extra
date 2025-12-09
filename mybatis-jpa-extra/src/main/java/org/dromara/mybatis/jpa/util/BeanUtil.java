@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -279,23 +278,23 @@ public class BeanUtil {
             isFieldNotEmpty= false;
         }
         
-        logger.debug("isFieldNotEmpty() fieldName : {}, fieldType : {}, Value : {}, isFieldNotEmpty : {}",field.getName(),fieldType,fillValue,isFieldNotEmpty);
+        logger.trace("isFieldNotEmpty() fieldName : {}, fieldType : {}, Value : {}, isFieldNotEmpty : {}",field.getName(),fieldType,fillValue,isFieldNotEmpty);
         
         return isFieldNotEmpty;
     }
     
     public static void displayValues(Object bean) {
         Field[] flds = bean.getClass().getDeclaredFields();
-        logger.debug("displayValues() *******************************************");
-        logger.debug("displayValues() {}",bean.getClass().getName());
+        logger.trace("displayValues() *******************************************");
+        logger.trace("displayValues() {}",bean.getClass().getName());
         for (int i = 0; i < flds.length; i++) {
             String name = flds[i].getName();
             if(isGetProperty(bean.getClass(),name)){
-                logger.debug("displayValues() Field {} : {} = {}",(i+1),name,BeanUtil.get(bean, name));
+                logger.trace("displayValues() Field {} : {} = {}",(i+1),name,BeanUtil.get(bean, name));
             }
         }
         
-        logger.debug("displayValues() *******************************************");
+        logger.trace("displayValues() *******************************************");
         
     }
     
@@ -327,7 +326,7 @@ public class BeanUtil {
                         (Character.toUpperCase(property.charAt(0)) + "") : 
                          Character.toUpperCase(
                                 property.charAt(0))+ property.substring(1));
-        logger.debug("getByProperty() methodName : {}",methodName);
+        logger.trace("getByProperty() methodName : {}",methodName);
         return methodName;
     }
     
@@ -337,7 +336,7 @@ public class BeanUtil {
                         (Character.toUpperCase(property.charAt(0)) + "") : 
                          Character.toUpperCase(
                                 property.charAt(0))+ property.substring(1));
-        logger.debug("setByProperty() methodName : {}",methodName);
+        logger.trace("setByProperty() methodName : {}",methodName);
         return methodName;
     }
     
@@ -345,17 +344,17 @@ public class BeanUtil {
     public static <T> Map<String, Object> beanToMap( T  bean){
         Map <String,Object> mapBean=new HashMap<>();
         Field[] flds = bean.getClass().getDeclaredFields();
-        logger.debug("beanToMap() *******************************************");
-        logger.debug("beanToMap() {}",bean.getClass().getName());
+        logger.trace("beanToMap() *******************************************");
+        logger.trace("beanToMap() {}",bean.getClass().getName());
         for (int i = 0; i < flds.length; i++) {
             String fieldName = flds[i].getName();
             if(BeanUtil.isGetProperty(bean.getClass(),fieldName)){
                 Object value=BeanUtil.get(bean, fieldName);
                 mapBean.put(fieldName,value );
-                logger.debug("beanToMap() field {} : {} = {} type : {}",(i+1),fieldName,value,flds[i].getType());
+                logger.trace("beanToMap() field {} : {} = {} type : {}",(i+1),fieldName,value,flds[i].getType());
             }
         }
-        LogFactory.getLog(BeanUtils.class).debug("beanToMap() *******************************************");
+        logger.trace("beanToMap() *******************************************");
         return mapBean;
     }
     @SuppressWarnings("rawtypes")
@@ -370,8 +369,8 @@ public class BeanUtil {
             return bean;
         }
         Iterator<?> fieldit = beanFiledMap.entrySet().iterator(); 
-        logger.debug("mapToBean() *******************************************");
-        logger.debug("mapToBean() {}",bean.getClass().getName());
+        logger.trace("mapToBean() *******************************************");
+        logger.trace("mapToBean() {}",bean.getClass().getName());
         int i=1;
         while (fieldit.hasNext()) {
             Map.Entry entry = (Map.Entry) fieldit.next();
@@ -380,7 +379,7 @@ public class BeanUtil {
             String fieldType=(String)beanFiledMap.get(fieldName);
             if(valueMap.get(fieldName)!=null) {
                 String fillValue=valueMap.get(fieldName).toString();
-                logger.debug("mapToBean() field {} : {} = {} type : {}",(i++),fieldName,fillValue,fieldType);  
+                logger.trace("mapToBean() field {} : {} = {} type : {}",(i++),fieldName,fillValue,fieldType);  
                 if(fieldType.equals("java.lang.String")){
                     value=String.valueOf(fillValue);
                 }else if(fieldType.equals("int")){
@@ -425,7 +424,7 @@ public class BeanUtil {
                BeanUtil.set(bean, fieldName, value);   
             }
         }
-        logger.debug("mapToBean() *******************************************");
+        logger.trace("mapToBean() *******************************************");
         return bean;
     }
     
