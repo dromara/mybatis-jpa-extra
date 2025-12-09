@@ -67,11 +67,15 @@ public class InsertProvider <T extends JpaEntity>{
             
             if(fieldColumnMapper.getColumnAnnotation().insertable()) {
                 if(fieldColumnMapper.isGenerated()) {//自动生成字段值
-                	if(DateConverter.isDateType(fieldType)) {//日期类型
-                        sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
-                    }else if(isFieldValueNull) {//空值
-                        generatedValue(sql , entity , fieldColumnMapper);
-                    }
+                	if(isFieldValueNull) {//空值
+                		if(fieldColumnMapper.isIdColumn()){//id
+	                        generatedValue(sql , entity , fieldColumnMapper);
+	                    }else if(DateConverter.isDateType(fieldType)) {//日期类型
+	                        sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
+	                    } 
+                	}else {
+                		sql.VALUES(columnName,"#{%s}".formatted(fieldName));
+                	}
                 }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
                     sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
                 }else if(isFieldValueNull && fieldColumnMapper.getColumnDefault() != null) {
