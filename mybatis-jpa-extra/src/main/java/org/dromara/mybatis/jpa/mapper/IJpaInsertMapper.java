@@ -17,7 +17,10 @@
 
 package org.dromara.mybatis.jpa.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Param;
 import org.dromara.mybatis.jpa.provider.MapperProvider;
 
 /**
@@ -30,5 +33,8 @@ public interface IJpaInsertMapper<T> {
     //follow function for insert
     @InsertProvider(type = MapperProvider.class, method = "insert")
     public Integer insert(T entity);
-            
+    
+    @InsertProvider(type = MapperProvider.class, method = "insertBatch")
+    public Integer insertBatch(List<T> listEntity);
+    
 }

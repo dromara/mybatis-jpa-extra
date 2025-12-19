@@ -23,6 +23,7 @@ package org.dromara.mybatis.jpa.provider.base;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
@@ -126,6 +127,89 @@ public class InsertProvider <T extends JpaEntity>{
             //skip
         }else if(generatedValue.strategy()==GenerationType.TABLE){
             //skip
+        }
+    }
+    
+    /**
+     * @param List<T> entity
+     * @return insert sql script
+     */
+    public String insertBatch(List<T> listEntity) {
+    	Class<?> entityClass = listEntity.get(0).getClass();
+    	
+        List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
+        
+        SQL sql = new SQL().INSERT_INTO(TableMetadata.getTableName(entityClass));
+        
+        StringBuilder values = new StringBuilder("");
+        for (ColumnMapper fieldColumnMapper : listFields) {
+            String columnName = fieldColumnMapper.getColumn();
+            String fieldName = fieldColumnMapper.getField();
+            if(fieldColumnMapper.getColumnAnnotation().insertable()) {
+            	sql.INTO_COLUMNS(columnName);
+            	if(StringUtils.isNotBlank(values)) {
+            		values.append(",");
+            	}
+            	values.append("#{").append("entity.").append(fieldName).append("}");
+            }
+            logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
+        }
+        
+        StringBuilder insertSql = new StringBuilder("");
+        insertSql.append("<script>").append("\n")
+		        .append(sql.toString()).append("\n")
+		        .append(" VALUES ").append("\n")
+		        .append(" <foreach collection =\"arg0\" item=\"entity\" separator =\",\">").append("\n")
+		        .append("  (")
+		        .append(values.toString()) 
+		        .append("  )").append("\n")
+		        .append(" </foreach>").append("\n")
+		        .append("</script>");
+        logger.trace("Insert SQL : \n{}" , insertSql);
+        
+        for(T entity : listEntity) {
+	        for (ColumnMapper fieldColumnMapper : listFields) {
+	            String fieldName = fieldColumnMapper.getField();
+	            String fieldType = fieldColumnMapper.getFieldType();
+	            Object fieldValue = BeanUtil.getValue(entity, fieldName);
+	            boolean isFieldValueNull = Objects.isNull(fieldValue);
+	            
+	            if(fieldColumnMapper.getColumnAnnotation().insertable()) {
+	                if(fieldColumnMapper.isGenerated()) {//自动生成字段值
+	                	if(isFieldValueNull) {//空值
+	                		if(fieldColumnMapper.isIdColumn()){//id
+	                			batchGeneratedValue( entity , fieldColumnMapper);
+		                    }else if(DateConverter.isDateType(fieldType)) {//日期类型
+		                        DateConverter.convert(entity, fieldColumnMapper,false);
+		                    } 
+	                	}
+	                }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
+	                	BeanUtil.set(entity, fieldColumnMapper.getField(),fieldColumnMapper.getSoftDelete().value());
+	                }
+	            }
+	        }
+        }
+        return insertSql.toString();
+    }
+    
+    private void  batchGeneratedValue( T entity , ColumnMapper fieldColumnMapper) {
+        GeneratedValue generatedValue = fieldColumnMapper.getGeneratedValue();
+        if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
+            String genValue = "";
+            if(generatedValue == null ) {
+                genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
+            }else if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
+                genValue = IdentifierGeneratorFactory.generate(generatedValue.generator());
+            }else {
+                genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
+            }
+            if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
+                BeanUtil.set(entity, fieldColumnMapper.getField(),genValue);
+            }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
+                BeanUtil.set(entity, fieldColumnMapper.getField(),Integer.valueOf(genValue));
+            }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
+                BeanUtil.set(entity, fieldColumnMapper.getField(),Long.valueOf(genValue));
+            }
         }
     }
     

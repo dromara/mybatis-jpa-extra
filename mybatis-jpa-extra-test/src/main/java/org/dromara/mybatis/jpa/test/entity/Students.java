@@ -81,7 +81,7 @@ public class Students extends JpaEntity implements Serializable {
     private LocalDateTime modifyDate;
     @SoftDelete
     @Column(name ="deleted")
-    private char deleted;
+    private String deleted;
     
     public Students() {
         super();
@@ -171,11 +171,11 @@ public class Students extends JpaEntity implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    public char getDeleted() {
+    public String getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(char deleted) {
+    public void setDeleted(String deleted) {
         this.deleted = deleted;
     }
 
