@@ -288,6 +288,30 @@ public class JpaPage {
         this.pageSize = size;
         this.pageable = true;
     }
+    
+    public JpaPage page(int page) {
+        this.pageNumber = page;
+        this.pageable = true;
+        return this;
+    }
+    
+    public JpaPage ofPage(int page) {
+        this.pageNumber = page;
+        this.pageable = true;
+        return this;
+    }
+    
+    public JpaPage size(int size) {
+        this.pageSize = size;
+        this.pageable = true;
+        return this;
+    }
+    
+    public JpaPage ofSize(int size) {
+        this.pageSize = size;
+        this.pageable = true;
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -312,7 +336,7 @@ public class JpaPage {
         builder.append(orderBy);
         builder.append(", pageable=");
         builder.append(pageable);
-        builder.append(", pageResultSelectUUID=");
+        builder.append(", pageSelectId=");
         builder.append(pageSelectId);
         builder.append("]");
         return builder.toString();

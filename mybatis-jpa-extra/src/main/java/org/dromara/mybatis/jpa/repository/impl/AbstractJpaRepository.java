@@ -698,6 +698,15 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
     }
     
     /**
+     * delete entity by id
+     * @param id
+     * @return boolean
+     */
+    public boolean deleteById(String id){
+        return this.delete(id);
+    }
+    
+    /**
      * delete one entity by id
      * @param id
      * @return
