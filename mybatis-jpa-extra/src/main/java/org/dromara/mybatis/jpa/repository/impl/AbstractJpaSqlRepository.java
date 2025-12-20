@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JpaSqlRepositoryImpl
+ * Abstract JPA Sql Repository
  */
 public class AbstractJpaSqlRepository implements IJpaSqlRepository {
     private static final  Logger logger = LoggerFactory.getLogger(AbstractJpaSqlRepository.class);

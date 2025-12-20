@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 public class FindTestRunner extends BaseTestRunner{
     private static final Logger _logger = LoggerFactory.getLogger(FindTestRunner.class);
     
-
     @Test
     void findAll(){
         _logger.info("findAll...");
@@ -36,16 +35,22 @@ public class FindTestRunner extends BaseTestRunner{
     }
     
     @Test
+    void findById(){
+        _logger.info("findById...");
+        service.findById("1004539842878504988");
+    }
+    
+    @Test
     void findByIds(){
         _logger.info("findByIds...");
         List<String> idList=new ArrayList<String>();
-        idList.add("8c34448b-c65b-4a4e-a0da-83284d05f909");
-        idList.add("b9111f83-d338-461d-8d46-f331087d5a42");
-        idList.add("12b6ceb8-573b-4f01-ad85-cfb24cfa007c");
-        idList.add("dafd5ba4-d2e3-4656-bd42-178841e610fe");
+        idList.add("1004539842878504981");
+        idList.add("1004539842878504982");
+        idList.add("1004539842878504983");
+        idList.add("1004539842878504984");
+        idList.add("1004539842878504985");
         service.findByIds(idList);
     }
-    
     
     @Test
     void find(){

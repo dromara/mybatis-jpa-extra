@@ -126,6 +126,12 @@ public  interface  IJpaRepository <T> {
     public T findOne(String filter) ;
     
     /**
+     * find one entity by id 
+     * @param id
+     * @return
+     */
+    public T findById(String id);
+    /**
      * find entity by id List
      * @param idList
      * @return List<T>

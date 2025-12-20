@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * JPA Base Repository
+ * Abstract JPA Repository
  * @author Crystal.Sea
  *
  * @param <T>
@@ -264,6 +264,15 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      */
     public T findOne(String filter) {
         return findOne( filter ,null , null);
+    }
+    
+    /**
+     * find one entity by entity id
+     * @param id
+     * @return
+     */
+    public T findById(String id) {
+        return this.get(id);
     }
     
     /**
@@ -507,7 +516,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
     public boolean insertBatch(List<T> listEntity){
         try {
             if(CollectionUtils.isNotEmpty(listEntity)) {
-            	Integer count = getMapper().insertBatch(listEntity) ;
+            	    Integer count = getMapper().insertBatch(listEntity) ;
                 logger.debug("Insert Batch count : {}" , count);
             }
         } catch(Exception e) {
