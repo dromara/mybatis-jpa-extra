@@ -126,6 +126,12 @@ public  interface  IJpaRepository <T> {
     public T findOne(String filter) ;
     
     /**
+     * find one entity by id , recommend use get(String id)
+     * @param id
+     * @return
+     */
+    public T findById(String id);
+    /**
      * find entity by id List
      * @param idList
      * @return List<T>
@@ -302,14 +308,14 @@ public  interface  IJpaRepository <T> {
     /**
      * delete entity by Query
      * @param Query
-     * @return
+     * @return boolean
      */
     public boolean delete(Query query) ;
     
     /**
      * delete entity by LambdaQuery
      * @param Query
-     * @return
+     * @return boolean
      */
     public boolean delete(LambdaQuery<T> lambdaQuery) ;
     
@@ -329,9 +335,16 @@ public  interface  IJpaRepository <T> {
     public boolean deleteBatch(List<String> idList,String partitionKey) ;
     
     /**
+     * delete entity by id , recommend use delete(String id)
+     * @param id
+     * @return boolean
+     */
+    public boolean deleteById(String id);
+    
+    /**
      * delete one entity by id
      * @param id
-     * @return
+     * @return boolean
      */
     public boolean delete(String id);
     
@@ -339,14 +352,14 @@ public  interface  IJpaRepository <T> {
      * delete one entity by id
      * @param id
      * @param partitionKey
-     * @return
+     * @return boolean
      */
     public boolean delete(String id,String partitionKey);
     
     /**
      * logicDelete entity by ids
      * @param idList
-     * @return
+     * @return boolean
      */
     public boolean softDelete(List<String> idList) ;
     
@@ -354,28 +367,28 @@ public  interface  IJpaRepository <T> {
      * logicDelete entity by ids
      * @param idList
      * @param partitionKey
-     * @return
+     * @return boolean
      */
     public boolean softDelete(List<String> idList,String partitionKey) ;
     
     /**
      * logicDelete entity by id
      * @param id string
-     * @return
+     * @return boolean
      */
     public boolean softDelete(String id) ;
     
     /**
      * logic Delete entity by Query
      * @param Query
-     * @return
+     * @return boolean
      */
     public boolean softDelete(Query query) ;
     
     /**
      * logic Delete entity by Query
      * @param Query
-     * @return
+     * @return boolean
      */
     public boolean softDelete(LambdaQuery <T> lambdaQuery) ;
 

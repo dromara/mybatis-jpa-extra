@@ -1,5 +1,5 @@
 /*
- * Copyright [2024] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2025] [MaxKey of copyright http://www.maxkey.top]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,11 @@
  */
  
 
-package org.dromara.mybatis.jpa.mapper;
-
-import org.apache.ibatis.annotations.InsertProvider;
-import org.dromara.mybatis.jpa.provider.MapperProvider;
+package org.dromara.mybatis.jpa.entity;
 
 /**
- * IJpa IJpaInsertMapper
- * @author Crystal.sea
- * @param <T>
+ * PageRequest
  */
-public interface IJpaInsertMapper<T> {
+public class PageRequest extends JpaPage{
 
-    //follow function for insert
-    @InsertProvider(type = MapperProvider.class, method = "insert")
-    public Integer insert(T entity);
-            
 }

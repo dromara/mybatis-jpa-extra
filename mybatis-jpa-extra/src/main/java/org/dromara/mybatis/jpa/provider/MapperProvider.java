@@ -20,6 +20,7 @@
  */
 package org.dromara.mybatis.jpa.provider;
 
+import java.util.List;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
@@ -103,6 +104,14 @@ public class MapperProvider <T extends JpaEntity>{
      */
     public String insert(T entity) {
         return new InsertProvider().insert(entity);
+    }
+    
+    /**
+     * @param List<T> entity
+     * @return insert sql script
+     */
+    public String insertBatch(List<T> listEntity) {
+        return new InsertProvider().insertBatch(listEntity);
     }
 
     //update

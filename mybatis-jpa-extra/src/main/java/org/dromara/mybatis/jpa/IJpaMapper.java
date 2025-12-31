@@ -17,25 +17,20 @@
 
 package org.dromara.mybatis.jpa;
 
-import org.dromara.mybatis.jpa.mapper.IJpaDeleteMapper;
 import org.dromara.mybatis.jpa.mapper.IJpaFetchMapper;
 import org.dromara.mybatis.jpa.mapper.IJpaFindMapper;
-import org.dromara.mybatis.jpa.mapper.IJpaInsertMapper;
 import org.dromara.mybatis.jpa.mapper.IJpaSoftDeleteMapper;
-import org.dromara.mybatis.jpa.mapper.IJpaUpdateMapper;
-import org.dromara.mybatis.jpa.mapper.IJpaQueryMapper;
+import org.dromara.mybatis.jpa.mapper.IJpaCrudMapper;
 
 /**
  * IJpa Mapper
  * @author Crystal.sea
  * @param <T>
  */
-public interface IJpaMapper<T> extends  IJpaQueryMapper<T>,
+public interface IJpaMapper<T> extends  IJpaCrudMapper<T>,
                                         IJpaFetchMapper<T>,
                                         IJpaFindMapper<T>,
-                                        IJpaSoftDeleteMapper<T>,
-                                        IJpaDeleteMapper<T>,
-                                        IJpaInsertMapper<T>,
-                                        IJpaUpdateMapper<T>{
+                                        IJpaSoftDeleteMapper<T>
+                                        {
             
 }

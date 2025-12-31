@@ -45,6 +45,26 @@ public class CurdTestRunner  extends BaseTestRunner{
         _logger.info("insert id {}" , student.getId());
     }
     
+    
+    @Test
+    void insertBatch(){
+        _logger.info("insertBatch...");
+        List<Students> list = new ArrayList<>();
+        for(int i=0;i<10;i++) {
+	        Students student=new Students();
+	        student.setStdNo("10024_"+i);
+	        student.setStdGender("M");
+	        student.setPassword("shimingxy");
+	        student.setStdName("司马昭");
+	        student.setStdAge(20);
+	        student.setStdMajor("政治");
+	        student.setStdClass("4");
+	        list.add(student);
+        }
+        service.insertBatch(list);
+        _logger.info("insertBatch finish");
+    }
+    
     @Test
     void merge(){
         _logger.info("merge...");

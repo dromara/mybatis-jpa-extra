@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * JPA Base Repository
+ * Abstract JPA Repository
  * @author Crystal.Sea
  *
  * @param <T>
@@ -264,6 +264,15 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      */
     public T findOne(String filter) {
         return findOne( filter ,null , null);
+    }
+    
+    /**
+     * find one entity by entity id
+     * @param id
+     * @return
+     */
+    public T findById(String id) {
+        return this.get(id);
     }
     
     /**
@@ -501,20 +510,14 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
     
     /**
      * insert entity with batch
-     * @param listEntity
+     * @param List<T> listEntity
      * @return
      */
     public boolean insertBatch(List<T> listEntity){
         try {
             if(CollectionUtils.isNotEmpty(listEntity)) {
-                Integer count = 0;
-                for(T entity  : listEntity) {
-                    if(getMapper().insert(entity)>0) {
-                        count ++;
-                    }
-                }
+            	    Integer count = getMapper().insertBatch(listEntity) ;
                 logger.debug("Insert Batch count : {}" , count);
-                return count > 0;
             }
         } catch(Exception e) {
             logger.error("Insert Batch Exception " , e);
@@ -692,6 +695,15 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
             logger.error("deleteBatch Exception " , e);
         }
         return false;
+    }
+    
+    /**
+     * delete entity by id
+     * @param id
+     * @return boolean
+     */
+    public boolean deleteById(String id){
+        return this.delete(id);
     }
     
     /**

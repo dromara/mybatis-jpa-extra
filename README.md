@@ -48,7 +48,7 @@
 
 ## 1.2、主键策略
 
-支持3种主键策略
+支持3种主键Id策略
 
 | 序号    | 策略      |   支持  |
 | --------| :-----        | :----   |
@@ -451,17 +451,20 @@ mybatis.table-column-escape=true
 #mybatis.configuration.map-underscore-to-camel-case=true
 ```
 
-##  5、相关资源
+##  5、案例
+
+|  项目         |  代码 |
+| ---           | ---   |
+|  MaxKey单点登录认证系统        | <a href="https://github.com/dromara/MaxKey" target="_blank">GitHub源码</a> -<a href="https://gitee.com/dromara/MaxKey" target="_blank">Gitee源码</a> |
+|  Surpass API开放平台           | <a href="https://github.com/tomsun28/surpass" target="_blank">GitHub源码</a> -<a href="https://gitee.com/tomsun28/bootshiro" target="_blank">Gitee源码</a> |
+
+
+##  6、MyBatis资源
 
 [MyBatis网站][1]
 
-[MyBatis GitHub源码][2]
+[MyBatis 源码][2]
 
-[MaxKey单点登录认证系统 GitHub源码][3]
 
-[MaxKey单点登录认证系统 Gitee源码][4]
-
-  [1]: http://www.mybatis.org/mybatis-3/
-  [2]: https://github.com/mybatis/mybatis-3/
-  [3]: https://github.com/dromara/MaxKey
-  [4]: https://gitee.com/dromara/MaxKey
+[1]: http://www.mybatis.org/mybatis-3/
+[2]: https://github.com/mybatis/mybatis-3/
