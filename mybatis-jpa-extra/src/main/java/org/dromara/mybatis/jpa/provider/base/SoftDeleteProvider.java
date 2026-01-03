@@ -20,14 +20,12 @@
  */
 package org.dromara.mybatis.jpa.provider.base;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
-import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
@@ -42,28 +40,41 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class SoftDeleteProvider <T extends JpaEntity>{    
+public class SoftDeleteProvider <T extends JpaEntity,ID extends Serializable>{    
     static final Logger logger     =     LoggerFactory.getLogger(SoftDeleteProvider.class);
 
-    @SuppressWarnings("unchecked")
+    
+    public String softDeleteById(Map<String, Object>  parametersMap) { 
+        Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        ColumnMetadata.buildColumnMapper(entityClass);
+        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
+        ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+        
+        SQL sql=new SQL()
+                .UPDATE(TableMetadata.getTableName(entityClass))
+                .SET(" %s = '%s' ".formatted(
+                        logicColumnMapper.getColumn(),
+                        logicColumnMapper.getSoftDelete().delete()
+                    )
+                );
+        
+        if(partitionKeyColumnMapper != null) {
+            sql.WHERE(" %s = #{partitionKey} "
+                    .formatted(partitionKeyColumnMapper.getColumn()));  
+        }
+        
+        sql.WHERE("%s = #{id}".formatted(idFieldColumnMapper.getColumn()) );  
+        
+        String deleteSql = sql.toString(); 
+        logger.trace("softDelete SQL \n{}" , deleteSql);
+        return deleteSql;  
+    }
+    
     public String softDelete(Map<String, Object>  parametersMap) { 
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
-        ArrayList <String> idValues=(ArrayList<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
-        
-        StringBuilder keyValue = new StringBuilder();
-        for(String value : idValues) {
-            if(StringUtils.isNotBlank(value)) {
-                keyValue.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
-                logger.trace("softDelete by id {}" , value);
-            }
-        }
-        /**
-         *  remove ;
-         */
-        String keyValues = keyValue.substring(1).replace(";", "");
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
         ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
@@ -74,22 +85,23 @@ public class SoftDeleteProvider <T extends JpaEntity>{
                         logicColumnMapper.getSoftDelete().delete()
                     )
                 );
-        
-        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-            sql.WHERE("%s = #{%s} and %s  in ( %s )"
-                    .formatted(
-                            partitionKeyColumnMapper.getColumn() ,
-                            partitionKeyValue,
-                            idFieldColumnMapper.getColumn(),
-                            idFieldColumnMapper.getField())
-                    );  
-        }else {
-            sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),keyValues));  
+        StringBuilder deleteSql = new StringBuilder("");
+        deleteSql.append("<script>").append("\n").append("\n")
+            .append(sql.toString()).append("\n")
+            .append("WHERE ")
+            .append(idFieldColumnMapper.getColumn())
+            .append(" in (\n")
+            .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")
+            .append("  #{item} ").append("\n")
+            .append(" </foreach>")
+            .append(" )\n");
+        if(partitionKeyColumnMapper != null) {
+            deleteSql.append(" and %s = #{partitionKey} )"
+                    .formatted(partitionKeyColumnMapper.getColumn()));  
         }
-        
-        String deleteSql = sql.toString(); 
+        deleteSql.append("\n").append("</script>");
         logger.trace("softDelete SQL \n{}" , deleteSql);
-        return deleteSql;  
+        return deleteSql.toString();  
     } 
     
     public String softDeleteByQuery(Class<?> entityClass, Query query) {

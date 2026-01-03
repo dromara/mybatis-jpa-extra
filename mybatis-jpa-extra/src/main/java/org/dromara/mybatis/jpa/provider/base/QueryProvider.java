@@ -16,6 +16,8 @@
 
 package org.dromara.mybatis.jpa.provider.base;
 
+import java.io.Serializable;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
@@ -36,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class QueryProvider<T extends JpaEntity> {
+public class QueryProvider<T extends JpaEntity,ID extends Serializable> {
     static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
     public String queryByQuery(Class<?> entityClass, Query query) {

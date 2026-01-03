@@ -20,6 +20,9 @@ package org.dromara.mybatis.jpa;
 import org.dromara.mybatis.jpa.mapper.IJpaFetchMapper;
 import org.dromara.mybatis.jpa.mapper.IJpaFindMapper;
 import org.dromara.mybatis.jpa.mapper.IJpaSoftDeleteMapper;
+
+import java.io.Serializable;
+
 import org.dromara.mybatis.jpa.mapper.IJpaCrudMapper;
 
 /**
@@ -27,10 +30,10 @@ import org.dromara.mybatis.jpa.mapper.IJpaCrudMapper;
  * @author Crystal.sea
  * @param <T>
  */
-public interface IJpaMapper<T> extends  IJpaCrudMapper<T>,
-                                        IJpaFetchMapper<T>,
-                                        IJpaFindMapper<T>,
-                                        IJpaSoftDeleteMapper<T>
+public interface IJpaMapper<T, ID extends Serializable> extends  IJpaCrudMapper<T, ID>,
+                                        IJpaFetchMapper<T, ID>,
+                                        IJpaFindMapper<T, ID>,
+                                        IJpaSoftDeleteMapper<T, ID>
                                         {
             
 }

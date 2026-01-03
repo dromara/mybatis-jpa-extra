@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.repository;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.dromara.mybatis.jpa.entity.JpaPage;
@@ -33,7 +34,7 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
  *
  * @param <T>
  */
-public  interface  IJpaRepository <T> {
+public  interface  IJpaRepository <T, ID extends Serializable> {
     
     //follow function for fetch page
     /**
@@ -130,13 +131,13 @@ public  interface  IJpaRepository <T> {
      * @param id
      * @return
      */
-    public T findById(String id);
+    public T findById(ID id);
     /**
      * find entity by id List
      * @param idList
      * @return List<T>
      */
-    public List<T> findByIds(List<String> idList) ;
+    public List<T> findByIds(List<ID> idList) ;
     
     /**
      * find entity by id List
@@ -144,7 +145,7 @@ public  interface  IJpaRepository <T> {
      * @param partitionKey
      * @return List<T>
      */
-    public List<T> findByIds(List<String> idList,String partitionKey) ;
+    public List<T> findByIds(List<ID> idList,String partitionKey) ;
     
     /**
      * findAll data
@@ -157,7 +158,7 @@ public  interface  IJpaRepository <T> {
      * @param id
      * @return
      */
-    public T get(String id) ;
+    public T get(ID id) ;
     
     /**
      * get one entity by entity id
@@ -165,7 +166,7 @@ public  interface  IJpaRepository <T> {
      * @param partitionKey
      * @return T
      */
-    public T get(String id,String partitionKey) ;
+    public T get(ID id,String partitionKey) ;
     
     /**
      *  get one entity by entity 
@@ -324,7 +325,7 @@ public  interface  IJpaRepository <T> {
      * @param idList
      * @return boolean
      */
-    public boolean deleteBatch(List<String> idList) ;
+    public boolean deleteBatch(List<ID> idList) ;
     
     /**
      * batch delete entity by id List
@@ -332,21 +333,21 @@ public  interface  IJpaRepository <T> {
      * @param partitionKey
      * @return boolean
      */
-    public boolean deleteBatch(List<String> idList,String partitionKey) ;
+    public boolean deleteBatch(List<ID> idList,String partitionKey) ;
     
     /**
      * delete entity by id , recommend use delete(String id)
      * @param id
      * @return boolean
      */
-    public boolean deleteById(String id);
+    public boolean deleteById(ID id);
     
     /**
      * delete one entity by id
      * @param id
      * @return boolean
      */
-    public boolean delete(String id);
+    public boolean delete(ID id);
     
     /**
      * delete one entity by id
@@ -354,14 +355,14 @@ public  interface  IJpaRepository <T> {
      * @param partitionKey
      * @return boolean
      */
-    public boolean delete(String id,String partitionKey);
+    public boolean delete(ID id,String partitionKey);
     
     /**
      * logicDelete entity by ids
      * @param idList
      * @return boolean
      */
-    public boolean softDelete(List<String> idList) ;
+    public boolean softDelete(List<ID> idList) ;
     
     /**
      * logicDelete entity by ids
@@ -369,14 +370,14 @@ public  interface  IJpaRepository <T> {
      * @param partitionKey
      * @return boolean
      */
-    public boolean softDelete(List<String> idList,String partitionKey) ;
+    public boolean softDelete(List<ID> idList,String partitionKey) ;
     
     /**
      * logicDelete entity by id
      * @param id string
      * @return boolean
      */
-    public boolean softDelete(String id) ;
+    public boolean softDelete(ID id) ;
     
     /**
      * logic Delete entity by Query

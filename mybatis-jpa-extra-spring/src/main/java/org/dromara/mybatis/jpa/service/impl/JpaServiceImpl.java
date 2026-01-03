@@ -17,6 +17,8 @@
 
 package org.dromara.mybatis.jpa.service.impl;
 
+import java.io.Serializable;
+
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.repository.impl.JpaRepositoryImpl;
@@ -28,7 +30,7 @@ import org.dromara.mybatis.jpa.repository.impl.JpaRepositoryImpl;
  *
  * @param <T>
  */
-public  class  JpaServiceImpl <M extends IJpaMapper<T>, T extends JpaEntity> extends JpaRepositoryImpl<M , T> {
+public  class  JpaServiceImpl <M extends IJpaMapper<T, ID>, T extends JpaEntity, ID extends Serializable > extends JpaRepositoryImpl<M , T, ID> {
 
     public JpaServiceImpl() {
         super();

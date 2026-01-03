@@ -29,7 +29,7 @@ public class FindByTestRunner extends BaseTestRunner{
     @Test
     void findBy(){
         _logger.info("find by");
-        service.findByStdNo("10024");
+       service.findByStdNo("10024");
     }
     
     @Test

@@ -17,6 +17,8 @@
 
 package org.dromara.mybatis.jpa.service;
 
+import java.io.Serializable;
+
 import org.dromara.mybatis.jpa.repository.IJpaRepository;
 
 /**
@@ -25,6 +27,6 @@ import org.dromara.mybatis.jpa.repository.IJpaRepository;
  *
  * @param <T>
  */
-public  interface  IJpaService <T> extends IJpaRepository <T>{
+public  interface  IJpaService <T,ID extends Serializable> extends IJpaRepository <T, ID>{
 
 }

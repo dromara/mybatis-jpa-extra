@@ -5,7 +5,7 @@ import org.dromara.mybatis.jpa.test.entity.TestUser;
 
 import java.util.List;
 
-public interface TestUserService extends IJpaService<TestUser> {
+public interface TestUserService extends IJpaService<TestUser,String> {
 
 
     void insertUser(TestUser user);

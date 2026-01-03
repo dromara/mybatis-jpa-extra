@@ -111,14 +111,14 @@ public class CurdTestRunner  extends BaseTestRunner{
     }
     
     @Test
-    void remove(){
-        _logger.info("remove...");
+    void delete(){
+        _logger.info("delete...");
         service.delete("b1e2-92fb23b5e512");
         service.delete("921d3377-937a-4578-b1e2-92fb23b5e512");
     }
     
     @Test
-    void batchDelete(){
+    void deleteBatch(){
         _logger.info("batchDelete...");
         List<String> idList=new ArrayList<String>();
         idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");

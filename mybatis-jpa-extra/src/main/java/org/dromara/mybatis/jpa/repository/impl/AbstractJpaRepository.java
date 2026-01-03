@@ -17,9 +17,9 @@
 
 package org.dromara.mybatis.jpa.repository.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T>
  */
-public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends JpaEntity> implements IJpaRepository<T>{
+public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T extends JpaEntity, ID extends Serializable > implements IJpaRepository<T, ID>{
     private static final  Logger logger = LoggerFactory.getLogger(AbstractJpaRepository.class);
     
     /**
@@ -271,7 +271,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param id
      * @return
      */
-    public T findById(String id) {
+    public T findById(ID id) {
         return this.get(id);
     }
     
@@ -280,7 +280,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param idList
      * @return List<T>
      */
-    public List<T> findByIds(List<String> idList) {
+    public List<T> findByIds(List<ID> idList) {
         try {
             logger.trace("findByIds {}" , idList);
             List<T> findList = getMapper().findByIds(this.entityClass,idList,null);
@@ -298,7 +298,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param partitionKey
      * @return List<T>
      */
-    public List<T> findByIds(List<String> idList,String partitionKey) {
+    public List<T> findByIds(List<ID> idList,String partitionKey) {
         try {
             logger.trace("findByIds {} , partitionKey {}" , idList , partitionKey);
             List<T> findList = getMapper().findByIds(this.entityClass , idList , partitionKey);
@@ -328,7 +328,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param id
      * @return
      */
-    public T get(String id) {
+    public T get(ID id) {
         try {
             logger.debug("entityClass  {} , primaryKey {}" , entityClass , id);
             return  getMapper().get(this.entityClass,id,null);
@@ -344,7 +344,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param partitionKey
      * @return T
      */
-    public T get(String id,String partitionKey) {
+    public T get(ID id,String partitionKey) {
         try {
             logger.debug("entityClass  {} , primaryKey {} , partitionKey {}" , entityClass , id,partitionKey);
             return  getMapper().get(this.entityClass,id,partitionKey);
@@ -667,7 +667,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param idList
      * @return boolean
      */
-    public boolean deleteBatch(List<String> idList) {
+    public boolean deleteBatch(List<ID> idList) {
         try {
             logger.trace("deleteBatch {}" , idList);
             Integer count = getMapper().deleteBatch(this.entityClass,idList,null);
@@ -685,7 +685,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param partitionKey
      * @return boolean
      */
-    public boolean deleteBatch(List<String> idList,String partitionKey) {
+    public boolean deleteBatch(List<ID> idList,String partitionKey) {
         try {
             logger.trace("deleteBatch {} , partitionKey {}" , idList , partitionKey);
             Integer count = getMapper().deleteBatch(this.entityClass , idList , partitionKey);
@@ -702,7 +702,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param id
      * @return boolean
      */
-    public boolean deleteById(String id){
+    public boolean deleteById(ID id){
         return this.delete(id);
     }
     
@@ -711,7 +711,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param id
      * @return
      */
-    public boolean delete(String id){
+    public boolean delete(ID id){
         try {
             logger.debug("id {} " , id );
             Integer count=getMapper().deleteById(this.entityClass,id,null);
@@ -729,7 +729,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param partitionKey
      * @return
      */
-    public boolean delete(String id,String partitionKey){
+    public boolean delete(ID id,String partitionKey){
         try {
             logger.debug("id {} , partitionKey {}" , id , partitionKey);
             Integer count = getMapper().deleteById(this.entityClass,id,partitionKey);
@@ -746,7 +746,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param idList
      * @return
      */
-    public boolean softDelete(List<String> idList) {
+    public boolean softDelete(List<ID> idList) {
         try {
             logger.trace("softDelete idList {}" , idList);
             Integer count = getMapper().softDelete(this.entityClass,idList,null);
@@ -764,7 +764,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param partitionKey
      * @return
      */
-    public boolean softDelete(List<String> idList,String partitionKey) {
+    public boolean softDelete(List<ID> idList,String partitionKey) {
         try {
             logger.trace("softDelete idList {} , partitionKey {}" , idList , partitionKey);
             Integer count = getMapper().softDelete(this.entityClass,idList,partitionKey);
@@ -781,10 +781,33 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T>, T extends
      * @param id string
      * @return
      */
-    public boolean softDelete(String id) {
-        List<String> idList = new ArrayList<>();
-        idList.add(id);
-        return softDelete(idList);
+    public boolean softDelete(ID id) {
+        try {
+            logger.trace("softDelete id {}" , id );
+            Integer count = getMapper().softDeleteById(this.entityClass,id,null);
+            logger.debug("softDelete id count : {}" , count);
+            return count > 0;
+        } catch(Exception e) {
+            logger.error("softDelete id Exception " , e);
+        }
+        return true;
+    }
+    
+    /**
+     * logicDelete entity by id
+     * @param id string
+     * @return
+     */
+    public boolean softDelete(ID id,String partitionKey) {
+        try {
+            logger.trace("softDelete id {} , partitionKey {}" , id , partitionKey);
+            Integer count = getMapper().softDeleteById(this.entityClass,id,partitionKey);
+            logger.debug("softDelete id and partitionKey count : {}" , count);
+            return count > 0;
+        } catch(Exception e) {
+            logger.error("softDelete id and partitionKey Exception " , e);
+        }
+        return true;
     }
     
     /**

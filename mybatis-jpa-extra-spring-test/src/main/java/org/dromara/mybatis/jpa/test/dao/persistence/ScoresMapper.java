@@ -32,7 +32,7 @@ import org.dromara.mybatis.jpa.test.entity.Scores;
  */
 
 @Mapper
-public interface ScoresMapper extends IJpaMapper<Scores> {
+public interface ScoresMapper extends IJpaMapper<Scores,String> {
 
     public List<Scores> fetchPageResults1(Scores entity);
 

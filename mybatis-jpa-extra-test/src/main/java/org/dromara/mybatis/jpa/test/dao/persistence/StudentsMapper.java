@@ -35,7 +35,7 @@ import org.dromara.mybatis.jpa.test.entity.StudentVo;
  */
 
 @Mapper
-public interface StudentsMapper extends IJpaMapper<Students> {
+public interface StudentsMapper extends IJpaMapper<Students,String> {
 
     public List<Students> fetchPageResults1(Students entity);
 

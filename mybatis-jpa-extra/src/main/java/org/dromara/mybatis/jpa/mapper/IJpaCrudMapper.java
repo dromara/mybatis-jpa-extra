@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.mapper;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.annotations.DeleteProvider;
@@ -36,7 +37,7 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
  * @author Crystal.sea
  * @param <T>
  */
-public interface IJpaCrudMapper<T> {
+public interface IJpaCrudMapper<T, ID extends Serializable> {
 
     //follow function for delete
     /**
@@ -63,8 +64,8 @@ public interface IJpaCrudMapper<T> {
      * @return
      */
     @DeleteProvider(type = MapperProvider.class, method = "deleteById")
-    public Integer deleteById(    @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
-                            @Param (ConstMetadata.PARAMETER_ID) String id,
+    public Integer deleteById(@Param (ConstMetadata.ENTITY_CLASS)          Class<?> entityClass,
+                            @Param (ConstMetadata.PARAMETER_ID)            ID id,
                             @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
     
     /**
@@ -77,7 +78,7 @@ public interface IJpaCrudMapper<T> {
     @DeleteProvider(type = MapperProvider.class, method = "deleteBatch")
     public Integer deleteBatch(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
-                            @Param (ConstMetadata.PARAMETER_ID_LIST)         List<String> idList,
+                            @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
                             @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);    
      
     //follow function for insert or save
@@ -111,8 +112,8 @@ public interface IJpaCrudMapper<T> {
      */
     @SelectProvider(type = MapperProvider.class, method = "get")
     public T get(
-                    @Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass,
-                    @Param (ConstMetadata.PARAMETER_ID) String id,
+                    @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
+                    @Param (ConstMetadata.PARAMETER_ID)            ID id,
                     @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
     
     @SelectProvider(type = MapperProvider.class, method = "query")

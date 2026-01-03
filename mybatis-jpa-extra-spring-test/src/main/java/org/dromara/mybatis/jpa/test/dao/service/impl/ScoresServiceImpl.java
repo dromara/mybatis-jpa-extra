@@ -26,7 +26,7 @@ import org.dromara.mybatis.jpa.test.entity.Scores;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ScoresServiceImpl extends JpaServiceImpl<ScoresMapper,Scores> implements ScoresService{
+public class ScoresServiceImpl extends JpaServiceImpl<ScoresMapper,Scores,String> implements ScoresService{
 
     public ScoresServiceImpl() {
     }

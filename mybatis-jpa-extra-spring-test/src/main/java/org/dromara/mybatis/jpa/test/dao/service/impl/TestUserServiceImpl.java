@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Service
-public class TestUserServiceImpl extends JpaServiceImpl<TestUserMapper, TestUser> implements TestUserService {
+public class TestUserServiceImpl extends JpaServiceImpl<TestUserMapper, TestUser,String> implements TestUserService {
 
     @Autowired
     private TestUserMapper userMapper;

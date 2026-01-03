@@ -86,6 +86,10 @@ public class MapperProvider <T extends JpaEntity>{
         return new DeleteProvider().deleteByLambdaQuery(entityClass,lambdaQuery);
     } 
     
+    public String softDeleteById(Map<String, Object>  parametersMap) { 
+        return new SoftDeleteProvider().softDeleteById(parametersMap);
+    }
+    
     public String softDelete(Map<String, Object>  parametersMap) { 
         return new SoftDeleteProvider().softDelete(parametersMap);
     }

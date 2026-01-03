@@ -22,7 +22,7 @@ import java.util.List;
 import org.dromara.mybatis.jpa.service.IJpaService;
 import org.dromara.mybatis.jpa.test.entity.Scores;
 
-public interface ScoresService extends IJpaService<Scores>{
+public interface ScoresService extends IJpaService<Scores,String>{
 
     public List<Scores> fetchPageResults1(Scores entity);
 

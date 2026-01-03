@@ -20,6 +20,7 @@
  */
 package org.dromara.mybatis.jpa.provider.base;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +44,7 @@ import jakarta.persistence.GenerationType;
  * @author Crystal.Sea
  *
  */
-public class InsertProvider <T extends JpaEntity>{    
+public class InsertProvider <T extends JpaEntity,ID extends Serializable>{    
     static final Logger logger     =     LoggerFactory.getLogger(InsertProvider.class);
     
     /**

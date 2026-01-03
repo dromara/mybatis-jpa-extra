@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 @Mapper
-public interface TestUserMapper extends IJpaMapper<TestUser> {
+public interface TestUserMapper extends IJpaMapper<TestUser,String> {
 
     @Select("SELECT COUNT(*) FROM test_user")
     int countUsers();

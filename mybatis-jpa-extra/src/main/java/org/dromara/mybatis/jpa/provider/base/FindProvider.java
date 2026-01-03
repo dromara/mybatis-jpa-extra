@@ -20,8 +20,8 @@
  */
 package org.dromara.mybatis.jpa.provider.base;
 
+import java.io.Serializable;
 import java.sql.Types;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class FindProvider <T extends JpaEntity>{
+public class FindProvider <T extends JpaEntity,ID extends Serializable>{
     static final Logger logger     =     LoggerFactory.getLogger(FindProvider.class);
     
     public String findAll(Map<String, Object>  parametersMap) {  
@@ -129,52 +129,40 @@ public class FindProvider <T extends JpaEntity>{
         return findSql;  
     }
     
-    @SuppressWarnings("unchecked")
     public String findByIds(Map<String, Object>  parametersMap) { 
         Class<?> parameterEntityClass = (Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(parameterEntityClass);
-        List <String> parameterIds = (List<String>)parametersMap.get(ConstMetadata.PARAMETER_ID_LIST);
-        
-        StringBuilder keyValues = new StringBuilder();
-        for(String value : parameterIds) {
-            if(StringUtils.isNotBlank(value)) {
-                keyValues.append(",'").append(SafeValueHandler.valueOf(value)).append("'");
-            }
-        }
-        logger.trace("find by id {}" , keyValues);
-        
-        //remove ';'
-        String idsValues = keyValues.substring(1).replace(";", "");
-        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
         ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(parameterEntityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(parameterEntityClass);
         
         SQL sql = TableMetadata.buildSelect(parameterEntityClass);
-        
-        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-            sql.WHERE("%s = #{%s} and %s  in ( %s )"
-                    .formatted(
-                            partitionKeyColumnMapper.getColumn() ,
-                            partitionKeyValue,
-                            idFieldColumnMapper.getColumn(),
-                            idsValues)
-                    );  
-        }else {
-            sql.WHERE(" %s in ( %s )".formatted(idFieldColumnMapper.getColumn(),idsValues));  
+
+        StringBuilder findByIdsSql = new StringBuilder("");
+        findByIdsSql.append("<script>").append("\n").append("\n")
+            .append(sql.toString()).append("\n")
+            .append("WHERE ").append(idFieldColumnMapper.getColumn())
+            .append(" in (\n")
+            .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")
+            .append("  #{item} ").append("\n")
+            .append(" </foreach>")
+            .append(" )\n");
+        //分区字段
+        if(partitionKeyColumnMapper != null) {
+            findByIdsSql.append(" and %s = #{partitionKey} )"
+                    .formatted(partitionKeyColumnMapper.getColumn()));  
         }
-        
+        //逻辑删除
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(parameterEntityClass);
         if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" %s = '%s'"
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
+            findByIdsSql.append(" and %s = '%s'".formatted(
+                        logicColumnMapper.getColumn(),
+                        logicColumnMapper.getSoftDelete().value()));
         }
+        //add close script
+        findByIdsSql.append("\n").append("</script>");
         
-        String findByIdsSql = sql.toString(); 
         logger.trace("Find by ids SQL \n{}" , findByIdsSql);
-        return findByIdsSql;  
+        return findByIdsSql.toString();  
     } 
     
 }

@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.mapper;
 
+import java.io.Serializable;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -28,7 +29,7 @@ import org.dromara.mybatis.jpa.provider.MapperProvider;
  * @author Crystal.sea
  * @param <T>
  */
-public interface IJpaFindMapper<T> {
+public interface IJpaFindMapper<T, ID extends Serializable> {
     
     /**
      * 查询所有数据
@@ -48,7 +49,7 @@ public interface IJpaFindMapper<T> {
     @SelectProvider(type = MapperProvider.class, method = "findByIds")
     public List<T> findByIds(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?>     entityClass,
-                            @Param (ConstMetadata.PARAMETER_ID_LIST)         List<String> idList,
+                            @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
                             @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
 
     /**
@@ -61,8 +62,8 @@ public interface IJpaFindMapper<T> {
      */
     @SelectProvider(type = MapperProvider.class, method = "find")
     public List<T> find(    @Param (ConstMetadata.ENTITY_CLASS)    Class<?>     entityClass,
-                            @Param (ConstMetadata.QUERY_FILTER)    String         filter,
-                            @Param (ConstMetadata.QUERY_ARGS)         Object[]     args, 
-                            @Param (ConstMetadata.QUERY_ARGTYPES)     int[]         argTypes);
+                            @Param (ConstMetadata.QUERY_FILTER)    String       filter,
+                            @Param (ConstMetadata.QUERY_ARGS)      Object[]     args, 
+                            @Param (ConstMetadata.QUERY_ARGTYPES)  int[]        argTypes);
     
 }

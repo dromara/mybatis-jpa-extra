@@ -8,7 +8,7 @@ import org.dromara.mybatis.jpa.test.entity.StudentQueryDto;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.dromara.mybatis.jpa.test.entity.StudentVo;
 
-public interface StudentsService extends IJpaService<Students>{
+public interface StudentsService extends IJpaService<Students,String>{
 
     public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) ;
     

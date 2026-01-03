@@ -27,7 +27,7 @@ import org.dromara.mybatis.jpa.test.entity.StudentQueryDto;
 import org.dromara.mybatis.jpa.test.entity.Students;
 import org.dromara.mybatis.jpa.test.entity.StudentVo;
 
-public class StudentsServiceImpl extends AbstractJpaRepository<StudentsMapper,Students> implements StudentsService{
+public class StudentsServiceImpl extends AbstractJpaRepository<StudentsMapper,Students,String> implements StudentsService{
 
     @SuppressWarnings("unchecked")
     public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) {

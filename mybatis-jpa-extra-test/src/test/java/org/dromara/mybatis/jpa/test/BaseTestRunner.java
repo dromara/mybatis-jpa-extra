@@ -23,6 +23,8 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.dromara.mybatis.jpa.dialect.DialectMapper;
+import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
 import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
@@ -41,6 +43,11 @@ public class BaseTestRunner {
         String resource = "config/mybatis-config.xml";
         InputStream inputStream = Resources.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        
+        StatementHandlerInterceptor statementHandlerInterceptor =new StatementHandlerInterceptor();
+        statementHandlerInterceptor.setDialectString(DialectMapper.getDialect("mysql"));
+        //select for page and findBy
+        sqlSessionFactory.getConfiguration().addInterceptor(statementHandlerInterceptor);
         SqlSession sqlSession = sqlSessionFactory.openSession(true);
         new InitDatabase().init(sqlSession.getConnection());
         StudentsMapper studentsMapper = sqlSession.getMapper(StudentsMapper.class);

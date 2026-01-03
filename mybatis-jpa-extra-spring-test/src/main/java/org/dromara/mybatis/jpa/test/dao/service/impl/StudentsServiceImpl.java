@@ -29,7 +29,7 @@ import org.dromara.mybatis.jpa.test.entity.StudentVo;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students> implements StudentsService{
+public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students,String> implements StudentsService{
 
     @SuppressWarnings("unchecked")
     public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) {

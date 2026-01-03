@@ -17,6 +17,8 @@
 
 package org.dromara.mybatis.jpa.repository.impl;
 
+import java.io.Serializable;
+
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @param <T>
  */
-public  class  JpaRepositoryImpl <M extends IJpaMapper<T>, T extends JpaEntity> extends AbstractJpaRepository<M,T>{
+public  class  JpaRepositoryImpl <M extends IJpaMapper<T, ID >, T extends JpaEntity, ID extends Serializable  > extends AbstractJpaRepository<M,T, ID>{
  
     @Autowired
     private M mapper;

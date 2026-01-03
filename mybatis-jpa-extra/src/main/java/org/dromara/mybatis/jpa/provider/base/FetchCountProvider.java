@@ -20,6 +20,7 @@
  */
 package org.dromara.mybatis.jpa.provider.base;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.mapping.BoundSql;
@@ -39,7 +40,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  * @author Crystal.Sea
  *
  */
-public class FetchCountProvider <T extends JpaEntity>{    
+public class FetchCountProvider <T extends JpaEntity,ID extends Serializable>{    
     static final Logger logger     =     LoggerFactory.getLogger(FetchCountProvider.class);
     
     /**

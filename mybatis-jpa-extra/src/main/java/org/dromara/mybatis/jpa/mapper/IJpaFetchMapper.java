@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.mapper;
 
+import java.io.Serializable;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -31,7 +32,7 @@ import org.dromara.mybatis.jpa.query.Query;
  * @author Crystal.sea
  * @param <T>
  */
-public interface IJpaFetchMapper<T>{
+public interface IJpaFetchMapper<T, ID extends Serializable>{
     
     @SelectProvider(type = MapperProvider.class, method = "fetchCount")
     public Integer fetchCount(JpaPage page);

@@ -20,6 +20,7 @@
  */
 package org.dromara.mybatis.jpa.provider.base;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
@@ -35,38 +36,27 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class GetProvider <T extends JpaEntity>{    
+public class GetProvider <T extends JpaEntity,ID extends Serializable>{    
     static final Logger logger     =     LoggerFactory.getLogger(GetProvider.class);
     
     public String get(Map<String, Object>  parametersMap) {
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
-
-        String partitionKeyValue = (String) parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY);
         ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
         SQL sql = TableMetadata.buildSelect(entityClass);
+        sql.WHERE(" %s = #{id} ".formatted(idFieldColumnMapper.getColumn()));
         
-        sql.WHERE(" %s = #{%s}"
-                .formatted(
-                        idFieldColumnMapper.getColumn(),
-                        idFieldColumnMapper.getField())
-                );
-        
-        if(partitionKeyColumnMapper != null && partitionKeyValue != null) {
-            sql.WHERE(" %s = #{%s} ".formatted(
-                    partitionKeyColumnMapper.getColumn() ,
-                    partitionKeyValue));
+        if(partitionKeyColumnMapper != null) {
+            sql.WHERE(" %s = #{partitionKey} \n".formatted(partitionKeyColumnMapper.getColumn()));
         }
         
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
         if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" %s = '%s'"
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
+            sql.WHERE(" %s = '%s'".formatted(
+                        logicColumnMapper.getColumn(),
+                        logicColumnMapper.getSoftDelete().value()));
         }
         
         String getSql = sql.toString(); 
