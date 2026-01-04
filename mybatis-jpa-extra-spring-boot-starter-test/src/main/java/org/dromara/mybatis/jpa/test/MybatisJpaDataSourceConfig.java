@@ -92,7 +92,7 @@ public class MybatisJpaDataSourceConfig {
         return dataSourceBuilder.build(); 
     }*/
 
-    private DataSource createH2DataSource(String database) {
+    public DataSource createH2DataSource(String database) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:h2:mem:" + database + ";DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;");
         config.setUsername("sa");
@@ -104,7 +104,7 @@ public class MybatisJpaDataSourceConfig {
         return new HikariDataSource(config);
     }
     
-    private void initializeDatabase(String dsName,DataSource ds) {
+    public void initializeDatabase(String dsName,DataSource ds) {
         Resource dataDs = new ClassPathResource("/sql/data-ds-h2.sql");
         try {
             ScriptUtils.executeSqlScript(ds.getConnection(), dataDs);

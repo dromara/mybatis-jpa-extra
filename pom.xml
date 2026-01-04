@@ -23,8 +23,8 @@
         <servlet-api.version>6.0.0</servlet-api.version>
         <junit.version>6.0.1</junit.version>
         
-        <spring.version>7.0.1</spring.version>
-        <springboot.version>4.0.0</springboot.version>
+        <spring.version>7.0.2</spring.version>
+        <springboot.version>4.0.1</springboot.version>
         
         <commons-collections.version>4.5.0</commons-collections.version>
         <beanutils.version>1.11.0</beanutils.version>
