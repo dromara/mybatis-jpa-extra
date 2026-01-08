@@ -41,9 +41,9 @@
 | @Column          | 字段(field)  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
 | @Id              | 字段(field)  |  标识主键字段  | 
 | @GeneratedValue  | 字段(field)  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
-| @Encrypted       | 字段(field)  |  注解用于标记需要加密的字段，支持多种加密算法（如 SM4、AES、DES、DESede）  | 
+| @Encrypted       | 字段(field)  |  标记需要加密的字段，支持多种加密算法（如SM4、AES、DES、DESede）  | 
 | @PartitionKey    | 字段(field)  |  分库分表，多租户区分  | 
-| @SoftDelete      | 字段(field)  |  注解用于标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1），而非物理删除数据  | 
+| @SoftDelete      | 字段(field)  |  标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1） | 
 | @ColumnDefault   | 字段(field)  |  字段设置默认值，避免手动初始化  | 
 | @Transient       | 字段(field)  |  标识字段不映射到数据库列  |
 
