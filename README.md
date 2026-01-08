@@ -34,16 +34,18 @@
 
 ## 1.1、注释
 
- * @Entity
- * @Table
- * @Column
- * @ColumnDefault
- * @Id
- * @GeneratedValue
- * @Encrypted
- * @Transient 
- * @PartitionKey
- * @SoftDelete
+| 序号    | 注释      | 作用范围    |功能描述 |
+| --------| :-----        | :----   | :----   |
+| 1     | @Entity          | 类(class)    |  标识一个类为JPA实体，映射到数据库表  | 
+| 2     | @Table           | 类(class)    |  指定实体类对应的数据库表名  | 
+| 3     | @Column          | 字段(field)  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
+| 4     | @Id              | 字段(field)  |  标识主键字段  | 
+| 5     | @GeneratedValue  | 字段(field)  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
+| 6     | @Encrypted       | 字段(field)  |  注解用于标记需要加密的字段，支持多种加密算法（如 SM4、AES、DES、DESede）  | 
+| 7     | @PartitionKey    | 字段(field)  |  分库分表，多租户区分  | 
+| 8     | @SoftDelete      | 字段(field)  |  注解用于标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1），而非物理删除数据  | 
+| 9     | @ColumnDefault   | 字段(field)  |  字段设置默认值，避免手动初始化  | 
+| 10    | @Transient       | 字段(field)  |  标识字段不映射到数据库列  |
 
 
 ## 1.2、主键策略
@@ -56,43 +58,7 @@
 | 2     | SEQUENCE      | 数据库序列生成，generator值为数据库序列名 | 
 | 3     | IDENTITY      | 数据库表自增主键  |
 
-## 1.3、Java Bean 注释
 
-```java
-@Entity
-@Table(name = "STUDENTS")  
-public class Students extends JpaEntity implements Serializable{
-    @Id
-    @Column
-    @GeneratedValue
-    private String id;
-    @Column
-    private String stdNo;
-    @Column
-    @Encrypted
-    private String password;
-    @Column
-    private String stdName;
-    @Column
-    @ColumnDefault("'M'")
-    private String stdGender;
-    @Column
-    private int stdAge;
-    @Column
-    private String stdMajor;
-    @Column
-    private String stdClass;
-    @Column
-    private byte[] images;
-    @Column(insertable = false)
-    @GeneratedValue
-    private LocalDateTime modifyDate;
-    @SoftDelete
-    @Column(name ="is_deleted")
-    private int isDeleted;
-    //getter setter
-}
-```
 ## 2、基本操作
 
 ## 2.1、CURD
@@ -390,7 +356,104 @@ public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
 }
 
 ```
-## 3、mapper配置
+
+## 3、 使用方法
+
+### 3.1、Java Bean 注释
+
+```java
+@Entity
+@Table(name = "STUDENTS")  
+public class Students extends JpaEntity implements Serializable{
+    @Id
+    @Column
+    @GeneratedValue
+    private String id;
+    @Column
+    private String stdNo;
+    @Column
+    @Encrypted
+    private String password;
+    @Column
+    private String stdName;
+    @Column
+    @ColumnDefault("'M'")
+    private String stdGender;
+    @Column
+    private int stdAge;
+    @Column
+    private String stdMajor;
+    @Column
+    private String stdClass;
+    @Column
+    private byte[] images;
+    @Column(insertable = false)
+    @GeneratedValue
+    private LocalDateTime modifyDate;
+    @SoftDelete
+    @Column(name ="is_deleted")
+    private int isDeleted;
+    //getter setter
+}
+```
+
+### 3.2、Mapper定义
+
+```java
+@Mapper
+public interface StudentsMapper extends IJpaMapper<Students,String> {
+
+    //根据mapper.xml的fetchPageResults语句分页查询
+    public List<Students> fetchPageResults(Students entity);
+
+    //根据mapper.xml的fetchPageResults1语句自定义分页查询
+    public List<Students> fetchPageResults1(Students entity);
+
+    //根据mapper.xml的fetchPageResultsVo语句自定返回类型分页查询，返回类型JpaPageResults<StudentVo>
+    public List<StudentVo> fetchPageResultsVo(StudentQueryDto entity);
+
+    //实现JPA findBy功能，无需写SQL
+    @Select({})
+    public List<Students> findByStdNo(String stdNo);
+
+}
+```
+
+### 3.3、Service接口
+
+```java
+public interface StudentsService extends IJpaService<Students,String>{
+
+    //fetchPageResults/fetchPageResults1无需定义接口
+
+    public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) ;
+
+    public List<Students> findByStdNo(String stdNo);
+}
+```
+
+### 3.4、Service实现
+
+```java
+public class StudentsServiceImpl extends AbstractJpaRepository<StudentsMapper,Students,String> implements StudentsService{
+    
+    //fetchPageResults/fetchPageResults1无需定义实现
+
+    //自定义返回类型JpaPageResults<StudentVo>
+    @SuppressWarnings("unchecked")
+    public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) {
+        entity.build();
+        return (JpaPageResults<StudentVo>) this.buildPageResults(entity, getMapper().fetchPageResultsVo(entity));
+    }
+    
+    //mapper findBy调用
+    public List<Students> findByStdNo(String stdNo) {
+        return getMapper().findByStdNo(stdNo);
+    }
+}
+```
+
+### 3.5、mapper配置
 
 ```xml
 <mapper namespace="org.apache.mybatis.jpa.test.dao.persistence.StudentsMapper" >
@@ -433,7 +496,7 @@ public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
 
 ```
 
-##  4、SpringBoot配置
+###  3.6、SpringBoot配置
 
 ```ini
 #
@@ -451,7 +514,35 @@ mybatis.table-column-escape=true
 #mybatis.configuration.map-underscore-to-camel-case=true
 ```
 
-##  5、案例
+###  3.7、依赖引用
+如果依赖得版本是`3.4.1`,项目的配置如下
+### 3.7.1 Maven依赖
+```xml
+<dependency>
+    <groupId>org.dromara.mybatis-jpa-extra</groupId>
+    <artifactId>mybatis-jpa-extra</artifactId>
+    <version>3.4.1</version>
+</dependency>
+<dependency>
+    <groupId>org.dromara.mybatis-jpa-extra</groupId>
+    <artifactId>mybatis-jpa-extra-spring</artifactId>
+    <version>3.4.1</version>
+</dependency>
+<dependency>
+    <groupId>org.dromara.mybatis-jpa-extra</groupId>
+    <artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
+    <version>3.4.1</version>
+</dependency>
+```
+
+### 3.7.2 Gradle依赖
+```ini
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.4.1'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.1'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.1'
+```
+
+##  4、案例
 
 |  项目         |  代码 |
 | ---           | ---   |
@@ -459,7 +550,7 @@ mybatis.table-column-escape=true
 |  Surpass API开放平台           | <a href="https://github.com/tomsun28/surpass" target="_blank">GitHub源码</a> -<a href="https://gitee.com/tomsun28/bootshiro" target="_blank">Gitee源码</a> |
 
 
-##  6、MyBatis资源
+##  5、MyBatis资源
 
 [MyBatis网站][1]
 
