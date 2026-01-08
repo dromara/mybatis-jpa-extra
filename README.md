@@ -34,29 +34,29 @@
 
 ## 1.1、注释
 
-| 序号    | 注释      | 作用范围    |功能描述 |
-| --------| :-----        | :----   | :----   |
-| 1     | @Entity          | 类(class)    |  标识一个类为JPA实体，映射到数据库表  | 
-| 2     | @Table           | 类(class)    |  指定实体类对应的数据库表名  | 
-| 3     | @Column          | 字段(field)  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
-| 4     | @Id              | 字段(field)  |  标识主键字段  | 
-| 5     | @GeneratedValue  | 字段(field)  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
-| 6     | @Encrypted       | 字段(field)  |  注解用于标记需要加密的字段，支持多种加密算法（如 SM4、AES、DES、DESede）  | 
-| 7     | @PartitionKey    | 字段(field)  |  分库分表，多租户区分  | 
-| 8     | @SoftDelete      | 字段(field)  |  注解用于标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1），而非物理删除数据  | 
-| 9     | @ColumnDefault   | 字段(field)  |  字段设置默认值，避免手动初始化  | 
-| 10    | @Transient       | 字段(field)  |  标识字段不映射到数据库列  |
+| 注释      | 作用    |功能描述 |
+| :-----        | :----   | :----   |
+| @Entity          | 类(class)    |  标识一个类为JPA实体，映射到数据库表  | 
+| @Table           | 类(class)    |  指定实体类对应的数据库表名  | 
+| @Column          | 字段(field)  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
+| @Id              | 字段(field)  |  标识主键字段  | 
+| @GeneratedValue  | 字段(field)  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
+| @Encrypted       | 字段(field)  |  注解用于标记需要加密的字段，支持多种加密算法（如 SM4、AES、DES、DESede）  | 
+| @PartitionKey    | 字段(field)  |  分库分表，多租户区分  | 
+| @SoftDelete      | 字段(field)  |  注解用于标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1），而非物理删除数据  | 
+| @ColumnDefault   | 字段(field)  |  字段设置默认值，避免手动初始化  | 
+| @Transient       | 字段(field)  |  标识字段不映射到数据库列  |
 
 
 ## 1.2、主键策略
 
 支持3种主键Id策略
 
-| 序号    | 策略      |   支持  |
-| --------| :-----        | :----   |
-| 1     | AUTO          | 主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID) | 
-| 2     | SEQUENCE      | 数据库序列生成，generator值为数据库序列名 | 
-| 3     | IDENTITY      | 数据库表自增主键  |
+| 策略      |   支持  |
+| :-----        | :----   |
+| AUTO          | 主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID) | 
+| SEQUENCE      | 数据库序列生成，generator值为数据库序列名 | 
+| IDENTITY      | 数据库表自增主键  |
 
 
 ## 2、基本操作
