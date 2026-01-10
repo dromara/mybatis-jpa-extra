@@ -359,7 +359,7 @@ public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
 
 ## 3、 使用方法
 
-### 3.1、Java Bean 注释
+### 3.1、实体类定义
 
 ```java
 @Entity
@@ -392,7 +392,7 @@ public class Students extends JpaEntity implements Serializable{
     private LocalDateTime modifyDate;
     @SoftDelete
     @Column(name ="is_deleted")
-    private int isDeleted;
+    private String isDeleted;
     //getter setter
 }
 ```
