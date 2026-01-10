@@ -358,19 +358,25 @@ public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
 @Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaEntity implements Serializable{
-    @Column @Id @GeneratedValue
+    @Id
+    @Column
+    @GeneratedValue
     private String id;
     @Column
     private String stdNo;
-    @Column @Encrypted
+    @Column
+    @Encrypted
     private String password;
     @Column
     private String stdName;
-    @Column @ColumnDefault("'M'")
+    @Column
+    @ColumnDefault("'M'")
     private String stdGender;
-    @Column(insertable = false) @GeneratedValue
+    @Column(insertable = false)
+    @GeneratedValue
     private LocalDateTime modifyDate;
-    @Column(name ="is_deleted") @SoftDelete
+    @SoftDelete
+    @Column(name ="is_deleted")
     private String isDeleted;
     //...
     //getter setter
