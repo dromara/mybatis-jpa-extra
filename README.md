@@ -82,14 +82,7 @@
         Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
         student.setStdMajor("政治");
         service.update(student);
-    }
-    //根据实体查询并更新
-    @Test
-    void merge() throws Exception{
-        Students student = new Students();
-        student.setStdMajor("政治");
-        student.setStdClass("4");
-        service.merge(student);
+        //service.merge(student);
     }
     //根据ID查询
     @Test
@@ -118,7 +111,6 @@
     void batchDelete() throws Exception{
         List<String> idList = new ArrayList<String>();
         idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-        idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
         //...
         service.deleteBatch(idList);
     }
@@ -128,6 +120,10 @@
     //根据IDS批量逻辑删除
     @Test
     void softDelete() throws Exception{
+        //逻辑删除
+        service.softDelete("ab7422e9-a91a-4840-9e59-9d911257c918");
+
+        //批量逻辑删除    
         List<String> idList=new ArrayList<String>();
         idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
         idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
@@ -152,7 +148,9 @@
     @Test
     void queryByCondition() throws Exception{
         List<Students> listStudents = service.query(
-                new Query().eq("stdMajor", "政治").and().gt("STDAGE", 30).and().in("stdMajor", new Object[]{"政治","化学"})
+                new Query().eq("stdMajor", "政治")
+                .and().gt("STDAGE", 30)
+                .and().in("stdMajor", new Object[]{"政治","化学"})
                 .or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
     }
 ```
@@ -177,13 +175,13 @@
     }
 ```
 
-## 2.5、根据mapper的xml分页查询
+## 2.5、多表关联分页查询，根据mapper的xml分页查询
 
 ```java
     //根据Mapper xml配置fetchPageResults分页查询
     @Test
     void fetchPageResults() throws Exception{
-         Students student=new Students();
+         Students student = new Students();
          student.setStdGender("M");
          student.setPageNumber(1);
          JpaPageResults<Students>  results = service.fetchPageResults(student);
@@ -191,7 +189,7 @@
     //根据Mapper xml id分页查询,fetchPageResults1在mapper的xml中配置
     @Test
     void fetchPageResultsByMapperId() throws Exception{
-         Students student=new Students();
+         Students student = new Students();
          student.setStdGender("M");
          student.setPageNumber(1);
          JpaPageResults<Students> results = service.fetchPageResults("fetchPageResults1",student);
@@ -204,21 +202,18 @@
 
     //根据Lambda链式条件构造器查询
     //WHERE (stdMajor = '政治' and STDAGE > 30 and stdMajor in ( '政治' , '化学' )  or  ( stdname = '周瑜' or stdname = '吕蒙' ) )
-    service.query(
-                new LambdaQuery<Students>().eq(Students::getStdMajor, "政治")
-                                     .and().gt(Students::getStdAge, Integer.valueOf(30))
-                                     .and().in(Students::getStdMajor, new Object[]{"政治","化学"})
-                                     .or(
-                                            new LambdaQuery<Students>().eq(Students::getStdName, "周瑜")
-                                                                  .or().eq(Students::getStdName, "吕蒙")
-                                        )
+    service.query(new LambdaQuery<Students>()
+                    .eq(Students::getStdMajor, "政治")
+                    .and().gt(Students::getStdAge, Integer.valueOf(30))
+                    .and().in(Students::getStdMajor, new Object[]{"政治","化学"})
+                    .or( new LambdaQuery<Students>()
+                            .eq(Students::getStdName, "周瑜")
+                            .or().eq(Students::getStdName, "吕蒙"))
                 );
 
     //根据Lambda链式条件构造器分页查询
     //where stdMajor = '政治' and stdAge > 30
-    JpaPage page = new JpaPage();
-    page.setPageSize(20);
-    page.setPageable(true);
+    JpaPage page = new JpaPage(1,20);
     LambdaQuery<Students> lambdaQuery =new LambdaQuery<>();
     lambdaQuery.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30));
     JpaPageResults<Students>  results = service.fetch(page,lambdaQuery);
@@ -241,7 +236,10 @@
                  .eq(Students::getStdMajor, "政治")
                  .and().gt(Students::getStdAge, Integer.valueOf(30))
                  .and().in(Students::getStdMajor, majorList)
-                 .or(new LambdaUpdateWrapper<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙"));
+                 .or(new LambdaUpdateWrapper<Students>()
+                        .eq(Students::getStdName, "周瑜")
+                        .or()
+                        .eq(Students::getStdName, "吕蒙"));
         
     service.update(updateWrapper);
 
@@ -249,7 +247,7 @@
 
 ## 2.8、FindBy查询
 
-实现spring data jpa的findBy功能
+`@Select({})` 标识findBy，实现spring data jpa的findBy功能
 
 ```java
     //Mapper接口定义
@@ -338,23 +336,18 @@
 继承FieldAutoFillHandler，实现insertFill和updateFill函数，可以完成租户字段，创建人、创建时间、修改人、修改时间等默认字段的填充
 
 ```java
-
-import org.apache.ibatis.reflection.MetaObject;
-import org.dromara.mybatis.jpa.handler.FieldAutoFillHandler;
-
 public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
-
+    //插入
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValue(metaObject , "stdNo", "AutoFill_Insert");
     }
-
+    //更新
     @Override
     public void updateFill(MetaObject metaObject) {
         this.setFieldValue(metaObject , "stdNo", "AutoFill_Update");
     }
 }
-
 ```
 
 ## 3、 使用方法
@@ -365,34 +358,21 @@ public class MxkFieldAutoFillHandler  extends FieldAutoFillHandler{
 @Entity
 @Table(name = "STUDENTS")  
 public class Students extends JpaEntity implements Serializable{
-    @Id
-    @Column
-    @GeneratedValue
+    @Column @Id @GeneratedValue
     private String id;
     @Column
     private String stdNo;
-    @Column
-    @Encrypted
+    @Column @Encrypted
     private String password;
     @Column
     private String stdName;
-    @Column
-    @ColumnDefault("'M'")
+    @Column @ColumnDefault("'M'")
     private String stdGender;
-    @Column
-    private int stdAge;
-    @Column
-    private String stdMajor;
-    @Column
-    private String stdClass;
-    @Column
-    private byte[] images;
-    @Column(insertable = false)
-    @GeneratedValue
+    @Column(insertable = false) @GeneratedValue
     private LocalDateTime modifyDate;
-    @SoftDelete
-    @Column(name ="is_deleted")
+    @Column(name ="is_deleted") @SoftDelete
     private String isDeleted;
+    //...
     //getter setter
 }
 ```
@@ -509,8 +489,11 @@ spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 mybatis.dialect=mysql
 mybatis.type-aliases-package=org.apache.mybatis.jpa.test.entity
 mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/${mybatis.dialect}/*.xml
-mybatis.table-column-escape=true
+#定界符
+#mybatis.table-column-escape=false
+#表、字段等定界符
 #mybatis.table-column-escape-char=`
+#驼峰与下划线转换配置，默认 false
 #mybatis.configuration.map-underscore-to-camel-case=true
 ```
 
