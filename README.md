@@ -79,7 +79,7 @@
     //查询数据实体并更新
     @Test
     void update() throws Exception{
-        Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
+        Students student = service.get("1");
         student.setStdMajor("政治");
         service.update(student);
         //service.merge(student);
@@ -87,7 +87,7 @@
     //根据ID查询
     @Test
     void get() throws Exception{
-        Students student = service.get("317d5eda-927c-4871-a916-472a8062df23");
+        Students student = service.get("2");
     }
     //根据实体查询
     @Test
@@ -104,13 +104,13 @@
     //根据ID删除
     @Test
     void delete() throws Exception{
-        service.delete("921d3377-937a-4578-b1e2-92fb23b5e512");
+        service.delete("3");
     }
     //根据ID集合批量删除
     @Test
     void batchDelete() throws Exception{
         List<String> idList = new ArrayList<String>();
-        idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
+        idList.add("4");
         //...
         service.deleteBatch(idList);
     }
@@ -121,12 +121,12 @@
     @Test
     void softDelete() throws Exception{
         //逻辑删除
-        service.softDelete("ab7422e9-a91a-4840-9e59-9d911257c918");
+        service.softDelete("5");
 
         //批量逻辑删除    
         List<String> idList=new ArrayList<String>();
-        idList.add("8584804d-b5ac-45d2-9f91-4dd8e7a090a7");
-        idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
+        idList.add("6");
+        idList.add("7");
         //...
         service.softDelete(idList);
     }
@@ -484,18 +484,18 @@ public class StudentsServiceImpl extends AbstractJpaRepository<StudentsMapper,St
 
 ###  3.6、SpringBoot配置
 
-```ini
+```properties
 #
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost/test?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
 spring.datasource.username=root
 spring.datasource.password=maxkey
-spring.datasource.url=jdbc:mysql://localhost/test?autoReconnect=true&characterEncoding=UTF-8&serverTimezone=UTC
-spring.datasource.driver-class-name=com.mysql.jdbc.Driver
-spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 
 mybatis.dialect=mysql
 mybatis.type-aliases-package=org.apache.mybatis.jpa.test.entity
 mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence/xml/${mybatis.dialect}/*.xml
-#定界符
+#定界符，默认 false
 #mybatis.table-column-escape=false
 #表、字段等定界符
 #mybatis.table-column-escape-char=`
@@ -525,7 +525,7 @@ mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence
 ```
 
 ### 3.7.2 Gradle依赖
-```ini
+```gradle
 implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.4.1'
 implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.1'
 implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.1'
