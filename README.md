@@ -36,12 +36,12 @@
 
 | 注释      | 作用    |功能描述 |
 | :-----        | :----   | :----   |
-| @Entity          | class  |  标识一个类为JPA实体，映射到数据库表  | 
+| @Entity          | class  |  标识一个类为JPA实体  | 
 | @Table           | class  |  指定实体类对应的数据库表名  | 
 | @Column          | field  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
 | @Id              | field  |  标识主键字段  | 
-| @GeneratedValue  | field  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
-| @Encrypted       | field  |  标记需要加密的字段，支持多种加密算法（如SM4、AES、DES、DESede）  | 
+| @GeneratedValue  | field  |  定义主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
+| @Encrypted       | field  |  标记加密的字段，支持加密算法(如SM4、AES、DES、DESede)  | 
 | @PartitionKey    | field  |  分库分表，多租户区分  | 
 | @SoftDelete      | field  |  标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1） | 
 | @ColumnDefault   | field  |  字段设置默认值，避免手动初始化  | 
