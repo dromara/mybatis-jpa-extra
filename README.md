@@ -36,16 +36,16 @@
 
 | 注释      | 作用    |功能描述 |
 | :-----        | :----   | :----   |
-| @Entity          | 类(class)    |  标识一个类为JPA实体，映射到数据库表  | 
-| @Table           | 类(class)    |  指定实体类对应的数据库表名  | 
-| @Column          | 字段(field)  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
-| @Id              | 字段(field)  |  标识主键字段  | 
-| @GeneratedValue  | 字段(field)  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
-| @Encrypted       | 字段(field)  |  标记需要加密的字段，支持多种加密算法（如SM4、AES、DES、DESede）  | 
-| @PartitionKey    | 字段(field)  |  分库分表，多租户区分  | 
-| @SoftDelete      | 字段(field)  |  标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1） | 
-| @ColumnDefault   | 字段(field)  |  字段设置默认值，避免手动初始化  | 
-| @Transient       | 字段(field)  |  标识字段不映射到数据库列  |
+| @Entity          | class  |  标识一个类为JPA实体，映射到数据库表  | 
+| @Table           | class  |  指定实体类对应的数据库表名  | 
+| @Column          | field  |  定义字段与数据库列的映射关系，支持自定义列名、是否可为空等属性  | 
+| @Id              | field  |  标识主键字段  | 
+| @GeneratedValue  | field  |  定主键生成策略，支持AUTO、SEQUENCE和IDENTITY  | 
+| @Encrypted       | field  |  标记需要加密的字段，支持多种加密算法（如SM4、AES、DES、DESede）  | 
+| @PartitionKey    | field  |  分库分表，多租户区分  | 
+| @SoftDelete      | field  |  标记逻辑删除字段。当执行删除操作时，该字段会被更新为标记值（如 y/1） | 
+| @ColumnDefault   | field  |  字段设置默认值，避免手动初始化  | 
+| @Transient       | field  |  标识字段不映射到数据库列  |
 
 
 ## 1.2、主键策略
