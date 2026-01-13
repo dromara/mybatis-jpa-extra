@@ -6,7 +6,7 @@
 
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
-1.Jakarta JPA 3注释**简化CUID操作**;
+1.Jakarta JPA 注释**简化CUID操作**;
     
 2.增强**SELECT分页**查询;
     
@@ -30,7 +30,7 @@
 
 |  <a href="https://gitcode.com/dromara/mybatis-jpa-extra/overview" target="_blank"><b>GitCode</b></a>        |  <a href="https://gitee.com/dromara/mybatis-jpa-extra" target="_blank"><b>Gitee</b></a>  |<a href="https://github.com/dromara/mybatis-jpa-extra" target="_blank"><b>GitHub</b></a>  |
 
-## 1、JPA 3注释
+## 1、JPA 注释
 
 ## 1.1、注释
 
