@@ -67,7 +67,8 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable>{
             column[columnCount++] = columnName;
             boolean isFieldValueNull = Objects.isNull(fieldValue);
             
-            if(isFieldValueNull || fieldType.startsWith("byte")) {
+            if(isFieldValueNull || fieldType.startsWith("byte") 
+            		|| (fieldType.equalsIgnoreCase("String")&&StringUtils.isBlank(fieldValue.toString()))) {
                 //skip null field value
                 if(logger.isTraceEnabled()) {
                     logger.trace("Field {} , Type {} , Value is null , Skiped ",
