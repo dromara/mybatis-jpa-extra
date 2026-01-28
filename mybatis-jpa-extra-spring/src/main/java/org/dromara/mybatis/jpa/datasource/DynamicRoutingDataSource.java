@@ -38,15 +38,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
-    private static final Logger dsLogger = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
+    private static final Logger logger = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
 
     // 默认数据源key
-    private static final String DEFAULT_DATASOURCE_KEY = "default";
+    public static final String DEFAULT_DATASOURCE_KEY = "default";
 
     // 存储数据源的线程安全Map
     private static final Map<Object, Object> DATA_SOURCE_MAP = new ConcurrentHashMap<>();
 
-    // 默认数据源key
+    // 当前默认数据源key
     private static String defaultDataSourceKey = DEFAULT_DATASOURCE_KEY;
 
     /**
@@ -60,7 +60,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
         if (StringUtils.isBlank(currentKey)) {
             currentKey = defaultDataSourceKey;
         }
-        dsLogger.debug("Determined current lookup key: {}", currentKey);
+        logger.debug("Determined current lookup key: {}", currentKey);
         return currentKey;
     }
 
@@ -75,9 +75,9 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
             DATA_SOURCE_MAP.clear();
             DATA_SOURCE_MAP.putAll(targetDataSources);
             super.afterPropertiesSet();
-            dsLogger.info("Updated target data sources, total count: {}", targetDataSources.size());
+            logger.info("Updated target data sources, total count: {}", targetDataSources.size());
         } else {
-            dsLogger.warn("Target data sources is null or empty");
+            logger.warn("Target data sources is null or empty");
         }
     }
 
@@ -96,7 +96,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
         }
 
         if (DATA_SOURCE_MAP.containsKey(key)) {
-            dsLogger.warn("DataSource with key '{}' already exists, skipping registration.", key);
+            logger.warn("DataSource with key '{}' already exists, skipping registration.", key);
             return false;
         }
 
@@ -115,7 +115,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
         super.setTargetDataSources(new ConcurrentHashMap<>(DATA_SOURCE_MAP));
         super.afterPropertiesSet();
 
-        dsLogger.info("Successfully added DataSource with key: {}", key);
+        logger.info("Successfully added DataSource with key: {}", key);
         return true;
     }
 
@@ -126,11 +126,12 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
      */
     public boolean removeDataSource(String key) {
         if (StringUtils.isBlank(key)) {
+        	logger.warn("DataSource key cannot be null or empty");
             return false;
         }
 
         if (key.equals(defaultDataSourceKey)) {
-            dsLogger.warn("Cannot remove default DataSource: {}", key);
+            logger.warn("Cannot remove default DataSource: {}", key);
             return false;
         }
 
@@ -138,10 +139,10 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
         if (removed != null) {
             super.setTargetDataSources(new ConcurrentHashMap<>(DATA_SOURCE_MAP));
             super.afterPropertiesSet();
-            dsLogger.info("Successfully removed DataSource with key: {}", key);
+            logger.info("Successfully removed DataSource with key: {}", key);
             return true;
         } else {
-            dsLogger.warn("DataSource with key '{}' does not exist", key);
+            logger.warn("DataSource with key '{}' does not exist", key);
             return false;
         }
     }
@@ -186,7 +187,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
     public static void setDefaultDataSourceKey(String key) {
         if (StringUtils.isNotBlank(key)) {
             defaultDataSourceKey = key;
-            dsLogger.info("Set default DataSource key to: {}", key);
+            logger.info("Set default DataSource key to: {}", key);
         }
     }
 
@@ -211,10 +212,10 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
 
         try {
             dataSource.getConnection().close();
-            dsLogger.debug("DataSource '{}' health check passed", key);
+            logger.debug("DataSource '{}' health check passed", key);
             return true;
         } catch (SQLException e) {
-            dsLogger.error("DataSource '{}' health check failed", key, e);
+            logger.error("DataSource '{}' health check failed", key, e);
             return false;
         }
     }
