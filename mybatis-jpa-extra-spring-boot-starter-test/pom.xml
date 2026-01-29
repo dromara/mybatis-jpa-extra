@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
             <groupId>org.dromara.mybatis-jpa-extra</groupId>
-            <artifactId>mybatis-jpa-extra-test</artifactId>
+            <artifactId>mybatis-jpa-extra-spring-test</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 		<dependency>
