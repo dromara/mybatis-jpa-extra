@@ -93,7 +93,7 @@ public class SqlRepositoryTest {
         Map<String, Object> p = new HashMap<>();
         p.put("name", "User1");
         JpaPage page = new JpaPage(2,5);
-        String selectSql = "select id,name, email, data_source  FROM test_user where name like '%${name}%'";
+        String selectSql = "select id,name, email, data_source  FROM test_user <if test=\"name != null and name != ''\"> where name like '%${name}%' </if>";
         JpaPageResults<Map<String, Object>> pageResults = sqlRepository.fetch(selectSql, page, p);
         _logger.debug("pageResults {}",pageResults);
     }

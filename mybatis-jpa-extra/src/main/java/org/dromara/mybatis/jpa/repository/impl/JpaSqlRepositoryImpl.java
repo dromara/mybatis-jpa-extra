@@ -16,6 +16,7 @@
  
 package org.dromara.mybatis.jpa.repository.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,20 @@ import org.slf4j.LoggerFactory;
 public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
     private static final  Logger logger = LoggerFactory.getLogger(JpaSqlRepositoryImpl.class);
 
+    static final ArrayList<String> xmlTagList = new ArrayList<>();
+    
+    static {
+	    	xmlTagList.add("</trim>");
+	    	xmlTagList.add("</where>");
+	    	xmlTagList.add("</set>");
+	    	xmlTagList.add("</foreach>");
+	    	xmlTagList.add("</if>");
+	    	xmlTagList.add("</choose>");
+	    	xmlTagList.add("</when>");
+	    	xmlTagList.add("</otherwise>");
+	    	xmlTagList.add("</bind>");
+    }
+    
     @Override
     public IJpaSqlMapper getMapper() {
         return null;
@@ -150,8 +165,24 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
         }
         logger.trace("sql {}",sql);
         logger.trace("parameters {}",parameters);
-        parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_SQL, sql);
+        String sqlLowerCase = sql.toLowerCase();
+        if(sqlLowerCase.indexOf("<script>")== -1 && hasXmlTag(sqlLowerCase)) {
+        	sql = "<script> " + sql + " </script>";
+        }
+        logger.trace("mappered sql {}",sql);
+        parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_SQL , sql);
         return parameters;
+    }
+    
+    boolean hasXmlTag(String sql) {
+	    	boolean hasXmlTag = false;
+	    	for(String xmlTag : xmlTagList) {
+	    		if(sql.indexOf(xmlTag) > -1) {
+	    			hasXmlTag = true;
+	    			break;
+	    		}
+	    	}
+	    	return hasXmlTag;
     }
 
 }
