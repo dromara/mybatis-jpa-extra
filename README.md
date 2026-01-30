@@ -453,6 +453,31 @@ mybatis.table-column-escape=true
 #mybatis.configuration.map-underscore-to-camel-case=true
 ```
 
+###  3.7、依赖引用
+例如依赖版本是`3.3.9`,项目的配置如下
+### 3.7.1 Maven依赖
+```xml
+<dependency>
+    <groupId>org.dromara.mybatis-jpa-extra</groupId>
+    <artifactId>mybatis-jpa-extra</artifactId>
+    <version>3.3.9</version>
+</dependency>
+<dependency>
+    <groupId>org.dromara.mybatis-jpa-extra</groupId>
+    <artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
+    <version>3.3.9</version>
+</dependency>
+```
+
+### 3.7.2 Gradle依赖
+```gradle
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.3.9'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.3.9'
+```
+> [提示]
+> 当前版本支持springboot v3+， springboot v4 请参考`master`分支
+
+
 ##  5、相关资源
 
 [MyBatis网站][1]
