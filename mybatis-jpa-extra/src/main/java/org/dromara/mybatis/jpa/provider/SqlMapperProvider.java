@@ -73,7 +73,7 @@ public class SqlMapperProvider {
      * @param entity
      * @return insert sql String
      */
-    public String fetchCountByMap(Map<String, Object>  parametersMap) {
+    public String fetchCount(Map<String, Object>  parametersMap) {
         return new FetchCountProvider<>().executeCountByMap(parametersMap);
     }
     

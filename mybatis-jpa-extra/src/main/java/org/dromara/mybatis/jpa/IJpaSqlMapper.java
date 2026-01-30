@@ -33,8 +33,8 @@ import org.dromara.mybatis.jpa.provider.SqlMapperProvider;
  */
 public interface IJpaSqlMapper {
 
-   @SelectProvider(type = SqlMapperProvider.class, method = "fetchCountByMap")
-   public Integer fetchCountByMap(Map<String, Object>  parametersMap);
+   @SelectProvider(type = SqlMapperProvider.class, method = "fetchCount")
+   public Integer fetchCount(Map<String, Object>  parametersMap);
     
    /**
     * 查询数据返回

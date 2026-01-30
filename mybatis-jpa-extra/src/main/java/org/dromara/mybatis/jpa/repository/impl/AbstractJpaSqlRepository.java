@@ -100,7 +100,7 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
     protected Integer fetchCount(Map<String, Object> parameters) {
         Integer count = 0;
         try {
-            count = getMapper().fetchCountByMap(parameters);
+            count = getMapper().fetchCount(parameters);
             logger.debug("fetchCount count : {}" , count);
         } catch(Exception e) {
             logger.error("fetchCount Exception " , e);
@@ -130,7 +130,7 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
         if(page.getPageNumber() == 1 && records < page.getPageSize()) {
             totalCount = records;
         }else {
-            totalCount = JpaPageResults.parseCount(getMapper().fetchCountByMap(parameters));
+            totalCount = JpaPageResults.parseCount(getMapper().fetchCount(parameters));
         }
         return totalCount;
     }
