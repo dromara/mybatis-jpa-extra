@@ -504,31 +504,31 @@ mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence
 ```
 
 ###  3.7、依赖引用
-如果依赖得版本是`3.4.1`,项目的配置如下
+例如依赖版本`3.4.2`配置如下
 ### 3.7.1 Maven依赖
 ```xml
 <dependency>
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
 </dependency>
 <dependency>
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra-spring</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
 </dependency>
 <dependency>
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
 </dependency>
 ```
 
 ### 3.7.2 Gradle依赖
 ```gradle
-implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.4.1'
-implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.1'
-implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.1'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.4.2'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.2'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.2'
 ```
 > [提示]
 > 当前版本支持springboot v4+， springboot v3 请参考`3.3`分支
