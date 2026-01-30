@@ -21,10 +21,12 @@
 package org.dromara.mybatis.jpa.provider.base;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
@@ -50,14 +52,40 @@ public class FetchCountProvider <T extends JpaEntity,ID extends Serializable>{
                             Caffeine.newBuilder()
                                 .expireAfterWrite(300, TimeUnit.SECONDS)
                                 .build();
+    
     /**
-     * @param entity
+     * 
+     * @param JpaPage
      * @return executePageResultsCount sql String
      */
     public String executeCount(JpaPage page) {
+    	return executeCount(page,null);
+    }
+    
+    /**
+     * 
+     * @param parameters
+     * @return executePageResultsCount sql String
+     */
+    public String executeCountByMap(Map<String, Object> parameters) {
+    	return executeCount(null,parameters);
+    }
+    
+    /**
+     * @param JpaPage or Map<String, Object>
+     * @return executePageResultsCount sql String
+     */
+    String executeCount(JpaPage page,Map<String, Object> parameters) {
         StringBuilder sql = new StringBuilder("");
+        //获取缓存SelectId
+        String pageSelectId = null;
+        if(page != null) {
+        	pageSelectId = page.getPageSelectId();
+        }else {
+        	pageSelectId = ((JpaPage)parameters.get(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE)).getPageSelectId();
+        }
         //获取缓存数据
-        JpaPageSqlCache pageSqlCache = getPageSqlCache(page.getPageSelectId());
+        JpaPageSqlCache pageSqlCache = getPageSqlCache(pageSelectId);
         if(pageSqlCache != null) {
             //多个空格 tab 替换成1个空格
             String selectSql = StrUtils.lineBreakToBlank(pageSqlCache.getSql());

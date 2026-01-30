@@ -24,8 +24,6 @@ import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.dromara.mybatis.jpa.entity.JpaPage;
-import org.dromara.mybatis.jpa.provider.MapperProvider;
 import org.dromara.mybatis.jpa.provider.SqlMapperProvider;
 
 /**
@@ -35,8 +33,8 @@ import org.dromara.mybatis.jpa.provider.SqlMapperProvider;
  */
 public interface IJpaSqlMapper {
 
-   @SelectProvider(type = MapperProvider.class, method = "fetchCount")
-   public Integer fetchCount(JpaPage page);
+   @SelectProvider(type = SqlMapperProvider.class, method = "fetchCountByMap")
+   public Integer fetchCountByMap(Map<String, Object>  parametersMap);
     
    /**
     * 查询数据返回

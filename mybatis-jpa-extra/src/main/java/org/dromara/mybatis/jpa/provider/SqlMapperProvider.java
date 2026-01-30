@@ -19,7 +19,6 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
-import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-@SuppressWarnings({"rawtypes" })
 public class SqlMapperProvider {    
     static final Logger logger     =     LoggerFactory.getLogger(SqlMapperProvider.class);
     
@@ -36,12 +34,17 @@ public class SqlMapperProvider {
         logger.debug("constructor init .");
     }
 
+    /**
+     * 
+     * @param parametersMap
+     * @return sql String
+     */
     public String selectList(Map<String, Object>  parametersMap) {
         return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
     }
     
     /**
-     * @param entity
+     * @param entityMap
      * @return insert sql String
      */
     public String insert(Map<String ,Object> entityMap) {
@@ -57,7 +60,11 @@ public class SqlMapperProvider {
         return entityMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
     }
 
-    
+    /**
+     * 
+     * @param parametersMap
+     * @return sql String
+     */
     public String delete(Map<String ,Object> parametersMap) {
         return parametersMap.get(ConstMetadata.SQL_MAPPER_PARAMETER_SQL).toString();
     }
@@ -66,8 +73,8 @@ public class SqlMapperProvider {
      * @param entity
      * @return insert sql String
      */
-    public String fetchCount(JpaPage entity) {
-        return new FetchCountProvider().executeCount(entity);
+    public String fetchCountByMap(Map<String, Object>  parametersMap) {
+        return new FetchCountProvider<>().executeCountByMap(parametersMap);
     }
     
 }
