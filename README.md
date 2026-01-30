@@ -530,6 +530,8 @@ implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra'
 implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.1'
 implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.1'
 ```
+> [提示]
+> 当前版本支持springboot v4+， springboot v3 请参考`3.3`分支
 
 ##  4、案例
 
