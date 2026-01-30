@@ -78,6 +78,35 @@ public class SqlRepositoryTest {
         
         
         Map<String, Object> p = new HashMap<>();
+        p.put("dataSource", "test1");
+        JpaPage page = new JpaPage(1,10);
+        String selectSql = "select id,name, email, data_source  FROM test_user <if test=\"dataSource != null and dataSource != ''\"> where data_source = #{dataSource} </if>";
+        JpaPageResults<Map<String, Object>> pageResults = sqlRepository.fetch(selectSql, page, p);
+        _logger.debug("pageResults {}",pageResults);
+    }
+    
+    @Test
+    public void testJpaPageResultsAndChange() throws Exception {
+        DataSourceSwitch.change("test1");
+        _logger.debug("CurrentDataSource {}",DataSourceSwitch.getCurrentDataSource());
+        // 
+        
+        String sql="INSERT INTO test_user (id,name, email, data_source) VALUES (#{id},#{name}, #{email}, #{dataSource})";
+ 
+        for (int i = 1; i < 30; i++) {
+            final int index = i;
+                String dataSourceKey = "test" + ((index % 2) + 1);
+                Map<String, Object> user = new HashMap<>();
+                user.put("id", Long.valueOf(index));
+                user.put("name", "User" + index);
+                user.put("email", (index % 2) ==0 ? "user" + index + "@test.com":null);
+                user.put("dataSource", dataSourceKey);
+                
+                sqlRepository.insert(sql, user);
+        }
+        
+        
+        Map<String, Object> p = new HashMap<>();
         p.put("name", "User1");
         JpaPage page = new JpaPage(2,5);
         String selectSql = "select id,name, email, data_source  FROM test_user where name like '%${name}%'";
@@ -87,6 +116,7 @@ public class SqlRepositoryTest {
         //change to test2
         changeDataSource();
     }
+    
     
     public void changeDataSource() {
         DataSourceSwitch.change("test2");

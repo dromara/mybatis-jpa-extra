@@ -79,7 +79,7 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
             page.build();
             parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE, page);
             List<Map<String,Object>> resultslist = this.selectList(sql, parameters);
-            return buildPageResults(page , resultslist);
+            return buildPageResults(page ,parameters, resultslist);
         }catch (Exception e) {
             logger.error("fetch Exception " , e);
         }
@@ -91,10 +91,10 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
      * @param entity
      * @return
      */
-    protected Integer fetchCount(JpaPage page) {
+    protected Integer fetchCount(Map<String, Object> parameters) {
         Integer count = 0;
         try {
-            count = getMapper().fetchCount(page);
+            count = getMapper().fetchCount(parameters);
             logger.debug("fetchCount count : {}" , count);
         } catch(Exception e) {
             logger.error("fetchCount Exception " , e);
@@ -103,11 +103,11 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
     }
     
 
-    protected JpaPageResults<Map<String,Object>> buildPageResults(JpaPage page , List<Map<String,Object>> resultslist) {
+    protected JpaPageResults<Map<String,Object>> buildPageResults(JpaPage page ,Map<String, Object> parameters , List<Map<String,Object>> resultslist) {
         //当前页记录数
         Integer records = JpaPageResults.parseRecords(resultslist);
         //总页数
-        Integer totalCount = fetchCount(page, resultslist);
+        Integer totalCount = fetchCount(page,parameters, resultslist);
         return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),records,totalCount,resultslist);
     }
     
@@ -117,14 +117,14 @@ public class JpaSqlRepositoryImpl implements IJpaSqlRepository {
      * @param records
      * @return
      */
-    protected Integer fetchCount(JpaPage page ,List<Map<String,Object>> resultslist) {
+    protected Integer fetchCount(JpaPage page , Map<String, Object> parameters ,List<Map<String,Object>> resultslist) {
         Integer totalCount = 0;
         page.setPageable(false);
         Integer records = JpaPageResults.parseRecords(resultslist);
         if(page.getPageNumber() == 1 && records < page.getPageSize()) {
             totalCount = records;
         }else {
-            totalCount = JpaPageResults.parseCount(getMapper().fetchCount(page));
+            totalCount = JpaPageResults.parseCount(getMapper().fetchCount(parameters));
         }
         return totalCount;
     }
