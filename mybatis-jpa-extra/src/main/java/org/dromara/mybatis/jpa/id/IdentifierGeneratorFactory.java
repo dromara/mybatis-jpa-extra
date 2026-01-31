@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.dromara.mybatis.jpa.id.impl.SnowFlakeIdGenerator;
+import org.dromara.mybatis.jpa.id.impl.ULIDGenerator;
 import org.dromara.mybatis.jpa.id.impl.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +35,14 @@ public class IdentifierGeneratorFactory {
     
     public IdentifierGeneratorFactory() {
         register(IdentifierStrategy.UUID        , new UUIDGenerator());
-        register(IdentifierStrategy.SNOWFLAKEID    , new SnowFlakeIdGenerator());
-        register(IdentifierStrategy.DEFAULT        , new SnowFlakeIdGenerator(null));
+        register(IdentifierStrategy.ULID        , new ULIDGenerator());
+        register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator());
+        register(IdentifierStrategy.DEFAULT     , new SnowFlakeIdGenerator(null));
     }
     
     public IdentifierGeneratorFactory(long datacenterId, long machineId) {
         register(IdentifierStrategy.UUID, new UUIDGenerator());
+        register(IdentifierStrategy.ULID, new ULIDGenerator());
         register(IdentifierStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
     }
 

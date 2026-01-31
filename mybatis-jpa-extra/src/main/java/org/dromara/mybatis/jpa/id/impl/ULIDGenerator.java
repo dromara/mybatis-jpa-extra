@@ -1,5 +1,5 @@
 /*
- * Copyright [2024] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2021] [MaxKey of copyright http://www.maxkey.top]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,18 @@
  */
  
 
-package org.dromara.mybatis.jpa.id;
-/*
- * snowflakeid(default) and uuid
- */
-public class IdentifierStrategy {
+package org.dromara.mybatis.jpa.id.impl;
 
-    /**
-     * uuid
-     */
-    public static final  String UUID               = "uuid";
-    /**
-     * snowflakeid
-     */
-    public static final  String SNOWFLAKEID        = "snowflakeid";
-    
-    /**
-     * snowflakeid
-     */
-    public static final  String ULID               = "ulid";
-    /**
-     * as snowflakeid
-     */
-    public static final  String DEFAULT            = "default";
-    
+import org.dromara.mybatis.jpa.id.IdentifierGenerator;
+import org.dromara.mybatis.jpa.id.impl.ulid.UlidCreator;
+/**
+ * ULID生成器，ULID生成后转小写
+ */
+public class ULIDGenerator implements IdentifierGenerator{
+
+    @Override
+    public String generate(Object object) {
+        return UlidCreator.getUlid().toString().toLowerCase();
+    }
+
 }
