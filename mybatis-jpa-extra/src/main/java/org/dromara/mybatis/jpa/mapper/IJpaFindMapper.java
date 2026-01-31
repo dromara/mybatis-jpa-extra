@@ -22,7 +22,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
-import org.dromara.mybatis.jpa.provider.MapperProvider;
+import org.dromara.mybatis.jpa.provider.FindMapperProvider;
 
 /**
  * IJpa IJpaFindMapper
@@ -36,7 +36,7 @@ public interface IJpaFindMapper<T, ID extends Serializable> {
      * @param entityClass
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "findAll")
+    @SelectProvider(type = FindMapperProvider.class, method = "findAll")
     public List<T> findAll(@Param (ConstMetadata.ENTITY_CLASS)Class<?> entityClass);
 
     /**
@@ -46,7 +46,7 @@ public interface IJpaFindMapper<T, ID extends Serializable> {
      * @param partitionKey
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "findByIds")
+    @SelectProvider(type = FindMapperProvider.class, method = "findByIds")
     public List<T> findByIds(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?>     entityClass,
                             @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
@@ -60,7 +60,7 @@ public interface IJpaFindMapper<T, ID extends Serializable> {
      * @param argTypes
      * @return
      */
-    @SelectProvider(type = MapperProvider.class, method = "find")
+    @SelectProvider(type = FindMapperProvider.class, method = "find")
     public List<T> find(    @Param (ConstMetadata.ENTITY_CLASS)    Class<?>     entityClass,
                             @Param (ConstMetadata.QUERY_FILTER)    String       filter,
                             @Param (ConstMetadata.QUERY_ARGS)      Object[]     args, 

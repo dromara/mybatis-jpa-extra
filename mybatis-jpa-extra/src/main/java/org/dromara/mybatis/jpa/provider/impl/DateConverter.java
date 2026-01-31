@@ -1,4 +1,4 @@
-package org.dromara.mybatis.jpa.provider.base;
+package org.dromara.mybatis.jpa.provider.impl;
 
 import java.time.Instant;
 import java.time.LocalDate;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dromara.mybatis.jpa.provider.base;
+package org.dromara.mybatis.jpa.provider.impl;
 
 import java.io.Serializable;
 

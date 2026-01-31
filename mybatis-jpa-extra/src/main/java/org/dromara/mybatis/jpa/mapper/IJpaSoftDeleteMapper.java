@@ -22,7 +22,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
-import org.dromara.mybatis.jpa.provider.MapperProvider;
+import org.dromara.mybatis.jpa.provider.SoftDeleteMapperProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 
@@ -33,22 +33,22 @@ import org.dromara.mybatis.jpa.query.Query;
  */
 public interface IJpaSoftDeleteMapper<T, ID extends Serializable> {
     
-    @UpdateProvider(type = MapperProvider.class, method = "softDeleteById")
+    @UpdateProvider(type = SoftDeleteMapperProvider.class, method = "softDeleteById")
     public Integer softDeleteById(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID)            ID       id,
                             @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String   partitionKey);
     
-    @UpdateProvider(type = MapperProvider.class, method = "softDelete")
+    @UpdateProvider(type = SoftDeleteMapperProvider.class, method = "softDelete")
     public Integer softDelete(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
                             @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String   partitionKey);
     
-    @UpdateProvider(type = MapperProvider.class, method = "softDeleteByQuery")
+    @UpdateProvider(type = SoftDeleteMapperProvider.class, method = "softDeleteByQuery")
     public Integer softDeleteByQuery(Class<?> entityClass , Query query);    
     
-    @UpdateProvider(type = MapperProvider.class, method = "softDeleteByLambdaQuery")
+    @UpdateProvider(type = SoftDeleteMapperProvider.class, method = "softDeleteByLambdaQuery")
     public Integer softDeleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);    
         
 }

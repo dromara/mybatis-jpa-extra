@@ -26,7 +26,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
-import org.dromara.mybatis.jpa.provider.MapperProvider;
+import org.dromara.mybatis.jpa.provider.CrudMapperProvider;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
@@ -40,30 +40,12 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
 public interface IJpaCrudMapper<T, ID extends Serializable> {
 
     //follow function for delete
-    /**
-     * delete by Query
-     * @param entityClass
-     * @param query
-     * @return
-     */
-    @DeleteProvider(type = MapperProvider.class, method = "deleteByQuery")
-    public Integer deleteByQuery(Class<?> entityClass , Query query);    
-    
-    /**
-     * delete by LambdaQuery
-     * @param entityClass
-     * @param lambdaQuery
-     * @return
-     */
-    @DeleteProvider(type = MapperProvider.class, method = "deleteByLambdaQuery")
-    public Integer deleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);    
-    
-    /**
+	/**
      * delete by id
      * @param id
      * @return
      */
-    @DeleteProvider(type = MapperProvider.class, method = "deleteById")
+    @DeleteProvider(type = CrudMapperProvider.class, method = "deleteById")
     public Integer deleteById(@Param (ConstMetadata.ENTITY_CLASS)          Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID)            ID id,
                             @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
@@ -75,33 +57,51 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
      * @param partitionKey
      * @return
      */
-    @DeleteProvider(type = MapperProvider.class, method = "deleteBatch")
+    @DeleteProvider(type = CrudMapperProvider.class, method = "deleteBatch")
     public Integer deleteBatch(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
-                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);    
-     
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);   
+    
+    /**
+     * delete by Query
+     * @param entityClass
+     * @param query
+     * @return
+     */
+    @DeleteProvider(type = CrudMapperProvider.class, method = "deleteByQuery")
+    public Integer deleteByQuery(Class<?> entityClass , Query query);    
+    
+    /**
+     * delete by LambdaQuery
+     * @param entityClass
+     * @param lambdaQuery
+     * @return
+     */
+    @DeleteProvider(type = CrudMapperProvider.class, method = "deleteByLambdaQuery")
+    public Integer deleteByLambdaQuery(Class<?> entityClass , LambdaQuery<T> lambdaQuery);    
+    
     //follow function for insert or save
-    @InsertProvider(type = MapperProvider.class, method = "insert")
+    @InsertProvider(type = CrudMapperProvider.class, method = "insert")
     public Integer insert(T entity);
     
-    @InsertProvider(type = MapperProvider.class, method = "insertBatch")
+    @InsertProvider(type = CrudMapperProvider.class, method = "insertBatch")
     public Integer insertBatch(List<T> listEntity);
     
     //update
-    @UpdateProvider(type = MapperProvider.class, method = "update")
+    @UpdateProvider(type = CrudMapperProvider.class, method = "update")
     public Integer update(T entity);
 
-    @UpdateProvider(type = MapperProvider.class, method = "updateByQuery")
+    @UpdateProvider(type = CrudMapperProvider.class, method = "updateByQuery")
     public Integer updateByQuery(Class<?> entityClass , String setSql, Query query);    
     
-    @UpdateProvider(type = MapperProvider.class, method = "updateByLambdaQuery")
+    @UpdateProvider(type = CrudMapperProvider.class, method = "updateByLambdaQuery")
     public Integer updateByLambdaQuery(Class<?> entityClass , String setSql, LambdaQuery<T> lambdaQuery);            
     
-    @UpdateProvider(type = MapperProvider.class, method = "updateByUpdateWrapper")
+    @UpdateProvider(type = CrudMapperProvider.class, method = "updateByUpdateWrapper")
     public Integer updateByUpdateWrapper(Class<?> entityClass , UpdateWrapper updateWrapper);    
     
-    @UpdateProvider(type = MapperProvider.class, method = "updateByLambdaUpdateWrapper")
+    @UpdateProvider(type = CrudMapperProvider.class, method = "updateByLambdaUpdateWrapper")
     public Integer updateByLambdaUpdateWrapper(Class<?> entityClass ,LambdaUpdateWrapper<T> lambdaUpdateWrapper);    
 
     //query
@@ -110,25 +110,26 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
      * @param id
      * @return one 
      */
-    @SelectProvider(type = MapperProvider.class, method = "get")
+    @SelectProvider(type = CrudMapperProvider.class, method = "get")
     public T get(
                     @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                     @Param (ConstMetadata.PARAMETER_ID)            ID id,
                     @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
     
-    @SelectProvider(type = MapperProvider.class, method = "query")
+    @SelectProvider(type = CrudMapperProvider.class, method = "query")
     public List<T> query(T entity);
     
-    @SelectProvider(type = MapperProvider.class, method = "queryByQuery")
+    @SelectProvider(type = CrudMapperProvider.class, method = "queryByQuery")
     public List<T> queryByQuery(Class<?> entityClass,Query query);
     
-    @SelectProvider(type = MapperProvider.class, method = "queryByLambdaQuery")
+    @SelectProvider(type = CrudMapperProvider.class, method = "queryByLambdaQuery")
     public List<T> queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
     
-    @SelectProvider(type = MapperProvider.class, method = "countByQuery")
+    //count
+    @SelectProvider(type = CrudMapperProvider.class, method = "countByQuery")
     public long countByQuery(Class<?> entityClass,Query query);
     
-    @SelectProvider(type = MapperProvider.class, method = "countByLambdaQuery")
+    @SelectProvider(type = CrudMapperProvider.class, method = "countByLambdaQuery")
     public long countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
     
 }

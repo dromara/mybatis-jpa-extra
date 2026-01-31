@@ -58,7 +58,7 @@ public class FindTestRunner extends BaseTestRunner{
 
         service.find(" StdNo = ? or StdNo = ?  or StdNo ='11111'",
                 new Object[]{"10024","10004"},
-                new int[]{Types.VARCHAR,Types.INTEGER}
+                new int[]{Types.VARCHAR,Types.VARCHAR}
             );
     }    
 

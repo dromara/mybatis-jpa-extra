@@ -18,11 +18,10 @@
 /**
  * 
  */
-package org.dromara.mybatis.jpa.provider.base;
+package org.dromara.mybatis.jpa.provider.impl;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -31,12 +30,10 @@ import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * @author Crystal.Sea
@@ -45,13 +42,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 public class FetchCountProvider <T extends JpaEntity,ID extends Serializable>{    
     static final Logger logger     =     LoggerFactory.getLogger(FetchCountProvider.class);
     
-    /**
-     * 定义全局缓存
-     */
-    public static final Cache<String, JpaPageSqlCache> PAGE_BOUNDSQL_CACHE = 
-                            Caffeine.newBuilder()
-                                .expireAfterWrite(300, TimeUnit.SECONDS)
-                                .build();
+
     
     /**
      * 
@@ -142,8 +133,8 @@ public class FetchCountProvider <T extends JpaEntity,ID extends Serializable>{
      * @return
      */
     private JpaPageSqlCache getPageSqlCache(String selectId) {
-        JpaPageSqlCache cache = PAGE_BOUNDSQL_CACHE.getIfPresent(selectId);
-        PAGE_BOUNDSQL_CACHE.invalidate(selectId);
+        JpaPageSqlCache cache = MapperMetadata.PAGE_BOUNDSQL_CACHE.getIfPresent(selectId);
+        MapperMetadata.PAGE_BOUNDSQL_CACHE.invalidate(selectId);
         return cache;
     }
     

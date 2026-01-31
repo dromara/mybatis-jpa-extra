@@ -19,7 +19,7 @@ package org.dromara.mybatis.jpa.provider;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
-import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
+import org.dromara.mybatis.jpa.provider.impl.FetchCountProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class SqlMapperProvider {
     static final Logger logger     =     LoggerFactory.getLogger(SqlMapperProvider.class);
     
     public SqlMapperProvider() {
-        logger.debug("constructor init .");
+        logger.trace("constructor init .");
     }
 
     /**
@@ -70,8 +70,8 @@ public class SqlMapperProvider {
     }
     
     /**
-     * @param entity
-     * @return insert sql String
+     * @param parametersMap
+     * @return fetchCount sql String
      */
     public String fetchCount(Map<String, Object>  parametersMap) {
         return new FetchCountProvider<>().executeCountByMap(parametersMap);

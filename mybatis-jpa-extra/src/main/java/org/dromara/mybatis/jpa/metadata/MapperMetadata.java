@@ -22,12 +22,17 @@ package org.dromara.mybatis.jpa.metadata;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import org.dromara.mybatis.jpa.constants.ConstCaseType;
 import org.dromara.mybatis.jpa.crypto.EncryptFactory;
+import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * @author Crystal.Sea
@@ -35,6 +40,14 @@ import org.slf4j.LoggerFactory;
  */
 public class MapperMetadata{
     private static final Logger logger     =     LoggerFactory.getLogger(MapperMetadata.class);
+    
+    /**
+     * 定义全局缓存
+     */
+    public static final Cache<String, JpaPageSqlCache> PAGE_BOUNDSQL_CACHE = 
+                            Caffeine.newBuilder()
+                                .expireAfterWrite(300, TimeUnit.SECONDS)
+                                .build();
     
     static ConcurrentMap<String, String>sqlsMap                 =     new ConcurrentHashMap<>();
 
@@ -55,6 +68,7 @@ public class MapperMetadata{
     
     static String      partitionColumn                          =  "inst_id";
     
+
     /**
      * Case Converter
      * @param name

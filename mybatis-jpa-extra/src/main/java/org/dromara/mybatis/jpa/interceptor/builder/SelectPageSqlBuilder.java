@@ -31,7 +31,7 @@ import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.dialect.Dialect;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
-import org.dromara.mybatis.jpa.provider.base.FetchCountProvider;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +59,7 @@ public class SelectPageSqlBuilder {
         if(statement instanceof SimpleStatementHandler){
             selectSql = dialect.getLimitString(selectSql, pageSql.getPage());
         }else if(statement instanceof PreparedStatementHandler){
-            FetchCountProvider.PAGE_BOUNDSQL_CACHE.put(
+        		MapperMetadata.PAGE_BOUNDSQL_CACHE.put(
                     pageSql.getPage().getPageSelectId(), 
                     new JpaPageSqlCache(selectSql,boundSql)
                     );
