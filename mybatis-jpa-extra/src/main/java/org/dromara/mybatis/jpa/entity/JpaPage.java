@@ -15,9 +15,6 @@
  */
  
 
-/**
- * 
- */
 package org.dromara.mybatis.jpa.entity;
 
 import org.dromara.mybatis.jpa.id.IdentifierStrategy;
@@ -283,10 +280,8 @@ public class JpaPage {
      * @param page 页码
      * @param size 记录数
      */
-    public void of(int page, int size) {
-        this.pageNumber = page;
-        this.pageSize = size;
-        this.pageable = true;
+    public static JpaPage of(int page, int size) {
+    	return new JpaPage(page,size);
     }
     
     public JpaPage page(int page) {

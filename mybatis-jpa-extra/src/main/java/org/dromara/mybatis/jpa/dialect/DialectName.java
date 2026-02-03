@@ -32,4 +32,6 @@ public class DialectName {
     public static final String HIGHGO        =     "highgo";
     
     public static final String SQLSERVER     =     "sqlserver";
+    
+    public static final String MARIADB       =     "mariadb";
 }

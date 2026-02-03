@@ -31,4 +31,6 @@ public class DialectClass {
     public static final String HIGHGO         =     "org.dromara.mybatis.jpa.dialect.HighgoDialect";
     
     public static final String SQLSERVER      =     "org.dromara.mybatis.jpa.dialect.SQLServerDialect";
+    
+    public static final String MARIADB        =     "org.dromara.mybatis.jpa.dialect.MariadbDialect";
 }

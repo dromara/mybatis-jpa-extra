@@ -45,6 +45,11 @@ public class CrudMapperProvider <T extends JpaEntity,ID extends Serializable>{
         logger.trace("constructor init .");
     }
 
+    //get
+    public String get(Map<String, Object>  parametersMap) {
+        return new GetProvider<>().get(parametersMap);  
+    }
+    
     //delete
     public String deleteById(Map<String, Object>  parametersMap) { 
         return new DeleteProvider<>().deleteById(parametersMap);  
@@ -108,10 +113,6 @@ public class CrudMapperProvider <T extends JpaEntity,ID extends Serializable>{
     }
     
     //query
-    public String get(Map<String, Object>  parametersMap) {
-        return new GetProvider<>().get(parametersMap);  
-    }
-    
     public String query(T entity) {
         return new QueryProvider<>().query(entity);
     }

@@ -38,6 +38,7 @@ public class DialectMapper {
         dialectMap.put(DialectName.POSTGRESQL,    DialectClass.POSTGRESQL);
         dialectMap.put(DialectName.HIGHGO,        DialectClass.HIGHGO);
         dialectMap.put(DialectName.SQLSERVER,     DialectClass.SQLSERVER);
+        dialectMap.put(DialectName.MARIADB,       DialectClass.MARIADB);
         
         logger.trace("Dialect Mapper : \n{}" ,dialectMap);
     }

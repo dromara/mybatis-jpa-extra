@@ -38,7 +38,19 @@ import org.dromara.mybatis.jpa.update.UpdateWrapper;
  * @param <T>
  */
 public interface IJpaCrudMapper<T, ID extends Serializable> {
-
+	
+	//get
+	/**
+     *  query by id
+     * @param id
+     * @return one 
+     */
+    @SelectProvider(type = CrudMapperProvider.class, method = "get")
+    public T get(
+                    @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
+                    @Param (ConstMetadata.PARAMETER_ID)            ID id,
+                    @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+    
     //follow function for delete
 	/**
      * delete by id
@@ -105,17 +117,6 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
     public Integer updateByLambdaUpdateWrapper(Class<?> entityClass ,LambdaUpdateWrapper<T> lambdaUpdateWrapper);    
 
     //query
-    /**
-     *  query by id
-     * @param id
-     * @return one 
-     */
-    @SelectProvider(type = CrudMapperProvider.class, method = "get")
-    public T get(
-                    @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
-                    @Param (ConstMetadata.PARAMETER_ID)            ID id,
-                    @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
-    
     @SelectProvider(type = CrudMapperProvider.class, method = "query")
     public List<T> query(T entity);
     

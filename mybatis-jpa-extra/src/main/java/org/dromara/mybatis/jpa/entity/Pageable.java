@@ -1,5 +1,5 @@
 /*
- * Copyright [2025] [MaxKey of copyright http://www.maxkey.top]
+ * Copyright [2026] [MaxKey of copyright http://www.maxkey.top]
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 
 package org.dromara.mybatis.jpa.entity;
 
 /**
- * PageRequest JPA
+ * Pageable JPA
  */
-public class PageRequest extends Pageable{
-	
-	public PageRequest() {
-		
-	}
-	
-	public PageRequest(int page, int size) {
-		this.pageNumber = page;
-        this.pageSize = size;
-        this.pageable = true;
-	}
-	
-    /**
-     * 创建分页请求实体
-     * @param page 页码
-     * @param size 记录数
-     */
-    public static PageRequest of(int page, int size) {
-    	return new PageRequest(page,size);
-    }
+public class Pageable extends JpaPage{
+
 }
