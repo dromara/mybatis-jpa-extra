@@ -490,6 +490,16 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean exists(LambdaQuery<T> lambdaQuery) {
         return count(lambdaQuery) > 0;
     }
+    
+    /**
+     * exists By primaryKey
+     * @param id
+     * @return
+     */
+    public boolean existsById(ID id) {
+    		T  entity = get(id);
+    		return entity != null;
+    }
 
     //follow function for insert update and delete
     /**

@@ -239,6 +239,13 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @return boolean
      */
     public boolean exists(LambdaQuery<T> lambdaQuery) ;
+    
+    /**
+     * exists By primaryKey
+     * @param id
+     * @return
+     */
+    boolean existsById(ID id);
 
     //follow function for insert update and delete
     /**
