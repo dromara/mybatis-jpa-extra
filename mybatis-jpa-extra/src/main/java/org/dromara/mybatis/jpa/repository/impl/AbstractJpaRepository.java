@@ -497,8 +497,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @return
      */
     public boolean existsById(ID id) {
-    		T  entity = get(id);
-    		return entity != null;
+    	return	getMapper().countById(entityClass,id) > 0;
     }
 
     //follow function for insert update and delete

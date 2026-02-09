@@ -127,6 +127,9 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
     public List<T> queryByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery);
     
     //count
+    @SelectProvider(type = CrudMapperProvider.class, method = "countById")
+    public long countById(Class<?> entityClass,ID id);
+    
     @SelectProvider(type = CrudMapperProvider.class, method = "countByQuery")
     public long countByQuery(Class<?> entityClass,Query query);
     

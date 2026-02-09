@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.provider.impl.CountProvider;
 import org.dromara.mybatis.jpa.provider.impl.DeleteProvider;
 import org.dromara.mybatis.jpa.provider.impl.GetProvider;
 import org.dromara.mybatis.jpa.provider.impl.InsertProvider;
@@ -127,13 +128,17 @@ public class CrudMapperProvider <T extends JpaEntity,ID extends Serializable>{
     }
     
     //count
+    public String countById(Class<?> entityClass,ID id) {
+        return new CountProvider<>().countById(entityClass,id);
+    }
+    
     public String countByQuery(Class<?> entityClass,Query query) {
-        return new QueryProvider<>().countByQuery(entityClass,query);
+        return new CountProvider<>().countByQuery(entityClass,query);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public String countByLambdaQuery(Class<?> entityClass,LambdaQuery<T> lambdaQuery) {
-        return new QueryProvider().countByLambdaQuery(entityClass,lambdaQuery);
+        return new CountProvider().countByLambdaQuery(entityClass,lambdaQuery);
     }
 
 }

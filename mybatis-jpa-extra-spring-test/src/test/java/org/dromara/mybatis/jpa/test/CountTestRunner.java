@@ -65,4 +65,10 @@ public class CountTestRunner  extends BaseTestRunner{
                 .or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
         _logger.info("count {}",count);
     }
+    
+    @Test
+    void existsById(){
+        _logger.info("exists By Id ...");
+        _logger.info("existsById {}",service.existsById("1004539842878504966"));
+    }
 }
