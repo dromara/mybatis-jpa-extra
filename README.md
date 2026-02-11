@@ -8,10 +8,10 @@
 </p>  
 
 <p align="center">
-    <img src="https://img.shields.io/github/v/release/dromara/mybatis-jpa-extra?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/JDK-v17%2B-brightgreen?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/springboot-v4%2B-brightgreen?style=for-the-badge" />
-    <img src="https://img.shields.io/github/license/dromara/mybatis-jpa-extra?style=for-the-badge" />
+    <img src="https://img.shields.io/github/v/release/dromara/mybatis-jpa-extra" />
+    <img src="https://img.shields.io/badge/JDK-v17%2B-brightgreen" />
+    <img src="https://img.shields.io/badge/springboot-v4%2B-brightgreen" />
+    <img src="https://img.shields.io/github/license/dromara/mybatis-jpa-extra" />
 </p>
 
 # MyBatis JPA Extra
