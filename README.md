@@ -1,22 +1,32 @@
-# MyBatis JPA Extra
+
 <p align="center" >
     <img src="mybatis-jpa-extra.png?raw=true"  width="200px"   alt=""/>
 </p>
 
+<p align="center">
+    <img src="https://img.shields.io/github/v/release/dromara/mybatis-jpa-extra?style=for-the-badge" />
+    <img src="https://img.shields.io/badge/JDK-v17%2B-brightgreen?style=for-the-badge" />
+    <img src="https://img.shields.io/badge/springboot-v4%2B-brightgreen?style=for-the-badge" />
+    <img src="https://img.shields.io/github/license/dromara/mybatis-jpa-extra?style=for-the-badge" />
+</p>
+
+# MyBatis JPA Extra - 标准化CRUD + 高效SELECT查询
 
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
-1.Jakarta JPA 注释**简化CUID操作**;
+1.Jakarta JPA 注释**标准化CRUD操作**;
     
-2.增强**SELECT分页**查询;
+2.高效**SELECT分页**查询;
     
-3.**链式**Query查询条件构造器；支持Lambda 形式调用，方便编写各类查询条件
+3.**链式**Query查询条件构造器；支持Lambda 形式调用，方便编写各类查询条件；
 
-4.@Encrypted注解轻松实现字段数据加密和解密;
+4.**findByXxx**解析方法名自动生成查询；
 
-5.字段数据自动填充功能;
+5.@Encrypted注解轻松实现字段数据加密和解密;
 
-6.数据库支持
+6.字段数据自动填充功能;
+
+7.数据库支持
 
 |  数据库        |  支持 |
 | ---           | ---   |
@@ -25,6 +35,7 @@
 |  Oracle       | ✅    |
 |  SqlServer    | ✅    |
 |  DB2          | ✅    |
+|  Mariadb      | ✅    |
 
 代码托管  
 

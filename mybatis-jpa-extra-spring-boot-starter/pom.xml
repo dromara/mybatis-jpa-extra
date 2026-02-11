@@ -13,7 +13,7 @@
 	<!--self -->
 	<artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
 	<name>mybatis-jpa-extra-spring-boot-starter</name>
-	<description>mybatis-jpa-extra-spring-boot-starter</description>
+	<description>扩展MyBatis JPA支持，标准CRUD操作，高效SELECT分页查询，mybatis-jpa-extra-spring-boot-starter</description>
 	<url>https://github.com/dromara/mybatis-jpa-extra</url>
 	
 	<properties>

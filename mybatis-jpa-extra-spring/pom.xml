@@ -12,7 +12,7 @@
 	<!--self -->
 	<artifactId>mybatis-jpa-extra-spring</artifactId>
 	<name>mybatis-jpa-extra-spring</name>
-	<description>扩展MyBatis JPA支持，简化CUID操作，增强SELECT分页查询</description>
+	<description>扩展MyBatis JPA支持，标准CRUD操作，高效SELECT分页查询，mybatis-jpa-extra-spring</description>
 	<url>https://github.com/dromara/mybatis-jpa-extra</url>
 
 	<dependencies>
