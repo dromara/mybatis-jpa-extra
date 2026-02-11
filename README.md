@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/github/license/dromara/mybatis-jpa-extra?style=for-the-badge" />
 </p>
 
-# MyBatis JPA Extra - 标准化CRUD + 高效SELECT查询
+# MyBatis JPA Extra - 标准CRUD + 高效SELECT查询
 
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
