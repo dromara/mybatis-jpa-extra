@@ -18,9 +18,9 @@
 
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
-1.Jakarta JPA 注释**标准化CRUD操作**;
+1.**标准化CRUD操作**，通过Jakarta JPA 注释和接口，减少传统MyBatis中大量的XML配置和SQL编写工作，使开发者能够更专注于业务逻辑;
     
-2.高效**SELECT分页**查询;
+2.高效**SELECT分页**查询，优化了分页查询的实现方式，提供更高效、更灵活的分页功能;
     
 3.**链式**Query查询条件构造器；支持Lambda 形式调用，方便编写各类查询条件；
 
