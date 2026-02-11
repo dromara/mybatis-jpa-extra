@@ -54,7 +54,7 @@
 
 | 策略      |   支持  |
 | :-----        | :----   |
-| AUTO          | 主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>uuid(UUID) | 
+| AUTO          | 主键自动填充策略<br>snowflakeid(雪花ID-默认)<br>ulid<br>uuid(UUID) | 
 | SEQUENCE      | 数据库序列生成，generator值为数据库序列名 | 
 | IDENTITY      | 数据库表自增主键  |
 
@@ -504,31 +504,31 @@ mybatis.mapper-locations=classpath*:/org/apache/mybatis/jpa/test/dao/persistence
 ```
 
 ###  3.7、依赖引用
-例如依赖版本`3.4.3`配置如下
+例如依赖版本`3.4.4`配置如下
 ### 3.7.1 Maven依赖
 ```xml
 <dependency>
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra</artifactId>
-    <version>3.4.3</version>
+    <version>3.4.4</version>
 </dependency>
 <dependency>
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra-spring</artifactId>
-    <version>3.4.3</version>
+    <version>3.4.4</version>
 </dependency>
 <dependency>
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra-spring-boot-starter</artifactId>
-    <version>3.4.3</version>
+    <version>3.4.4</version>
 </dependency>
 ```
 
 ### 3.7.2 Gradle依赖
 ```gradle
-implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.4.3'
-implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.3'
-implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.3'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra', version: '3.4.4'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring', version: '3.4.4'
+implementation group: 'org.dromara.mybatis-jpa-extra', name: 'mybatis-jpa-extra-spring-boot-starter', version: '3.4.4'
 ```
 > [提示]
 > 当前版本支持springboot v4+， springboot v3 请参考`3.3`分支

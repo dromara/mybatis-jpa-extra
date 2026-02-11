@@ -4,7 +4,7 @@
     <!--parent -->
     <groupId>org.dromara.mybatis-jpa-extra</groupId>
     <artifactId>mybatis-jpa-extra-parent</artifactId>
-    <version>3.4.3</version>
+    <version>3.4.4</version>
     <packaging>pom</packaging>
     
     <!--modules -->
