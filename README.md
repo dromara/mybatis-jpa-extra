@@ -16,21 +16,23 @@
 
 # MyBatis JPA Extra
 
-**MyBatis JPA Extra**对MyBatis扩展JPA功能
-   
-1.**标准化CRUD操作**，通过Jakarta JPA 注释和接口，减少传统MyBatis中大量的XML配置和SQL编写工作;
+**MyBatis JPA Extra**对MyBatis扩展JPA功能，融合JPA的标准化和MyBatis灵活性
+
+1.JPA 注解支持：支持 `@Entity`、`@Table`、`@Column` 等注解，简化实体类的定义；  
+
+2.**标准化CRUD操作**，通过JPA 注释和接口，减少传统MyBatis中大量的XML配置和SQL编写工作;
     
-2.高效**SELECT分页**查询，优化了分页查询的实现方式，提供更高效、更灵活的分页功能;
+3.高效**SELECT分页**查询，优化了分页查询的实现方式，提供更高效、更灵活的分页功能;
     
-3.**链式**Query查询条件构造器；支持Lambda 形式调用，方便编写各类查询条件；
+4.**链式**Query查询条件构造器；支持Lambda 形式调用，方便编写各类查询条件；
 
-4.**findByXxx**解析方法名自动生成查询；
+5.**findByXxx**解析方法名自动生成查询；
 
-5.@Encrypted注解轻松实现字段数据加密和解密;
+6.@Encrypted注解轻松实现字段数据加密和解密;
 
-6.字段数据自动填充功能;
+7.字段数据自动填充功能;
 
-7.数据库支持
+8.数据库支持
 
 |  数据库        |  支持 |
 | ---           | ---   |
