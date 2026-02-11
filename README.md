@@ -4,13 +4,17 @@
 </p>
 
 <p align="center">
+  <strong>标准CRUD + 高效SELECT查询</strong>
+</p>  
+
+<p align="center">
     <img src="https://img.shields.io/github/v/release/dromara/mybatis-jpa-extra?style=for-the-badge" />
     <img src="https://img.shields.io/badge/JDK-v17%2B-brightgreen?style=for-the-badge" />
     <img src="https://img.shields.io/badge/springboot-v4%2B-brightgreen?style=for-the-badge" />
     <img src="https://img.shields.io/github/license/dromara/mybatis-jpa-extra?style=for-the-badge" />
 </p>
 
-# MyBatis JPA Extra - 标准CRUD + 高效SELECT查询
+# MyBatis JPA Extra
 
 **MyBatis JPA Extra**对MyBatis扩展JPA功能
    
