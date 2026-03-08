@@ -19,11 +19,11 @@ package org.dromara.mybatis.jpa.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.Strings;
 
 public class StrUtils {
     public static final char UNDERLINE = '_';
@@ -77,19 +77,18 @@ public class StrUtils {
     }
 
     public static String listToString(List<String> list, String split) {
-        StringBuilder string = new StringBuilder("");
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) != null && !list.get(i).equals("")) {
-                    string.append(list.get(i)).append( split );
-                }
-            }
-            //删除最后一个分隔符
-            if (Strings.CS.endsWith(string,split)) {
-                string = string.deleteCharAt(string.length() - 1);
+        if (CollectionUtils.isEmpty(list)) {
+            return "";
+        }
+
+        // Use String.valueOf to keep historical behavior when split is null.
+        StringJoiner joiner = new StringJoiner(String.valueOf(split));
+        for (String item : list) {
+            if (item != null && !item.equals("")) {
+                joiner.add(item);
             }
         }
-        return string.toString();
+        return joiner.toString();
     }
 
     public static String lineBreakToBlank(String sql) {

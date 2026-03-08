@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
@@ -106,21 +105,7 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
         //have @GeneratedValue and (value is null or eq "")
         GeneratedValue generatedValue = fieldColumnMapper.getGeneratedValue();
         if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
-            String genValue = "";
-            if(generatedValue == null ) {
-                genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
-            }else if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
-                genValue = IdentifierGeneratorFactory.generate(generatedValue.generator());
-            }else {
-                genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
-            }
-            if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
-                BeanUtil.set(entity, fieldColumnMapper.getField(),genValue);
-            }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
-                BeanUtil.set(entity, fieldColumnMapper.getField(),Integer.valueOf(genValue));
-            }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
-                BeanUtil.set(entity, fieldColumnMapper.getField(),Long.valueOf(genValue));
-            }
+            assignGeneratedIdentifier(entity, fieldColumnMapper, generatedValue);
             sql.VALUES(fieldColumnMapper.getColumn(),"#{%s}".formatted(fieldColumnMapper.getField()));
         }else if(generatedValue.strategy()==GenerationType.SEQUENCE){
             sql.VALUES(fieldColumnMapper.getColumn(),generatedValue.generator()+".nextval");
@@ -148,7 +133,7 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
             String fieldName = fieldColumnMapper.getField();
             if(fieldColumnMapper.getColumnAnnotation().insertable()) {
             	sql.INTO_COLUMNS(columnName);
-            	if(StringUtils.isNotBlank(values)) {
+	            if(values.length() > 0) {
             		values.append(",");
             	}
             	values.append("#{").append("entity.").append(fieldName).append("}");
@@ -196,22 +181,29 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
     private void  batchGeneratedValue( T entity , ColumnMapper fieldColumnMapper) {
         GeneratedValue generatedValue = fieldColumnMapper.getGeneratedValue();
         if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
-            String genValue = "";
-            if(generatedValue == null ) {
-                genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
-            }else if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
-                genValue = IdentifierGeneratorFactory.generate(generatedValue.generator());
-            }else {
-                genValue = IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
-            }
-            if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
-                BeanUtil.set(entity, fieldColumnMapper.getField(),genValue);
-            }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
-                BeanUtil.set(entity, fieldColumnMapper.getField(),Integer.valueOf(genValue));
-            }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
-                BeanUtil.set(entity, fieldColumnMapper.getField(),Long.valueOf(genValue));
-            }
+            assignGeneratedIdentifier(entity, fieldColumnMapper, generatedValue);
         }
+    }
+
+    private void assignGeneratedIdentifier(T entity, ColumnMapper fieldColumnMapper, GeneratedValue generatedValue) {
+        String genValue = generateIdentifierValue(generatedValue);
+        if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
+            BeanUtil.set(entity, fieldColumnMapper.getField(),genValue);
+        }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
+            BeanUtil.set(entity, fieldColumnMapper.getField(),Integer.valueOf(genValue));
+        }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
+            BeanUtil.set(entity, fieldColumnMapper.getField(),Long.valueOf(genValue));
+        }
+    }
+
+    private String generateIdentifierValue(GeneratedValue generatedValue) {
+        if(generatedValue == null) {
+            return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
+        }
+        if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
+            return IdentifierGeneratorFactory.generate(generatedValue.generator());
+        }
+        return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
     }
     
 }

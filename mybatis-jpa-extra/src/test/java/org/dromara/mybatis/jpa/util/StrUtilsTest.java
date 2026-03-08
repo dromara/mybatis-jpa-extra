@@ -19,15 +19,30 @@ package org.dromara.mybatis.jpa.util;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List; 
+import java.util.ArrayList;
+
 public class StrUtilsTest {
 
     @Test
-    void test() {
+    void shouldConvertUnderlineToCamelAndBack() {
         String aaa = "app_version_fld";
         System.out.println(StrUtils.underlineToCamel(aaa));
         System.out.println(StrUtils.underlineToCamel2(aaa));
         aaa = "appVersionFld";
         System.out.println(StrUtils.camelToUnderline(aaa));
+    }
+
+     @Test
+    void shouldJoinListToString() {
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+
+        assertEquals("a,b,c", StrUtils.listToString(list, ","));
     }
 
 }
