@@ -36,28 +36,19 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class GetProvider <T extends JpaEntity,ID extends Serializable>{    
-    static final Logger logger     =     LoggerFactory.getLogger(GetProvider.class);
+public class GetProvider <T extends JpaEntity,ID extends Serializable> extends AbstractProvider{
+    private static final Logger logger     =     LoggerFactory.getLogger(GetProvider.class);
     
     public String get(Map<String, Object>  parametersMap) {
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
-        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
         SQL sql = TableMetadata.buildSelect(entityClass);
-        sql.WHERE(" %s = #{id} ".formatted(idFieldColumnMapper.getColumn()));
+        sql.WHERE(" %s = #{%s} ".formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));
         
-        if(partitionKeyColumnMapper != null) {
-            sql.WHERE(" %s = #{partitionKey} \n".formatted(partitionKeyColumnMapper.getColumn()));
-        }
-        
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" %s = '%s'".formatted(
-                        logicColumnMapper.getColumn(),
-                        logicColumnMapper.getSoftDelete().value()));
-        }
+        appendPartitionWhere(sql , entityClass);
+        appendSoftDeleteWhere(sql , entityClass);
         
         String getSql = sql.toString(); 
         logger.trace("Get SQL \n{}" , getSql);

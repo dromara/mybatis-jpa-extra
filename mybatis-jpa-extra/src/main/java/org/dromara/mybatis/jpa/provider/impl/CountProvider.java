@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class CountProvider<T extends JpaEntity,ID extends Serializable> {
+public class CountProvider<T extends JpaEntity,ID extends Serializable> extends AbstractProvider{
     static final Logger logger = LoggerFactory.getLogger(CountProvider.class);
     
     public String countById(Class<?> entityClass, ID id) {
@@ -45,17 +45,9 @@ public class CountProvider<T extends JpaEntity,ID extends Serializable> {
         //id
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         sql.WHERE(" %s = %s ".formatted(idFieldColumnMapper.getColumn(),SafeValueHandler.valueOfType(id)));
-        
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 
         //逻辑删除
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendSoftDeleteWhere(sql , entityClass);
         
         logger.trace("count by Id SQL \n{}" , sql);
         return sql.toString();
@@ -65,7 +57,6 @@ public class CountProvider<T extends JpaEntity,ID extends Serializable> {
         logger.trace("count Query \n{}" , query);
         SQL sql = TableMetadata.buildSelectCount(entityClass);
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
         StringBuilder whereSql = new StringBuilder("");
         //查询语句
         String querySql = QueryBuilder.build(query);
@@ -74,13 +65,7 @@ public class CountProvider<T extends JpaEntity,ID extends Serializable> {
         }
         
         //逻辑删除
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendQuerySoftDeleteWhere(sql , entityClass , query.isSoftDelete());
         
         if(StringUtils.isNotBlank(whereSql)) {
             sql.WHERE(whereSql.toString());
@@ -95,21 +80,15 @@ public class CountProvider<T extends JpaEntity,ID extends Serializable> {
         
         SQL sql = TableMetadata.buildSelectCount(entityClass);
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
         StringBuilder whereSql = new StringBuilder("");
         //查询语句
         String querySql = LambdaQueryBuilder.build(lambdaQuery);
         if(StringUtils.isNotBlank(querySql)) {
             sql.WHERE("( " + querySql +" ) ");
         }
+        
         //逻辑删除
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendQuerySoftDeleteWhere(sql , entityClass , lambdaQuery.isSoftDelete());
         
         if(StringUtils.isNotBlank(whereSql)) {
             sql.WHERE(whereSql.toString());

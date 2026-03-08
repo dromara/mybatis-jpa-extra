@@ -80,7 +80,7 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
                 }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
                     sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
                 }else if(isFieldValueNull && fieldColumnMapper.getColumnDefault() != null) {
-                	//字段值为空，且标注默认值
+                    //字段值为空，且标注默认值
                     sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
                 }else if(!isFieldValueNull) {
                 	if(logger.isTraceEnabled()) {
@@ -89,7 +89,7 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
                     }
                     sql.VALUES(columnName,"#{%s}".formatted(fieldName));
                 }else {
-                	//skip null field value
+                	    //skip null field value
                     if(logger.isTraceEnabled()) {
                         logger.trace("Field {} , Type {} , Value is null , skiped ",
                             String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
@@ -121,7 +121,7 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
      * @return insert sql script
      */
     public String insertBatch(List<T> listEntity) {
-    	Class<?> entityClass = listEntity.get(0).getClass();
+    		Class<?> entityClass = listEntity.get(0).getClass();
     	
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
         

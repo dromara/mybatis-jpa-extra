@@ -38,29 +38,21 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class QueryProvider<T extends JpaEntity,ID extends Serializable> {
-    static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
+public class QueryProvider<T extends JpaEntity,ID extends Serializable> extends AbstractProvider{
+    private static final Logger logger = LoggerFactory.getLogger(QueryProvider.class);
 
     public String queryByQuery(Class<?> entityClass, Query query) {
         logger.trace("Query \n{}" , query);
         SQL sql = TableMetadata.buildSelect(entityClass);
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        
         //查询语句
         String querySql = QueryBuilder.build(query);
         if(StringUtils.isNotBlank(querySql)) {
-            sql.WHERE("( " + querySql +" ) ");
+            sql.WHERE(" ( " + querySql +" ) ");
         }
         
         //逻辑删除
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && query.isSoftDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendQuerySoftDeleteWhere(sql, entityClass, query.isSoftDelete());
         
         if (query.getGroupBy() != null) {
             sql.GROUP_BY(ConditionBuilder.buildGroupBy(query.getGroupBy()));
@@ -77,22 +69,14 @@ public class QueryProvider<T extends JpaEntity,ID extends Serializable> {
         
         SQL sql = TableMetadata.buildSelect(entityClass);
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        
         StringBuilder whereSql = new StringBuilder("");
         //查询语句
         String querySql = LambdaQueryBuilder.build(lambdaQuery);
         if(StringUtils.isNotBlank(querySql)) {
-            sql.WHERE("( " + querySql +" ) ");
+            sql.WHERE(" ( " + querySql +" ) ");
         }
-        //逻辑删除
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && lambdaQuery.isSoftDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        
+        appendQuerySoftDeleteWhere(sql, entityClass, lambdaQuery.isSoftDelete());
         
         if(StringUtils.isNotBlank(whereSql)) {
             sql.WHERE(whereSql.toString());

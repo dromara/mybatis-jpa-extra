@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class FindProvider <T extends JpaEntity,ID extends Serializable>{
+public class FindProvider <T extends JpaEntity,ID extends Serializable> extends AbstractProvider{
     static final Logger logger     =     LoggerFactory.getLogger(FindProvider.class);
     
     public String findAll(Map<String, Object>  parametersMap) {  
@@ -48,14 +48,9 @@ public class FindProvider <T extends JpaEntity,ID extends Serializable>{
         ColumnMetadata.buildColumnMapper(entityClass);
         
         SQL sql=  TableMetadata.buildSelect(entityClass);
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" %s = '%s'"
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+       
+        appendSoftDeleteWhere(sql , entityClass);
+        
         String findAllSql = sql.toString(); 
         logger.trace("Find All SQL \n{}" , findAllSql);
         return findAllSql;  
@@ -115,14 +110,8 @@ public class FindProvider <T extends JpaEntity,ID extends Serializable>{
         
         SQL sql = TableMetadata.buildSelect(entityClass).WHERE("( " + filterSql +" )");
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" %s = '%s'"
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendSoftDeleteWhere(sql , entityClass);
+        
         String findSql = sql.toString(); 
         logger.trace("Find SQL \n{}" , findSql);
 
@@ -132,32 +121,25 @@ public class FindProvider <T extends JpaEntity,ID extends Serializable>{
     public String findByIds(Map<String, Object>  parametersMap) { 
         Class<?> parameterEntityClass = (Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(parameterEntityClass);
-        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(parameterEntityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(parameterEntityClass);
         
         SQL sql = TableMetadata.buildSelect(parameterEntityClass);
-
+        //逻辑删除
+        appendSoftDeleteWhere(sql,parameterEntityClass);
+        
         StringBuilder findByIdsSql = new StringBuilder("");
         findByIdsSql.append("<script>").append("\n").append("\n")
-            .append(sql.toString()).append("\n")
-            .append("WHERE ").append(idFieldColumnMapper.getColumn())
+        				.append(sql.toString()).append("\n");
+        //append where or and
+        findByIdsSql.append((findByIdsSql.indexOf("WHERE") == -1 ) ? " WHERE " : " and ");
+        		
+        findByIdsSql.append(idFieldColumnMapper.getColumn())
             .append(" in (\n")
             .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")
             .append("  #{item} ").append("\n")
             .append(" </foreach>")
             .append(" )\n");
-        //分区字段
-        if(partitionKeyColumnMapper != null) {
-            findByIdsSql.append(" and %s = #{partitionKey} )"
-                    .formatted(partitionKeyColumnMapper.getColumn()));  
-        }
-        //逻辑删除
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(parameterEntityClass);
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            findByIdsSql.append(" and %s = '%s'".formatted(
-                        logicColumnMapper.getColumn(),
-                        logicColumnMapper.getSoftDelete().value()));
-        }
+
         //add close script
         findByIdsSql.append("\n").append("</script>");
         

@@ -40,5 +40,14 @@ public class QueryTestRunner  extends BaseTestRunner{
                 new Query().eq("stdMajor", "政治").gt("STDAGE", 30).in("stdMajor", new Object[]{"政治","数学"})
                 .or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
     }
+    
+    //no soft delete
+    @Test
+    void queryByQuery2(){
+        _logger.info("query by query ...");
+        service.query(
+                new Query(false).eq("stdMajor", "政治").gt("STDAGE", 30).in("stdMajor", new Object[]{"政治","数学"})
+                .or(new Query().eq("stdname", "周瑜").or().eq("stdname", "吕蒙")));
+    }
 
 }

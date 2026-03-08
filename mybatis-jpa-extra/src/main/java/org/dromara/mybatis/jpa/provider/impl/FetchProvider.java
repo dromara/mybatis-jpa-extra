@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 
 @SuppressWarnings("unchecked")
-public class FetchProvider <T extends JpaEntity,ID extends Serializable>{    
+public class FetchProvider <T extends JpaEntity,ID extends Serializable> extends AbstractProvider{    
     static final Logger logger     =     LoggerFactory.getLogger(FetchProvider.class);
     
     /**
@@ -101,14 +101,7 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable>{
             sql.WHERE(conditions.toString());
         }
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entity.getClass());
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendSoftDeleteWhere(sql , entity.getClass());
         
         logger.trace("Query Page SQL : \n{}" , sql);
         return sql.toString();
@@ -135,14 +128,8 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable>{
             sql.WHERE("( " + conditionString +" ) ");
         }
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendQuerySoftDeleteWhere(sql,entityClass,condition.isSoftDelete());
+
         logger.trace("query Page By Query SQL : \n{}" , sql);
         return sql.toString();
     }
@@ -166,14 +153,8 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable>{
             sql.WHERE("( " + conditionString +" ) ");
         }
         
-        ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        if(logicColumnMapper != null && logicColumnMapper.isLogicDelete() && condition.isSoftDelete()) {
-            sql.WHERE(" ( %s = '%s' )" 
-                    .formatted(
-                            logicColumnMapper.getColumn(),
-                            logicColumnMapper.getSoftDelete().value())
-                    );
-        }
+        appendQuerySoftDeleteWhere(sql,entityClass,condition.isSoftDelete());
+        
         logger.trace("query Page By LambdaQuery SQL : \n{}" , sql);
         return sql.toString();
     }

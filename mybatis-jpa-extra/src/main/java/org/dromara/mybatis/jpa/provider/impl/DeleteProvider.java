@@ -40,22 +40,18 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class DeleteProvider <T extends JpaEntity,ID extends Serializable>{    
+public class DeleteProvider <T extends JpaEntity,ID extends Serializable> extends AbstractProvider{    
     static final Logger logger     =     LoggerFactory.getLogger(DeleteProvider.class);
     
     public String deleteById(Map<String, Object>  parametersMap) { 
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
-        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
         SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
-        if(partitionKeyColumnMapper != null) {
-            sql.WHERE(" %s = #{partitionKey} "
-                    .formatted(partitionKeyColumnMapper.getColumn()));  
-        }
+        appendPartitionWhere(sql , entityClass);
         
-        sql.WHERE("%s = #{id}".formatted(idFieldColumnMapper.getColumn()) );  
+        sql.WHERE("%s = #{%s}".formatted(idFieldColumnMapper.getColumn()),idFieldColumnMapper.getField());  
         
         String deleteSql = sql.toString(); 
         logger.trace("Delete SQL \n{}" , deleteSql);
@@ -65,27 +61,23 @@ public class DeleteProvider <T extends JpaEntity,ID extends Serializable>{
     public String batchDelete(Map<String, Object>  parametersMap) { 
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
-        ColumnMapper partitionKeyColumnMapper = ColumnMetadata.getPartitionKey(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
         SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
-        
+
         StringBuilder deleteSql = new StringBuilder("");
         deleteSql.append("<script>").append("\n").append("\n")
-            .append(sql.toString()).append("\n")
-            .append("WHERE ")
-            .append(idFieldColumnMapper.getColumn())
+            .append(sql.toString()).append("\n");
+        //append where or and
+        deleteSql.append((deleteSql.indexOf("WHERE") == -1 ) ? " WHERE " : " and ");
+
+        deleteSql.append(idFieldColumnMapper.getColumn())
             .append(" in (\n")
             .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")
             .append("  #{item} ").append("\n")
             .append(" </foreach>")
             .append(" )\n");
-        
-        if(partitionKeyColumnMapper != null ) {
-            deleteSql.append(" and %s = #{partitionKey} )"
-                    .formatted(partitionKeyColumnMapper.getColumn()));  
-        }
-        
+
         deleteSql.append("\n").append("</script>");
         logger.trace("Delete SQL \n{}" , deleteSql);
         return deleteSql.toString();  
