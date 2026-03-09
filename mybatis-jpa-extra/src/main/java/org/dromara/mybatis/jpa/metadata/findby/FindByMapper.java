@@ -72,14 +72,14 @@ public class FindByMapper {
         
         logger.trace("removed FindBy name : {}" , removedFindByName);
         try {
-                mappedStatementClass  = Class.forName(mappedStatementClassName);
-                Class<?>[] classArgs = ClassesUtils.parseClassArgs(mappedStatementClass);
-                if (classArgs != null && classArgs.length >= 1) {
-                    entityClass = classArgs[0];
-                    logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
-                }
+            mappedStatementClass  = Class.forName(mappedStatementClassName);
+            Class<?>[] classArgs = ClassesUtils.parseClassArgs(mappedStatementClass);
+            if (classArgs != null && classArgs.length >= 1) {
+                entityClass = classArgs[0];
+                logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
+            }
         } catch (ClassNotFoundException e) {
-                logger.error("ClassNotFoundException" , e);
+            logger.error("ClassNotFoundException" , e);
         }
     }
     
