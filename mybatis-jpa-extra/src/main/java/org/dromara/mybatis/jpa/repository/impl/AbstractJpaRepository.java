@@ -79,7 +79,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         this.mapper = mapper;
     }
     
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked"})
     protected void init() {
         Class<?>[] classArgs = ClassesUtils.parseSuperClassArgs(this.getClass());
         if (classArgs != null && classArgs.length >= 2) {
