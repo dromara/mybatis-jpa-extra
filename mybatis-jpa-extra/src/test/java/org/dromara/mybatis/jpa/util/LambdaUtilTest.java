@@ -18,13 +18,17 @@
 package org.dromara.mybatis.jpa.util;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LambdaUtilTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(LambdaUtilTest.class);
+
     @Test
     public  void getColumnName() {
-        System.out.println(LambdaUtil.getColumnName(Stds::getStdNo));
-        System.out.println(LambdaUtil.getColumnName(Stds::getDeleted));
+        logger.debug("{}", LambdaUtil.getColumnName(Stds::getStdNo));
+        logger.debug("{}", LambdaUtil.getColumnName(Stds::getDeleted));
     }
 
 }

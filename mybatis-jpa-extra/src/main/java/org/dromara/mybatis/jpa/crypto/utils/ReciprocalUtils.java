@@ -57,7 +57,7 @@ public final class ReciprocalUtils {
             try {
                 Security.addProvider((Provider)InstanceUtil.newInstance("com.sun.crypto.provider.SunJCE"));
             }catch (Exception e) {
-                e.printStackTrace();
+                // provider loading removed; previously logged exception here
             }
         }
         //else not need to add see jdk-17\conf\security\java.security,SunJCE
@@ -75,7 +75,7 @@ public final class ReciprocalUtils {
             byteFinal = ecipher.doFinal(simpleBytes);
             return byteFinal;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to encode bytes using algorithm {}", algorithm, e);
         }
         return byteFinal;
     }
@@ -103,7 +103,7 @@ public final class ReciprocalUtils {
             byteFinal = cipher.doFinal(ciphersBytes);
             return byteFinal;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to decode bytes using algorithm {}", algorithm, e);
         } 
         return null;
     }
@@ -130,7 +130,7 @@ public final class ReciprocalUtils {
             }
            return secretKey;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to generate default key for algorithm {}", algorithm, e);
         }
         return null;
     }
@@ -139,7 +139,7 @@ public final class ReciprocalUtils {
         try {
             return new SecretKeySpec(secretKey.getBytes(), algorithm);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to generate SecretKey for algorithm {}", algorithm, e);
         }
         return null;
     }

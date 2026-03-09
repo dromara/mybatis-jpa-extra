@@ -19,17 +19,21 @@ package org.dromara.mybatis.jpa.util;
 
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.builder.LambdaQueryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LambdaQueryTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(LambdaQueryTest.class);
 
     public static void main(String[] args) {
         LambdaQuery<Stds> lambdaQuery = new LambdaQuery<>();
         
         lambdaQuery.between(Stds::getStdName, 1,20);
         
-        System.out.println(lambdaQuery.getConditions());
+        logger.debug("{}", lambdaQuery.getConditions());
         
-        System.out.println(LambdaQueryBuilder.build(lambdaQuery));
+        logger.debug("{}", LambdaQueryBuilder.build(lambdaQuery));
         
     }
 

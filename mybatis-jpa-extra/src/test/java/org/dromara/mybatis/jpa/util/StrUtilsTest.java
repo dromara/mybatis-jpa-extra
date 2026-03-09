@@ -24,15 +24,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List; 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StrUtilsTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(StrUtilsTest.class);
 
     @Test
     void shouldConvertUnderlineToCamelAndBack() {
         String aaa = "app_version_fld";
-        System.out.println(StrUtils.underlineToCamel(aaa));
-        System.out.println(StrUtils.underlineToCamel2(aaa));
+        logger.debug("{}", StrUtils.underlineToCamel(aaa));
+        logger.debug("{}", StrUtils.underlineToCamel2(aaa));
         aaa = "appVersionFld";
-        System.out.println(StrUtils.camelToUnderline(aaa));
+        logger.debug("{}", StrUtils.camelToUnderline(aaa));
     }
 
      @Test

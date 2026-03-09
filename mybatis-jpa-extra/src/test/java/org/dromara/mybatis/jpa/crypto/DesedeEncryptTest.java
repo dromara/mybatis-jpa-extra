@@ -21,8 +21,12 @@ import java.sql.SQLException;
 
 import org.dromara.mybatis.jpa.crypto.impl.DesedeEncrypt;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DesedeEncryptTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(DesedeEncryptTest.class);
 
     @Test
     void encrypt() throws SQLException{
@@ -30,8 +34,8 @@ public class DesedeEncryptTest {
         String simple = "shimingxy";
         String ciphers = se.encrypt(simple);
         
-        System.out.println(ciphers);
+        logger.debug("{}", ciphers);
         
-        System.out.println(se.decrypt(ciphers));
+        logger.debug("{}", se.decrypt(ciphers));
     }
 }

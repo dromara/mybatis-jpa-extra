@@ -19,12 +19,16 @@ package org.dromara.mybatis.jpa.id;
 
 import org.dromara.mybatis.jpa.id.impl.UUIDGenerator;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UUIDGeneratorTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(UUIDGeneratorTest.class);
 
     @Test
     void generator(){
         UUIDGenerator uuidGenerator = new UUIDGenerator();
-        System.out.println(uuidGenerator.generate(uuidGenerator));
+        logger.debug("{}", uuidGenerator.generate(uuidGenerator));
     }
 }

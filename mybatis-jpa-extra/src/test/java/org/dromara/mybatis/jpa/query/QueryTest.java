@@ -20,16 +20,20 @@ package org.dromara.mybatis.jpa.query;
 import org.dromara.mybatis.jpa.query.builder.ConditionBuilder;
 import org.dromara.mybatis.jpa.query.builder.QueryBuilder;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class QueryTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(QueryTest.class);
     
     @Test
     void queryBuilder() {
         
         Query q = new Query().eq("cc", "ee").orderBy("aa", OrderBy.ASC);
         
-        System.out.println(QueryBuilder.build(q));
+        logger.debug("{}", QueryBuilder.build(q));
         
-        System.out.println(ConditionBuilder.buildOrderBy(q.getOrderBy()));
+        logger.debug("{}", ConditionBuilder.buildOrderBy(q.getOrderBy()));
     }
 }

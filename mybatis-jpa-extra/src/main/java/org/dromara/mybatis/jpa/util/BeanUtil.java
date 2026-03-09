@@ -39,9 +39,9 @@ public class BeanUtil {
             return;
         }
         try {
-            BeanUtils.copyProperties( origin, target);
+            BeanUtils.copyProperties(target, origin);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to copy bean properties from {} to {}", origin, target, e);
         }        
     }
         
@@ -54,7 +54,7 @@ public class BeanUtil {
             target = InstanceUtil.newInstance(origin.getClass().getSuperclass());
             BeanUtils.copyProperties(target,origin);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to clone superclass for {}", origin, e);
         }        
         return target;
     }
@@ -65,7 +65,7 @@ public class BeanUtil {
                 return  PropertyUtils.getProperty(bean, field);
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to get value for field {} on bean {}", field, bean, e);
         }
         return null;
     }
@@ -79,7 +79,7 @@ public class BeanUtil {
         try {
             return invokeMethod(bean,getByProperty(fieldName));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to get property {} from bean {}", fieldName, bean, e);
         }
         return null;
     }
@@ -88,7 +88,7 @@ public class BeanUtil {
         try {
             return invokeMethod(bean,setByProperty(fieldName),new Object[]{value});
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to set property {} on bean {} to value {}", fieldName, bean, value, e);
         }
         return null;
     }
@@ -98,7 +98,7 @@ public class BeanUtil {
             Field field = bean.getClass().getField(fieldName);
             return field.get(bean);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to get public field {} on bean {}", fieldName, bean, e);
         }
         return null;
     }
@@ -108,7 +108,7 @@ public class BeanUtil {
             bean.getClass().getField(fieldName).set(bean,value);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to set public field {} on bean {} to {}", fieldName, bean, value, e);
         }
         return false;
     }
@@ -171,7 +171,7 @@ public class BeanUtil {
 
     public static Object invokeStaticMethod(Class<?> beanClass, String methodName,
             Object[] args) throws Exception {
-        return InstanceUtil.invokeMethod(beanClass, methodName, args);
+        return InstanceUtil.invokeStaticMethod(beanClass, methodName, args);
     }
     
     public static Object invokeStaticMethod(Class<?> beanClass, String methodName) throws Exception {
@@ -224,7 +224,7 @@ public class BeanUtil {
                 fillValue = getValue == null? null : getValue.toString();
             }
         } catch (IllegalArgumentException e1) {
-            e1.printStackTrace();
+            logger.error("Failed to check isNotEmpty for field {} on {}", field.getName(), entity, e1);
         } 
         if(fieldType.equals("java.lang.String")){
             if(String.valueOf(fillValue)==null) {
@@ -254,7 +254,7 @@ public class BeanUtil {
             try {
                 value=BeanUtil.get(entity, field.getName());
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                logger.error("Failed to get date value for field {} on {}", field.getName(), entity, e);
             } 
             if(value==null) {
                 isFieldNotEmpty= false;
@@ -363,7 +363,7 @@ public class BeanUtil {
         try {
             beanFiledMap = BeanUtil.getFields(bean);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to get fields for bean {}", bean, e);
         }
         if(beanFiledMap==null) {
             return bean;
@@ -402,12 +402,12 @@ public class BeanUtil {
                     try {
                         if(fillValue.length()==10){
                             fillValue+=" 00:00:00";
-                            value=(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")).parse(fillValue);
+                            value=(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(fillValue);
                         }else{
                             continue;
                         }
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        logger.error("Failed to parse date value {} for field {} on bean {}", fillValue, fieldName, bean, e);
                     }
                 }else if(fieldType.equals("java.lang.Object")){
                     value=valueMap.get(fieldName);

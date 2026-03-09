@@ -3,8 +3,12 @@ package org.dromara.mybatis.jpa.query;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConditionValueTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConditionValueTest.class);
 
     @Test
     public void valueOfList() {
@@ -14,13 +18,13 @@ public class ConditionValueTest {
         list.add(3);
         list.add(4);
         list.add(5);
-        System.out.println(ConditionValue.valueOfList(list));
+        logger.debug("{}", ConditionValue.valueOfList(list));
     }
     
     @Test
     public void valueOfArray() {
         Integer []array =new Integer[] {1,2,3,4,5};
-        System.out.println(ConditionValue.valueOfArray(array));
+        logger.debug("{}", ConditionValue.valueOfArray(array));
     }
     
     @Test
@@ -31,7 +35,7 @@ public class ConditionValueTest {
         list.add("3");
         list.add("4");
         list.add("5");
-        System.out.println(ConditionValue.valueOfIterator(list));
+        logger.debug("{}", ConditionValue.valueOfIterator(list));
     }
     
     @Test
@@ -42,6 +46,6 @@ public class ConditionValueTest {
         list.add("3");
         list.add("4");
         list.add("5");
-        System.out.println(ConditionValue.valueOfCollection(list));
+        logger.debug("{}", ConditionValue.valueOfCollection(list));
     }
 }

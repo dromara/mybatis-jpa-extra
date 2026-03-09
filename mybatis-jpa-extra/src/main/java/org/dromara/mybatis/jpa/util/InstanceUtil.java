@@ -23,11 +23,16 @@ package org.dromara.mybatis.jpa.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Crystal
  *
  */
 public class InstanceUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(InstanceUtil.class);
 
     public static Object newInstance(String className) {
         Class<?> cls;
@@ -36,7 +41,7 @@ public class InstanceUtil {
             Constructor<?> constructor = cls.getConstructor();
             return constructor.newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to instantiate class by name: {}", className, e);
         }
         return null;
 
@@ -47,13 +52,16 @@ public class InstanceUtil {
             Constructor<?> constructor = cls.getConstructor();
             return constructor.newInstance();
         }catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to instantiate class: {}", cls, e);
         }
         return null;
     }
     
     @SuppressWarnings("rawtypes")
     public static Object newInstance(String className, Object[] args) {
+        if (args == null || args.length == 0) {
+            return newInstance(className);
+        }
         Class<?> newClass;
         try {
             newClass = Class.forName(className);
@@ -66,7 +74,7 @@ public class InstanceUtil {
             Constructor<?> cons = newClass.getConstructor(argsClass);
             return cons.newInstance(args);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to instantiate class by name with args: {}", className, e);
         } 
         return null;
 
@@ -74,6 +82,9 @@ public class InstanceUtil {
 
     @SuppressWarnings("rawtypes")
     public static <T> Object newInstance(Class<T> cls, Object[] args) {
+        if (args == null || args.length == 0) {
+            return newInstance((Class<?>) cls);
+        }
         try {
             Class[] argsClass = new Class[args.length];
 
@@ -84,7 +95,7 @@ public class InstanceUtil {
             Constructor<T> cons = cls.getConstructor(argsClass);
             return cons.newInstance(args);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to instantiate class with args: {}", cls, e);
         }
 
         return null;

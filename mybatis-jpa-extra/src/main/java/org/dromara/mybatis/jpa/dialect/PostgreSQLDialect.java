@@ -21,8 +21,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.dromara.mybatis.jpa.entity.JpaPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PostgreSQLDialect extends AbstractDialect {
+
+    private static final Logger logger = LoggerFactory.getLogger(PostgreSQLDialect.class);
 
     public PostgreSQLDialect() {
         super();
@@ -75,7 +79,7 @@ public class PostgreSQLDialect extends AbstractDialect {
                 preparedStatement.setInt(++parameterSize, 1000);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to set limit parameters for page {}", page, e);
         }
     }
     

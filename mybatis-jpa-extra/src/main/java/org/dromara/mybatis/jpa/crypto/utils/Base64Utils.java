@@ -71,7 +71,7 @@ public class Base64Utils {
             stream.close();
             return b64Image;
         }catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to encode image to base64", e);
         }
         return "";
     }
@@ -95,7 +95,7 @@ public class Base64Utils {
             byte[] buffer = inputFile.readAllBytes();
             return encodeBase64(buffer);
         } catch (FileNotFoundException e) {
-            logger.error("error",e);
+            logger.error("File not found when converting to base64: {}", fileName, e);
         }
         return null;
 
@@ -126,7 +126,7 @@ public class Base64Utils {
         try (FileOutputStream out = new FileOutputStream(targetPath)) {
             out.write(buffer);
         }catch (FileNotFoundException e){
-            logger.info("error",e);
+            logger.error("File not found when writing base64 to file: {}", targetPath, e);
         }
     }
 
