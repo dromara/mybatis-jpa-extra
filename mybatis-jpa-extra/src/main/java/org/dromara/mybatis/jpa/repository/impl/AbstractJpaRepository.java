@@ -18,11 +18,8 @@
 package org.dromara.mybatis.jpa.repository.impl;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
@@ -63,6 +60,9 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     private M mapper;
 
     public M getMapper() {
+        if (mapper == null) {
+            throw new RuntimeException("Mapper must not be null . ");
+        }
         return mapper;
     }
     
@@ -83,7 +83,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     protected void init() {
         Class<?>[] classArgs = ClassesUtils.parseSuperClassArgs(this.getClass());
         if (classArgs != null && classArgs.length >= 2) {
-            mapperClass = (Class<T>) classArgs[0];
+            mapperClass = (Class<?>) classArgs[0];
             this.entityClass = (Class<T>) classArgs[1];
             if(logger.isTraceEnabled()) {
                 logger.trace("Mapper {} , Entity {}" , String.format(ConstMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
@@ -502,7 +502,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @return
      */
     public boolean existsById(ID id) {
-    	return	getMapper().countById(entityClass,id) > 0;
+        return  getMapper().countById(entityClass,id) > 0;
     }
 
     //follow function for insert update and delete
@@ -530,7 +530,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean insertBatch(List<T> listEntity){
         try {
             if(CollectionUtils.isNotEmpty(listEntity)) {
-            	    Integer count = getMapper().insertBatch(listEntity) ;
+                    Integer count = getMapper().insertBatch(listEntity) ;
                 logger.debug("Insert Batch count : {}" , count);
             }
         } catch(Exception e) {
