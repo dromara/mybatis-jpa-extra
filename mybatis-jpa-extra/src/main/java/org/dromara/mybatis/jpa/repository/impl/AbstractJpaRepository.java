@@ -34,6 +34,7 @@ import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.repository.IJpaRepository;
 import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
 import org.dromara.mybatis.jpa.update.UpdateWrapper;
+import org.dromara.mybatis.jpa.util.ClassesUtils;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,11 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T extends JpaEntity, ID extends Serializable > implements IJpaRepository<T, ID>{
     private static final  Logger logger = LoggerFactory.getLogger(AbstractJpaRepository.class);
+    
+    /**
+     * Mapper Class
+     */
+    Class<?> mapperClass = null;
     
     /**
      * entity Class
@@ -75,11 +81,10 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     
     @SuppressWarnings({"unchecked","rawtypes"})
     protected void init() {
-        Class mapperClass = null;
-        Type[] pType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
-        if (pType != null && pType.length >= 2) {
-            mapperClass=(Class<T>) pType[0];
-            this.entityClass = (Class<T>) pType[1];
+        Class<?>[] classArgs = ClassesUtils.parseSuperClassArgs(this.getClass());
+        if (classArgs != null && classArgs.length >= 2) {
+            mapperClass = (Class<T>) classArgs[0];
+            this.entityClass = (Class<T>) classArgs[1];
             if(logger.isTraceEnabled()) {
                 logger.trace("Mapper {} , Entity {}" , String.format(ConstMetadata.LOG_FORMAT, mapperClass.getSimpleName()),entityClass.getSimpleName());
             }

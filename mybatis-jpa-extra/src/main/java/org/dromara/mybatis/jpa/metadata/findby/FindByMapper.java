@@ -17,9 +17,7 @@
 
 package org.dromara.mybatis.jpa.metadata.findby;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-
+import org.dromara.mybatis.jpa.util.ClassesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,26 +71,18 @@ public class FindByMapper {
         }
         
         logger.trace("removed FindBy name : {}" , removedFindByName);
-        
-        parseEntityClass();
-    }
-    
-    public void parseEntityClass() {
         try {
-            mappedStatementClass  = Class.forName(mappedStatementClassName);
-            Type[] pType = mappedStatementClass.getGenericInterfaces();
-            if (pType != null && pType.length >= 1) {
-                ParameterizedType parameterizedType = (ParameterizedType)pType[0];
-                if(parameterizedType != null && parameterizedType.getActualTypeArguments().length > 0) {
-                    entityClass = (Class<?>)parameterizedType.getActualTypeArguments()[0];
+                mappedStatementClass  = Class.forName(mappedStatementClassName);
+                Class<?>[] classArgs = ClassesUtils.parseClassArgs(mappedStatementClass);
+                if (classArgs != null && classArgs.length >= 1) {
+                    entityClass = classArgs[0];
                     logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
                 }
-            }
         } catch (ClassNotFoundException e) {
-        	logger.error("ClassNotFoundException" , e);
+                logger.error("ClassNotFoundException" , e);
         }
     }
-
+    
     public String getMappedStatementId() {
         return mappedStatementId;
     }
