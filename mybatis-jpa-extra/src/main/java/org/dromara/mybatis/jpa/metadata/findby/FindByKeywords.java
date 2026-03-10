@@ -28,7 +28,7 @@ public class FindByKeywords {
     /**
      * keyword list
      */
-    static List<String> keywords;
+    private static List<String> keywords;
     /**
      * findBy
      */

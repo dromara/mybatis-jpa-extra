@@ -33,16 +33,17 @@ public class IdentifierGeneratorFactory {
     
     static ConcurrentMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
     
-    public IdentifierGeneratorFactory() {
-        register(IdentifierStrategy.UUID        , new UUIDGenerator());
+    static {
+    	register(IdentifierStrategy.UUID        , new UUIDGenerator());
         register(IdentifierStrategy.ULID        , new ULIDGenerator());
         register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator());
         register(IdentifierStrategy.DEFAULT     , new SnowFlakeIdGenerator(null));
     }
     
+    public IdentifierGeneratorFactory() {
+    }
+    
     public IdentifierGeneratorFactory(long datacenterId, long machineId) {
-        register(IdentifierStrategy.UUID, new UUIDGenerator());
-        register(IdentifierStrategy.ULID, new ULIDGenerator());
         register(IdentifierStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
     }
 
@@ -54,7 +55,7 @@ public class IdentifierGeneratorFactory {
         IdentifierGeneratorFactory.identifierGeneratorMap = identifierGeneratorMap;
     }
 
-    public void register(String strategy, IdentifierGenerator generator) {
+    public static void register(String strategy, IdentifierGenerator generator) {
         strategy = strategy.toLowerCase();
         if(IdentifierGeneratorFactory.identifierGeneratorMap.containsKey(strategy)) {
             return;
