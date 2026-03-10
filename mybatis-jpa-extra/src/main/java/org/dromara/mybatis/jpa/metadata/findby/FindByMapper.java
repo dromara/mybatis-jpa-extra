@@ -24,30 +24,22 @@ import org.slf4j.LoggerFactory;
 public class FindByMapper {
     private static final Logger logger     =     LoggerFactory.getLogger(FindByMapper.class);
     
-    /**
-     * 
-     */
+    /** mapped statement id like 'com.xxx.YourMapper.findByName' */
     String mappedStatementId;
     
-    /**
-     * 
-     */
+    /** method name part of the id */
     String mappedStatementMethodName;
     
-    /**
-     * 
-     */
+    /** method name with the 'findBy' prefix removed */
     String removedFindByName;
     
-    /**
-     * 
-     */
+    /** mapper class object */
     Class<?> mappedStatementClass;
     
+    /** mapper class name */
     String mappedStatementClassName;
-    /**
-     * 
-     */
+    
+    /** entity class discovered from generics */
     Class<?> entityClass;
     
     boolean isDistinct = false;
@@ -79,7 +71,7 @@ public class FindByMapper {
                 logger.trace("Entity Class : {}" , entityClass.getCanonicalName());
             }
         } catch (ClassNotFoundException e) {
-            logger.error("ClassNotFoundException" , e);
+            logger.error("ClassNotFoundException while loading {}", mappedStatementClassName, e);
         }
     }
     
