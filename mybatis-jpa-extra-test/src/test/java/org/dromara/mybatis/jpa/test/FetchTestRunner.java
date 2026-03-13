@@ -32,12 +32,9 @@ public class FetchTestRunner  extends BaseTestRunner{
     @Test
     void fetch(){
         _logger.info("fetch...");
-         JpaPage page = new JpaPage();
+         JpaPage page = new JpaPage(1);
          Students student = new Students();
          student.setStdGender("M");
-         student.setStdAge(40);
-         page.setPageSize(20);
-         page.setPageable(true);
          
          JpaPageResults<Students>  results = service.fetch(page,student);
          _logger.info("records {} , total {} , totalPage {} , page {} ",
@@ -47,11 +44,10 @@ public class FetchTestRunner  extends BaseTestRunner{
     @Test
     void fetchByQuery(){
         _logger.info("fetch By Query...");
-         JpaPage page = new JpaPage();
+         JpaPage page = new JpaPage(1);
          page.setPageSize(20);
-         page.setPageable(true);
          
-         Query condition = new Query().isNotNull("stdMajor");//.eq("stdMajor", "政治").and().gt("STDAGE", 30);
+         Query condition = new Query().eq("stdMajor", "政治");
          
          JpaPageResults<Students>  results = service.fetch(page,condition);
          _logger.info("records {} , total {} , totalPage {} , page {} ",
@@ -65,7 +61,7 @@ public class FetchTestRunner  extends BaseTestRunner{
          page.setPageSize(20);
          page.setPageable(true);
          LambdaQuery<Students> lambdaQuery =new LambdaQuery<>();
-         //lambdaQuery.eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30));
+         lambdaQuery.eq(Students::getStdMajor, "政治");
          JpaPageResults<Students>  results = service.fetch(page,lambdaQuery);
          _logger.info("records {} , total {} , totalPage {} , page {} ",
                  results.getRecords(),results.getTotal(),results.getTotalPage(),results.getPage());

@@ -18,6 +18,7 @@
 package org.dromara.mybatis.jpa.entity;
 
 import org.dromara.mybatis.jpa.id.IdentifierStrategy;
+import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.constants.ConstPage;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,82 +27,63 @@ import jakarta.persistence.Transient;
 
 /**
  * Pagination for database pagination
- * @author Crystal.Sea
- *
+ * Improvements: input validation, safer calculations, normalized sort/order building,
+ * and small fluent helpers.
  */
 public class JpaPage {
-    
-    @JsonIgnore
+	
+	@JsonIgnore
     @Transient
-    protected int rows;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected int pageSize = 20;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected int pageNumber = 1;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected int startRow;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected int endRow;
-    
-    @JsonIgnore
-    @Transient
-    protected String sidx;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected String sortOrder;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected String sortKey;
-    /**
-     * 
-     */
-    @JsonIgnore
-    @Transient
-    protected String orderBy;
-    /**
-     * @serialField pageable
-     */
+    protected String    pageSelectId;
+	
+	/** whether to apply pagination */
     @JsonIgnore
     @Transient
     protected boolean pageable = false;
     
+    /** default page size */
     @JsonIgnore
     @Transient
-    protected String    pageSelectId;
+    protected int pageSize = ConstPage.NORMAL_RESULTS;
+    /** current page number, 1-based */
+    @JsonIgnore
+    @Transient
+    protected int pageNumber = 1;
+    /** asc/desc */
+    @JsonIgnore
+    @Transient
+    protected String sortOrder;
+    /** prebuilt sort key (without ORDER BY) */
+    @JsonIgnore
+    @Transient
+    protected String sortKey;
+    /** full ORDER BY clause */
+    @JsonIgnore
+    @Transient
+    protected String orderBy;
     
+    @JsonIgnore
+    @Transient
+    protected int rows;
+    /** zero-based start row for SQL limit/offset */
+    @JsonIgnore
+    @Transient
+    protected int startRow;
+    /** exclusive end row */
+    @JsonIgnore
+    @Transient
+    protected int endRow;
     
     public JpaPage(){}
     
     public JpaPage(int pageNumber ){
-        this.pageNumber = pageNumber;
+        setPageNumber(pageNumber);
         this.pageable = true;
     }
     
     public JpaPage(int pageNumber , int pageSize){
-        this.pageNumber = pageNumber;
-        this.pageSize = pageSize;
+        setPageNumber(pageNumber);
+        setPageSize(pageSize);
         this.pageable = true;
     }
 
@@ -116,7 +98,12 @@ public class JpaPage {
     }
 
     public void setRows(int rows) {
+        if (rows < 0) {
+            // negative rows don't make sense; keep previous value
+            return;
+        }
         this.rows = rows;
+        // keep pageSize in sync with rows when rows explicitly provided
         this.pageSize = rows;
         calculate();
     }
@@ -127,19 +114,14 @@ public class JpaPage {
     }
 
     public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
+        if (pageNumber <= 0) {
+            this.pageNumber = 1;
+        } else {
+            this.pageNumber = pageNumber;
+        }
         calculate();
     }
     
-    @JsonIgnore
-    public String getSidx() {
-        return sidx;
-    }
-
-    public void setSidx(String sidx) {
-        this.sidx = sidx;
-        setSortKey();
-    }
     @JsonIgnore
     public String getSortOrder() {
         return sortOrder;
@@ -147,7 +129,6 @@ public class JpaPage {
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
-        setSortKey();
     }
 
     @JsonIgnore
@@ -156,8 +137,13 @@ public class JpaPage {
     }
 
     public void setStartRow(int startRow) {
-        this.startRow     = startRow;
-        
+        if (startRow < 0) {
+            this.startRow = 0;
+        } else {
+            this.startRow     = startRow;
+        }
+        // derive pageNumber from explicit startRow
+        calculate(this.startRow);
     }
     
     @JsonIgnore
@@ -166,7 +152,11 @@ public class JpaPage {
     }
 
     public void setEndRow(int endRow) {
-        this.endRow = endRow;
+        if (endRow < 0) {
+            this.endRow = this.startRow + this.pageSize;
+        } else {
+            this.endRow = endRow;
+        }
     }
 
     public void calculate(int startRow) {
@@ -194,10 +184,16 @@ public class JpaPage {
     }
 
     public void setPageSize(int pageSize) {
-        if(pageSize == -1 || pageSize > ConstPage.MAX_RESULTS) {
-            pageSize = ConstPage.MAX_RESULTS;
+        if(pageSize <= 0) {
+            // default to max results when non-positive
+            this.pageSize = ConstPage.NORMAL_RESULTS;
+        } else if(pageSize > ConstPage.MAX_RESULTS) {
+            this.pageSize = ConstPage.MAX_RESULTS;
+        } else {
+            this.pageSize = pageSize;
         }
-        this.pageSize = pageSize;
+        // recalculate dependent fields
+        calculate();
     }
     
     @JsonIgnore
@@ -205,17 +201,6 @@ public class JpaPage {
         return sortKey;
     }
 
-    /**
-     * create sortKey from sidx & sord,eg  order by  name asc 
-     */
-    public void setSortKey() {
-        if(sidx!=null    &&    sortOrder!=null    &&    !sidx.equals("")    &&    !sortOrder.equals("")){
-            sortKey=" "+sidx+" "+sortOrder+" ";
-            setOrderBy();
-        }
-        
-    }
-    
     public void setSortKey(String sortKey) {
         this.sortKey = sortKey;
     }
@@ -225,13 +210,12 @@ public class JpaPage {
     }
     
     /**
-     * create ORDER BY 
+     * build ORDER BY with sortKey, if sortKey is not empty
      */
-    public void setOrderBy() {
-        if(sortKey!=null    &&    !sortKey.equals("")){
-            orderBy=" ORDER BY  "+sidx+" "+sortOrder+" ";
+    public void buildOrderBy() {
+        if(StringUtils.isNotBlank(sortKey)){
+            orderBy = " ORDER BY " + sortKey + " " + sortOrder + " ";
         }
-        
     }
     
     public void setOrderBy(String orderBy) {
@@ -261,17 +245,25 @@ public class JpaPage {
     
     /**
      * calculate StartRow
-     * @param page
-     * @param pageResults
-     * @return
+     * @param page page number (1-based)
+     * @param pageResults page size
+     * @return zero-based start row
      */
     protected Integer calculateStartRow(Integer page,Integer pageSize){
+        if (page == null || page <= 1) {
+            return 0;
+        }
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = ConstPage.NORMAL_RESULTS;
+        }else if(pageSize > ConstPage.MAX_RESULTS) {
+        	pageSize = ConstPage.NORMAL_RESULTS;
+        }
         return (page - 1) * pageSize;
     }
     
     public void build() {
         this.pageSelectId= generateId();
-        this.startRow= calculateStartRow(this.pageNumber ,this.pageSize);
+        this.startRow = calculateStartRow(this.pageNumber ,this.pageSize);
         this.pageable = true;
     }
     
@@ -281,61 +273,55 @@ public class JpaPage {
      * @param size 记录数
      */
     public static JpaPage of(int page, int size) {
-    	return new JpaPage(page,size);
+        return new JpaPage(page,size);
     }
     
     public JpaPage page(int page) {
-        this.pageNumber = page;
+        setPageNumber(page);
         this.pageable = true;
         return this;
     }
     
     public JpaPage ofPage(int page) {
-        this.pageNumber = page;
-        this.pageable = true;
-        return this;
+        return page(page);
     }
     
     public JpaPage size(int size) {
-        this.pageSize = size;
+        setPageSize(size);
         this.pageable = true;
         return this;
     }
     
     public JpaPage ofSize(int size) {
-        this.pageSize = size;
-        this.pageable = true;
-        return this;
+        return size(size);
     }
 
     @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("JpaPage [rows=");
-        builder.append(rows);
-        builder.append(", pageSize=");
-        builder.append(pageSize);
-        builder.append(", pageNumber=");
-        builder.append(pageNumber);
-        builder.append(", startRow=");
-        builder.append(startRow);
-        builder.append(", endRow=");
-        builder.append(endRow);
-        builder.append(", sidx=");
-        builder.append(sidx);
-        builder.append(", sortOrder=");
-        builder.append(sortOrder);
-        builder.append(", sortKey=");
-        builder.append(sortKey);
-        builder.append(", orderBy=");
-        builder.append(orderBy);
-        builder.append(", pageable=");
-        builder.append(pageable);
-        builder.append(", pageSelectId=");
-        builder.append(pageSelectId);
-        builder.append("]");
-        return builder.toString();
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("JpaPage [pageSelectId=");
+		builder.append(pageSelectId);
+		builder.append(", pageable=");
+		builder.append(pageable);
+		builder.append(", pageSize=");
+		builder.append(pageSize);
+		builder.append(", pageNumber=");
+		builder.append(pageNumber);
+		builder.append(", sortOrder=");
+		builder.append(sortOrder);
+		builder.append(", sortKey=");
+		builder.append(sortKey);
+		builder.append(", orderBy=");
+		builder.append(orderBy);
+		builder.append(", rows=");
+		builder.append(rows);
+		builder.append(", startRow=");
+		builder.append(startRow);
+		builder.append(", endRow=");
+		builder.append(endRow);
+		builder.append("]");
+		return builder.toString();
+	}
     
     
 }

@@ -74,7 +74,7 @@ public class SqlMapperProvider {
      * @return fetchCount sql String
      */
     public String fetchCount(Map<String, Object>  parametersMap) {
-        return new FetchCountProvider<>().executeCountByMap(parametersMap);
+        return new FetchCountProvider().executeCountByMap(parametersMap);
     }
     
 }

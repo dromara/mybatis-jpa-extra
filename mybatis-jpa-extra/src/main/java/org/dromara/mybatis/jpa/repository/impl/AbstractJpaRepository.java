@@ -106,7 +106,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         try {
             page.build();
             List<T> resultslist = getMapper().fetch(page, entity);
-            return (JpaPageResults<T>) buildPageResults(page , resultslist);
+            return (JpaPageResults<T>) buildPageResults(page , entity , resultslist);
         }catch (Exception e) {
             logger.error("fetch Exception " , e);
         }
@@ -125,7 +125,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         try {
             page.build();
             List<T> resultslist = getMapper().fetchByQuery(page, query , this.entityClass);
-            return (JpaPageResults<T>) buildPageResults(page , resultslist);
+            return (JpaPageResults<T>) buildPageResults(page , null,resultslist);
         }catch (Exception e) {
             logger.error("fetch by Query Exception " , e);
         }
@@ -144,7 +144,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         try {
             page.build();
             List<T> resultslist = getMapper().fetchByLambdaQuery(page, lambdaQuery , this.entityClass);
-            return (JpaPageResults<T>) buildPageResults(page , resultslist);
+            return (JpaPageResults<T>) buildPageResults(page ,null, resultslist);
         }catch (Exception e) {
             logger.error("fetch by LambdaQuery Exception " , e);
         }
@@ -161,46 +161,24 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         try {
             entity.build();
             List<T> resultslist = getMapper().fetchPageResults(entity);
-            return (JpaPageResults<T>) buildPageResults(entity , resultslist);
+            return (JpaPageResults<T>) buildPageResults( entity , resultslist);
         }catch (Exception e) {
             logger.error("fetchPageResults Exception " , e);
         }
         return null;
     }
     
-    @SuppressWarnings("unchecked")
-    public JpaPageResults<T> fetchPageResults(JpaPage page , T entity) {
-        try {
-            entity.build();
-            List<T> resultslist = getMapper().fetchPageResults(page , entity);
-            return (JpaPageResults<T>) buildPageResults(entity , resultslist);
-        }catch (Exception e) {
-            logger.error("fetchPageResults page Exception " , e);
-        }
-        return null;
-    }
-    
     /**
      * query page list entity by entity 
      * @param entity
      * @return
      */
+    @SuppressWarnings("unchecked")
     public JpaPageResults<T> fetchPageResults(String mapperId,T entity) {
-        return fetchPageResults(mapperId , null , entity);
-    }
-    
-    /**
-     * query page list entity by entity 
-     * @param entity
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public JpaPageResults<T> fetchPageResults(String mapperId,JpaPage page ,T entity) {
-        try {
+    	try {
             entity.build();
-            List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, 
-                    page == null ? new Object[]{entity} : new Object[]{page , entity});
-            return (JpaPageResults<T>) buildPageResults(entity , resultslist);
+            List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
+            return (JpaPageResults<T>) buildPageResults( entity , resultslist);
         }catch (NoSuchMethodException e) {
             logger.error("Mapper no fetchPageResults Method Exception " , e);
         }catch (Exception e) {
@@ -862,10 +840,26 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param entity
      * @return
      */
-    protected Integer fetchCount(JpaPage page) {
+    protected Integer fetchCount(JpaPage entity) {
         Integer count = 0;
         try {
-            count = getMapper().fetchCount(page);
+            count = getMapper().fetchCount(entity);
+            logger.debug("fetchCount count : {}" , count);
+        } catch(Exception e) {
+            logger.error("fetchCount Exception " , e);
+        }
+        return count;
+    }
+    
+    /**
+     * query Count by page and entity 
+     * @param entity
+     * @return
+     */
+    protected Integer fetchCount(JpaPage page, T entity) {
+        Integer count = 0;
+        try {
+            count = getMapper().fetchCountByPage(page,entity);
             logger.debug("fetchCount count : {}" , count);
         } catch(Exception e) {
             logger.error("fetchCount Exception " , e);
@@ -873,29 +867,63 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         return count;
     }
 
-    protected JpaPageResults<?> buildPageResults(JpaPage page , List<?> resultslist) {
+    protected JpaPageResults<?> buildPageResults(JpaPage entity, List<?> resultslist) {
         //当前页记录数
         Integer records = JpaPageResults.parseRecords(resultslist);
         //总页数
-        Integer totalCount = fetchCount(page, resultslist);
+        Integer totalCount = fetchCount(entity, resultslist);
+        //构建返回对象
+        return new JpaPageResults<>(entity.getPageNumber(),entity.getPageSize(),records,totalCount,resultslist);
+    }
+    
+    protected JpaPageResults<?> buildPageResults(JpaPage page , JpaPage entity, List<?> resultslist) {
+        //当前页记录数
+        Integer records = JpaPageResults.parseRecords(resultslist);
+        //总页数
+        Integer totalCount = fetchCount(page,entity, resultslist);
         //构建返回对象
         return new JpaPageResults<>(page.getPageNumber(),page.getPageSize(),records,totalCount,resultslist);
     }
     
     /**
      * 获取总页数
-     * @param page
-     * @param records
-     * @return
+     * @param entity
+     * @param resultslist
+     * @return totalCount
      */
-    protected Integer fetchCount(JpaPage page ,List<?> resultslist) {
+    protected Integer fetchCount(JpaPage entity,List<?> resultslist) {
+        Integer totalCount = 0;
+        entity.setPageable(false);
+        if(CollectionUtils.isEmpty(resultslist)) {
+			return totalCount;
+		}
+        Integer records = JpaPageResults.parseRecords(resultslist);
+        if(entity.getPageNumber() == 1 && records < entity.getPageSize()) {
+            totalCount = records;
+        }else {
+            totalCount = JpaPageResults.parseCount(getMapper().fetchCount(entity));
+        }
+        return totalCount;
+    }
+    
+    /**
+     * 获取总页数
+     * @param page
+     * @param entity
+     * @param resultslist
+     * @return totalCount
+     */
+    protected Integer fetchCount(JpaPage page , Object entity,List<?> resultslist) {
         Integer totalCount = 0;
         page.setPageable(false);
+        if(CollectionUtils.isEmpty(resultslist)) {
+			return totalCount;
+		}
         Integer records = JpaPageResults.parseRecords(resultslist);
         if(page.getPageNumber() == 1 && records < page.getPageSize()) {
             totalCount = records;
         }else {
-            totalCount = JpaPageResults.parseCount(getMapper().fetchCount(page));
+            totalCount = JpaPageResults.parseCount(getMapper().fetchCountByPage(page,entity));
         }
         return totalCount;
     }

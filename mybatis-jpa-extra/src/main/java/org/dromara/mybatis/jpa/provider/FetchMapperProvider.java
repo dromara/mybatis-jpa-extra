@@ -56,7 +56,14 @@ public class FetchMapperProvider <T extends JpaEntity,ID extends Serializable>{
      * @return insert sql String
      */
     public String fetchCount(JpaPage entity) {
-        return new FetchCountProvider<>().executeCount(entity);
+        return new FetchCountProvider().executeCount(entity);
+    }
+    /**
+     * @param entity
+     * @return insert sql String
+     */
+    public String fetchCountByPage(Map<String, Object>  parametersMap) {
+        return new FetchCountProvider().executeCountByPage(parametersMap);
     }
 
 }

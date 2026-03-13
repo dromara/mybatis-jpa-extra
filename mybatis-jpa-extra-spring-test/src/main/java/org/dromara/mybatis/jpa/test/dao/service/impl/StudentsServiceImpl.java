@@ -34,7 +34,7 @@ public class StudentsServiceImpl extends JpaServiceImpl<StudentsMapper,Students,
     @SuppressWarnings("unchecked")
     public JpaPageResults<StudentVo> fetchPageResultsVo(StudentQueryDto entity) {
         entity.build();
-        return (JpaPageResults<StudentVo>) this.buildPageResults(entity, getMapper().fetchPageResultsVo(entity));
+        return (JpaPageResults<StudentVo>) this.buildPageResults(entity,entity, getMapper().fetchPageResultsVo(entity));
     }
     
     public List<Students> findByStdNo(String stdNo) {

@@ -20,14 +20,12 @@
  */
 package org.dromara.mybatis.jpa.provider.impl;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
-import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.metadata.MapperMetadata;
@@ -39,27 +37,36 @@ import org.slf4j.LoggerFactory;
  * @author Crystal.Sea
  *
  */
-public class FetchCountProvider <T extends JpaEntity,ID extends Serializable>{    
+public class FetchCountProvider{    
     static final Logger logger     =     LoggerFactory.getLogger(FetchCountProvider.class);
-    
 
+    /**
+     * 
+     * @param entity extends JpaPage
+     * @return executePageResultsCount sql String
+     */
+    public String executeCount(JpaPage entity) {
+    	return executeCount(entity,null);
+    }
     
     /**
      * 
-     * @param JpaPage
+     * @param parametersMap contains page and entity
      * @return executePageResultsCount sql String
      */
-    public String executeCount(JpaPage page) {
+    public String executeCountByPage(Map<String, Object>  parametersMap) {
+    	JpaPage page = (JpaPage) parametersMap.get(ConstMetadata.PAGE);
     	return executeCount(page,null);
     }
     
     /**
      * 
-     * @param parameters
+     * @param parameters as Map<String, Object> contains page
      * @return executePageResultsCount sql String
      */
     public String executeCountByMap(Map<String, Object> parameters) {
-    	return executeCount(null,parameters);
+    	JpaPage page = (JpaPage)parameters.get(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE);
+    	return executeCount(page,parameters);
     }
     
     /**
@@ -68,15 +75,8 @@ public class FetchCountProvider <T extends JpaEntity,ID extends Serializable>{
      */
     String executeCount(JpaPage page,Map<String, Object> parameters) {
         StringBuilder sql = new StringBuilder("");
-        //获取缓存SelectId
-        String pageSelectId = null;
-        if(page != null) {
-        	pageSelectId = page.getPageSelectId();
-        }else {
-        	pageSelectId = ((JpaPage)parameters.get(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE)).getPageSelectId();
-        }
-        //获取缓存数据
-        JpaPageSqlCache pageSqlCache = getPageSqlCache(pageSelectId);
+        //根据pageSelectId获取缓存数据
+        JpaPageSqlCache pageSqlCache = getPageSqlCache(page.getPageSelectId());
         if(pageSqlCache != null) {
             //多个空格 tab 替换成1个空格
             String selectSql = StrUtils.lineBreakToBlank(pageSqlCache.getSql());

@@ -35,12 +35,17 @@ import org.dromara.mybatis.jpa.query.Query;
 public interface IJpaFetchMapper<T, ID extends Serializable>{
     
     @SelectProvider(type = FetchMapperProvider.class, method = "fetchCount")
-    public Integer fetchCount(JpaPage page);
+    public Integer fetchCount(JpaPage entity);
+    
+    @SelectProvider(type = FetchMapperProvider.class, method = "fetchCountByPage")
+    public Integer fetchCountByPage(
+                    @Param (ConstMetadata.PAGE) JpaPage page,
+                    @Param (ConstMetadata.ENTITY) Object entity);
     
     @SelectProvider(type = FetchMapperProvider.class, method = "fetch")
     public List<T> fetch(
                     @Param (ConstMetadata.PAGE)JpaPage page,
-                    @Param (ConstMetadata.ENTITY) T entity);
+                    @Param (ConstMetadata.ENTITY) Object entity);
     
     @SelectProvider(type = FetchMapperProvider.class, method = "fetchByQuery")
     public List<T> fetchByQuery(
@@ -57,7 +62,5 @@ public interface IJpaFetchMapper<T, ID extends Serializable>{
 
     //
     public List<T> fetchPageResults(T entity);
-    
-    public List<T> fetchPageResults(@Param (ConstMetadata.PAGE) JpaPage page ,@Param (ConstMetadata.ENTITY) T entity);
-        
+       
 }

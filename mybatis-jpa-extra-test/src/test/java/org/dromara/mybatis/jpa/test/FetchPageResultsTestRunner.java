@@ -35,6 +35,7 @@ public class FetchPageResultsTestRunner  extends BaseTestRunner{
          Students student=new Students();
          student.setPageNumber(2);
          student.setPageSize(10);
+         student.setStdGender("M");
          JpaPageResults<Students>  results = service.fetchPageResults(student);
 
          _logger.info("records {} , total {} , totalPage {} , page {} ",

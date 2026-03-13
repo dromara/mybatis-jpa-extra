@@ -27,8 +27,10 @@ package org.dromara.mybatis.jpa.constants;
  */
 public class ConstPage {
     
+	public static final int NORMAL_RESULTS     = 20;
+	
     public static final int MAX_RESULTS        = 10000;
-
+    
     public static final String PAGE_NUMBER     = "pageNumber";
     
     public static final String PAGE_SIZE       = "pageSize";

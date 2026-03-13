@@ -67,21 +67,12 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      */
     public JpaPageResults<T> fetchPageResults(T entity);
     
-    public JpaPageResults<T> fetchPageResults(JpaPage page , T entity) ;
-    
     /**
      * query page list entity by entity 
      * @param entity
      * @return
      */
     public JpaPageResults<T> fetchPageResults(String mapperId,T entity);
-    
-    /**
-     * query page list entity by entity 
-     * @param entity
-     * @return
-     */
-    public JpaPageResults<T> fetchPageResults(String mapperId,JpaPage page ,T entity);
 
     /**
      * select with filter and args

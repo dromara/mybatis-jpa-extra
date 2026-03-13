@@ -36,6 +36,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.spring.boot4.autoconfigure.DruidDataSourceBuilder;
 //import com.alibaba.druid.pool.DruidDataSource;
 //import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceBuilder;
 import com.zaxxer.hikari.HikariConfig;
@@ -54,11 +56,11 @@ public class MybatisJpaDataSourceConfig {
     public static final String DS_TEST3 = "test3";
     
     
-    /*@Bean
+    @Bean
     @ConfigurationProperties("spring.datasource")
     public DruidDataSource druidDataSource() {
         return DruidDataSourceBuilder.create().build();
-    }*/
+    }
 
     @Primary
     @Bean(name="dataSource")
@@ -92,13 +94,13 @@ public class MybatisJpaDataSourceConfig {
         return dynamicDataSource;
     }
     
-    @Bean 
+    /*@Bean 
     public DataSource getDataSource() { 
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create(); 
         dataSourceBuilder.username("SA"); 
         dataSourceBuilder.password(""); 
         return dataSourceBuilder.build(); 
-    }
+    }*/
 
     public DataSource createH2DataSource(String database) {
         HikariConfig config = new HikariConfig();
