@@ -58,7 +58,7 @@
         <joda-time.version>2.14.0</joda-time.version>
         <activation.version>2.1.4</activation.version>
         <aopalliance.version>1.0</aopalliance.version>
-        <bouncycastle.version>1.83</bouncycastle.version>
+        <bouncycastle.version>1.84</bouncycastle.version>
 
     </properties>
 
