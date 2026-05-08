@@ -508,8 +508,9 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean insertBatch(List<T> listEntity){
         try {
             if(CollectionUtils.isNotEmpty(listEntity)) {
-                    Integer count = getMapper().insertBatch(listEntity) ;
+                Integer count = getMapper().insertBatch(listEntity) ;
                 logger.debug("Insert Batch count : {}" , count);
+                return  count > 0;
             }
         } catch(Exception e) {
             logger.error("Insert Batch Exception " , e);
