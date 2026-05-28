@@ -48,7 +48,7 @@ public class LambdaQueryTestRunner  extends BaseTestRunner{
         List<String> majorList = new ArrayList<>(Arrays.asList("政治","数学"));
         service.query(
                 new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").gt(Students::getStdAge, Integer.valueOf(30)).in(Students::getStdMajor, majorList)
-                .or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));
+                .or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, null)));
         //service.query(
         //        new LambdaQuery<Students>().eq(Students::getStdMajor, "政治").and().gt(Students::getStdAge, Integer.valueOf(30)).and().in(Students::getStdMajor, new Object[]{"政治","化学"})
         //        .or(new LambdaQuery<Students>().eq(Students::getStdName, "周瑜").or().eq(Students::getStdName, "吕蒙")));

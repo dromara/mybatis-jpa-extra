@@ -20,8 +20,9 @@ package org.dromara.mybatis.jpa.handler;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class SafeValueHandler {
-
-    public final class NumberSign{
+    public static final String NULL = "null";
+    
+	public final class NumberSign{
         public static final String SYMBOL         = "#";
         public static final String REPLACE        = "0x23";
     }
@@ -37,6 +38,9 @@ public class SafeValueHandler {
     }
 
     public static String valueOf(Object value) {
+    	if(value == null) {
+    		return NULL;
+    	}
         String valueType = value.getClass().getSimpleName().toLowerCase();
         if (valueType.equals("string") 
                 || valueType.equals("char")
@@ -54,6 +58,9 @@ public class SafeValueHandler {
     }
     
     public static String valueOfType(Object value) {
+    	if(value == null) {
+    		return NULL;
+    	}
         String valueType = value.getClass().getSimpleName().toLowerCase();
         if (valueType.equals("string") 
                 || valueType.equals("char")
