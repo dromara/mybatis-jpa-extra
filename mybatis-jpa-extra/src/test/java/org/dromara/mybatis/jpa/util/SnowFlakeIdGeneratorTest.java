@@ -32,5 +32,12 @@ public class SnowFlakeIdGeneratorTest {
         StringBuilder  conditionString =new StringBuilder ("");
         _logger.info("length {}",conditionString.length());
     }
+    
+    @Test
+    void generatorMAC() {
+       SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator(null);
+       _logger.info("MachineId "+uhg.getMachineId());
+       _logger.info(uhg.generate(""));
+   }
 
 }

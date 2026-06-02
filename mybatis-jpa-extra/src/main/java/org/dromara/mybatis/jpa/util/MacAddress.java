@@ -69,7 +69,12 @@ public class MacAddress {
     
     public static String getMac(InetAddress ia) throws SocketException {
         //获取网卡，获取地址
-        byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+        return getMacByNetworkInterface(NetworkInterface.getByInetAddress(ia));
+    }
+    
+    public static String getMacByNetworkInterface(NetworkInterface network) throws SocketException {
+        //获取网卡，获取地址
+        byte[] mac = network.getHardwareAddress();
         StringBuilder  sb = new StringBuilder("");
         for(int i=0; i<mac.length; i++) {
             if(i!=0) {

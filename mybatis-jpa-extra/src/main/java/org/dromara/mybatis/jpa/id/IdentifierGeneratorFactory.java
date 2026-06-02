@@ -36,7 +36,7 @@ public class IdentifierGeneratorFactory {
     static {
     	register(IdentifierStrategy.UUID        , new UUIDGenerator());
         register(IdentifierStrategy.ULID        , new ULIDGenerator());
-        register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator());
+        register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator(null));
         register(IdentifierStrategy.DEFAULT     , new SnowFlakeIdGenerator(null));
     }
     
@@ -44,6 +44,9 @@ public class IdentifierGeneratorFactory {
     }
     
     public IdentifierGeneratorFactory(long datacenterId, long machineId) {
+    	if(machineId <= 0) {
+    		machineId = SnowFlakeIdGenerator.generateMacMachineId();
+    	}
         register(IdentifierStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
     }
 
@@ -57,9 +60,6 @@ public class IdentifierGeneratorFactory {
 
     public static void register(String strategy, IdentifierGenerator generator) {
         strategy = strategy.toLowerCase();
-        if(IdentifierGeneratorFactory.identifierGeneratorMap.containsKey(strategy)) {
-            return;
-        }
         IdentifierGeneratorFactory.identifierGeneratorMap.put(strategy, generator);
         logger.debug( "Registering IdentifierGenerator strategy [{}] -> [{}]", strategy, generator.getClass().getName() );
     }
