@@ -89,17 +89,18 @@ public class FindBySqlBuilder {
                     appendParameter(q,findByKeyword,columnName,((ParamMap<?>)parameterObject).get("arg0"),((ParamMap<?>)parameterObject).get("arg1"));
                     break;
                 }else if(parameterObject instanceof ParamMap<?> paramMap) {
-                    
                     Object parameterValue = paramMap.get("arg"+(argIndex++ ));
-                    logger.trace("FindBy getCanonicalName : {} " , parameterValue.getClass().getCanonicalName());
-                    if(KEY.AND.equals(findByKeyword)) {
-                        appendParameter(q,KEY.EQUALS,columnName,parameterValue,null);
-                        appendParameter(q,KEY.AND,columnName,parameterValue,null);
-                    }else if(KEY.OR.equals(findByKeyword)) {
-                        appendParameter(q,KEY.EQUALS,columnName,parameterValue,null);
-                        appendParameter(q,KEY.OR,columnName,parameterValue,null);
-                    }else {
-                        appendParameter(q,findByKeyword,columnName,parameterValue,null);
+                    if(parameterValue != null) {
+                        logger.trace("FindBy getCanonicalName : {} " , parameterValue.getClass().getCanonicalName());
+                        if(KEY.AND.equals(findByKeyword)) {
+                            appendParameter(q,KEY.EQUALS,columnName,parameterValue,null);
+                            appendParameter(q,KEY.AND,columnName,parameterValue,null);
+                        }else if(KEY.OR.equals(findByKeyword)) {
+                            appendParameter(q,KEY.EQUALS,columnName,parameterValue,null);
+                            appendParameter(q,KEY.OR,columnName,parameterValue,null);
+                        }else {
+                            appendParameter(q,findByKeyword,columnName,parameterValue,null);
+                        }
                     }
                 }else {
                     if(KEY.ORDER_BY.equals(findByKeyword)) {
