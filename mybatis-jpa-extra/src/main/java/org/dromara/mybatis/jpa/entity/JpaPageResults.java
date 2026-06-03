@@ -24,13 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JpaPageResults 前端控件的组装类
- * 需要提供
- *         1、当前页码         page
- *         2、当前页记录数     total
- *         3、总页数        totalPage
- *         4、总记录数         records
- *         5、记录的列表     List<T> rows
+ * JpaPageResults 前端控件的组装类 <br/>
+ * 需要提供 <br/>
+ *         1、当前页码         page <br/>
+ *         2、当前页记录数      total <br/>
+ *         3、总页数          totalPage <br/>
+ *         4、总记录数         records <br/>
+ *         5、记录的列表        List<T> rows <br/>
 
  * @author Crystal.Sea
  *
