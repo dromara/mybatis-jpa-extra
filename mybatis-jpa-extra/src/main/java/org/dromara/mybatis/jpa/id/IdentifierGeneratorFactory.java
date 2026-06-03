@@ -34,19 +34,19 @@ public class IdentifierGeneratorFactory {
     static ConcurrentMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
     
     static {
-    	register(IdentifierStrategy.UUID        , new UUIDGenerator());
+        register(IdentifierStrategy.UUID        , new UUIDGenerator());
         register(IdentifierStrategy.ULID        , new ULIDGenerator());
-        register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator(null));
-        register(IdentifierStrategy.DEFAULT     , new SnowFlakeIdGenerator(null));
+        register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator(0));
+        register(IdentifierStrategy.DEFAULT     , new SnowFlakeIdGenerator(0));
     }
     
     public IdentifierGeneratorFactory() {
     }
     
     public IdentifierGeneratorFactory(long datacenterId, long machineId) {
-    	if(machineId <= 0) {
-    		machineId = SnowFlakeIdGenerator.generateMacMachineId();
-    	}
+        if(machineId <= 0) {
+            machineId = SnowFlakeIdGenerator.generateMacMachineId();
+        }
         register(IdentifierStrategy.SNOWFLAKEID, new SnowFlakeIdGenerator(datacenterId,machineId));
     }
 

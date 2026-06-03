@@ -35,7 +35,7 @@ public class SnowFlakeIdGeneratorTest {
     
     @Test
     void generatorMAC() {
-       SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator(null);
+       SnowFlakeIdGenerator uhg=new SnowFlakeIdGenerator(0);
        _logger.info("MachineId "+uhg.getMachineId());
        _logger.info(uhg.generate(""));
    }

@@ -17,7 +17,6 @@
 
 package org.dromara.mybatis.jpa.id.impl;
 
-import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Calendar;
 import java.util.Date;
@@ -93,8 +92,12 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
 
     public SnowFlakeIdGenerator() {}
 
-    public  SnowFlakeIdGenerator(InetAddress inetAddress) {
-        machineId = generateMacMachineId();
+    public  SnowFlakeIdGenerator(long machineId) {
+    		if(machineId <= 0) {
+    			this.machineId = generateMacMachineId();
+    		}else {
+    			this.machineId = machineId;
+    		}
     }
     
     public SnowFlakeIdGenerator(long datacenterId, long machineId) {
