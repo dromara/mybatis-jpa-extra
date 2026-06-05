@@ -34,10 +34,11 @@ public class IdentifierGeneratorFactory {
     static ConcurrentMap<String, IdentifierGenerator> identifierGeneratorMap = new ConcurrentHashMap<>();
     
     static {
+        SnowFlakeIdGenerator snowFlakeIdGenerator = new SnowFlakeIdGenerator(0);
         register(IdentifierStrategy.UUID        , new UUIDGenerator());
         register(IdentifierStrategy.ULID        , new ULIDGenerator());
-        register(IdentifierStrategy.SNOWFLAKEID , new SnowFlakeIdGenerator(0));
-        register(IdentifierStrategy.DEFAULT     , new SnowFlakeIdGenerator(0));
+        register(IdentifierStrategy.SNOWFLAKEID , snowFlakeIdGenerator);
+        register(IdentifierStrategy.DEFAULT     , snowFlakeIdGenerator);
     }
     
     public IdentifierGeneratorFactory() {
