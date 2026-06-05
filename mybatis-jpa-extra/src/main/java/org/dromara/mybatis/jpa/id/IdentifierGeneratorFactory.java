@@ -61,7 +61,7 @@ public class IdentifierGeneratorFactory {
     public static void register(String strategy, IdentifierGenerator generator) {
         strategy = strategy.toLowerCase();
         IdentifierGeneratorFactory.identifierGeneratorMap.put(strategy, generator);
-        logger.debug( "Registering IdentifierGenerator strategy [{}] -> [{}]", strategy, generator.getClass().getName() );
+        logger.debug( "Register IdentifierGenerator strategy [{}] -> [{}]", strategy, generator.getClass().getName() );
     }
     
     public static boolean exists(String strategy) {

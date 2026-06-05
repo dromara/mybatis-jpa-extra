@@ -36,10 +36,7 @@ import org.slf4j.LoggerFactory;
  **/
 public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     private static final Logger logger     =     LoggerFactory.getLogger(SnowFlakeIdGenerator.class);
-    /**
-	 *  假设分配给 Machine ID 的位数为 5 位，最大合法值为 31 (2^5 - 1)
-	 */
-    private static final long MAX_WORKER_ID = 31L; 
+
     /**
      * 起始的时间戳
      */
@@ -68,9 +65,9 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
     /**
      * 每一部分向左的位移
      */
-    private static final long MACHINE_LEFT             = SEQUENCE_BIT;
-    private static final long DATACENTER_LEFT         = SEQUENCE_BIT + MACHINE_BIT;
-    private static final long TIMESTMP_LEFT         = DATACENTER_LEFT + DATACENTER_BIT;
+    private static final long MACHINE_LEFT             	= SEQUENCE_BIT;
+    private static final long DATACENTER_LEFT         	= SEQUENCE_BIT + MACHINE_BIT;
+    private static final long TIMESTMP_LEFT         	= DATACENTER_LEFT + DATACENTER_BIT;
 
     /**
      * 数据中心
@@ -213,7 +210,7 @@ public class SnowFlakeIdGenerator  implements IdentifierGenerator{
             System.err.println("获取本机 MAC 地址失败: " + e.getMessage());
         }
         // 保证结果为非负数，并对最大值取模
-        return (macSegment & 0x7FFFFFFF) % (MAX_WORKER_ID + 1);
+        return (macSegment & 0x7FFFFFFF) % (MAX_MACHINE_NUM + 1);
     }
     
     private static Date fromatTime(long date) {
