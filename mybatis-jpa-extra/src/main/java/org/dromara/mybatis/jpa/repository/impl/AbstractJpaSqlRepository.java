@@ -81,15 +81,10 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
      */
     @Override
     public JpaPageResults<Map<String,Object>> fetch(String sql , JpaPage page , Map<String, Object> parameters) {
-        try {
-            page.build();
-            parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE, page);
-            List<Map<String,Object>> resultslist = this.selectList(sql, parameters);
-            return buildPageResults(page ,parameters , resultslist);
-        }catch (Exception e) {
-            logger.error("fetch Exception " , e);
-        }
-        return null;
+        page.build();
+        parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_PAGE, page);
+        List<Map<String,Object>> resultslist = this.selectList(sql, parameters);
+        return buildPageResults(page ,parameters , resultslist);
     }
     
     /**
@@ -99,12 +94,8 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
      */
     protected Integer fetchCount(Map<String, Object> parameters) {
         Integer count = 0;
-        try {
-            count = getMapper().fetchCount(parameters);
-            logger.debug("fetchCount count : {}" , count);
-        } catch(Exception e) {
-            logger.error("fetchCount Exception " , e);
-        }
+        count = getMapper().fetchCount(parameters);
+        logger.debug("fetchCount count : {}" , count);
         return count;
     }
     

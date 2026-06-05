@@ -18,7 +18,6 @@
 package org.dromara.mybatis.jpa.repository.impl;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.IJpaMapper;
@@ -26,6 +25,7 @@ import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.repository.IJpaRepository;
@@ -61,7 +61,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
 
     public M getMapper() {
         if (mapper == null) {
-            throw new RuntimeException("Mapper must not be null . ");
+            throw new MybatisJpaException("Mapper must not be null . ");
         }
         return mapper;
     }
@@ -90,6 +90,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             }
         } else {
             logger.error("invalide initail, need generic type parameter! ");
+            throw new MybatisJpaException("invalide initail, need generic type parameter! ");
         }
     }
 
@@ -109,8 +110,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return (JpaPageResults<T>) buildPageResults(page , entity , resultslist);
         }catch (Exception e) {
             logger.error("fetch Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -128,8 +129,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return (JpaPageResults<T>) buildPageResults(page , null,resultslist);
         }catch (Exception e) {
             logger.error("fetch by Query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -147,8 +148,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return (JpaPageResults<T>) buildPageResults(page ,null, resultslist);
         }catch (Exception e) {
             logger.error("fetch by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -164,8 +165,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return (JpaPageResults<T>) buildPageResults( entity , resultslist);
         }catch (Exception e) {
             logger.error("fetchPageResults Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -179,12 +180,10 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             entity.build();
             List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
             return (JpaPageResults<T>) buildPageResults( entity , resultslist);
-        }catch (NoSuchMethodException e) {
-            logger.error("Mapper no fetchPageResults Method Exception " , e);
         }catch (Exception e) {
             logger.error("fetchPageResults Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
 
     /**
@@ -204,8 +203,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().find(this.entityClass,filter ,args , argTypes);
         } catch(Exception e) {
             logger.error("findAll Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     /**
@@ -233,8 +232,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return  CollectionUtils.isEmpty(findList) ? null : findList.get(0);
         } catch(Exception e) {
             logger.error("findOne filter Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -271,8 +270,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return findList;
         } catch(Exception e) {
             logger.error("findByIds Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     /**
@@ -289,8 +288,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return findList;
         } catch(Exception e) {
             logger.error("findByIds Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     /**
@@ -302,8 +301,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().findAll(this.entityClass);
         } catch(Exception e) {
             logger.error("findAll Exception" , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     /**
@@ -317,8 +316,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return  getMapper().get(this.entityClass,id,null);
         } catch(Exception e) {
             logger.error("get Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -333,8 +332,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return  getMapper().get(this.entityClass,id,partitionKey);
         } catch(Exception e) {
             logger.error("get Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -348,8 +347,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);
         } catch(Exception e) {
             logger.error("get by entity Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -363,8 +362,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);
         } catch(Exception e) {
             logger.error("get by Query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     /**
@@ -378,8 +377,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);
         } catch(Exception e) {
             logger.error("get by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return null;
     }
     
     //follow function for query
@@ -397,8 +396,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().query(entity);
         } catch(Exception e) {
             logger.error("query by entity Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     
@@ -412,8 +411,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().queryByQuery(entityClass,query);
         } catch(Exception e) {
             logger.error("query by Query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     /**
@@ -426,8 +425,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().queryByLambdaQuery(entityClass,lambdaQuery);
         } catch(Exception e) {
             logger.error("query by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return Collections.emptyList();
     }
     
     /**
@@ -440,8 +439,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().countByQuery(entityClass,query);
         } catch(Exception e) {
             logger.error("count by Query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return 0;
     }
     
     /**
@@ -454,8 +453,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return getMapper().countByLambdaQuery(entityClass,lambdaQuery);
         } catch(Exception e) {
             logger.error("count by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return 0;
     }
     
     /**
@@ -496,8 +495,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return  count > 0;
         } catch(Exception e) {
             logger.error("insert Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -514,6 +513,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             }
         } catch(Exception e) {
             logger.error("Insert Batch Exception " , e);
+            throw new MybatisJpaException(e);
         }
         return false;
     }
@@ -553,8 +553,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("update Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -570,8 +570,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("update by Query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -587,8 +587,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("update by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -603,8 +603,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("update by UpdateWrapper Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
 
     /**
@@ -619,8 +619,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("update by LambdaUpdateWrapper Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -635,8 +635,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("delete by query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -651,8 +651,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("delete by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -668,8 +668,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("deleteBatch Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -686,8 +686,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("deleteBatch Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -712,8 +712,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("delete by id Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -730,8 +730,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("delete by id and partitionKey Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -747,8 +747,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("softDelete by idList Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return true;
     }
     
     /**
@@ -765,8 +765,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("softDelete idList and partitionKey Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return true;
     }
     
     /**
@@ -782,8 +782,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("softDelete id Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return true;
     }
     
     /**
@@ -799,8 +799,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("softDelete id and partitionKey Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return true;
     }
     
     /**
@@ -815,8 +815,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("softDelete by Query Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     /**
@@ -831,8 +831,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             return count > 0;
         } catch(Exception e) {
             logger.error("softDelete by LambdaQuery Exception " , e);
+            throw new MybatisJpaException(e);
         }
-        return false;
     }
     
     //follow is  for query paging
@@ -848,6 +848,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             logger.debug("fetchCount count : {}" , count);
         } catch(Exception e) {
             logger.error("fetchCount Exception " , e);
+            throw new MybatisJpaException(e);
         }
         return count;
     }
@@ -864,6 +865,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
             logger.debug("fetchCount count : {}" , count);
         } catch(Exception e) {
             logger.error("fetchCount Exception " , e);
+            throw new MybatisJpaException(e);
         }
         return count;
     }
