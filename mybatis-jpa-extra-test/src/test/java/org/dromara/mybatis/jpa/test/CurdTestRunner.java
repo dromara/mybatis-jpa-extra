@@ -37,7 +37,7 @@ public class CurdTestRunner  extends BaseTestRunner{
         student.setStdGender("M");
         student.setPassword("shimingxy");
         student.setStdName("司马昭");
-        student.setStdAge(20);
+        //student.setStdAge(20);
         student.setStdMajor("政治");
         student.setStdClass("4");
         service.insert(student);
@@ -91,7 +91,7 @@ public class CurdTestRunner  extends BaseTestRunner{
     @Test
     void update(){
         _logger.info("get...");
-        Students student=service.get("1071432244066779136");
+        Students student=service.get("1269425728252813312");
          _logger.info("Students {}",student);
          
          _logger.info("update...");

@@ -78,18 +78,24 @@ public class UpdateProvider <T extends JpaEntity,ID extends Serializable>{
                 isSkipField = true;
             }
             if(fieldColumnMapper.isLogicDelete()) {
-            	isSkipField = true;
+            	    isSkipField = true;
             }
             if(isSkipField || isFieldValueNull && !fieldColumnMapper.isGenerated()) {
                 //skip null field value
                 if(logger.isTraceEnabled()) {
-                    logger.trace("Field {} , Type {} , Value is {} or skiped ",
-                        String.format(ConstMetadata.LOG_FORMAT, fieldName), fieldValue, String.format(ConstMetadata.LOG_FORMAT, fieldType));
+                    logger.trace("Field {} , Type {} , Value is {} , Column skiped {}",
+                        String.format(ConstMetadata.LOG_FORMAT, fieldName), 
+                        String.format(ConstMetadata.LOG_FORMAT, fieldType),
+                        fieldValue,
+                        isSkipField
+                        );
                 }
             }else {
                 if(logger.isTraceEnabled()) {
-                    logger.trace("Field {} , Type {} , Value {}",
-                        String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
+                    logger.trace("Field {} , Type {} , Value is {}",
+                        String.format(ConstMetadata.LOG_FORMAT, fieldName), 
+                        String.format(ConstMetadata.LOG_FORMAT, fieldType),
+                        fieldValue);
                 }
                 if(fieldColumnMapper.getColumnAnnotation().updatable()) {
                     if(fieldColumnMapper.isGenerated() && DateConverter.isDateType(fieldType)) {
