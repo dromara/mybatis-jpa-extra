@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.mybatis.jpa.test.dao.persistence.StudentsInstMapper" >
+
+	<sql id="sql_condition">
+		WHERE	1	=	1
+    	<if test="id != null">
+			AND	ID	=	'${id}'
+		</if>
+		<if test="stdName != null  and stdName != '' ">
+			AND STDNAME like '%${stdName}%'
+		</if>
+		<if test="stdGender != null  and stdGender != '' ">
+			AND	STDGENDER	=	#{stdGender}
+		</if>
+		<if test="stdMajor != null">
+			<![CDATA[AND	STDMAJOR	= #{stdMajor}]]>
+		</if>
+	</sql>
+	
+    <select id="fetchPageResults" parameterType="StudentsInst" resultType="StudentsInst">
+    	SELECT 
+    		ID		   ,
+			STDNO      ,
+			STDNAME    ,
+			STDGENDER  ,
+			STDAGE     ,
+			STDMAJOR   ,
+			STDCLASS 
+			
+    	FROM students_inst 
+    	<include refid="sql_condition"/>
+    </select>
+
+
+</mapper>

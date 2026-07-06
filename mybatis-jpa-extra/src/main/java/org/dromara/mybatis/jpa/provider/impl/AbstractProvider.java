@@ -17,15 +17,19 @@
 
 package org.dromara.mybatis.jpa.provider.impl;
 
+import java.util.Map;
+
 import org.apache.ibatis.jdbc.SQL;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 
 public abstract class AbstractProvider{
 
-	protected void appendPartitionWhere(SQL sql , Class<?> entityClass) {
+	protected void appendPartitionWhere(SQL sql , Class<?> entityClass,Map<String, Object>  parametersMap) {
 		ColumnMapper partitionKeyMapper = ColumnMetadata.getPartitionKey(entityClass);
 		if(partitionKeyMapper != null) {
+		    parametersMap.put(partitionKeyMapper.getField(), parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY));
             sql.WHERE(" %s = #{%s} \n".formatted(partitionKeyMapper.getColumn(),partitionKeyMapper.getField()));
         }
 	}

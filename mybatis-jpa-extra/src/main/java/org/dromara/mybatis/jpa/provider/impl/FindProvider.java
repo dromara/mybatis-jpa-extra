@@ -124,6 +124,8 @@ public class FindProvider <T extends JpaEntity,ID extends Serializable> extends 
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(parameterEntityClass);
         
         SQL sql = TableMetadata.buildSelect(parameterEntityClass);
+        //Partition
+        appendPartitionWhere(sql,parameterEntityClass,parametersMap);
         //逻辑删除
         appendSoftDeleteWhere(sql,parameterEntityClass);
         

@@ -120,9 +120,17 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
     /**
      * find one entity by id , recommend use get(String id)
      * @param id
-     * @return
+     * @return T
      */
     public T findById(ID id);
+    
+    /**
+     * 
+     * @param id
+     * @param partitionKey
+     * @return T
+     */
+    public T findById(ID id,String partitionKey);
     /**
      * find entity by id List
      * @param idList
@@ -376,6 +384,14 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @return boolean
      */
     public boolean softDelete(ID id) ;
+    
+    /**
+     * 
+     * @param id
+     * @param partitionKey
+     * @return
+     */
+    public boolean softDelete(ID id,String partitionKey) ;
     
     /**
      * logic Delete entity by Query

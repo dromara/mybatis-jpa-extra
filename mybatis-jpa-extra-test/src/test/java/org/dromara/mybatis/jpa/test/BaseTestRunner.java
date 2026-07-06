@@ -25,8 +25,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.dromara.mybatis.jpa.dialect.DialectMapper;
 import org.dromara.mybatis.jpa.interceptor.StatementHandlerInterceptor;
+import org.dromara.mybatis.jpa.test.dao.persistence.StudentsInstMapper;
 import org.dromara.mybatis.jpa.test.dao.persistence.StudentsMapper;
+import org.dromara.mybatis.jpa.test.dao.service.StudentsInstService;
 import org.dromara.mybatis.jpa.test.dao.service.StudentsService;
+import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsInstServiceImpl;
 import org.dromara.mybatis.jpa.test.dao.service.impl.StudentsServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
@@ -36,6 +39,8 @@ public class BaseTestRunner {
     private static final Logger _logger = LoggerFactory.getLogger(FetchPageResultsTestRunner.class);
 
     public static StudentsService service;
+    
+    public static StudentsInstService serviceInst;
     
     @BeforeAll
     public static void initContext() throws IOException {
@@ -50,10 +55,18 @@ public class BaseTestRunner {
         sqlSessionFactory.getConfiguration().addInterceptor(statementHandlerInterceptor);
         SqlSession sqlSession = sqlSessionFactory.openSession(true);
         new InitDatabase().init(sqlSession.getConnection());
+        //no inst
         StudentsMapper studentsMapper = sqlSession.getMapper(StudentsMapper.class);
         StudentsServiceImpl studentsServiceImpl= new StudentsServiceImpl();
         studentsServiceImpl.setMapper(studentsMapper);
         BaseTestRunner.service = studentsServiceImpl;
+        
+        //inst
+        StudentsInstMapper studentsInstMapper = sqlSession.getMapper(StudentsInstMapper.class);
+        StudentsInstServiceImpl studentsInstServiceImpl= new StudentsInstServiceImpl();
+        studentsInstServiceImpl.setMapper(studentsInstMapper);
+        BaseTestRunner.serviceInst = studentsInstServiceImpl;
+        
         _logger.debug("init Context success ");
     }
 

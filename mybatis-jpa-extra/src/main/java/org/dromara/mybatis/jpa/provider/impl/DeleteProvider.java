@@ -49,9 +49,10 @@ public class DeleteProvider <T extends JpaEntity,ID extends Serializable> extend
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
         SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
-        appendPartitionWhere(sql , entityClass);
+       
+        sql.WHERE("%s = #{%s}".formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));  
         
-        sql.WHERE("%s = #{%s}".formatted(idFieldColumnMapper.getColumn()),idFieldColumnMapper.getField());  
+        appendPartitionWhere(sql , entityClass,parametersMap);
         
         String deleteSql = sql.toString(); 
         logger.trace("Delete SQL \n{}" , deleteSql);
@@ -64,13 +65,15 @@ public class DeleteProvider <T extends JpaEntity,ID extends Serializable> extend
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         
         SQL sql=new SQL().DELETE_FROM(TableMetadata.getTableName(entityClass));
-
+        
+        appendPartitionWhere(sql , entityClass,parametersMap);
+        
         StringBuilder deleteSql = new StringBuilder("");
         deleteSql.append("<script>").append("\n").append("\n")
             .append(sql.toString()).append("\n");
         //append where or and
         deleteSql.append((deleteSql.indexOf("WHERE") == -1 ) ? " WHERE " : " and ");
-
+        
         deleteSql.append(idFieldColumnMapper.getColumn())
             .append(" in (\n")
             .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")

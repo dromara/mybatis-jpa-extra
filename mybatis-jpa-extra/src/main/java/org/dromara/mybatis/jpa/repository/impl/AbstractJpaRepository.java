@@ -257,6 +257,11 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         return this.get(id);
     }
     
+    
+    public T findById(ID id,String partitionKey) {
+        return this.get(id,partitionKey);
+    }
+    
     /**
      * find entity by id List
      * @param idList

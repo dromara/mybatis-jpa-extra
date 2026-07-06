@@ -47,7 +47,7 @@ public class GetProvider <T extends JpaEntity,ID extends Serializable> extends A
         SQL sql = TableMetadata.buildSelect(entityClass);
         sql.WHERE(" %s = #{%s} ".formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));
         
-        appendPartitionWhere(sql , entityClass);
+        appendPartitionWhere(sql , entityClass,parametersMap);
         appendSoftDeleteWhere(sql , entityClass);
         
         String getSql = sql.toString(); 

@@ -28,3 +28,20 @@ CREATE TABLE  IF NOT EXISTS  `scores` (
   `deleted` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+
+
+CREATE TABLE IF NOT EXISTS `students_inst` (
+  `id` varchar(100) NOT NULL,
+  `stdno` varchar(100) DEFAULT NULL,
+  `stdname` varchar(100) DEFAULT NULL,
+  `stdgender` varchar(100) DEFAULT NULL,
+  `stdage` int DEFAULT NULL,
+  `stdmajor` varchar(100) DEFAULT NULL,
+  `stdclass` varchar(100) DEFAULT NULL,
+  `password` varchar(250) DEFAULT NULL,
+  `images` blob,
+  `status` int DEFAULT NULL,
+  `modifydate` datetime DEFAULT NULL,
+  `instid` varchar(100) DEFAULT NULL,
+  `deleted` varchar(1) DEFAULT NULL
+);
