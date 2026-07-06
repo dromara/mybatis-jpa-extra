@@ -40,6 +40,7 @@
         <log4j.version>2.25.4</log4j.version>
         <slf4j2.version>2.0.17</slf4j2.version>
         <slf4j.version>1.7.36</slf4j.version>
+        <jackson.annotations.version2>2.22</jackson.annotations.version2>
         <jackson.version2>2.22.0</jackson.version2>
         
         <!--jdbc Driver-->
@@ -102,11 +103,11 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
+            <id>central</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
+            <id>central</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
@@ -256,7 +257,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version2}</version>
+            <version>${jackson.annotations.version2}</version>
         </dependency>
         
         <dependency>
