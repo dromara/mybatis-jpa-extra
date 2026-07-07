@@ -50,7 +50,7 @@ public interface IJpaFindMapper<T, ID extends Serializable> {
     public List<T> findByIds(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?>     entityClass,
                             @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
-                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) ID partitionKey);
 
     /**
      * 根据给定的过滤条件，参数，参数类型查询

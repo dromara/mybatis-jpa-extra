@@ -128,8 +128,8 @@ public class CrudMapperProvider <T extends JpaEntity,ID extends Serializable>{
     }
     
     //count
-    public String countById(Class<?> entityClass,ID id) {
-        return new CountProvider<>().countById(entityClass,id);
+    public String countById(Class<?> entityClass , ID id , ID partitionKey) {
+        return new CountProvider<>().countById(entityClass,id,partitionKey);
     }
     
     public String countByQuery(Class<?> entityClass,Query query) {

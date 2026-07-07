@@ -37,13 +37,13 @@ public interface IJpaSoftDeleteMapper<T, ID extends Serializable> {
     public Integer softDeleteById(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID)            ID       id,
-                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String   partitionKey);
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) ID   partitionKey);
     
     @UpdateProvider(type = SoftDeleteMapperProvider.class, method = "softDelete")
     public Integer softDelete(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
-                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String   partitionKey);
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) ID   partitionKey);
     
     @UpdateProvider(type = SoftDeleteMapperProvider.class, method = "softDeleteByQuery")
     public Integer softDeleteByQuery(Class<?> entityClass , Query query);    

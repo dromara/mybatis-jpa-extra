@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
+import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 
@@ -30,25 +31,38 @@ public abstract class AbstractProvider{
 		ColumnMapper partitionKeyMapper = ColumnMetadata.getPartitionKey(entityClass);
 		if(partitionKeyMapper != null) {
 		    parametersMap.put(partitionKeyMapper.getField(), parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY));
-            sql.WHERE(" %s = #{%s} \n".formatted(partitionKeyMapper.getColumn(),partitionKeyMapper.getField()));
+            sql.WHERE(" %s = #{%s} \n".formatted(
+                        partitionKeyMapper.getColumn(),
+                        partitionKeyMapper.getField()
+                    )); 
         }
 	}
+	
+	protected void appendPartitionWhere(SQL sql , Class<?> entityClass , Object partitionKey) {
+	    if(partitionKey != null) {
+            ColumnMapper partitionKeyMapper = ColumnMetadata.getPartitionKey(entityClass);
+            if(partitionKeyMapper != null ) {
+                sql.WHERE(" %s = %s ".formatted(
+                            partitionKeyMapper.getColumn(),
+                            SafeValueHandler.valueOfType(partitionKey)
+                        ));
+            }
+	    }
+    }
 	
 	protected void appendSoftDeleteWhere(SQL sql , Class<?> entityClass) {
 		ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
 		if(logicColumnMapper != null && logicColumnMapper.isLogicDelete()) {
-			sql.WHERE(" %s = '%s' "
-                .formatted(
+			sql.WHERE(" %s = '%s' ".formatted(
                         logicColumnMapper.getColumn(),
-                        logicColumnMapper.getSoftDelete().value())
-                );
+                        logicColumnMapper.getSoftDelete().value()
+                      ));
 		}
 	}
 	
 	protected void appendQuerySoftDeleteWhere(SQL sql, Class<?> entityClass, boolean isSoftDelete) {
-        if (!isSoftDelete) {
-            return;
+        if (isSoftDelete) {
+            appendSoftDeleteWhere(sql,entityClass);
         }
-        appendSoftDeleteWhere(sql,entityClass);
     }
 }

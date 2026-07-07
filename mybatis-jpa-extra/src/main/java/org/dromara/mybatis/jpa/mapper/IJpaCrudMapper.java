@@ -49,7 +49,7 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
     public T get(
                     @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                     @Param (ConstMetadata.PARAMETER_ID)            ID id,
-                    @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+                    @Param (ConstMetadata.PARAMETER_PARTITION_KEY) ID partitionKey);
     
     //follow function for delete
 	/**
@@ -60,7 +60,7 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
     @DeleteProvider(type = CrudMapperProvider.class, method = "deleteById")
     public Integer deleteById(@Param (ConstMetadata.ENTITY_CLASS)          Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID)            ID id,
-                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) ID partitionKey);
     
     /**
      * delete by idList
@@ -73,7 +73,7 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
     public Integer deleteBatch(    
                             @Param (ConstMetadata.ENTITY_CLASS)            Class<?> entityClass,
                             @Param (ConstMetadata.PARAMETER_ID_LIST)       List<ID> idList,
-                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) String partitionKey);   
+                            @Param (ConstMetadata.PARAMETER_PARTITION_KEY) ID partitionKey);   
     
     /**
      * delete by Query
@@ -128,7 +128,7 @@ public interface IJpaCrudMapper<T, ID extends Serializable> {
     
     //count
     @SelectProvider(type = CrudMapperProvider.class, method = "countById")
-    public long countById(Class<?> entityClass,ID id);
+    public long countById(Class<?> entityClass,ID id, ID partitionKey);
     
     @SelectProvider(type = CrudMapperProvider.class, method = "countByQuery")
     public long countByQuery(Class<?> entityClass,Query query);

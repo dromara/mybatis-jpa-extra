@@ -39,14 +39,15 @@ import org.slf4j.LoggerFactory;
 public class CountProvider<T extends JpaEntity,ID extends Serializable> extends AbstractProvider{
     static final Logger logger = LoggerFactory.getLogger(CountProvider.class);
     
-    public String countById(Class<?> entityClass, ID id) {
+    public String countById(Class<?> entityClass, ID id , ID partitionKey) {
         logger.trace("count by Id \n{}" , id);
         SQL sql = TableMetadata.buildSelectCount(entityClass);
         //id
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
         sql.WHERE(" %s = %s ".formatted(idFieldColumnMapper.getColumn(),SafeValueHandler.valueOfType(id)));
-
-        //逻辑删除
+        //Partition
+        appendPartitionWhere(sql , entityClass,partitionKey);
+        //SoftDelete
         appendSoftDeleteWhere(sql , entityClass);
         
         logger.trace("count by Id SQL \n{}" , sql);

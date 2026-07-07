@@ -130,7 +130,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return T
      */
-    public T findById(ID id,String partitionKey);
+    public T findById(ID id,ID partitionKey);
     /**
      * find entity by id List
      * @param idList
@@ -144,7 +144,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return List<T>
      */
-    public List<T> findByIds(List<ID> idList,String partitionKey) ;
+    public List<T> findByIds(List<ID> idList,ID partitionKey) ;
     
     /**
      * findAll data
@@ -165,7 +165,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return T
      */
-    public T get(ID id,String partitionKey) ;
+    public T get(ID id,ID partitionKey) ;
     
     /**
      *  get one entity by entity 
@@ -245,7 +245,9 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @return
      */
     boolean existsById(ID id);
-
+    
+    boolean existsById(ID id,ID partitionKey);
+    
     //follow function for insert update and delete
     /**
      * insert new entity
@@ -339,7 +341,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return boolean
      */
-    public boolean deleteBatch(List<ID> idList,String partitionKey) ;
+    public boolean deleteBatch(List<ID> idList,ID partitionKey) ;
     
     /**
      * delete entity by id , recommend use delete(String id)
@@ -361,7 +363,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return boolean
      */
-    public boolean delete(ID id,String partitionKey);
+    public boolean delete(ID id,ID partitionKey);
     
     /**
      * logicDelete entity by ids
@@ -376,7 +378,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return boolean
      */
-    public boolean softDelete(List<ID> idList,String partitionKey) ;
+    public boolean softDelete(List<ID> idList,ID partitionKey) ;
     
     /**
      * logicDelete entity by id
@@ -391,7 +393,7 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
      * @param partitionKey
      * @return
      */
-    public boolean softDelete(ID id,String partitionKey) ;
+    public boolean softDelete(ID id,ID partitionKey) ;
     
     /**
      * logic Delete entity by Query

@@ -50,14 +50,14 @@ public class CurdInstTestRunner  extends BaseTestRunner{
     @Test
     void get(){
         _logger.info("get...");
-        StudentsInst student=serviceInst.get("1271630485503614976","1");
+        StudentsInst student=serviceInst.get("1271838792461959168","1");
          _logger.info("Students {}",student);
     }
     
     @Test
     void findById(){
         _logger.info("get...");
-        StudentsInst student=serviceInst.findById("1271630485503614976","1");
+        StudentsInst student=serviceInst.findById("1271838792461959168","1");
         _logger.info("Students {}",student);
     }
     
@@ -119,5 +119,14 @@ public class CurdInstTestRunner  extends BaseTestRunner{
         idList.add("ab7422e9-a91a-4840-9e59-9d911257c918");
         serviceInst.softDelete(idList,"1");
     }
+    
+    @Test
+    void existsById(){
+        _logger.info("delete...");
+        serviceInst.existsById("1271838792461959168","1");
+        serviceInst.existsById("1271838792461959168");
+    }
+    
+    
     
 }

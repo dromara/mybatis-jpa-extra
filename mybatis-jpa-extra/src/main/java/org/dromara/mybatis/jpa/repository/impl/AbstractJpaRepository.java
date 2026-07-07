@@ -258,7 +258,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     }
     
     
-    public T findById(ID id,String partitionKey) {
+    public T findById(ID id,ID partitionKey) {
         return this.get(id,partitionKey);
     }
     
@@ -285,7 +285,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param partitionKey
      * @return List<T>
      */
-    public List<T> findByIds(List<ID> idList,String partitionKey) {
+    public List<T> findByIds(List<ID> idList,ID partitionKey) {
         try {
             logger.trace("findByIds {} , partitionKey {}" , idList , partitionKey);
             List<T> findList = getMapper().findByIds(this.entityClass , idList , partitionKey);
@@ -331,7 +331,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param partitionKey
      * @return T
      */
-    public T get(ID id,String partitionKey) {
+    public T get(ID id,ID partitionKey) {
         try {
             logger.debug("entityClass  {} , primaryKey {} , partitionKey {}" , entityClass , id,partitionKey);
             return  getMapper().get(this.entityClass,id,partitionKey);
@@ -481,12 +481,22 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     /**
      * exists By primaryKey
      * @param id
-     * @return
+     * @return boolean
      */
     public boolean existsById(ID id) {
-        return  getMapper().countById(entityClass,id) > 0;
+        return  getMapper().countById(entityClass,id,null) > 0;
     }
 
+    /**
+     * exists By primaryKey
+     * @param id
+     * @param partitionKey
+     * @return boolean
+     */
+    public boolean existsById(ID id, ID partitionKey) {
+        return  getMapper().countById(entityClass,id,partitionKey) > 0;
+    }
+    
     //follow function for insert update and delete
     /**
      * insert new entity
@@ -683,7 +693,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param partitionKey
      * @return boolean
      */
-    public boolean deleteBatch(List<ID> idList,String partitionKey) {
+    public boolean deleteBatch(List<ID> idList,ID partitionKey) {
         try {
             logger.trace("deleteBatch {} , partitionKey {}" , idList , partitionKey);
             Integer count = getMapper().deleteBatch(this.entityClass , idList , partitionKey);
@@ -727,7 +737,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param partitionKey
      * @return
      */
-    public boolean delete(ID id,String partitionKey){
+    public boolean delete(ID id,ID partitionKey){
         try {
             logger.debug("id {} , partitionKey {}" , id , partitionKey);
             Integer count = getMapper().deleteById(this.entityClass,id,partitionKey);
@@ -762,7 +772,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param partitionKey
      * @return
      */
-    public boolean softDelete(List<ID> idList,String partitionKey) {
+    public boolean softDelete(List<ID> idList,ID partitionKey) {
         try {
             logger.trace("softDelete idList {} , partitionKey {}" , idList , partitionKey);
             Integer count = getMapper().softDelete(this.entityClass,idList,partitionKey);
@@ -796,7 +806,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @param id string
      * @return
      */
-    public boolean softDelete(ID id,String partitionKey) {
+    public boolean softDelete(ID id,ID partitionKey) {
         try {
             logger.trace("softDelete id {} , partitionKey {}" , id , partitionKey);
             Integer count = getMapper().softDeleteById(this.entityClass,id,partitionKey);
