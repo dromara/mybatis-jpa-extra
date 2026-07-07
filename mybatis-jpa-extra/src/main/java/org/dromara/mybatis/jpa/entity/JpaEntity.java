@@ -33,4 +33,20 @@ public class JpaEntity extends JpaPage{
         return "";
     }
     
+    /**
+     * 日志事件目标ID Logging Event Target ID
+     * @return String
+     */
+    public String loggingEventTargetId() {
+        return "";
+    }
+    
+    /**
+     * 日志事件目标名称 Logging Event Target Name
+     * @return String
+     */
+    public String loggingEventTargetName() {
+        return "";
+    }
+    
 }
