@@ -24,5 +24,13 @@ package org.dromara.mybatis.jpa.entity;
  * 
  */
 public class JpaEntity extends JpaPage{
-
+    
+    /**
+     * 日志事件内容 Logging Event
+     * @return String
+     */
+    public String loggingEvent() {
+        return "";
+    }
+    
 }
