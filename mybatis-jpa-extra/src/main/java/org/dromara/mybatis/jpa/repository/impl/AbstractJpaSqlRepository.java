@@ -40,15 +40,15 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
     static final ArrayList<String> xmlTagList = new ArrayList<>();
     
     static {
-    	xmlTagList.add("</trim>");
-    	xmlTagList.add("</where>");
-    	xmlTagList.add("</set>");
-    	xmlTagList.add("</foreach>");
-    	xmlTagList.add("</if>");
-    	xmlTagList.add("</choose>");
-    	xmlTagList.add("</when>");
-    	xmlTagList.add("</otherwise>");
-    	xmlTagList.add("</bind>");
+        	xmlTagList.add("</trim>");
+        	xmlTagList.add("</where>");
+        	xmlTagList.add("</set>");
+        	xmlTagList.add("</foreach>");
+        	xmlTagList.add("</if>");
+        	xmlTagList.add("</choose>");
+        	xmlTagList.add("</when>");
+        	xmlTagList.add("</otherwise>");
+        	xmlTagList.add("</bind>");
     }
     
     @Override
@@ -163,8 +163,8 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
         logger.trace("sql {}",sql);
         logger.trace("parameters {}",parameters);
         String sqlLowerCase = sql.toLowerCase();
-        if(sqlLowerCase.indexOf("<script>")== -1 && hasXmlTag(sqlLowerCase)) {
-        	sql = "<script> " + sql + " </script>";
+        if(sqlLowerCase.contains("<script>") && hasXmlTag(sqlLowerCase)) {
+            sql = "<script> " + sql + " </script>";
         }
         logger.trace("mappered sql {}",sql);
         parameters.put(ConstMetadata.SQL_MAPPER_PARAMETER_SQL , sql);
@@ -172,14 +172,14 @@ public class AbstractJpaSqlRepository implements IJpaSqlRepository {
     }
     
     boolean hasXmlTag(String sql) {
-    	boolean hasXmlTag = false;
-    	for(String xmlTag : xmlTagList) {
-    		if(sql.indexOf(xmlTag) > -1) {
-    			hasXmlTag = true;
-    			break;
-    		}
-    	}
-    	return hasXmlTag;
+        	boolean hasXmlTag = false;
+        	for(String xmlTag : xmlTagList) {
+        		if(sql.contains(xmlTag)) {
+        			hasXmlTag = true;
+        			break;
+        		}
+        	}
+        	return hasXmlTag;
     }
 
 }

@@ -23,10 +23,13 @@ package org.dromara.mybatis.jpa.provider.impl;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.id.IdentifierStrategy;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
@@ -51,51 +54,64 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
      * @return insert sql String
      */
     public String insert(T entity) {
+        Objects.requireNonNull(entity, "Entity cannot be null");
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entity.getClass());
-        
         SQL sql = new SQL().INSERT_INTO(TableMetadata.getTableName(entity.getClass()));
+        //优化日志打印，避免集合遍历时产生不必要的性能开销
         if(logger.isTraceEnabled()) {
             for (ColumnMapper fieldColumnMapper : listFields) {
                 logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
             }
         }
         for (ColumnMapper fieldColumnMapper : listFields) {
+            if(!fieldColumnMapper.getColumnAnnotation().insertable()) {
+                continue;
+            }
             String columnName = fieldColumnMapper.getColumn();
             String fieldName = fieldColumnMapper.getField();
             String fieldType = fieldColumnMapper.getFieldType();
             Object fieldValue = BeanUtil.getValue(entity, fieldName);
             boolean isFieldValueNull = Objects.isNull(fieldValue);
-            
-            if(fieldColumnMapper.getColumnAnnotation().insertable()) {
-                if(fieldColumnMapper.isGenerated()) {//自动生成字段值
+            //自动生成字段 (如 ID, 创建时间等)
+            if(fieldColumnMapper.isGenerated()) {//自动生成字段值
                 	if(isFieldValueNull) {//空值
                 		if(fieldColumnMapper.isIdColumn()){//id
-	                        generatedValue(sql , entity , fieldColumnMapper);
-	                    }else if(DateConverter.isDateType(fieldType)) {//日期类型
-	                        sql.VALUES(columnName,"'" + DateConverter.convert(entity, fieldColumnMapper,false) + "'");
-	                    } 
+                        generatedValue(sql , entity , fieldColumnMapper);
+                    }else if(DateConverter.isDateType(fieldType)) {//日期类型
+                        DateConverter.convert(entity, fieldColumnMapper,false);
+                        sql.VALUES(columnName,"#{%s}".formatted(fieldName));
+                    } 
+                		fieldValue = BeanUtil.getValue(entity, fieldName);
                 	}else {
                 		sql.VALUES(columnName,"#{%s}".formatted(fieldName));
                 	}
-                }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
-                    sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
-                }else if(isFieldValueNull && fieldColumnMapper.getColumnDefault() != null) {
-                    //字段值为空，且标注默认值
-                    sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
-                }else if(!isFieldValueNull) {
-                	if(logger.isTraceEnabled()) {
-                        logger.trace("Field {} , Type {} , Value {}",
-                            String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
-                    }
-                    sql.VALUES(columnName,"#{%s}".formatted(fieldName));
-                }else {
-                	    //skip null field value
-                    if(logger.isTraceEnabled()) {
-                        logger.trace("Field {} , Type {} , Value is null , skiped ",
-                            String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
-                    } 
-                }
+                	continue;
             }
+            //逻辑删除字段 (仅在值为空时设置默认值)
+            if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
+                sql.VALUES(columnName,"'" + fieldColumnMapper.getSoftDelete().value() + "'");
+                continue;
+            }
+            //字段值为空，且存默认值
+            if(isFieldValueNull && fieldColumnMapper.getColumnDefault() != null) {
+                //字段值为空，且标注默认值
+                sql.VALUES(columnName,"" + fieldColumnMapper.getColumnDefault().value() + "");
+                continue;
+            }
+            // 字段值不为空，正常插入
+            if(!isFieldValueNull) {
+                if(logger.isTraceEnabled()) {
+                    logger.trace("Field {} , Type {} , Value {}",
+                        String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType),fieldValue);
+                }
+                sql.VALUES(columnName,"#{%s}".formatted(fieldName));
+                continue;
+            }
+        	    //skip null field value
+            if(logger.isTraceEnabled()) {
+                logger.trace("Field {} , Type {} , Value is null , skiped ",
+                    String.format(ConstMetadata.LOG_FORMAT, fieldName), String.format(ConstMetadata.LOG_FORMAT, fieldType));
+            } 
         }
         logger.trace("Insert SQL : \n{}" , sql);
         return sql.toString();
@@ -121,22 +137,25 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
      * @return insert sql script
      */
     public String insertBatch(List<T> listEntity) {
-    		Class<?> entityClass = listEntity.get(0).getClass();
+        //使用 CollectionUtils 简化判空，去除冗余的 size() > 0
+        if(CollectionUtils.isEmpty(listEntity)) {
+            throw new MybatisJpaException("insert List<T> can not been null ! ");
+        }
+        // 2. 安全获取 Class，避免 listEntity.get(0) 为 null 导致的警告和 NPE
+        T firstEntity = listEntity.get(0);
+        if (firstEntity == null) {
+            throw new MybatisJpaException("The first element in the insert list cannot be null!");
+        }
+        Class<?> entityClass = firstEntity.getClass();
     	
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
         
         SQL sql = new SQL().INSERT_INTO(TableMetadata.getTableName(entityClass));
-        
-        StringBuilder values = new StringBuilder("");
+        StringJoiner valueJoiner = new StringJoiner(",");
         for (ColumnMapper fieldColumnMapper : listFields) {
-            String columnName = fieldColumnMapper.getColumn();
-            String fieldName = fieldColumnMapper.getField();
             if(fieldColumnMapper.getColumnAnnotation().insertable()) {
-            	sql.INTO_COLUMNS(columnName);
-	            if(values.length() > 0) {
-            		values.append(",");
-            	}
-            	values.append("#{").append("entity.").append(fieldName).append("}");
+                	sql.INTO_COLUMNS(fieldColumnMapper.getColumn());
+    	            valueJoiner.add("#{entity."+fieldColumnMapper.getField()+"}");
             }
             logger.trace("fieldColumnMapper {} ",fieldColumnMapper);
         }
@@ -147,35 +166,36 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
 		        .append(" VALUES ").append("\n")
 		        .append(" <foreach collection =\"arg0\" item=\"entity\" separator =\",\">").append("\n")
 		        .append("  (")
-		        .append(values.toString()) 
+		        .append(valueJoiner.toString()) 
 		        .append("  )").append("\n")
 		        .append(" </foreach>").append("\n")
 		        .append("</script>");
         logger.trace("Insert SQL : \n{}" , insertSql);
         
         for(T entity : listEntity) {
-	        for (ColumnMapper fieldColumnMapper : listFields) {
-	            String fieldName = fieldColumnMapper.getField();
-	            String fieldType = fieldColumnMapper.getFieldType();
-	            Object fieldValue = BeanUtil.getValue(entity, fieldName);
-	            boolean isFieldValueNull = Objects.isNull(fieldValue);
-	            
-	            if(fieldColumnMapper.getColumnAnnotation().insertable()) {
-	                if(fieldColumnMapper.isGenerated()) {//自动生成字段值
-	                	if(isFieldValueNull) {//空值
-	                		if(fieldColumnMapper.isIdColumn()){//id
-	                			batchGeneratedValue( entity , fieldColumnMapper);
-		                    }else if(DateConverter.isDateType(fieldType)) {//日期类型
-		                        DateConverter.convert(entity, fieldColumnMapper,false);
-		                    } 
-	                	}
-	                }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
-	                	BeanUtil.set(entity, fieldColumnMapper.getField(),fieldColumnMapper.getSoftDelete().value());
-	                }
-	            }
-	        }
+    	        for (ColumnMapper fieldColumnMapper : listFields) {
+    	            //仅处理可插入的字段
+    	            if(!fieldColumnMapper.getColumnAnnotation().insertable()) {
+    	                continue;
+    	            }
+    	            String fieldName = fieldColumnMapper.getField();
+    	            String fieldType = fieldColumnMapper.getFieldType();
+    	            Object fieldValue = BeanUtil.getValue(entity, fieldName);
+    	            boolean isFieldValueNull = Objects.isNull(fieldValue);
+    	            if(fieldColumnMapper.isGenerated()) {//自动生成字段值
+    	                	if(isFieldValueNull) {//空值
+    	                		if(fieldColumnMapper.isIdColumn()){//id
+    	                			batchGeneratedValue( entity , fieldColumnMapper);
+	                    }else if(DateConverter.isDateType(fieldType)) {//日期类型
+	                        DateConverter.convert(entity, fieldColumnMapper,false);
+	                    } 
+    	                	}
+    	            }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
+    	                BeanUtil.set(entity, fieldColumnMapper.getField(),fieldColumnMapper.getSoftDelete().value());
+    	            }
+    	        }
         }
-        return insertSql.toString();
+        return insertSql.toString();        
     }
     
     private void  batchGeneratedValue( T entity , ColumnMapper fieldColumnMapper) {

@@ -19,6 +19,8 @@ package org.dromara.mybatis.jpa.repository.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
@@ -33,6 +35,7 @@ import org.dromara.mybatis.jpa.update.LambdaUpdateWrapper;
 import org.dromara.mybatis.jpa.update.UpdateWrapper;
 import org.dromara.mybatis.jpa.util.ClassesUtils;
 import org.dromara.mybatis.jpa.util.InstanceUtil;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +62,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     
     private M mapper;
 
+    @NonNull 
     public M getMapper() {
         if (mapper == null) {
             throw new MybatisJpaException("Mapper must not be null . ");
@@ -160,6 +164,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     @SuppressWarnings("unchecked")
     public JpaPageResults<T> fetchPageResults(T entity) {
         try {
+            Objects.requireNonNull(entity, "Entity cannot be null");
             entity.build();
             List<T> resultslist = getMapper().fetchPageResults(entity);
             return (JpaPageResults<T>) buildPageResults( entity , resultslist);
@@ -176,7 +181,8 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      */
     @SuppressWarnings("unchecked")
     public JpaPageResults<T> fetchPageResults(String mapperId,T entity) {
-    	try {
+        Objects.requireNonNull(entity, "Entity cannot be null");
+        try {
             entity.build();
             List<T> resultslist = (List<T>)InstanceUtil.invokeMethod(getMapper(), mapperId, new Object[]{entity});
             return (JpaPageResults<T>) buildPageResults( entity , resultslist);
@@ -271,7 +277,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         try {
             logger.trace("findByIds {}" , idList);
             List<T> findList = getMapper().findByIds(this.entityClass,idList,null);
-            logger.trace("findByIds count : {}" , findList.size());
+            logger.trace("findByIds count : {}" , CollectionUtils.size(findList));
             return findList;
         } catch(Exception e) {
             logger.error("findByIds Exception " , e);
@@ -289,7 +295,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
         try {
             logger.trace("findByIds {} , partitionKey {}" , idList , partitionKey);
             List<T> findList = getMapper().findByIds(this.entityClass , idList , partitionKey);
-            logger.debug("findByIds count : {}" , findList.size());
+            logger.debug("findByIds count : {}" , CollectionUtils.size(findList));
             return findList;
         } catch(Exception e) {
             logger.error("findByIds Exception " , e);
@@ -347,6 +353,7 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
      * @return
      */
     public T get(T entity) {
+        Objects.requireNonNull(entity, "entity cannot be null");
         try {
             List<T> queryList = query(entity);
             return CollectionUtils.isEmpty(queryList) ? null : queryList.get(0);

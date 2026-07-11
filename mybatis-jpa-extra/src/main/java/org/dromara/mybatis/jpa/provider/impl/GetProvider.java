@@ -22,10 +22,12 @@ package org.dromara.mybatis.jpa.provider.impl;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
@@ -41,9 +43,12 @@ public class GetProvider <T extends JpaEntity,ID extends Serializable> extends A
     
     public String get(Map<String, Object>  parametersMap) {
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        Objects.requireNonNull(entityClass, "Entity class cannot be null in parametersMap");
         ColumnMetadata.buildColumnMapper(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
-        
+        if (idFieldColumnMapper == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @Id column for Get .");
+        }
         SQL sql = TableMetadata.buildSelect(entityClass);
         sql.WHERE(" %s = #{%s} ".formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));
         

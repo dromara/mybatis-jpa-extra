@@ -27,6 +27,7 @@ import java.util.Objects;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
@@ -54,11 +55,12 @@ public class UpdateProvider <T extends JpaEntity,ID extends Serializable>{
      * @return update sql String
      */
     public String update(T entity) {
+        Objects.requireNonNull(entity, "Entity cannot be null");
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entity.getClass());
         
         SQL sql = new SQL()
             .UPDATE(TableMetadata.getTableName(entity.getClass()));
-        
+        boolean hasSetClause = false; // 记录是否有字段被加入 SET
         ColumnMapper partitionKey = null;
         ColumnMapper idFieldColumnMapper = null;
         for(ColumnMapper fieldColumnMapper : listFields) {
@@ -67,67 +69,80 @@ public class UpdateProvider <T extends JpaEntity,ID extends Serializable>{
             String fieldType = fieldColumnMapper.getFieldType();
             Object fieldValue = BeanUtil.getValue(entity, fieldName);
             boolean isFieldValueNull = Objects.isNull(fieldValue);
-            boolean isSkipField = false;
-            
+            // 主键只用于 WHERE，不参与 SET
             if (fieldColumnMapper.isIdColumn() ) {
                 idFieldColumnMapper = fieldColumnMapper;
-                isSkipField = true;
+                continue; 
             }
+            // 分割键只用于 WHERE，不参与 SET
             if(fieldColumnMapper.getPartitionKey() != null) {
                 partitionKey = fieldColumnMapper;
-                isSkipField = true;
+                continue; 
             }
+            //逻辑删除键不更新
             if(fieldColumnMapper.isLogicDelete()) {
-            	    isSkipField = true;
+                continue; 
             }
-            if(isSkipField || isFieldValueNull && !fieldColumnMapper.isGenerated()) {
+            //检查字段是否允许更新
+            if(!fieldColumnMapper.getColumnAnnotation().updatable()) {
+                continue;
+            }
+            //值为空 且 不是自动生成字段 -> 跳过
+            if( isFieldValueNull && !fieldColumnMapper.isGenerated()) {
                 //skip null field value
                 if(logger.isTraceEnabled()) {
-                    logger.trace("Field {} , Type {} , Value is {} , Column skiped {}",
+                    logger.trace("Field {} , Type {} , Value is {} , Column skiped",
                         String.format(ConstMetadata.LOG_FORMAT, fieldName), 
                         String.format(ConstMetadata.LOG_FORMAT, fieldType),
-                        fieldValue,
-                        isSkipField
+                        fieldValue
                         );
                 }
-            }else {
-                if(logger.isTraceEnabled()) {
-                    logger.trace("Field {} , Type {} , Value is {}",
-                        String.format(ConstMetadata.LOG_FORMAT, fieldName), 
-                        String.format(ConstMetadata.LOG_FORMAT, fieldType),
-                        fieldValue);
-                }
-                if(fieldColumnMapper.getColumnAnnotation().updatable()) {
-                    if(fieldColumnMapper.isGenerated() && DateConverter.isDateType(fieldType)) {
-                        sql.SET(" %s =  '%s' ".formatted(columnName,DateConverter.convert(entity, fieldColumnMapper,true)));
-                    }else {
-                        sql.SET(" %s = #{%s} ".formatted(columnName,fieldName));
-                    }
-                }
+                continue;
             }
+            //处理自动生成的日期字段
+            if(fieldColumnMapper.isGenerated() && DateConverter.isDateType(fieldType)) {
+                DateConverter.convert(entity, fieldColumnMapper,true);
+                fieldValue = BeanUtil.getValue(entity, fieldName); 
+            }
+            
+            if(logger.isTraceEnabled()) {
+                logger.trace("Field {} , Type {} , Value is {}",
+                    String.format(ConstMetadata.LOG_FORMAT, fieldName), 
+                    String.format(ConstMetadata.LOG_FORMAT, fieldType),
+                    fieldValue);
+            }
+            
+            hasSetClause = true;
+            sql.SET(" %s = #{%s} ".formatted(columnName,fieldName));
         }
-        if(idFieldColumnMapper != null) {
-            if(partitionKey != null) {
-                sql.WHERE("""
-                        %s = #{%s}
-                        and %s = #{%s}
-                        """.formatted(
-                                partitionKey.getColumn(),
-                                partitionKey.getField(),
-                                idFieldColumnMapper.getColumn(),
-                                idFieldColumnMapper.getField())
-                        );
-            }else {
-                sql.WHERE("%s = #{%s}" .formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));
-            }
-            logger.trace("Update SQL : \n{}" , sql);
-            return sql.toString();
+        
+        if (idFieldColumnMapper == null) {
+            throw new MybatisJpaException("Update operation failed: Entity [" + entity.getClass().getName() + "] lacks an @Id column.");
+        }
+        
+        if (!hasSetClause) {
+            throw new MybatisJpaException("No fields to update for entity ["+entity.getClass().getName()+"], skipping SQL generation.");
+        }
+        
+        if(partitionKey != null) {
+            sql.WHERE("""
+                    %s = #{%s}
+                    and %s = #{%s}
+                    """.formatted(
+                            partitionKey.getColumn(),
+                            partitionKey.getField(),
+                            idFieldColumnMapper.getColumn(),
+                            idFieldColumnMapper.getField())
+                    );
         }else {
-            return "";
+            sql.WHERE("%s = #{%s}" .formatted(idFieldColumnMapper.getColumn(),idFieldColumnMapper.getField()));
         }
+        logger.trace("Update SQL : \n{}" , sql);
+        return sql.toString();
     }
     
     public String updateByQuery(Class<?> entityClass,String setSql, Query query) {
+        Objects.requireNonNull(query, "Query cannot be null");
         logger.trace("update By Query \n{}" , query);
         ColumnMetadata.buildColumnMapper(entityClass);
 
@@ -140,6 +155,7 @@ public class UpdateProvider <T extends JpaEntity,ID extends Serializable>{
     }
     
     public String updateByLambdaQuery(Class<?> entityClass,String setSql, LambdaQuery<T> lambdaQuery) {
+        Objects.requireNonNull(lambdaQuery, "LambdaQuery cannot be null");
         logger.trace("update By LambdaQuery \n{}" , lambdaQuery);
         ColumnMetadata.buildColumnMapper(entityClass);
 
@@ -153,6 +169,7 @@ public class UpdateProvider <T extends JpaEntity,ID extends Serializable>{
     
     
     public String updateByUpdateWrapper(Class<?> entityClass, UpdateWrapper updateWrapper) {
+        Objects.requireNonNull(updateWrapper, "UpdateWrapper cannot be null");
         logger.trace("update By UpdateWrapper \n{}" , updateWrapper);
         ColumnMetadata.buildColumnMapper(entityClass);
         
@@ -166,6 +183,7 @@ public class UpdateProvider <T extends JpaEntity,ID extends Serializable>{
     }
     
     public String updateByLambdaUpdateWrapper(Class<?> entityClass, LambdaUpdateWrapper<T> lambdaUpdateWrapper) {
+        Objects.requireNonNull(lambdaUpdateWrapper, "LambdaUpdateWrapper cannot be null");
         logger.trace("update By LambdaUpdateWrapper \n{}" , lambdaUpdateWrapper);
         ColumnMetadata.buildColumnMapper(entityClass);
         

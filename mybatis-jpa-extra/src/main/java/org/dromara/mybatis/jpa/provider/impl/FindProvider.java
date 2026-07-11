@@ -27,10 +27,13 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
+import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.util.StrUtils;
 import org.slf4j.Logger;
@@ -122,7 +125,9 @@ public class FindProvider <T extends JpaEntity,ID extends Serializable> extends 
         Class<?> parameterEntityClass = (Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(parameterEntityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(parameterEntityClass);
-        
+        if (idFieldColumnMapper == null) {
+            throw new MybatisJpaException("Entity [" + parameterEntityClass.getName() + "] lacks @Id column for findByIds.");
+        }
         SQL sql = TableMetadata.buildSelect(parameterEntityClass);
         //Partition
         appendPartitionWhere(sql,parameterEntityClass,parametersMap);
@@ -133,13 +138,11 @@ public class FindProvider <T extends JpaEntity,ID extends Serializable> extends 
         findByIdsSql.append("<script>").append("\n").append("\n")
         				.append(sql.toString()).append("\n");
         //append where or and
-        findByIdsSql.append((findByIdsSql.indexOf("WHERE") == -1 ) ? " WHERE " : " and ");
+        findByIdsSql.append(appendWhereOrAnd(findByIdsSql.toString()));
         		
-        findByIdsSql.append(idFieldColumnMapper.getColumn())
-            .append(" in (\n")
-            .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")
-            .append("  #{item} ").append("\n")
-            .append(" </foreach>")
+        findByIdsSql.append(idFieldColumnMapper.getColumn()).append(ConstSqlSyntax.IN)
+            .append("(\n")
+            .append(MapperMetadata.buildForeachCollection("idList","item"))
             .append(" )\n");
 
         //add close script

@@ -22,6 +22,7 @@ package org.dromara.mybatis.jpa.provider.impl;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
@@ -99,17 +100,14 @@ public class FetchCountProvider{
             }
             String countSqlLowerCase = countSql.toString().toLowerCase().replace("\n", " ");
             logger.trace("Count SQL LowerCase  :\n{}" , countSqlLowerCase);
-            
+            boolean isDistinct = countSqlLowerCase.contains(ConstSqlSyntax.DISTINCT + " ");
+            boolean isGroupBy = countSqlLowerCase.contains(" " + ConstSqlSyntax.GROUP_BY + " ");
+            boolean isHaving = countSqlLowerCase.contains(" " + ConstSqlSyntax.HAVING + " ");
+            boolean isSubQuery = StringUtils.countMatches(countSqlLowerCase, " " + ConstSqlSyntax.FROM + " ") > 1;
             /*
-             * 判断 1,去重 2,分组 3,聚合函数
+             * 判断 1,去重 2,分组 3,聚合函数 4,嵌套
              */
-            if(countSqlLowerCase.indexOf(ConstSqlSyntax.DISTINCT + " ")> -1 
-                    ||countSqlLowerCase.indexOf(" " + ConstSqlSyntax.GROUP_BY + " ")> -1 
-                    ||countSqlLowerCase.indexOf(" " + ConstSqlSyntax.HAVING + " ")> -1 
-                    ||(countSqlLowerCase.indexOf(" " + ConstSqlSyntax.FROM + " ") 
-                            != countSqlLowerCase.lastIndexOf(" " + ConstSqlSyntax.FROM + " ")
-                    ) //嵌套
-                    ) {
+            if( isDistinct || isGroupBy || isHaving || isSubQuery) {
                 logger.trace("Count SQL Complex ");
                 sql.append(ConstSqlSyntax.FROM).append(" (").append(countSql).append(" ) count_table_");
             }else {

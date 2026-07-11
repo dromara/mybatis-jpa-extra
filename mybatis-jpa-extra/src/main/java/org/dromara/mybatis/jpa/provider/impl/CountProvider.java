@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
@@ -44,6 +45,9 @@ public class CountProvider<T extends JpaEntity,ID extends Serializable> extends 
         SQL sql = TableMetadata.buildSelectCount(entityClass);
         //id
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        if (idFieldColumnMapper == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @Id column for countById .");
+        }
         sql.WHERE(" %s = %s ".formatted(idFieldColumnMapper.getColumn(),SafeValueHandler.valueOfType(id)));
         //Partition
         appendPartitionWhere(sql , entityClass,partitionKey);

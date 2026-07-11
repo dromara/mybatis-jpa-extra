@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import org.dromara.mybatis.jpa.constants.ConstCaseType;
+import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.crypto.EncryptFactory;
 import org.dromara.mybatis.jpa.entity.JpaPageSqlCache;
 import org.dromara.mybatis.jpa.id.IdentifierGeneratorFactory;
@@ -156,6 +157,11 @@ public class MapperMetadata{
 
     public static void setPartitionColumn(String partitionColumn) {
         MapperMetadata.partitionColumn = partitionColumn;
+    }
+    
+    
+    public static String buildForeachCollection(String collection , String item){
+        return  ConstMetadata.FOREACH_COLLECTION.formatted(collection,item);
     }
     
 }

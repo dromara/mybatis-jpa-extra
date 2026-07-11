@@ -19,6 +19,7 @@ package org.dromara.mybatis.jpa.provider.impl;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.Strings;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
@@ -65,4 +66,9 @@ public abstract class AbstractProvider{
             appendSoftDeleteWhere(sql,entityClass);
         }
     }
+	
+	protected  String appendWhereOrAnd(String sql){
+	    return Strings.CS.contains(sql.toUpperCase(), "WHERE") ? " and " : " WHERE " ;
+	}
+	
 }

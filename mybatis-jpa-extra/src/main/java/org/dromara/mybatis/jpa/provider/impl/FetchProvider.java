@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-@SuppressWarnings("unchecked")
 public class FetchProvider <T extends JpaEntity,ID extends Serializable> extends AbstractProvider{    
     static final Logger logger     =     LoggerFactory.getLogger(FetchProvider.class);
     
@@ -54,7 +53,9 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable> extends
      * @return fetch sql String
      */
     public String fetch(Map<String, Object>  parametersMap) {
+        @SuppressWarnings("unchecked")
         T entity = (T)parametersMap.get(ConstMetadata.ENTITY);
+        Objects.requireNonNull(entity, "entity cannot be null");
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entity.getClass());
         String[] column = new String[listFields.size()] ;
         StringBuilder conditions = new StringBuilder();
@@ -115,7 +116,7 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable> extends
     public String fetchByQuery(Map<String, Object>  parametersMap) {
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         Query condition = (Query)parametersMap.get(ConstMetadata.CONDITION);
-        
+        Objects.requireNonNull(condition, "Query condition cannot be null");
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
         String[] column = new String[listFields.size()] ;
         for(int i = 0 ; i< listFields.size() ; i++) {
@@ -140,7 +141,9 @@ public class FetchProvider <T extends JpaEntity,ID extends Serializable> extends
      */
     public String fetchByLambdaQuery(Map<String, Object>  parametersMap) {
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
+        @SuppressWarnings("unchecked")
         LambdaQuery<T> condition = (LambdaQuery<T>)parametersMap.get(ConstMetadata.CONDITION);
+        Objects.requireNonNull(condition, "Query LambdaQuery cannot be null");
         List<ColumnMapper> listFields = ColumnMetadata.buildColumnMapper(entityClass);
         String[] column = new String[listFields.size()] ;
         for(int i = 0 ; i< listFields.size() ; i++) {

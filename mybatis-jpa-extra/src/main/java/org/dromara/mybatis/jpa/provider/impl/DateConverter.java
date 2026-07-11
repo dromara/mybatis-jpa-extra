@@ -57,13 +57,13 @@ public class DateConverter{
     }
     
     public static boolean isDateType(String fieldType) {
-    	return fieldType.equalsIgnoreCase("Date")
+        return fieldType.equalsIgnoreCase("Date")
     			|| fieldType.equalsIgnoreCase("LocalDate")
     			|| fieldType.equalsIgnoreCase("LocalTime")
     			|| fieldType.equalsIgnoreCase("LocalDateTime");
     }
     
     public static String convertDateTime(LocalDateTime localDateTime) {
-    	return localDateTime.format(DateTimeFormatter.ofPattern(TIMESTAMP_FORMATTER));
+    	    return localDateTime.format(DateTimeFormatter.ofPattern(TIMESTAMP_FORMATTER));
     }
 }

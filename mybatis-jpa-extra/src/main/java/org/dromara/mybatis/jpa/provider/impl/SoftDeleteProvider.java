@@ -22,12 +22,17 @@ package org.dromara.mybatis.jpa.provider.impl;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
+import org.dromara.mybatis.jpa.constants.ConstSqlSyntax;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
+import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
 import org.dromara.mybatis.jpa.metadata.ColumnMapper;
 import org.dromara.mybatis.jpa.metadata.ColumnMetadata;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.metadata.TableMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
@@ -48,8 +53,13 @@ public class SoftDeleteProvider <T extends JpaEntity,ID extends Serializable>  e
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        if (idFieldColumnMapper == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @Id column for soft delete.");
+        }
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        
+        if (logicColumnMapper == null || logicColumnMapper.getSoftDelete() == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @SoftDelete annotation.");
+        }
         SQL sql=new SQL()
                 .UPDATE(TableMetadata.getTableName(entityClass))
                 .SET(" %s = '%s' ".formatted(
@@ -71,7 +81,13 @@ public class SoftDeleteProvider <T extends JpaEntity,ID extends Serializable>  e
         Class<?> entityClass=(Class<?>)parametersMap.get(ConstMetadata.ENTITY_CLASS);
         ColumnMetadata.buildColumnMapper(entityClass);
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
+        if (logicColumnMapper == null || logicColumnMapper.getSoftDelete() == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @SoftDelete annotation.");
+        }
         ColumnMapper idFieldColumnMapper = ColumnMetadata.getIdColumn(entityClass);
+        if (idFieldColumnMapper == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @Id column for soft delete.");
+        }
         
         SQL sql=new SQL()
                 .UPDATE(TableMetadata.getTableName(entityClass))
@@ -84,12 +100,10 @@ public class SoftDeleteProvider <T extends JpaEntity,ID extends Serializable>  e
         StringBuilder deleteSql = new StringBuilder("");
         deleteSql.append("<script>").append("\n").append("\n")
             .append(sql.toString()).append("\n");
-        deleteSql.append((deleteSql.indexOf("WHERE") == -1 ) ? " WHERE " : " and ");
-        deleteSql.append(idFieldColumnMapper.getColumn())
-            .append(" in (\n")
-            .append(" <foreach collection =\"idList\" item=\"item\" separator =\",\">").append("\n")
-            .append("  #{item} ").append("\n")
-            .append(" </foreach>")
+        deleteSql.append( appendWhereOrAnd(deleteSql.toString()));
+        deleteSql.append(idFieldColumnMapper.getColumn()).append(ConstSqlSyntax.IN)
+            .append(" (\n")
+            .append(MapperMetadata.buildForeachCollection("idList","item"))
             .append(" )\n");
         deleteSql.append("\n").append("</script>");
         logger.trace("softDelete SQL \n{}" , deleteSql);
@@ -98,17 +112,24 @@ public class SoftDeleteProvider <T extends JpaEntity,ID extends Serializable>  e
     
     public String softDeleteByQuery(Class<?> entityClass, Query query) {
         logger.trace("softDelete By Query \n{}" , query);
+        Objects.requireNonNull(query, "Query cannot be null");
         ColumnMetadata.buildColumnMapper(entityClass);
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        
+        if (logicColumnMapper == null || logicColumnMapper.getSoftDelete() == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @SoftDelete annotation.");
+        }
         SQL sql = new SQL()
                 .UPDATE(TableMetadata.getTableName(entityClass))
                 .SET(" %s = '%s' ".formatted(
                         logicColumnMapper.getColumn(),
                         logicColumnMapper.getSoftDelete().delete()
                     )
-                ).WHERE(QueryBuilder.build(query));
-        
+                );
+        //处理动态查询条件
+        String querySql = QueryBuilder.build(query);
+        if (StringUtils.isNotBlank(querySql)) {
+            sql.WHERE(querySql);
+        }
         logger.trace("softDelete By Query  SQL \n{}" , sql);
         return sql.toString();
     }
@@ -117,15 +138,21 @@ public class SoftDeleteProvider <T extends JpaEntity,ID extends Serializable>  e
         logger.trace("softDelete By LambdaQuery \n{}" , lambdaQuery);
         ColumnMetadata.buildColumnMapper(entityClass);
         ColumnMapper logicColumnMapper = ColumnMetadata.getLogicColumn(entityClass);
-        
+        if (logicColumnMapper == null || logicColumnMapper.getSoftDelete() == null) {
+            throw new MybatisJpaException("Entity [" + entityClass.getName() + "] lacks @SoftDelete annotation.");
+        }
         SQL sql = new SQL()
                 .UPDATE(TableMetadata.getTableName(entityClass))
                 .SET(" %s = '%s' ".formatted(
                         logicColumnMapper.getColumn(),
                         logicColumnMapper.getSoftDelete().delete()
                     )
-                ).WHERE(LambdaQueryBuilder.build(lambdaQuery));
-        
+                );
+        //处理动态查询条件
+        String querySql = LambdaQueryBuilder.build(lambdaQuery);
+        if (StringUtils.isNotBlank(querySql)) {
+            sql.WHERE(querySql);
+        }
         logger.trace("softDelete By LambdaQuery  SQL \n{}" , sql);
         return sql.toString();
     }

@@ -17,6 +17,7 @@
 package org.dromara.mybatis.jpa.provider.impl;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -93,8 +94,8 @@ public class QueryProvider<T extends JpaEntity,ID extends Serializable> extends 
     }
     
     public String query(T entity) {
+        Objects.requireNonNull(entity, "Entity cannot be null");
         SQL sql = TableMetadata.buildSelect(entity.getClass());
-
         for (ColumnMapper fieldColumnMapper : ColumnMetadata.buildColumnMapper(entity.getClass())) {
             Object fieldValue = BeanUtil.get(entity, fieldColumnMapper.getField());
             String fieldType = fieldColumnMapper.getFieldType().toLowerCase();

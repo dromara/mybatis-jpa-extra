@@ -14,6 +14,8 @@ public class ConstSqlSyntax {
     
     public static final   String HAVING          = "having";
     
+    public static final   String IN              = " in ";
+    
     public class Functions{
         
         public static final String COUNT_ALL     = "count(*)";

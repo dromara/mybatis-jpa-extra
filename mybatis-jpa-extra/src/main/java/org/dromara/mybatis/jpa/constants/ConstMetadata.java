@@ -54,4 +54,11 @@ public class ConstMetadata{
      */
     public static final String SELECT_TMP_TABLE                    = " tmp_t";
     
+    public static final String FOREACH_COLLECTION                  =
+            """
+                <foreach collection ="%s" item="%s" separator =",">
+                    #{item}
+                </foreach>
+            """;
+    
 }
