@@ -18,27 +18,28 @@
 package org.dromara.mybatis.jpa.update;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.query.Condition;
 import org.dromara.mybatis.jpa.query.Operator;
 import org.dromara.mybatis.jpa.query.Query;
 
 public class UpdateWrapper extends Query{
     
-    List<Condition> sets ;
+    List<Condition> sets = new ArrayList<>();
     
     public UpdateWrapper set(String column ,Object value) {
-        if(CollectionUtils.isEmpty(sets)) {
-            this.sets = new ArrayList<>();
+        if (StringUtils.isBlank(column)) {
+            throw new IllegalArgumentException("Failed to resolve column from expression");
         }
-        sets.add(new Condition(Operator.EQ,column,value));
+        sets.add(new Condition(Operator.SET,column,value));
         return  this;
     }
 
     public List<Condition> getSets() {
-        return sets;
+        return Collections.unmodifiableList(sets);
     }
 
     @Override

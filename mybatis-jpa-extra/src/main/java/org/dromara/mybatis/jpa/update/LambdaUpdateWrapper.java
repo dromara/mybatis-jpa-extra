@@ -18,9 +18,10 @@
 package org.dromara.mybatis.jpa.update;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.functions.IGetter;
 import org.dromara.mybatis.jpa.query.Condition;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
@@ -32,22 +33,23 @@ import org.dromara.mybatis.jpa.query.Operator;
  */
 public class LambdaUpdateWrapper  <T> extends LambdaQuery<T>{
 
-    List<Condition> sets ;
+    List<Condition> sets = new ArrayList<>();
 
     public LambdaUpdateWrapper() {
         super();
     }
 
     public LambdaUpdateWrapper <T> set(IGetter<T> getter ,Object value) {
-        if(CollectionUtils.isEmpty(sets)) {
-            this.sets = new ArrayList<>();
+        String column = getColumnName(getter);
+        if (StringUtils.isBlank(column)) {
+            throw new IllegalArgumentException("Failed to resolve column from Lambda expression");
         }
-        sets.add(new Condition(Operator.EQ,getColumnName(getter),value));
+        sets.add(new Condition(Operator.SET,column,value));
         return  this;
     }
     
     public List<Condition> getSets() {
-        return sets;
+        return Collections.unmodifiableList(sets);
     }
 
     @Override
