@@ -86,6 +86,8 @@ public enum Operator {
      * 忽略大小写
      */
     IGNORE_CASE("ignoreCase"),
+    
+    SET("set"),
     ;
     
     /**

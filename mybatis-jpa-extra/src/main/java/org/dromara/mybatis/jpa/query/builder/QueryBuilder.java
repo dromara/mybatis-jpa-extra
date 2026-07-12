@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.query.builder;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.query.Condition;
 import org.dromara.mybatis.jpa.query.Operator;
@@ -26,8 +27,20 @@ import org.slf4j.LoggerFactory;
 
 public class QueryBuilder {
     private static final  Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
+    private static final int MAX_NESTED_DEPTH = 3;
     
     public static String build(Query query) {
+        return build(query, 0);
+    }
+    
+    
+    private static String build(Query query, int currentDepth) {
+        if (query == null || CollectionUtils.isEmpty(query.getConditions())) {
+            return "";
+        }
+        if (currentDepth > MAX_NESTED_DEPTH) {
+            throw new IllegalStateException("LambdaQuery nested depth exceeds the maximum limit of " + MAX_NESTED_DEPTH);
+        }
         StringBuilder conditionString = new StringBuilder("");
         Operator lastExpression = Operator.AND;
         for (Condition condition : query.getConditions()) {
@@ -38,7 +51,7 @@ public class QueryBuilder {
             if (expression.equals(Operator.AND) || expression.equals(Operator.OR)) {
                 lastExpression = condition.getExpression();
                 if (value instanceof Query subQuery) {
-                    ConditionBuilder.appendSubQuery(conditionString,build(subQuery),lastExpression);
+                    ConditionBuilder.appendSubQuery(conditionString,build(subQuery , currentDepth + 1),lastExpression);
                 }
             }else {
                 ConditionBuilder.build(conditionString, column, expression, lastExpression, value, value);
@@ -47,5 +60,4 @@ public class QueryBuilder {
         logger.trace("conditionString {}" , conditionString);
         return conditionString.toString();
     }
-
 }

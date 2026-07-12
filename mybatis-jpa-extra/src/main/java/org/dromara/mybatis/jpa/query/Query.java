@@ -405,5 +405,4 @@ public class Query extends BaseQuery {
         return builder.toString();
     }
     
-    
 }

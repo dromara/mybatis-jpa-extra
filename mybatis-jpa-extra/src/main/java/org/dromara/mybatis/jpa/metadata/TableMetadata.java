@@ -17,6 +17,7 @@
 
 package org.dromara.mybatis.jpa.metadata;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -78,48 +79,47 @@ public class TableMetadata {
      * @return table name
      */
     public static String getTableName(Class<?> entityClass) {
+        Objects.requireNonNull(entityClass, "entityClass cannot be null");
         String entityClassName = entityClass.getName();
         if(!tableNameMap.containsKey(entityClassName)) {
-
             logger.trace("getTableName entity Class Name {}" , entityClassName);
             String tableName = null;
             String schema = null;
             String catalog = null;
             //must use @Entity to ORM class
             Entity entity = entityClass.getAnnotation(Entity.class);
+            Objects.requireNonNull(entity, "Class [" + entityClassName + "] is missing @Entity annotation");
             logger.trace("getTableName entity {}" , entity);
             Table table = entityClass.getAnnotation(Table.class);
             logger.trace("getTableName table {}" , table);
-            if(entity != null ) {
-                if(entity.name() != null && !entity.name().equals("")) {
-                    tableName = entity.name();
+            if(entity.name() != null && !entity.name().equals("")) {
+                tableName = entity.name();
+            }
+            if (table != null) {
+                if(table.name() != null && !table.name().equals("")) {
+                    tableName = table.name();
                 }
-                if (table != null) {
-                    if(table.name() != null && !table.name().equals("")) {
-                        tableName = table.name();
-                    }
-                    if(table.schema() != null && !table.schema().equals("")) {
-                        schema = table.schema();
-                        logger.trace("getTableName schema {}" , schema);
-                    }
-                    
-                    if(table.catalog() != null && !table.catalog().equals("")) {
-                        catalog = table.catalog();
-                        logger.trace("getTableName catalog {}" , catalog);
-                    }
+                if(table.schema() != null && !table.schema().equals("")) {
+                    schema = table.schema();
+                    logger.trace("getTableName schema {}" , schema);
                 }
                 
-                if(tableName == null) {
-                    tableName = entityClass.getSimpleName();
+                if(table.catalog() != null && !table.catalog().equals("")) {
+                    catalog = table.catalog();
+                    logger.trace("getTableName catalog {}" , catalog);
                 }
-                
-                if(schema != null) {
-                    tableName = schema+"."+tableName;
-                }
-                
-                if(catalog != null) {
-                    tableName = catalog+"."+tableName;
-                }
+            }
+            
+            if(tableName == null) {
+                tableName = entityClass.getSimpleName();
+            }
+            
+            if(schema != null) {
+                tableName = schema+"."+tableName;
+            }
+            
+            if(catalog != null) {
+                tableName = catalog+"."+tableName;
             }
             
             tableName = MapperMetadata.tableOrColumnCaseConverter(tableName);

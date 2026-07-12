@@ -616,10 +616,10 @@ public class LambdaQuery <T>  extends BaseQuery {
      * @return ColumnName
      */
     protected String getColumnName(IGetter <T> getter ) {
-    	String columnName = LambdaUtil.getColumnName(getter);
-    	if(MapperMetadata.isMapUnderscoreToCamelCase()) {
-    		columnName = StrUtils.camelToUnderline(columnName);
-    	}
+        	String columnName = LambdaUtil.getColumnName(getter);
+        	if(MapperMetadata.isMapUnderscoreToCamelCase()) {
+        		columnName = StrUtils.camelToUnderline(columnName);
+        	}
         return columnName;
     }
 

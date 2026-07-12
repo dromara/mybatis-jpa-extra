@@ -18,6 +18,7 @@ package org.dromara.mybatis.jpa.query.builder;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dromara.mybatis.jpa.handler.SafeValueHandler;
 import org.dromara.mybatis.jpa.query.Condition;
@@ -30,56 +31,63 @@ public class ConditionBuilder {
     private static final Logger logger = LoggerFactory.getLogger(ConditionBuilder.class);
             
     public static String build(StringBuilder conditionString,String column,Operator expression,Operator lastExpression,Object value,Object value2) {
+        if (expression == null || StringUtils.isBlank(column)) {
+            return conditionString.toString();
+        }
         if (expression.equals(Operator.CONDITION)) {
             conditionString.append(column);
-        } else {
-            logger.trace("Expression {} column {} value class {}",lastExpression,column,value == null ? "" : value.getClass().getCanonicalName());
-            
-            conditionString.append(ConditionBuilder.appendExpression(conditionString.toString(),lastExpression));
-            
-            if (expression.equals(Operator.LIKE) || expression.equals(Operator.NOT_LIKE)) {
+            return conditionString.toString();
+        } 
+        logger.trace("Expression {} column {} value class {}",lastExpression,column,value == null ? "" : value.getClass().getCanonicalName());
+        conditionString.append(ConditionBuilder.appendExpression(conditionString.toString(),lastExpression));
+        switch (expression) {
+            case LIKE:
+            case NOT_LIKE:
                 conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
                 conditionString.append("'%").append(SafeValueHandler.valueOf(value)).append("%'");
-
-            }else if (expression.equals(Operator.IGNORE_CASE)) {
+                break;
+            case IGNORE_CASE:
                 conditionString.append("UPPER(").append(column).append(") ").append(Operator.EQ.getOperator()).append(" ");
                 conditionString.append("UPPER('").append(SafeValueHandler.valueOf(value)).append("')");
-
-            } else if (expression.equals(Operator.LIKE_LEFT)) {
-
+                break;
+            case LIKE_LEFT:
                 conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
                 conditionString.append("'%").append(SafeValueHandler.valueOf(value)).append("'");
-
-            } else if (expression.equals(Operator.LIKE_RIGHT)) {
-
+                break;
+            case LIKE_RIGHT:
                 conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
                 conditionString.append("'").append(SafeValueHandler.valueOf(value)).append("%'");
-
-            } else if (expression.equals(Operator.EQ) || expression.equals(Operator.NOT_EQ)
-                    || expression.equals(Operator.GT) || expression.equals(Operator.GE)
-                    || expression.equals(Operator.LT) || expression.equals(Operator.LE)) {
-
+                break;
+            case EQ:   
+            case NOT_EQ:   
+            case GT:   
+            case GE:   
+            case LT:   
+            case LE:   
                 conditionString.append(column).append(" ").append(expression.getOperator()).append(" ");
                 conditionString.append(SafeValueHandler.valueOfType(value));
-
-            } else if (expression.equals(Operator.BETWEEN) || expression.equals(Operator.NOT_BETWEEN)) {
-
+                break;
+            case BETWEEN:   
+            case NOT_BETWEEN:  
                 conditionString.append(" ( ").append(column).append(" ").append(expression.getOperator()).append(" ");
                 conditionString.append(SafeValueHandler.valueOfType(value));
                 conditionString.append(" and ");
                 conditionString.append(SafeValueHandler.valueOfType(value2)).append(" ) ");
-
-            } else if (expression.equals(Operator.IS_NULL) || expression.equals(Operator.IS_NOT_NULL)) {
-
+                break;
+            case IS_NULL:
+            case IS_NOT_NULL:
                 conditionString.append(column).append(" ").append(expression.getOperator());
-
-            } else if (value != null && (expression.equals(Operator.IN) || expression.equals(Operator.NOT_IN))) {
-                String inValues  = ConditionValue.getCollectionValues(value);
-                if(StringUtils.isNotBlank(inValues)) {
-                    conditionString.append(column).append(" ").append(expression.getOperator());
-                    conditionString.append(" ( ").append(inValues).append(" ) ");
+                break;
+            case IN:
+            case NOT_IN:
+                if (value != null) {
+                    String inValues  = ConditionValue.getCollectionValues(value);
+                    if(StringUtils.isNotBlank(inValues)) {
+                        conditionString.append(column).append(" ").append(expression.getOperator());
+                        conditionString.append(" ( ").append(inValues).append(" ) ");
+                    }
                 }
-            } 
+                break;
         }
         return conditionString.toString();
     }
@@ -97,25 +105,35 @@ public class ConditionBuilder {
     }
     
     public static String buildGroupBy(List<Condition> conditions) {
+        if(CollectionUtils.isEmpty(conditions)) {
+            return "";
+        }
+        boolean isFirst = true;
         StringBuilder groupBy = new StringBuilder();
         for (Condition condition : conditions) {
-            if (StringUtils.isNotBlank(groupBy)) {
+            if (!isFirst) {
                 groupBy.append(" , ");
             }
             groupBy.append(SafeValueHandler.safeColumn(condition.getColumn()));
+            isFirst = false;
         }
         return groupBy.toString();
     }
 
     public static String buildOrderBy(List<Condition> conditions) {
+        if(CollectionUtils.isEmpty(conditions)) {
+            return "";
+        }
+        boolean isFirst = true;
         StringBuilder orderBy = new StringBuilder();
         for (Condition condition : conditions) {
-            if (StringUtils.isNotBlank(orderBy)) {
+            if (!isFirst) {
                 orderBy.append(" , ");
             }
             orderBy.append(SafeValueHandler.safeColumn(condition.getColumn()));
             orderBy.append(" ");
             orderBy.append(SafeValueHandler.valueOf(condition.getValue()));
+            isFirst = false;
         }
         return orderBy.toString();
     }
