@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.dromara.mybatis.jpa.id.impl.SnowFlakeIdGenerator;
-import org.dromara.mybatis.jpa.id.impl.ULIDGenerator;
 import org.dromara.mybatis.jpa.id.impl.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,6 @@ public class IdentifierGeneratorFactory {
     static {
         SnowFlakeIdGenerator snowFlakeIdGenerator = new SnowFlakeIdGenerator(0);
         register(IdentifierStrategy.UUID        , new UUIDGenerator());
-        register(IdentifierStrategy.ULID        , new ULIDGenerator());
         register(IdentifierStrategy.SNOWFLAKEID , snowFlakeIdGenerator);
         register(IdentifierStrategy.DEFAULT     , snowFlakeIdGenerator);
     }
@@ -73,9 +71,8 @@ public class IdentifierGeneratorFactory {
         strategy = strategy.toLowerCase();
         if(identifierGeneratorMap.containsKey(strategy)) {
             return identifierGeneratorMap.get(strategy).generate(strategy);
-        }else {
-            return UUID.randomUUID().toString().toLowerCase();
         }
+        return UUID.randomUUID().toString().toLowerCase();
     }
 
 }

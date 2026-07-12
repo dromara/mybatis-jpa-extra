@@ -29,13 +29,9 @@ public class IdentifierStrategy {
      * snowflakeid
      */
     public static final  String SNOWFLAKEID        = "snowflakeid";
-    
+
     /**
-     * snowflakeid
-     */
-    public static final  String ULID               = "ulid";
-    /**
-     * as snowflakeid
+     * as default
      */
     public static final  String DEFAULT            = "default";
     
