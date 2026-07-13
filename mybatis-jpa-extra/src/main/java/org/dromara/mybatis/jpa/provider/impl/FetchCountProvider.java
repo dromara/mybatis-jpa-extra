@@ -84,7 +84,7 @@ public class FetchCountProvider{
             
             BoundSql boundSql = pageSqlCache.getBoundSql();
             logger.trace("Count original SQL  :\n{}" , selectSql);
-            
+            //拼接count sql，select count(1) countrows_
             sql.append(ConstSqlSyntax.SELECT).append(" ").append(ConstSqlSyntax.Functions.COUNT_ONE).append(" countrows_ ");
             StringBuilder countSql = new StringBuilder();
     
@@ -111,12 +111,18 @@ public class FetchCountProvider{
                 logger.trace("Count SQL Complex ");
                 sql.append(ConstSqlSyntax.FROM).append(" (").append(countSql).append(" ) count_table_");
             }else {
+                //截取 from sql
                 int fromIndex = countSqlLowerCase.indexOf(" " + ConstSqlSyntax.FROM + " ");
                 int orderByIndex = countSqlLowerCase.indexOf(" " + ConstSqlSyntax.ORDER_BY + " ");
                 logger.trace("Count SQL from Index {} , order by {}" ,fromIndex,orderByIndex);
-                if(orderByIndex > -1) {
+                /* 
+                 * 截取from到order by之间的sql
+                 * 例如 select * from table where id = 1 order by name
+                 * 截取 from table where id = 1
+                 */
+                if(orderByIndex > -1) {//有order by
                     sql.append(countSql.substring(fromIndex,orderByIndex));
-                }else {
+                }else {//无order by
                     sql.append(countSql.substring(fromIndex));
                 }
             }
