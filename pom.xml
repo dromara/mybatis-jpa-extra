@@ -45,7 +45,7 @@
         
         <!--jdbc Driver-->
         <mysql.version>8.4.0</mysql.version>
-        <postgresql.version>42.7.11</postgresql.version>
+        <postgresql.version>42.7.12</postgresql.version>
         <!--
         <ojdbc8.version>21.6.0.0.1</ojdbc8.version>
         <highgo.version>6.0.3.jre8</highgo.version>
