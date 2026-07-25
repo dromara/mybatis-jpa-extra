@@ -41,7 +41,7 @@
         <slf4j2.version>2.0.18</slf4j2.version>
         <slf4j.version>1.7.36</slf4j.version>
         <jackson.annotations.version2>2.22</jackson.annotations.version2>
-        <jackson.version2>2.22.0</jackson.version2>
+        <jackson.version2>2.22.1</jackson.version2>
         
         <!--jdbc Driver-->
         <mysql.version>8.4.0</mysql.version>
