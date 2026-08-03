@@ -22,12 +22,14 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.dromara.mybatis.jpa.IJpaMapper;
 import org.dromara.mybatis.jpa.constants.ConstMetadata;
 import org.dromara.mybatis.jpa.entity.JpaEntity;
 import org.dromara.mybatis.jpa.entity.JpaPage;
 import org.dromara.mybatis.jpa.entity.JpaPageResults;
 import org.dromara.mybatis.jpa.exceptions.MybatisJpaException;
+import org.dromara.mybatis.jpa.metadata.MapperMetadata;
 import org.dromara.mybatis.jpa.query.LambdaQuery;
 import org.dromara.mybatis.jpa.query.Query;
 import org.dromara.mybatis.jpa.repository.IJpaRepository;
@@ -529,7 +531,14 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean insertBatch(List<T> listEntity){
         try {
             if(CollectionUtils.isNotEmpty(listEntity)) {
-                Integer count = getMapper().insertBatch(listEntity) ;
+                int count = ListUtils.partition(listEntity, MapperMetadata.getBatchSize())
+                        .stream()
+                        .mapToInt(batch -> {
+                            Integer batchCount = getMapper().insertBatch(batch);
+                            logger.debug("partition insert batch count: {}", batchCount);
+                            return batchCount != null ? batchCount : 0; 
+                        })
+                        .sum();
                 logger.debug("Insert Batch count : {}" , count);
                 return  count > 0;
             }
@@ -685,7 +694,14 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean deleteBatch(List<ID> idList) {
         try {
             logger.trace("deleteBatch {}" , idList);
-            Integer count = getMapper().deleteBatch(this.entityClass,idList,null);
+            int count = ListUtils.partition(idList, MapperMetadata.getBatchSize())
+                    .stream()
+                    .mapToInt(batch -> {
+                        Integer batchCount = getMapper().deleteBatch(this.entityClass, batch, null);
+                        logger.debug("partition deleteBatch batch count : {}", batchCount);
+                        return batchCount != null ? batchCount : 0; 
+                    })
+                    .sum();
             logger.debug("deleteBatch count : {}" , count);
             return count > 0;
         } catch(Exception e) {
@@ -703,7 +719,14 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean deleteBatch(List<ID> idList,ID partitionKey) {
         try {
             logger.trace("deleteBatch {} , partitionKey {}" , idList , partitionKey);
-            Integer count = getMapper().deleteBatch(this.entityClass , idList , partitionKey);
+            int count = ListUtils.partition(idList, MapperMetadata.getBatchSize())
+                    .stream()
+                    .mapToInt(batch -> {
+                        Integer batchCount = getMapper().deleteBatch(this.entityClass, batch, partitionKey);
+                        logger.debug("partition deleteBatch idList and partitionKey batch count : {}", batchCount);
+                        return batchCount != null ? batchCount : 0; 
+                    })
+                    .sum();
             logger.debug("deleteBatch count : {}" , count);
             return count > 0;
         } catch(Exception e) {
@@ -764,7 +787,14 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean softDelete(List<ID> idList) {
         try {
             logger.trace("softDelete idList {}" , idList);
-            Integer count = getMapper().softDelete(this.entityClass,idList,null);
+            int count = ListUtils.partition(idList, MapperMetadata.getBatchSize())
+                    .stream()
+                    .mapToInt(batch -> {
+                        Integer batchCount = getMapper().softDelete(this.entityClass, batch, null);
+                        logger.debug("partition softDelete batch count : {}", batchCount);
+                        return batchCount != null ? batchCount : 0; 
+                    })
+                    .sum();
             logger.debug("softDelete count : {}" , count);
             return count > 0;
         } catch(Exception e) {
@@ -782,7 +812,14 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     public boolean softDelete(List<ID> idList,ID partitionKey) {
         try {
             logger.trace("softDelete idList {} , partitionKey {}" , idList , partitionKey);
-            Integer count = getMapper().softDelete(this.entityClass,idList,partitionKey);
+            int count = ListUtils.partition(idList, MapperMetadata.getBatchSize())
+                    .stream()
+                    .mapToInt(batch -> {
+                        Integer batchCount = getMapper().softDelete(this.entityClass, batch, partitionKey);
+                        logger.debug("partition softDelete idList and partitionKey count : {}", batchCount);
+                        return batchCount != null ? batchCount : 0; 
+                    })
+                    .sum();
             logger.debug("softDelete idList and partitionKey count : {}" , count);
             return count > 0;
         } catch(Exception e) {

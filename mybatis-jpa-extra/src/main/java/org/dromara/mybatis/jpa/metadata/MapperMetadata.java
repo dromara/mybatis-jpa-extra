@@ -69,6 +69,8 @@ public class MapperMetadata{
     
     static String      partitionColumn                          =  "inst_id";
     
+    static int         batchSize                                =  1000;
+    
 
     /**
      * Case Converter
@@ -159,9 +161,16 @@ public class MapperMetadata{
         MapperMetadata.partitionColumn = partitionColumn;
     }
     
-    
     public static String buildForeachCollection(String collection , String item){
         return  ConstMetadata.FOREACH_COLLECTION.formatted(collection,item);
+    }
+
+    public static int getBatchSize() {
+        return batchSize;
+    }
+
+    public static void setBatchSize(int batchSize) {
+        MapperMetadata.batchSize = batchSize;
     }
     
 }
