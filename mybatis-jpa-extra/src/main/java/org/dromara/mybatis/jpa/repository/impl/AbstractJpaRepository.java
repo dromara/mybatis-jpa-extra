@@ -550,6 +550,33 @@ public abstract class  AbstractJpaRepository <M extends IJpaMapper<T, ID>, T ext
     }
     
     /**
+     * insert entity with batch use custom batchSize
+     * @param List<T> listEntity
+     * @param batchSize
+     * @return
+     */
+    public boolean insertBatch(List<T> listEntity,int batchSize){
+        try {
+            if(CollectionUtils.isNotEmpty(listEntity)) {
+                int count = ListUtils.partition(listEntity, batchSize)
+                        .stream()
+                        .mapToInt(batch -> {
+                            Integer batchCount = getMapper().insertBatch(batch);
+                            logger.debug("partition insert batch count: {}", batchCount);
+                            return batchCount != null ? batchCount : 0; 
+                        })
+                        .sum();
+                logger.debug("Insert Batch count : {}" , count);
+                return  count > 0;
+            }
+        } catch(Exception e) {
+            logger.error("Insert Batch Exception " , e);
+            throw new MybatisJpaException(e);
+        }
+        return false;
+    }
+    
+    /**
      * JPA persist ,  save
      * @param entity
      * @return boolean

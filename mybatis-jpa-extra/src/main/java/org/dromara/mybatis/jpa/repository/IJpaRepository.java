@@ -264,6 +264,14 @@ public  interface  IJpaRepository <T, ID extends Serializable> {
     public boolean insertBatch(List<T> listEntity);
     
     /**
+     * insert entity with batch use custom batchSize
+     * @param listEntity
+     * @param batchSize
+     * @return
+     */
+    public boolean insertBatch(List<T> listEntity,int batchSize);
+    
+    /**
      * JPA persist ,  save
      * @param entity
      * @return boolean
