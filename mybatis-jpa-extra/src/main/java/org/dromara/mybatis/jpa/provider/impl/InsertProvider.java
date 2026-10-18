@@ -119,15 +119,18 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
     
     private void  generatedValue(SQL sql , T entity , ColumnMapper fieldColumnMapper) {
         //have @GeneratedValue and (value is null or eq "")
+        String fieldName = fieldColumnMapper.getField();
+        String fieldType = fieldColumnMapper.getFieldType();
+        String columnName = fieldColumnMapper.getColumn();
         GeneratedValue generatedValue = fieldColumnMapper.getGeneratedValue();
         if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
-            assignGeneratedIdentifier(entity, fieldColumnMapper, generatedValue);
-            sql.VALUES(fieldColumnMapper.getColumn(),"#{%s}".formatted(fieldColumnMapper.getField()));
-        }else if(generatedValue.strategy()==GenerationType.SEQUENCE){
-            sql.VALUES(fieldColumnMapper.getColumn(),generatedValue.generator()+".nextval");
-        }else if(generatedValue.strategy()==GenerationType.IDENTITY){
+            assignIdentifier(entity, fieldType,fieldName, generatedValue);
+            sql.VALUES(columnName,"#{%s}".formatted(fieldName));
+        }else if(generatedValue.strategy() == GenerationType.SEQUENCE){
+            sql.VALUES(columnName,generatedValue.generator()+".nextval");
+        }else if(generatedValue.strategy() == GenerationType.IDENTITY){
             //skip
-        }else if(generatedValue.strategy()==GenerationType.TABLE){
+        }else if(generatedValue.strategy() == GenerationType.TABLE){
             //skip
         }
     }
@@ -191,7 +194,7 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
 	                    } 
     	                	}
     	            }else if(fieldColumnMapper.isLogicDelete()) {//逻辑删除字段默认值
-    	                BeanUtil.set(entity, fieldColumnMapper.getField(),fieldColumnMapper.getSoftDelete().value());
+    	                BeanUtil.set(entity, fieldName , fieldColumnMapper.getSoftDelete().value());
     	            }
     	        }
         }
@@ -201,26 +204,23 @@ public class InsertProvider <T extends JpaEntity,ID extends Serializable>{
     private void  batchGeneratedValue( T entity , ColumnMapper fieldColumnMapper) {
         GeneratedValue generatedValue = fieldColumnMapper.getGeneratedValue();
         if(generatedValue == null || generatedValue.strategy() == GenerationType.AUTO) {
-            assignGeneratedIdentifier(entity, fieldColumnMapper, generatedValue);
+            assignIdentifier(entity, fieldColumnMapper.getFieldType(),fieldColumnMapper.getField(), generatedValue);
         }
     }
 
-    private void assignGeneratedIdentifier(T entity, ColumnMapper fieldColumnMapper, GeneratedValue generatedValue) {
+    private void assignIdentifier(T entity, String fieldType , String field , GeneratedValue generatedValue) {
         String genValue = generateIdentifierValue(generatedValue);
-        if(fieldColumnMapper.getFieldType().equalsIgnoreCase("String")) {
-            BeanUtil.set(entity, fieldColumnMapper.getField(),genValue);
-        }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Integer")) {
-            BeanUtil.set(entity, fieldColumnMapper.getField(),Integer.valueOf(genValue));
-        }else if(fieldColumnMapper.getFieldType().equalsIgnoreCase("Long")) {
-            BeanUtil.set(entity, fieldColumnMapper.getField(),Long.valueOf(genValue));
+        if("String".equalsIgnoreCase(fieldType)) {
+            BeanUtil.set(entity, field,genValue);
+        }else if("Integer".equalsIgnoreCase(fieldType)) {
+            BeanUtil.set(entity, field,Integer.valueOf(genValue));
+        }else if("Long".equalsIgnoreCase(fieldType)) {
+            BeanUtil.set(entity, field,Long.valueOf(genValue));
         }
     }
 
     private String generateIdentifierValue(GeneratedValue generatedValue) {
-        if(generatedValue == null) {
-            return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
-        }
-        if(IdentifierGeneratorFactory.exists(generatedValue.generator())) {
+        if(generatedValue != null && IdentifierGeneratorFactory.exists(generatedValue.generator())) {
             return IdentifierGeneratorFactory.generate(generatedValue.generator());
         }
         return IdentifierGeneratorFactory.generate(IdentifierStrategy.DEFAULT);
