@@ -122,10 +122,10 @@ public class BeanUtil {
     }
 
     public static <T> boolean isSetProperty(Class<T> cls, String fieldName) {
-        Method[] method = cls.getDeclaredMethods();
-        for (int i = 0; i < method.length; i++) {
-            if (method[i].getModifiers() == Modifier.PUBLIC
-                    && method[i].getName().equals(setByProperty(fieldName))) {
+        Method[] methods = cls.getDeclaredMethods();
+        for (Method method :  methods) {
+            if (method.getModifiers() == Modifier.PUBLIC
+                    && method.getName().equals(setByProperty(fieldName))) {
                 return true;
             }
         }
@@ -133,10 +133,10 @@ public class BeanUtil {
     }
 
     public static <T> boolean isGetProperty(Class<T> cls, String fieldName) {
-        Method[] method = cls.getDeclaredMethods();
-        for (int i = 0; i < method.length; i++) {
-            if (method[i].getModifiers() == Modifier.PUBLIC
-                    && method[i].getName().equals(getByProperty(fieldName))) {
+        Method[] methods = cls.getDeclaredMethods();
+        for (Method method :  methods) {
+            if (method.getModifiers() == Modifier.PUBLIC
+                    && method.getName().equals(getByProperty(fieldName))) {
                 return true;
             }
         }
@@ -179,10 +179,10 @@ public class BeanUtil {
     }
     
     public static Map<String, String> getFields(Class<? extends Object> cls) {
-        Field[] flds = cls.getDeclaredFields();
+        Field[] fields = cls.getDeclaredFields();
         Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < flds.length; i++) {
-            map.put(flds[i].getName(), flds[i].getType().getName());
+        for (Field field :  fields) {
+            map.put(field.getName(), field.getType().getName());
         }
         return map;
     }
@@ -192,12 +192,12 @@ public class BeanUtil {
     }
 
     public static Map<String, String> getPropertyFields(Class<? extends Object> cls){
-        Field[] flds = cls.getDeclaredFields();
+        Field[] fields = cls.getDeclaredFields();
         Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < flds.length; i++) {
-            String fieldName = flds[i].getName();
+        for (Field field :  fields) {
+            String fieldName = field.getName();
             if (isPublicProperty(cls, fieldName)) {
-                map.put(flds[i].getName(), flds[i].getType().getName());
+                map.put(field.getName(), field.getType().getName());
             }
         }
         return map;
@@ -284,13 +284,14 @@ public class BeanUtil {
     }
     
     public static void displayValues(Object bean) {
-        Field[] flds = bean.getClass().getDeclaredFields();
+        Field[] fields = bean.getClass().getDeclaredFields();
         logger.trace("displayValues() *******************************************");
         logger.trace("displayValues() {}",bean.getClass().getName());
-        for (int i = 0; i < flds.length; i++) {
-            String name = flds[i].getName();
+        int i = 1;
+        for (Field field :  fields) {
+            String name = field.getName();
             if(isGetProperty(bean.getClass(),name)){
-                logger.trace("displayValues() Field {} : {} = {}",(i+1),name,BeanUtil.get(bean, name));
+                logger.trace("displayValues() Field {} : {} = {}",(i++),name,BeanUtil.get(bean, name));
             }
         }
         
@@ -299,11 +300,13 @@ public class BeanUtil {
     }
     
     public static <T> void beanClone(T target,T origin){
-        Field[] flds = target.getClass().getDeclaredFields();
-        for (int i = 0; i < flds.length; i++) {
-            String name = flds[i].getName();
-            if(isPublicProperty(origin,name) && get(origin,name)!=null){
-                set(target,name,get(origin,name));
+        if(target != null) {
+            Field[] fields = target.getClass().getDeclaredFields();
+            for (Field field :  fields) {
+                String name = field.getName();
+                if(isPublicProperty(origin,name) && get(origin,name)!=null){
+                    set(target,name,get(origin,name));
+                }
             }
         }
     }
@@ -343,22 +346,28 @@ public class BeanUtil {
     
     public static <T> Map<String, Object> beanToMap( T  bean){
         Map <String,Object> mapBean=new HashMap<>();
-        Field[] flds = bean.getClass().getDeclaredFields();
-        logger.trace("beanToMap() *******************************************");
-        logger.trace("beanToMap() {}",bean.getClass().getName());
-        for (int i = 0; i < flds.length; i++) {
-            String fieldName = flds[i].getName();
-            if(BeanUtil.isGetProperty(bean.getClass(),fieldName)){
-                Object value=BeanUtil.get(bean, fieldName);
-                mapBean.put(fieldName,value );
-                logger.trace("beanToMap() field {} : {} = {} type : {}",(i+1),fieldName,value,flds[i].getType());
+        if(bean != null) {
+            int i = 1;
+            Field[] fields = bean.getClass().getDeclaredFields();
+            logger.trace("beanToMap() *******************************************");
+            logger.trace("beanToMap() {}",bean.getClass().getName());
+            for (Field field :  fields) {
+                String fieldName = field.getName();
+                if(BeanUtil.isGetProperty(bean.getClass(),fieldName)){
+                    Object value=BeanUtil.get(bean, fieldName);
+                    mapBean.put(fieldName,value );
+                    logger.trace("beanToMap() field {} : {} = {} type : {}",(i++),fieldName,value,field.getType());
+                }
             }
+            logger.trace("beanToMap() *******************************************");
         }
-        logger.trace("beanToMap() *******************************************");
         return mapBean;
     }
     @SuppressWarnings("rawtypes")
     public static <T> Object mapToBean(T bean,Map<?, ?> valueMap){
+        if(bean ==  null) {
+            return null;
+        }
         Map<?, ?> beanFiledMap=null;
         try {
             beanFiledMap = BeanUtil.getFields(bean);
@@ -371,38 +380,42 @@ public class BeanUtil {
         Iterator<?> fieldit = beanFiledMap.entrySet().iterator(); 
         logger.trace("mapToBean() *******************************************");
         logger.trace("mapToBean() {}",bean.getClass().getName());
-        int i=1;
+        int i = 1;
         while (fieldit.hasNext()) {
             Map.Entry entry = (Map.Entry) fieldit.next();
+            if(entry == null) {
+                continue;
+            }
             String fieldName = entry.getKey().toString();
             Object value = null;
-            String fieldType=(String)beanFiledMap.get(fieldName);
-            if(valueMap.get(fieldName)!=null) {
-                String fillValue=valueMap.get(fieldName).toString();
+            String fieldType = (String) beanFiledMap.get(fieldName);
+            Object fieldValue = valueMap.get(fieldName);
+            if(fieldType != null && fieldValue != null) {
+                String fillValue = fieldValue.toString();
                 logger.trace("mapToBean() field {} : {} = {} type : {}",(i++),fieldName,fillValue,fieldType);  
                 if(fieldType.equals("java.lang.String")){
-                    value=String.valueOf(fillValue);
+                    value = String.valueOf(fillValue);
                 }else if(fieldType.equals("int")){
-                    value=Integer.parseInt(fillValue);
+                    value = Integer.parseInt(fillValue);
                 }else if(fieldType.equals("java.lang.Integer")){
-                    value=Integer.parseInt(fillValue);
+                    value = Integer.parseInt(fillValue);
                 }else if(fieldType.equals("long")){
-                    value=Long.parseLong(fillValue);
+                    value = Long.parseLong(fillValue);
                 }else if(fieldType.equals("java.lang.Long")){
-                    value= Long.parseLong(fillValue);
+                    value = Long.parseLong(fillValue);
                 }else if(fieldType.equals("double")){
-                    value=(double)Double.valueOf(fillValue);
+                    value = (double)Double.valueOf(fillValue);
                 }else if(fieldType.equals("java.lang.Double")){
-                    value=Double.valueOf(fillValue);
+                    value = Double.valueOf(fillValue);
                 }else if(fieldType.equals("float")){
-                    value=Float.parseFloat(fillValue);
+                    value = Float.parseFloat(fillValue);
                 }else if(fieldType.equals("java.lang.Float")){
-                    value=Float.parseFloat(fillValue);
+                    value = Float.parseFloat(fillValue);
                 }else if(fieldType.equals("java.util.Date")){ 
                     try {
-                        if(fillValue.length()==10){
-                            fillValue+=" 00:00:00";
-                            value=(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(fillValue);
+                        if(fillValue.length() == 10){
+                            fillValue += " 00:00:00";
+                            value = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(fillValue);
                         }else{
                             continue;
                         }
@@ -410,15 +423,15 @@ public class BeanUtil {
                         logger.error("Failed to parse date value {} for field {} on bean {}", fillValue, fieldName, bean, e);
                     }
                 }else if(fieldType.equals("java.lang.Object")){
-                    value=valueMap.get(fieldName);
+                    value = valueMap.get(fieldName);
                 }else if(fieldType.equals("char")){
-                    value=Character.valueOf(fillValue.charAt(0));
+                    value = Character.valueOf(fillValue.charAt(0));
                 }else if(fieldType.equals("boolean")){
-                    value=Boolean.parseBoolean(fillValue);
+                    value = Boolean.parseBoolean(fillValue);
                 }else if(fieldType.equals("short")){
-                    value=Short.parseShort(fillValue);
+                    value = Short.parseShort(fillValue);
                 }else if(fieldType.equals("byte")){
-                    value=Byte.parseByte(fillValue);
+                    value = Byte.parseByte(fillValue);
                 }
     
                BeanUtil.set(bean, fieldName, value);   
