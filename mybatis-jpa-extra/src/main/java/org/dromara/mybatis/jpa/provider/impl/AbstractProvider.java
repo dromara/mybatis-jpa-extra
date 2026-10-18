@@ -30,7 +30,7 @@ public abstract class AbstractProvider{
 
 	protected void appendPartitionWhere(SQL sql , Class<?> entityClass,Map<String, Object>  parametersMap) {
 		ColumnMapper partitionKeyMapper = ColumnMetadata.getPartitionKey(entityClass);
-		if(partitionKeyMapper != null) {
+		if(partitionKeyMapper != null && parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY) != null) {
 		    parametersMap.put(partitionKeyMapper.getField(), parametersMap.get(ConstMetadata.PARAMETER_PARTITION_KEY));
             sql.WHERE(" %s = #{%s} \n".formatted(
                         partitionKeyMapper.getColumn(),
@@ -40,7 +40,7 @@ public abstract class AbstractProvider{
 	}
 	
 	protected void appendPartitionWhere(SQL sql , Class<?> entityClass , Object partitionKey) {
-	    if(partitionKey != null) {
+	    if(partitionKey != null && partitionKey != null) {
             ColumnMapper partitionKeyMapper = ColumnMetadata.getPartitionKey(entityClass);
             if(partitionKeyMapper != null ) {
                 sql.WHERE(" %s = %s ".formatted(

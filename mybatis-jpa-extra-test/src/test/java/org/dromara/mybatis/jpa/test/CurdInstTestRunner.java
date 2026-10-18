@@ -50,8 +50,11 @@ public class CurdInstTestRunner  extends BaseTestRunner{
     @Test
     void get(){
         _logger.info("get...");
-        StudentsInst student=serviceInst.get("1271838792461959168","1");
-         _logger.info("Students {}",student);
+        StudentsInst student=serviceInst.get("1309150924412821504","1");
+        _logger.info("Students {}",student);
+        
+        StudentsInst studentById=serviceInst.get("1309150924412821504");
+         _logger.info("studentById {}",studentById);
     }
     
     @Test
