@@ -15,7 +15,6 @@
  */
 package org.dromara.mybatis.jpa.starter;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -30,11 +29,11 @@ import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitializat
  * @since 2.3.0
  */
 class MybatisDependsOnDatabaseInitializationDetector
-    extends AbstractBeansOfTypeDependsOnDatabaseInitializationDetector {
-
-  @Override
-  protected Set<Class<?>> getDependsOnDatabaseInitializationBeanTypes() {
-    return Collections.singleton(SqlSessionTemplate.class);
-  }
+extends AbstractBeansOfTypeDependsOnDatabaseInitializationDetector {
+    
+    @Override
+    protected Set<Class<?>> getDependsOnDatabaseInitializationBeanTypes() {
+        return Set.of(SqlSessionTemplate.class);
+    }
 
 }
